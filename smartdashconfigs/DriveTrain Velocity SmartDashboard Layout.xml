@@ -1,0 +1,53 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Talon Error" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="1606"/>
+	</widget>
+	<widget field="Motor Output Percent" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1794" y="18"/>
+	</widget>
+	<widget field="Motor Output Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1327" y="14"/>
+	</widget>
+	<widget field="Joystick Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="319" y="66"/>
+	</widget>
+	<widget field="Joystick X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="59"/>
+	</widget>
+	<widget field="Turn Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="931" y="42"/>
+	</widget>
+	<widget field="Drive Speed" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="436" y="3"/>
+		<height>66</height>
+	</widget>
+	<widget field="Velocity (L)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="-31" y="115"/>
+		<width>1527</width>
+		<height>1490</height>
+	</widget>
+	<widget field="Velocity (R)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="1519" y="93"/>
+		<width>1145</width>
+		<height>1509</height>
+	</widget>
+	<widget field="Auto mode" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="20" y="3"/>
+	</widget>
+</dashboard>
+<live-window>
+	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="29"/>
+	</widget>
+	<widget field="Drivetrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="3" y="14"/>
+	</widget>
+</live-window>
+	<hidden field="Quadrature (L)"/>
+	<hidden field="Sensor (L)"/>
+	<hidden field="Sensor (R)"/>
+	<hidden field="Quadrature (R)"/>
+	<hidden field="Quadrature Velocity"/>
+	<hidden field="Sensor Velocity"/>
+</xml>
