@@ -10,23 +10,11 @@ package org.usfirst.frc.team1072.robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
- * The RobotMap is a mapping from the ports sensors and actuators are wired into
- * to a variable name. This provides flexibility changing wiring, makes checking
- * the wiring easier and significantly reduces the number of magic numbers
- * floating around.
+ * Represents all the global constants to be used in the code.
+ * @author Finn Frankis
+ * @version 6/11/18
  */
 public class RobotMap {
-	// For example to map the left and right motors, you could define the
-	// following variables to use with your drivetrain subsystem.
-	// public static int leftMotor = 1;
-	// public static int rightMotor = 2;
-
-	// If you are using multiple modules, make sure to define both the port
-	// number and the module. For example you with a rangefinder:
-	// public static int rangefinderPort = 1;
-	// public static int rangefinderModule = 1;
-    
-   
     public static int LEFT_CIM_TALON = 5;
     public static int RIGHT_CIM_TALON = 2;
     public static int LEFT_CIM_VICTOR = 4;
@@ -55,6 +43,14 @@ public class RobotMap {
     public static double NOMINAL_OUTPUT_RIGHT = 0.04; 
     public static double DRIVETRAIN_SCALE = 1;
     
+    public static boolean DT_LEFT_TALON_PHASE = false;
+    public static boolean DT_RIGHT_TALON_PHASE = false;
+    public static boolean EL_TALON_PHASE = true;
+
+    public static boolean EL_BOTTOM_LEFT_VICTOR_INVERT = true;
+    public static boolean EL_TOP_LEFT_VICTOR_INVERT = false;
+    public static boolean EL_TALON_INVERT = false;
+    public static boolean EL_TOP_RIGHT_VICTOR_INVERT = false;
     
     public static double VEL_KF_LEFT = .178;
     // when modifying KP, double until disastrous
@@ -119,13 +115,11 @@ public class RobotMap {
     
     public static double EL_POS_FGRAV= 0.115;
     public static double EL_POS_KF = 0;
-    public static double EL_POS_KP = 0.2;
+    public static double EL_POS_KP = 0.1;
     public static double EL_POS_KI = 0;
     public static double EL_POS_KD = 0;
     
     public static int INT_PEAK_CURRENT_LIMIT = 5;
     public static int INT_PEAK_TIME_MS = 200;
     public static int INT_CONTINUOUS_CURRENT_LIMIT = 5;
-    
-    public static boolean INT_DOUBLE_CONTROLS = true;
 }

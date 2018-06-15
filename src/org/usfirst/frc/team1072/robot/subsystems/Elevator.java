@@ -9,6 +9,11 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+/**
+ * Represents an Elevator subsystem with control over the four motors.
+ * @author Finn Frankis
+ * @version 6/14/18
+ */
 public class Elevator extends Subsystem
 {
     private static Elevator el;
@@ -17,7 +22,10 @@ public class Elevator extends Subsystem
     private VictorSPX bottomLeftVictor;
     private VictorSPX topLeftVictor;
     private TalonSRX bottomRightTalon; 
-    @Override
+    
+    /**
+     * Initializes the command using the four ports in RobotMap.
+     */
     protected void initDefaultCommand()
     {
         topRightVictor = new VictorSPX(RobotMap.ELEVATOR_VICTOR_TOPRIGHT);
@@ -26,56 +34,65 @@ public class Elevator extends Subsystem
         bottomRightTalon = new TalonSRX(RobotMap.ELEVATOR_TALON);
     }
     
+    /**
+     * Moves the elevator given a velocity.
+     * @param speed the speed with which the elevator will be moved
+     */
     public void moveElevatorVelocity(double speed)
     {
+        // feed forward counterracts gravity
         bottomRightTalon.set(ControlMode.Velocity, speed, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
     }
     
-    public void moveElevatorPosition(double speed)
+    /**
+     * Moves the elevator given a position setpoint.
+     * @param position the position to which the elevator will be moved
+     */
+    public void moveElevatorPosition(double position)
     {
-        bottomRightTalon.set(ControlMode.Position, speed, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
+        bottomRightTalon.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
     }
     
+    /**
+     * Gets the top right Victor on the elevator.
+     * @return the top right Victor
+     */
     public VictorSPX getTopRightVictor()
     {
         return topRightVictor;
     }
 
-    public void setTopRightVictor(VictorSPX topRightVictor)
-    {
-        this.topRightVictor = topRightVictor;
-    }
-
+    /**
+     * Gets the bottom left Victor on the elevator.
+     * @return the bottom left Victor
+     */
     public VictorSPX getBottomLeftVictor()
     {
         return bottomLeftVictor;
     }
 
-    public void setBottomLeftVictor(VictorSPX bottomLeftVictor)
-    {
-        this.bottomLeftVictor = bottomLeftVictor;
-    }
-
+    /**
+     * Gets the top left Victor on the elevator.
+     * @return the top left Victor
+     */
     public VictorSPX getTopLeftVictor()
     {
         return topLeftVictor;
     }
 
-    public void setTopLeftVictor(VictorSPX topLeftVictor)
-    {
-        this.topLeftVictor = topLeftVictor;
-    }
-
+    /**
+     * Gets the bottom right Talon on the elevator.
+     * @return the bottom right Talon
+     */
     public TalonSRX getBottomRightTalon()
     {
         return bottomRightTalon;
     }
 
-    public void setBottomRightTalon(TalonSRX bottomRightTalon)
-    {
-        this.bottomRightTalon = bottomRightTalon;
-    }
-
+    /**
+     * Gets the instance of the singleton Elevator, creating a new one if necessary.
+     * @return the instance of Elevator
+     */
     public static Elevator getInstance()
     {
         if (el == null)

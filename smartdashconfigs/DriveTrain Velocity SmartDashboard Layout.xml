@@ -1,24 +1,41 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="Talon Error" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="1172" y="314"/>
+		<width>985</width>
+		<height>1320</height>
+	</widget>
+	<widget field="Output Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="332" y="320"/>
+		<width>843</width>
+		<height>1323</height>
+	</widget>
+	<widget field="Elevator Position" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1476" y="183"/>
+		<height>75</height>
+	</widget>
+	<widget field="Talon Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="630" y="187"/>
+	</widget>
+	<widget field="D-Pad" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1089" y="202"/>
+	</widget>
+	<widget field="Drivetrain Current (L)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="2415" y="-96"/>
+		<width>928</width>
+		<height>1336</height>
+	</widget>
 	<widget field="Position (L)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="1291" y="35"/>
 	</widget>
-	<widget field="Motor Output Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="318" y="131"/>
-		<width>2210</width>
-		<height>1519</height>
-	</widget>
 	<widget field="Velocity (R)" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="1581" y="81"/>
-	</widget>
-	<widget field="Talon Error" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="1606"/>
 	</widget>
 	<widget field="Motor Output Percent" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="1794" y="18"/>
 	</widget>
 	<widget field="Joystick Y" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="319" y="66"/>
+		<location x="208" y="5"/>
 	</widget>
 	<widget field="Joystick X" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="2516" y="43"/>
@@ -39,12 +56,51 @@
 	</widget>
 </dashboard>
 <live-window>
+	<widget field="Elevator" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="117"/>
+	</widget>
+	<widget field="Intake" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="81"/>
+	</widget>
+	<widget field="Pneumatics" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<location x="0" y="45"/>
+	</widget>
 	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="6" y="22"/>
+		<widget field="Compressor[0]" type="Compressor" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalOutputController">
+			<location x="46" y="28"/>
+			<height>35</height>
+			<width>147</width>
+		</widget>
+		<widget field="DoubleSolenoid[0,2]" type="Double Solenoid" class="edu.wpi.first.smartdashboard.livewindow.elements.RelayController">
+			<location x="6" y="63"/>
+			<height>32</height>
+			<width>227</width>
+		</widget>
+		<widget field="DoubleSolenoid[0,1]" type="Double Solenoid" class="edu.wpi.first.smartdashboard.livewindow.elements.RelayController">
+			<location x="6" y="95"/>
+			<height>32</height>
+			<width>227</width>
+		</widget>
+		<widget field="DoubleSolenoid[0,3]" type="Double Solenoid" class="edu.wpi.first.smartdashboard.livewindow.elements.RelayController">
+			<location x="6" y="127"/>
+			<height>32</height>
+			<width>227</width>
+		</widget>
+		<widget field="DoubleSolenoid[0,0]" type="Double Solenoid" class="edu.wpi.first.smartdashboard.livewindow.elements.RelayController">
+			<location x="6" y="159"/>
+			<height>32</height>
+			<width>227</width>
+		</widget>
+		<location x="24" y="11"/>
+		<width>239</width>
+		<height>198</height>
 	</widget>
 	<widget field="Drivetrain" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
-		<location x="23" y="26"/>
+		<location x="5" y="9"/>
 	</widget>
 </live-window>
-	<hidden field="Velocity (L)"/>
+	<hidden field="Elevator Velocity"/>
+	<hidden field="Drivetrain Current (R)"/>
+	<hidden field="Position Velocity"/>
+	<hidden field="Motor Output Voltage"/>
 </xml>

@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Represents a drive train.
+ * Represents a drive train with two Talons and two Victors.
  * @author Finn Frankis
  * @version 6/11/18
  */
@@ -25,6 +25,9 @@ public class Drivetrain extends Subsystem
     private VictorSPX leftVictor;
     private VictorSPX rightVictor;
     
+    /**
+     * Initializes the command using the four ports for the Talons/Victors.
+     */
     public void initDefaultCommand()
     {
         // initialize talons
@@ -35,7 +38,12 @@ public class Drivetrain extends Subsystem
         
     }
     
-    public void arcadeDrive(double speed, double turn)
+    /**
+     * Runs both motor controllers given a velocity and turn.
+     * @param speed the speed at which the controllers should run
+     * @param turn the amount by which each speed should be modified to account for turn
+     */
+    public void arcadeDriveVelocity(double speed, double turn)
     {
         // victor follows talon
         //leftTalon.set(ControlMode.Velocity, speed - turn);
@@ -45,52 +53,59 @@ public class Drivetrain extends Subsystem
          
     }
     
+    /**
+     * Moves the robot to a given position using PID.
+     * @param target the target position 
+     */
     public void arcadeDrivePosition (double target)
     {
         leftTalon.set(ControlMode.Position, target);
         rightTalon.set(ControlMode.Position, target);
     }
     
+    /**
+     * Gets the left Talon on the drivetrain.
+     * @return the left Talon
+     */
     public TalonSRX getLeftTalon()
     {
         return leftTalon;
     }
 
-    public void setLeftTalon(TalonSRX leftTalon)
-    {
-        this.leftTalon = leftTalon;
-    }
 
+    /**
+     * Gets the right Talon on the drivetrain.
+     * @return the right Talon
+     */
     public TalonSRX getRightTalon()
     {
         return rightTalon;
     }
 
-    public void setRightTalon(TalonSRX rightTalon)
-    {
-        this.rightTalon = rightTalon;
-    }
 
+    /**
+     * Gets the left Victor on the drivetrain.
+     * @return the left Victor
+     */
     public VictorSPX getLeftVictor()
     {
         return leftVictor;
     }
-
-    public void setLeftVictor(VictorSPX leftVictor)
-    {
-        this.leftVictor = leftVictor;
-    }
-
+    
+    /**
+     * Gets the right Victor on the drivetrain.
+     * @return the right Victor.
+     */
     public VictorSPX getRightVictor()
     {
         return rightVictor;
     }
 
-    public void setRightVictor(VictorSPX rightVictor)
-    {
-        this.rightVictor = rightVictor;
-    }
 
+    /**
+     * Gets the instance of this Drivetrain, creating a new one if necessary.
+     * @return the instance of this singleton class
+     */
     public static Drivetrain getInstance()
     {
         if (instance == null)
