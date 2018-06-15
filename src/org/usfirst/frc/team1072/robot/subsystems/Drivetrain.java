@@ -39,10 +39,16 @@ public class Drivetrain extends Subsystem
     {
         // victor follows talon
         //leftTalon.set(ControlMode.Velocity, speed - turn);
-        //rightTalon.set(ControlMode.Velocity, speed + turn);  
-        leftTalon.set(ControlMode.Velocity, speed);  
+        rightTalon.set(ControlMode.Velocity, speed + turn);  
+        leftTalon.set(ControlMode.Velocity, speed - turn);  
         
          
+    }
+    
+    public void arcadeDrivePosition (double target)
+    {
+        leftTalon.set(ControlMode.Position, target);
+        rightTalon.set(ControlMode.Position, target);
     }
     
     public TalonSRX getLeftTalon()
