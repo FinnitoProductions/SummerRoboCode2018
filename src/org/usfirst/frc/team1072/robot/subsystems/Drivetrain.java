@@ -3,14 +3,10 @@ package org.usfirst.frc.team1072.robot.subsystems;
 import org.usfirst.frc.team1072.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Represents a drive train with two Talons and two Victors.
@@ -48,9 +44,7 @@ public class Drivetrain extends Subsystem
         // victor follows talon
         //leftTalon.set(ControlMode.Velocity, speed - turn);
         rightTalon.set(ControlMode.Velocity, speed + turn);  
-        leftTalon.set(ControlMode.Velocity, speed - turn);  
-        
-         
+        leftTalon.set(ControlMode.Velocity, speed - turn);   
     }
     
     /**
@@ -67,40 +61,25 @@ public class Drivetrain extends Subsystem
      * Gets the left Talon on the drivetrain.
      * @return the left Talon
      */
-    public TalonSRX getLeftTalon()
-    {
-        return leftTalon;
-    }
-
+    public TalonSRX getLeftTalon() { return leftTalon; }
 
     /**
      * Gets the right Talon on the drivetrain.
      * @return the right Talon
      */
-    public TalonSRX getRightTalon()
-    {
-        return rightTalon;
-    }
-
+    public TalonSRX getRightTalon() { return rightTalon; }
 
     /**
      * Gets the left Victor on the drivetrain.
      * @return the left Victor
      */
-    public VictorSPX getLeftVictor()
-    {
-        return leftVictor;
-    }
+    public VictorSPX getLeftVictor() { return leftVictor; }
     
     /**
      * Gets the right Victor on the drivetrain.
      * @return the right Victor.
      */
-    public VictorSPX getRightVictor()
-    {
-        return rightVictor;
-    }
-
+    public VictorSPX getRightVictor() { return rightVictor; }
 
     /**
      * Gets the instance of this Drivetrain, creating a new one if necessary.
@@ -108,8 +87,7 @@ public class Drivetrain extends Subsystem
      */
     public static Drivetrain getInstance()
     {
-        if (instance == null)
-            instance = new Drivetrain();
+        if (instance == null) instance = new Drivetrain();
         return instance;
     }
 

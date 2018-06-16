@@ -41,7 +41,7 @@ public class Elevator extends Subsystem
     public void moveElevatorVelocity(double speed)
     {
         // feed forward counterracts gravity
-        bottomRightTalon.set(ControlMode.Velocity, speed, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
+        bottomRightTalon.set(ControlMode.PercentOutput, speed, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
     }
     
     /**
@@ -54,40 +54,37 @@ public class Elevator extends Subsystem
     }
     
     /**
+     * Moves the elevator using motion magic. 
+     * @param targetPos the position to which the elevatr will be moved
+     */
+    public void moveElevatorMotionMagic(double targetPos)
+    {
+        bottomRightTalon.set(ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
+    }
+    
+    /**
      * Gets the top right Victor on the elevator.
      * @return the top right Victor
      */
-    public VictorSPX getTopRightVictor()
-    {
-        return topRightVictor;
-    }
+    public VictorSPX getTopRightVictor() { return topRightVictor; }
 
     /**
      * Gets the bottom left Victor on the elevator.
      * @return the bottom left Victor
      */
-    public VictorSPX getBottomLeftVictor()
-    {
-        return bottomLeftVictor;
-    }
+    public VictorSPX getBottomLeftVictor() { return bottomLeftVictor; }
 
     /**
      * Gets the top left Victor on the elevator.
      * @return the top left Victor
      */
-    public VictorSPX getTopLeftVictor()
-    {
-        return topLeftVictor;
-    }
+    public VictorSPX getTopLeftVictor() { return topLeftVictor; }
 
     /**
      * Gets the bottom right Talon on the elevator.
      * @return the bottom right Talon
      */
-    public TalonSRX getBottomRightTalon()
-    {
-        return bottomRightTalon;
-    }
+    public TalonSRX getBottomRightTalon() { return bottomRightTalon; }
 
     /**
      * Gets the instance of the singleton Elevator, creating a new one if necessary.
@@ -95,8 +92,7 @@ public class Elevator extends Subsystem
      */
     public static Elevator getInstance()
     {
-        if (el == null)
-            el = new Elevator();
+        if (el == null) el = new Elevator();
         return el;
     }
     

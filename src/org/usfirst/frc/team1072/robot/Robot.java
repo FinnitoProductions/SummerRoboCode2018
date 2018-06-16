@@ -8,9 +8,12 @@
 package org.usfirst.frc.team1072.robot;
 
 import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
+//import org.harker.robotics.harkerrobolib.*;
+//import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
-import org.usfirst.frc.team1072.robot.commands.ExampleCommand;
+//import org.usfirst.frc.team1072.robot.commands.ExampleCommand;
 import org.usfirst.frc.team1072.robot.commands.IntakeOuttakeCubeCommand;
+import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
 import org.usfirst.frc.team1072.robot.commands.MoveElevatorPositionCommand;
 import org.usfirst.frc.team1072.robot.commands.MoveElevatorVelocityCommand;
 import org.usfirst.frc.team1072.robot.commands.SetCompressorCommand;
@@ -27,6 +30,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -42,7 +46,9 @@ public class Robot extends TimedRobot
     public static Drivetrain dt;
     public static Intake intake;
     public static Elevator el;
-    public static Joystick jt = new Joystick(RobotMap.JOYSTICK);
+
+    public static Joystick jt = new Joystick (OI.XBOX_360_PORT);
+    
     public static OI m_oi;
 
     Command m_autonomousCommand;
@@ -54,16 +60,14 @@ public class Robot extends TimedRobot
      */
     public void robotInit()
     {
-
         m_oi = new OI();
-        m_chooser.addDefault("Default Auto", new ExampleCommand());
+        //m_chooser.addDefault("Default Auto", new ExampleCommand());
         // chooser.addObject("My Auto", new MyAutoCommand());
         dt = Drivetrain.getInstance();
         intake = Intake.getInstance();
         el = Elevator.getInstance();
         SmartDashboard.putData("Auto mode", m_chooser);
         System.out.println("robot initialized");
-
     }
 
     /**
@@ -104,16 +108,26 @@ public class Robot extends TimedRobot
                 RobotMap.EL_CONTINOUS_CURRENT_LIMIT);
         elInvertControllers();
         elScaleVoltage(RobotMap.EL_NOMINAL_OUTPUT);
-        elSetSoftLimit(35000);
+        elSetSoftLimit(RobotMap.EL_FORWARD_SOFT, RobotMap.EL_REVERSE_SOFT);
 
+        elSetRampRate (RobotMap.EL_RAMP_RATE);
         elScaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
         elConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
         elZeroSensors();
 
         elConfigurePositionClosedLoop();
+        elConfigureMotionMagic();
 
     }
 
+    /**
+     * Sets the ramp rate for closed loop elevator motion.
+     * @param rampRate the time from zero to full voltage
+     */
+    private void elSetRampRate (double rampRate)
+    {
+        el.getBottomRightTalon().configOpenloopRamp(rampRate, RobotMap.TIMEOUT);
+    }
     /**
      * Slaves the three elevator Victors to the one Talon.
      */
@@ -139,8 +153,7 @@ public class Robot extends TimedRobot
     /**
      * Sets the correct neutral mode for the motor controllers on the elevator
      * 
-     * @param n
-     *            the neutral mode (coast or brake) to be set
+     * @param n the neutral mode (coast or brake) to be set
      */
     private void elSetNeutralMode(NeutralMode n)
     {
@@ -167,10 +180,15 @@ public class Robot extends TimedRobot
      * @param softLimit
      *            the soft limit to be set
      */
-    private void elSetSoftLimit(int softLimit)
+    private void elSetSoftLimit(int forwardSoftLimit, int reverseSoftLimit)
     {
-        el.getBottomRightTalon().configForwardSoftLimitThreshold(softLimit, RobotMap.TIMEOUT);
+        el.getBottomRightTalon().configForwardSoftLimitThreshold(forwardSoftLimit, RobotMap.TIMEOUT);
         el.getBottomRightTalon().configForwardSoftLimitEnable(true, RobotMap.TIMEOUT);
+        
+        el.getBottomRightTalon().configReverseSoftLimitThreshold(reverseSoftLimit, RobotMap.TIMEOUT);
+        el.getBottomRightTalon().configReverseSoftLimitEnable(true, RobotMap.TIMEOUT);
+        
+        el.getBottomRightTalon().overrideLimitSwitchesEnable(true);
     }
 
     /**
@@ -182,20 +200,41 @@ public class Robot extends TimedRobot
     private void elConfigurePositionClosedLoop()
     {
         el.getBottomRightTalon().configNominalOutputForward(RobotMap.EL_NOMINAL_OUTPUT, RobotMap.TIMEOUT);
-
+        
         el.getBottomRightTalon().configNominalOutputReverse(-1 * RobotMap.EL_NOMINAL_OUTPUT, RobotMap.TIMEOUT);
-
+        
         el.getBottomRightTalon().configPeakOutputForward(RobotMap.EL_PEAK_OUTPUT, RobotMap.TIMEOUT);
-
+        
         el.getBottomRightTalon().configPeakOutputReverse(-1 * RobotMap.EL_PEAK_OUTPUT, RobotMap.TIMEOUT);
-
+        
         el.getBottomRightTalon().config_kF(RobotMap.EL_POS_PID, RobotMap.EL_POS_KF, RobotMap.TIMEOUT);
-
+        
         el.getBottomRightTalon().config_kP(RobotMap.EL_POS_PID, RobotMap.EL_POS_KP, RobotMap.TIMEOUT);
-
+        
         el.getBottomRightTalon().config_kI(RobotMap.EL_POS_PID, RobotMap.EL_POS_KI, RobotMap.TIMEOUT);
-
+        
         el.getBottomRightTalon().config_kD(RobotMap.EL_POS_PID, RobotMap.EL_POS_KD, RobotMap.TIMEOUT);
+        
+        el.getBottomRightTalon().configAllowableClosedloopError(RobotMap.POS_PID, RobotMap.EL_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+    }
+    
+    /**
+     * Configures Motion Magic on the elevator, which seamlessly allows the robot to move between positions.
+     */
+    private void elConfigureMotionMagic()
+    {
+        // set motion magic port to be the velocity PID port 
+        el.getBottomRightTalon().selectProfileSlot(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_PID);
+        el.getBottomRightTalon().config_kF(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KF, RobotMap.TIMEOUT);
+        el.getBottomRightTalon().config_kP(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KP, RobotMap.TIMEOUT);
+        el.getBottomRightTalon().config_kI(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KI, RobotMap.TIMEOUT);
+        el.getBottomRightTalon().config_kD(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KD, RobotMap.TIMEOUT);
+        
+        el.getBottomRightTalon().configMotionCruiseVelocity(RobotMap.EL_VEL_VEL, RobotMap.TIMEOUT);
+        el.getBottomRightTalon().configMotionAcceleration(RobotMap.EL_VEL_ACCEL, RobotMap.TIMEOUT);
+        
+        el.getBottomRightTalon().configAllowableClosedloopError(RobotMap.VEL_PID, RobotMap.EL_VEL_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        
     }
 
     /**
@@ -211,20 +250,15 @@ public class Robot extends TimedRobot
     private void elSetCurrentLimit(int peakCurrentLimit, int peakTime, int continuousLimit)
     {
         el.getBottomRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
-
         el.getBottomRightTalon().configPeakCurrentDuration(peakTime, RobotMap.TIMEOUT);
-
         el.getBottomRightTalon().configContinuousCurrentLimit(continuousLimit, RobotMap.TIMEOUT);
-
         el.getBottomRightTalon().enableCurrentLimit(true);
-
     }
 
     /**
      * Configures the elevator sensor given the feedback device.
      * 
-     * @param fd
-     *            the feedback device, either quadrature or absolute
+     * @param fd the feedback device, either quadrature or absolute
      */
     private void elConfigureSensors(FeedbackDevice fd)
     {
@@ -238,6 +272,7 @@ public class Robot extends TimedRobot
     {
         el.getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.POS_PID, RobotMap.TIMEOUT);
     }
+    
 
     /**
      * Initializes the intake talons.
@@ -252,8 +287,7 @@ public class Robot extends TimedRobot
     /**
      * Sets the neutral mode for the Talons
      * 
-     * @param nm
-     *            the neutral mode
+     * @param nm the neutral mode
      */
     private void intakeSetNeutralMode(NeutralMode nm)
     {
@@ -290,8 +324,7 @@ public class Robot extends TimedRobot
      * Converts an encoder value in units of ticks per 100 ms to a speed value in
      * fps (feet-per-second).
      * 
-     * @param encoderVal
-     *            the encoder value in ticks per 100 ms
+     * @param encoderVal the encoder value in ticks per 100 ms
      * @return the converted speed
      */
     private double encoderUnitsToSpeed(int encoderVal)
@@ -306,8 +339,7 @@ public class Robot extends TimedRobot
     /**
      * Converts a speed value in fps to encoder units of ticks per 100 ms
      * 
-     * @param speed
-     *            the speed in fps
+     * @param speed the speed in fps
      * @return the converted encoder value
      */
     private double speedToEncoderUnits(double speed)
@@ -344,6 +376,7 @@ public class Robot extends TimedRobot
     {
         dt.getLeftTalon().setInverted(true);
         dt.getLeftVictor().setInverted(true);
+        
         // Invert the following direction (left Talons and Victors were wired
         // oppositely)
         dt.getRightTalon().setInverted(false);
@@ -456,8 +489,8 @@ public class Robot extends TimedRobot
         dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.POS_PID, RobotMap.TIMEOUT);
         dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.POS_PID, RobotMap.TIMEOUT);
 
-        dt.getLeftTalon().configAllowableClosedloopError(100, RobotMap.POS_PID, RobotMap.TIMEOUT);
-        dt.getRightTalon().configAllowableClosedloopError(100, RobotMap.POS_PID, RobotMap.TIMEOUT);
+        dt.getLeftTalon().configAllowableClosedloopError(RobotMap.POS_PID, RobotMap.DT_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        dt.getRightTalon().configAllowableClosedloopError(RobotMap.POS_PID, RobotMap.DT_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
 
         dt.getLeftTalon().config_kF(RobotMap.POS_PID, RobotMap.POS_KF_LEFT, RobotMap.TIMEOUT);
         dt.getRightTalon().config_kF(RobotMap.POS_PID, RobotMap.POS_KF_RIGHT, RobotMap.TIMEOUT);
@@ -502,18 +535,12 @@ public class Robot extends TimedRobot
      * can use it to reset any subsystem information you want to clear when the
      * robot is disabled.
      */
-    public void disabledInit()
-    {
-
-    }
+    public void disabledInit() { }
 
     /**
      * Called periodically while the robot is disabled.
      */
-    public void disabledPeriodic()
-    {
-        Scheduler.getInstance().run();
-    }
+    public void disabledPeriodic() { Scheduler.getInstance().run(); }
 
     /**
      * This autonomous (along with the chooser code above) shows how to select
@@ -539,9 +566,7 @@ public class Robot extends TimedRobot
 
         // schedule the autonomous command (example)
         if (m_autonomousCommand != null)
-        {
             m_autonomousCommand.start();
-        }
         driveTrainTalonInit();
         elevatorTalonInit();
         intakeTalonInit();
@@ -550,11 +575,7 @@ public class Robot extends TimedRobot
     /**
      * This function is called periodically during autonomous.
      */
-    public void autonomousPeriodic()
-    {
-        // Scheduler.getInstance().run();
-
-    }
+    public void autonomousPeriodic(){ /* Scheduler.getInstance().run();*/ }
 
     /**
      * Calls necessary methods to initialize for the teleoperated period.
@@ -566,9 +587,7 @@ public class Robot extends TimedRobot
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (m_autonomousCommand != null)
-        {
             m_autonomousCommand.cancel();
-        }
         driveTrainTalonInit();
         elevatorTalonInit();
         intakeTalonInit();
@@ -579,17 +598,43 @@ public class Robot extends TimedRobot
      */
     public void teleopPeriodic()
     {
-        /*
-         * DriveWithVelocityCommand adc = new DriveWithVelocityCommand();
-         * 
-         * // all the way up for y stick is given as -1 double driveSpeed =
-         * speedToEncoderUnits(-1 * jt.getY() * RobotMap.MAX_DRIVE_SPEED); double
-         * turnSpeed = speedToEncoderUnits(-1 * jt.getX() * RobotMap.MAX_TURN_SPEED);
-         * 
-         * 
-         * adc.execute(driveSpeed, turnSpeed);
-         */
-
+         //drivePeriodic();
+        
+        // POSITION PID
+        /*MoveElevatorPositionCommand mepc = new MoveElevatorPositionCommand();
+        mepc.execute(Math.abs(jt.getY()) * 15100 + 9900);
+        
+        
+        SmartDashboard.putNumber("Elevator Position",
+        el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.EL_POS_PID));
+        SmartDashboard.putNumber("Output Voltage",
+        el.getBottomRightTalon().getMotorOutputVoltage());
+        SmartDashboard.putNumber("Talon Error",
+        el.getBottomRightTalon().getClosedLoopError(RobotMap.POS_PID));*/
+          
+        MoveElevatorMotionMagicCommand memmc = new MoveElevatorMotionMagicCommand();
+        memmc.execute(Math.abs(jt.getRawAxis(OI.CHEAP_WHITE_RIGHTY)) * 33500 + 1000);
+        
+        SmartDashboard.putNumber("Elevator Velocity",
+                el.getBottomRightTalon().getSelectedSensorVelocity(RobotMap.EL_VEL_PID));
+        SmartDashboard.putNumber("Motor Voltage", 
+                el.getBottomRightTalon().getMotorOutputVoltage());
+        SmartDashboard.putNumber("Talon Current", el.getBottomRightTalon().getOutputCurrent());
+        SmartDashboard.putNumber("Tal Error", el.getBottomRightTalon().getClosedLoopError(RobotMap.EL_VEL_PID));
+        
+        if (el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.EL_VEL_PID) < 1000)
+        {
+            el.getBottomRightTalon().config_kP(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
+            el.getBottomRightTalon().config_kI(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
+            el.getBottomRightTalon().config_kD(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
+        }
+        else
+        {
+            elConfigureMotionMagic();
+        }
+        
+        drivePeriodic();
+         
         /*
          * double targetPos = -1 * jt.getY() * RobotMap.TICKS_PER_REV * 3;
          * DriveToPositionCommand dtp = new DriveToPositionCommand();
@@ -605,23 +650,9 @@ public class Robot extends TimedRobot
          * dt.getLeftTalon().getClosedLoopError(RobotMap.POS_PID));
          */
 
-        /*
-         * SetCompressorCommand tc = new SetCompressorCommand();
-         * 
-         * tc.execute(true);
-         * 
-         * SetSolenoidCommand ssc = new SetSolenoidCommand(); int i = jt.getPOV();
-         * 
-         * if (i > -1 && i <= 1) ssc.execute(RobotMap.INTAKE_UPDOWN_KEY,
-         * RobotMap.INTAKE_UP); if (i >= 269 && i <= 271)
-         * ssc.execute(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY,
-         * RobotMap.INTAKE_DECOMPRESS); if (i >= 179 && i <= 181)
-         * ssc.execute(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN); if (i >= 89 &&
-         * i <= 91) ssc.execute(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY,
-         * RobotMap.INTAKE_COMPRESS);
-         * 
-         * SmartDashboard.putNumber("D-Pad", Math.round(jt.getPOV()));
-         */
+        
+
+         
 
         /*
          * MoveElevatorVelocityCommand mevc = new MoveElevatorVelocityCommand();
@@ -630,20 +661,11 @@ public class Robot extends TimedRobot
          */
 
         /*
-         * MoveElevatorPositionCommand mepc = new MoveElevatorPositionCommand();
-         * mepc.execute(Math.abs(jt.getY()) * 17000);
-         * //SmartDashboard.putNumber("Elevator Velocity",
-         * el.getBottomRightTalon().getSelectedSensorVelocity(RobotMap.EL_VEL_PID));
-         * SmartDashboard.putNumber("Elevator Position",
-         * el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.EL_POS_PID));
-         * SmartDashboard.putNumber("Output Voltage",
-         * el.getBottomRightTalon().getMotorOutputVoltage());
-         * SmartDashboard.putNumber("Talon Error",
-         * el.getBottomRightTalon().getClosedLoopError(RobotMap.POS_PID));
+         * 
          */
 
-        IntakeOuttakeCubeCommand iocc = new IntakeOuttakeCubeCommand();
-        iocc.execute(jt.getY());
+       
+        
         /*
          * /*SmartDashboard.putNumber("Position (R)",
          * encoderUnitsToSpeed(dt.getRightTalon().getSelectedSensorVelocity(RobotMap.
@@ -661,6 +683,73 @@ public class Robot extends TimedRobot
          * SmartDashboard.putNumber("Motor Output Percent",
          * dt.getLeftTalon().getMotorOutputPercent());
          */
+    }
+    
+    /**
+     * Represents important commands to be called for a standard teleoperated drive period.
+     */
+    private void drivePeriodic()
+    {
+        DriveWithVelocityCommand adc = new DriveWithVelocityCommand();
+        
+        // all the way up for y stick is given as -1 
+        double driveSpeed = speedToEncoderUnits(-1 * jt.getY() * RobotMap.MAX_DRIVE_SPEED); 
+        double turnSpeed = speedToEncoderUnits(-1 * jt.getX() * RobotMap.MAX_TURN_SPEED);
+        adc.execute(driveSpeed, turnSpeed);
+        
+        
+        SetCompressorCommand tc = new SetCompressorCommand();
+        
+        tc.execute(true);
+         
+        SetSolenoidCommand ssc = new SetSolenoidCommand(); int i = jt.getPOV();
+         
+         if (i > -1 && i <= 1) 
+             ssc.execute(RobotMap.INTAKE_UPDOWN_KEY,
+                     RobotMap.INTAKE_UP); 
+         if (i >= 269 && i <= 271)
+         ssc.execute(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY,
+                 RobotMap.INTAKE_DECOMPRESS); 
+         if (i >= 179 && i <= 181)
+             ssc.execute(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN); 
+         if (i >= 89 && i <= 91) 
+             ssc.execute(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY,
+        RobotMap.INTAKE_COMPRESS);
+        
+         SmartDashboard.putNumber("D-Pad", Math.round(jt.getPOV()));
+         
+         
+         IntakeOuttakeCubeCommand iocc = new IntakeOuttakeCubeCommand();
+         if (jt.getRawButton(OI.LEFT_BUMPER))
+             iocc.execute(1);
+         else if (jt.getRawButton(OI.RIGHT_BUMPER))
+             iocc.execute(-1);
+         else
+             iocc.execute(0);
+         
+         /*MoveElevatorVelocityCommand mevc = new MoveElevatorVelocityCommand();
+         boolean isDown = OI.AXIS_MULTIPLIER * jt.getRawAxis(OI.CHEAP_WHITE_RIGHTY) < 0;
+         boolean reverseBeyondLimit = el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.POS_PID) <= RobotMap.EL_REVERSE_SOFT;
+         if (isDown && !reverseBeyondLimit)
+           mevc.execute(OI.AXIS_MULTIPLIER * jt.getRawAxis(OI.CHEAP_WHITE_RIGHTY));
+         else if (isDown && reverseBeyondLimit)
+             mevc.execute(0);
+         else
+             mevc.execute(OI.AXIS_MULTIPLIER * jt.getRawAxis(OI.CHEAP_WHITE_RIGHTY));
+         SmartDashboard.putNumber("Elevator Position", el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.POS_PID));*/
+         
+         
+         SmartDashboard.putNumber("Axis 0", jt.getRawAxis(0));
+         SmartDashboard.putNumber("Axis 1", jt.getRawAxis(1));
+         SmartDashboard.putNumber("Axis 2", jt.getRawAxis(2));
+         SmartDashboard.putNumber("Axis 3", jt.getRawAxis(3));
+         SmartDashboard.putNumber("Axis 4", jt.getRawAxis(4));
+         
+         SmartDashboard.putBoolean("Button 5", jt.getRawButton(5));
+         SmartDashboard.putBoolean("Button 6", jt.getRawButton(6));
+         
+        
+        
     }
 
     /**

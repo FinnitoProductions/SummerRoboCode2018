@@ -74,6 +74,8 @@ public class RobotMap {
     public static double POS_KI_RIGHT = 0.000004; // 
     public static double POS_KD_RIGHT = 25;
     
+    public static int DT_POS_ALLOWABLE_ERROR = 100;
+    
     public static int TICKS_PER_REV = 4096;
     public static double WHEELDIAMETER = 4.0;
     
@@ -103,23 +105,42 @@ public class RobotMap {
     public static final String INTAKE_UPDOWN_KEY = "UPDOWN";
     public static final String INTAKE_COMPRESSDECOMPRESS_KEY = "COMPRESSDE";
     
-    public static int EL_PEAK_CURRENT_LIMIT = 15;
-    public static int EL_PEAK_TIME_MS = 200;
+    
+    public static int EL_MANUAL_CURRENT_LIMIT_CONT = 10;
+    
+    public static int EL_PEAK_CURRENT_LIMIT = 25;
+    public static int EL_PEAK_TIME_MS = 750;
     public static int EL_CONTINOUS_CURRENT_LIMIT = 15;
     
-    public static int EL_VEL_PID = 1;
-    public static int EL_POS_PID = 0;
+    public static int EL_VEL_PID = 0;
+    public static int EL_POS_PID = 1;
     
     public static double EL_NOMINAL_OUTPUT = 0;
     public static double EL_PEAK_OUTPUT = 1.0;
     
-    public static double EL_POS_FGRAV= 0.115;
+    public static double EL_POS_FGRAV = 0.12; 
     public static double EL_POS_KF = 0;
     public static double EL_POS_KP = 0.1;
-    public static double EL_POS_KI = 0;
-    public static double EL_POS_KD = 0;
+    public static double EL_POS_KI = 0.0001;
+    public static double EL_POS_KD = 18;
+    public static int EL_POS_ALLOWABLE_ERROR = 75;
     
-    public static int INT_PEAK_CURRENT_LIMIT = 5;
-    public static int INT_PEAK_TIME_MS = 200;
+    public static int EL_FORWARD_SOFT = 34500;
+    public static int EL_REVERSE_SOFT = 1000;
+    public static double EL_RAMP_RATE = 0.75;
+    
+    // elevator max RPM: 500 RPM
+    public static double EL_VEL_KF = 0.37;
+    public static double EL_VEL_KP = 0.1;
+    public static double EL_VEL_KI = 0.0001;
+    public static double EL_VEL_KD = 14;
+    
+    public static int EL_VEL_ACCEL =  9000;
+    public static int EL_VEL_VEL = 2600;
+    public static int EL_VEL_ALLOWABLE_ERROR = 100;
+            
+    
+    public static int INT_PEAK_CURRENT_LIMIT = 15;
+    public static int INT_PEAK_TIME_MS = 2000;
     public static int INT_CONTINUOUS_CURRENT_LIMIT = 5;
 }

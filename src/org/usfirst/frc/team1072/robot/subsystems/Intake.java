@@ -55,19 +55,13 @@ public class Intake extends Subsystem
      * Gets the left Talon on the intake.
      * @return the left Talon
      */
-    public TalonSRX getLeftTalon()
-    {
-        return leftTalon;
-    }
+    public TalonSRX getLeftTalon() { return leftTalon; }
 
     /**
      * Gets the right Talon on the intake.
      * @return the right Talon
      */
-    public TalonSRX getRightTalon()
-    {
-        return rightTalon;
-    }
+    public TalonSRX getRightTalon() { return rightTalon; }
 
     /**
      * Gets the instance of this singleton Intake, returning a new one if one has not yet been created.
@@ -75,8 +69,7 @@ public class Intake extends Subsystem
      */
     public static Intake getInstance()
     {
-        if (intake == null)
-            intake = new Intake();
+        if (intake == null) intake = new Intake();
         return intake;
     }
 

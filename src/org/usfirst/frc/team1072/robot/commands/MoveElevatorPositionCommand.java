@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands;
 
 import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -15,28 +14,18 @@ public class MoveElevatorPositionCommand extends Command
     /**
      * Creates a new command requiring the elevator subsystem.
      */
-    public MoveElevatorPositionCommand()
-    {
-        requires(Robot.el);
-    }
+    public MoveElevatorPositionCommand() { requires(Robot.el); }
 
     /**
      * Executes the command given the position to which the elevator should move. 
      * @param position the position to move to
      */
-    public void execute(double position)
-    {
-        Robot.el.moveElevatorPosition(position);
-    }
+    public void execute(double position) { Robot.el.moveElevatorPosition(position); }
 
     /**
      * Determines whether the command is complete.
      * 
      * @return true if the command is complete; false otherwise
      */
-    protected boolean isFinished()
-    {
-        // TODO Auto-generated method stub
-        return true;
-    }
+    protected boolean isFinished() { return true; }
 }
