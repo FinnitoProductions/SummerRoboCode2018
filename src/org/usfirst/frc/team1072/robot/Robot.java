@@ -8,6 +8,9 @@
 package org.usfirst.frc.team1072.robot;
 
 import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
+
+import java.io.IOException;
+
 //import org.harker.robotics.harkerrobolib.*;
 //import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
 import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
@@ -21,6 +24,7 @@ import org.usfirst.frc.team1072.robot.commands.SetSolenoidCommand;
 import org.usfirst.frc.team1072.robot.commands.ToggleCompressorCommand;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
+import org.usfirst.frc.team1072.robot.subsystems.Gamepad;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -48,8 +52,9 @@ public class Robot extends TimedRobot
     public static Elevator el;
 
     public static Joystick jt = new Joystick (OI.XBOX_360_PORT);
+
     
-    public static OI m_oi;
+    public static OI oi;
 
     Command m_autonomousCommand;
     SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -60,7 +65,7 @@ public class Robot extends TimedRobot
      */
     public void robotInit()
     {
-        m_oi = new OI();
+        oi = new OI();
         //m_chooser.addDefault("Default Auto", new ExampleCommand());
         // chooser.addObject("My Auto", new MyAutoCommand());
         dt = Drivetrain.getInstance();
@@ -596,7 +601,7 @@ public class Robot extends TimedRobot
     /**
      * This function is called periodically during operator control.
      */
-    public void teleopPeriodic()
+    public void teleopPeriodic() 
     {
          //drivePeriodic();
         
@@ -612,8 +617,7 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Talon Error",
         el.getBottomRightTalon().getClosedLoopError(RobotMap.POS_PID));*/
           
-        MoveElevatorMotionMagicCommand memmc = new MoveElevatorMotionMagicCommand();
-        memmc.execute(Math.abs(jt.getRawAxis(OI.CHEAP_WHITE_RIGHTY)) * 33500 + 1000);
+        
         
         SmartDashboard.putNumber("Elevator Velocity",
                 el.getBottomRightTalon().getSelectedSensorVelocity(RobotMap.EL_VEL_PID));
@@ -622,18 +626,13 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Talon Current", el.getBottomRightTalon().getOutputCurrent());
         SmartDashboard.putNumber("Tal Error", el.getBottomRightTalon().getClosedLoopError(RobotMap.EL_VEL_PID));
         
-        if (el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.EL_VEL_PID) < 1000)
-        {
-            el.getBottomRightTalon().config_kP(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
-            el.getBottomRightTalon().config_kI(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
-            el.getBottomRightTalon().config_kD(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
-        }
-        else
-        {
-            elConfigureMotionMagic();
-        }
         
+        try {
         drivePeriodic();
+        }
+        catch(IOException e){
+           e.printStackTrace();
+        }
          
         /*
          * double targetPos = -1 * jt.getY() * RobotMap.TICKS_PER_REV * 3;
@@ -688,21 +687,24 @@ public class Robot extends TimedRobot
     /**
      * Represents important commands to be called for a standard teleoperated drive period.
      */
-    private void drivePeriodic()
+    private void drivePeriodic() throws IOException
     {
         DriveWithVelocityCommand adc = new DriveWithVelocityCommand();
         
         // all the way up for y stick is given as -1 
-        double driveSpeed = speedToEncoderUnits(-1 * jt.getY() * RobotMap.MAX_DRIVE_SPEED); 
-        double turnSpeed = speedToEncoderUnits(-1 * jt.getX() * RobotMap.MAX_TURN_SPEED);
+        double driveSpeed = speedToEncoderUnits(oi.getGamepad().getLeftY() * RobotMap.MAX_DRIVE_SPEED); 
+        double turnSpeed = speedToEncoderUnits(-1 * oi.getGamepad().getLeftX() * RobotMap.MAX_TURN_SPEED);
         adc.execute(driveSpeed, turnSpeed);
         
+        MoveElevatorMotionMagicCommand memmc = new MoveElevatorMotionMagicCommand();
+        memmc.execute(Math.abs(oi.getGamepad().getRightY()) * 33500 + 1000);
         
         SetCompressorCommand tc = new SetCompressorCommand();
         
         tc.execute(true);
-         
-        SetSolenoidCommand ssc = new SetSolenoidCommand(); int i = jt.getPOV();
+          
+        SetSolenoidCommand ssc = new SetSolenoidCommand(); 
+        int i = oi.getGamepad().getDPad();
          
          if (i > -1 && i <= 1) 
              ssc.execute(RobotMap.INTAKE_UPDOWN_KEY,
@@ -720,12 +722,28 @@ public class Robot extends TimedRobot
          
          
          IntakeOuttakeCubeCommand iocc = new IntakeOuttakeCubeCommand();
-         if (jt.getRawButton(OI.LEFT_BUMPER))
-             iocc.execute(1);
-         else if (jt.getRawButton(OI.RIGHT_BUMPER))
-             iocc.execute(-1);
+         if (oi.getGamepad().getLeftTriggerButton())
+         {
+             iocc.execute(oi.getGamepad().getLeftTrigger());
+         }
+         else if (oi.getGamepad().getRightTriggerButton())
+         {
+             iocc.execute(-1 * oi.getGamepad().getRightTrigger());
+         }
          else
              iocc.execute(0);
+         
+         if (el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.EL_VEL_PID) < 1000)
+         {
+             el.getBottomRightTalon().config_kP(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
+             el.getBottomRightTalon().config_kI(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
+             el.getBottomRightTalon().config_kD(RobotMap.EL_VEL_PID, 0, RobotMap.TIMEOUT);
+         }
+         else
+         {
+             elConfigureMotionMagic();
+         }
+         
          
          /*MoveElevatorVelocityCommand mevc = new MoveElevatorVelocityCommand();
          boolean isDown = OI.AXIS_MULTIPLIER * jt.getRawAxis(OI.CHEAP_WHITE_RIGHTY) < 0;
