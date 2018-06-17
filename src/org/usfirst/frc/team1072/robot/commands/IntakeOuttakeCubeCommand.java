@@ -48,6 +48,6 @@ public class IntakeOuttakeCubeCommand extends Command
     /**
      * Determines whether this command has finished.
      */
-    protected boolean isFinished() { return true; }
+    protected boolean isFinished() { return false; }
 
 }

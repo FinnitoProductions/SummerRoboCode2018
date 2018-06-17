@@ -108,9 +108,9 @@ public class RobotMap {
     
     public static int EL_MANUAL_CURRENT_LIMIT_CONT = 10;
     
-    public static int EL_PEAK_CURRENT_LIMIT = 25;
+    public static int EL_PEAK_CURRENT_LIMIT = 10; //25
     public static int EL_PEAK_TIME_MS = 750;
-    public static int EL_CONTINOUS_CURRENT_LIMIT = 15;
+    public static int EL_CONTINOUS_CURRENT_LIMIT = 5; //15
     
     public static int EL_VEL_PID = 0;
     public static int EL_POS_PID = 1;
@@ -135,9 +135,14 @@ public class RobotMap {
     public static double EL_VEL_KI = 0.0001;
     public static double EL_VEL_KD = 14;
     
-    public static int EL_VEL_ACCEL =  9000;
-    public static int EL_VEL_VEL = 2600;
+    public static int EL_VEL_ACCEL =  5000; // 9000
+    public static int EL_VEL_VEL = 1500; //2600
     public static int EL_VEL_ALLOWABLE_ERROR = 100;
+    
+    public static int EL_INTAKE_HEIGHT = 1000;
+    public static int EL_SWITCH_HEIGHT = 10000;
+    public static int EL_SCALE_LOW_HEIGHT = 20000;
+    public static int EL_SCALE_HIGH_HEIGHT = 34000;
             
     
     public static int INT_PEAK_CURRENT_LIMIT = 15;

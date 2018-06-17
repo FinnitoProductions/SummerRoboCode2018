@@ -11,10 +11,14 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class MoveElevatorPositionCommand extends Command
 {
+    double position;
     /**
      * Creates a new command requiring the elevator subsystem.
      */
-    public MoveElevatorPositionCommand() { requires(Robot.el); }
+    public MoveElevatorPositionCommand(double position) 
+    { 
+        requires(Robot.el); 
+    }
 
     /**
      * Executes the command given the position to which the elevator should move. 

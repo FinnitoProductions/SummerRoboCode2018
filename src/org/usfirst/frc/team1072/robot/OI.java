@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
+import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
 import org.usfirst.frc.team1072.robot.commands.SetSolenoidCommand;
 import org.usfirst.frc.team1072.robot.subsystems.Gamepad;
 
@@ -42,7 +43,7 @@ public class OI
     public static int BLACK_XBOX_RIGHT_TRIGGER = 3;
     public static int BLACK_XBOX_LEFT_BUMPER = 5;
     public static int BLACK_XBOX_RIGHT_BUMPER = 6;
-    public static double BLACK_XBOX_DEADBAND = 0.1;
+    public static double BLACK_XBOX_DEADBAND = 0.08;
     public static boolean BLACK_XBOX_INVERT_Y = true;
     public static int BLACK_XBOX_PORT = 0;
     public static boolean BLACK_XBOX_IS_ANALOG_TRIGGER = true;
@@ -99,6 +100,10 @@ public class OI
         leftDPad.whenPressed(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
         rightDPad.whenPressed(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
         
+        gw.getButtonA().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_INTAKE_HEIGHT));
+        gw.getButtonX().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_SWITCH_HEIGHT));
+        gw.getButtonB().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_SCALE_LOW_HEIGHT));
+        gw.getButtonY().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_SCALE_HIGH_HEIGHT));
         
     }
 

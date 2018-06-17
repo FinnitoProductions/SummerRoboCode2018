@@ -3,6 +3,7 @@ package org.usfirst.frc.team1072.robot.subsystems;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
 import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
+import org.usfirst.frc.team1072.robot.commands.MoveElevatorVelocityCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -38,7 +39,7 @@ public class Elevator extends Subsystem
 
     protected void initDefaultCommand()
     {
-        setDefaultCommand(new MoveElevatorMotionMagicCommand());
+        setDefaultCommand(new MoveElevatorVelocityCommand());
     }
     
     /**

@@ -65,7 +65,7 @@ public class Robot extends TimedRobot
      */
     public void robotInit()
     {
-        oi = OI.getInstance();
+        
         //m_chooser.addDefault("Default Auto", new ExampleCommand());
         // chooser.addObject("My Auto", new MyAutoCommand());
         dt = Drivetrain.getInstance();
@@ -73,6 +73,7 @@ public class Robot extends TimedRobot
         el = Elevator.getInstance();
         SmartDashboard.putData("Auto mode", m_chooser);
         System.out.println("robot initialized");
+        oi = OI.getInstance();
     }
     
     

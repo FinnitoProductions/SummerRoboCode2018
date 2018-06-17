@@ -1,8 +1,11 @@
 package org.usfirst.frc.team1072.robot.commands;
 
+import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Represents a command to continually move the elevator given a velocity.
@@ -20,7 +23,26 @@ public class MoveElevatorVelocityCommand extends Command
      * Executes the command given a speed.
      * @param speed the speed by which the elevator will be moved
      */
-    public void execute(double speed) { Robot.el.moveElevatorVelocity(speed); }
+    public void execute() 
+    { 
+        OI oi = OI.getInstance();
+        if (Math.abs(oi.getGamepad().getRightY()) > OI.BLACK_XBOX_DEADBAND)
+        {
+            boolean isDown = oi.getGamepad().getRightY() < 0;
+            boolean reverseBeyondLimit = Robot.el.getBottomRightTalon()
+                    .getSelectedSensorPosition(RobotMap.POS_PID) <= RobotMap.EL_REVERSE_SOFT;
+            if (isDown && !reverseBeyondLimit)
+              Robot.el.moveElevatorVelocity(oi.getGamepad().getRightY());
+            else if (isDown && reverseBeyondLimit)
+                Robot.el.moveElevatorVelocity(0);
+            else
+                Robot.el.moveElevatorVelocity(oi.getGamepad().getRightY());
+        }
+        else
+            Robot.el.moveElevatorVelocity(0);
+        
+        SmartDashboard.putNumber("Joystick Value", oi.getGamepad().getRightY());
+    }
     
     /**
      * Determines whether the command has finished.
