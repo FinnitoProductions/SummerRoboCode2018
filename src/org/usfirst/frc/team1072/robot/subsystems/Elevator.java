@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
+import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -26,12 +28,17 @@ public class Elevator extends Subsystem
     /**
      * Initializes the command using the four ports in RobotMap.
      */
-    protected void initDefaultCommand()
+    public Elevator()
     {
         topRightVictor = new VictorSPX(RobotMap.ELEVATOR_VICTOR_TOPRIGHT);
         topLeftVictor = new VictorSPX (RobotMap.ELEVATOR_VICTOR_TOPLEFT);
         bottomLeftVictor = new VictorSPX(RobotMap.ELEVATOR_VICTOR_BOTTOMLEFT);
         bottomRightTalon = new TalonSRX(RobotMap.ELEVATOR_TALON);
+    }
+
+    protected void initDefaultCommand()
+    {
+        setDefaultCommand(new MoveElevatorMotionMagicCommand());
     }
     
     /**

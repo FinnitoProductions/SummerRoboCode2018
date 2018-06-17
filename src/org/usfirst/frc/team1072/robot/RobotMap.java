@@ -97,10 +97,10 @@ public class RobotMap {
     public static final DoubleSolenoid.Value INTAKE_UP = DoubleSolenoid.Value.kForward;
     
     public static final int INTAKE_COMPRESS_SOL = 0;
-    public static final DoubleSolenoid.Value INTAKE_COMPRESS = DoubleSolenoid.Value.kForward;
+    public static final DoubleSolenoid.Value INTAKE_COMPRESS = DoubleSolenoid.Value.kReverse;
     
     public static final int INTAKE_DECOMPRESS_SOL = 2;
-    public static final DoubleSolenoid.Value INTAKE_DECOMPRESS = DoubleSolenoid.Value.kReverse;
+    public static final DoubleSolenoid.Value INTAKE_DECOMPRESS = DoubleSolenoid.Value.kForward;
     
     public static final String INTAKE_UPDOWN_KEY = "UPDOWN";
     public static final String INTAKE_COMPRESSDECOMPRESS_KEY = "COMPRESSDE";

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -21,16 +22,20 @@ public class Drivetrain extends Subsystem
     private VictorSPX leftVictor;
     private VictorSPX rightVictor;
     
-    /**
-     * Initializes the command using the four ports for the Talons/Victors.
-     */
-    public void initDefaultCommand()
+    public Drivetrain()
     {
         // initialize talons
         leftTalon = new TalonSRX (RobotMap.LEFT_CIM_TALON);
         rightTalon = new TalonSRX (RobotMap.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (RobotMap.LEFT_CIM_VICTOR);
         rightVictor = new VictorSPX (RobotMap.RIGHT_CIM_VICTOR);
+    }
+    /**
+     * Initializes the command using the four ports for the Talons/Victors.
+     */
+    public void initDefaultCommand()
+    {
+        setDefaultCommand(new DriveWithVelocityCommand());
         
     }
     

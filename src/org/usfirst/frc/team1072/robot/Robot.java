@@ -65,7 +65,7 @@ public class Robot extends TimedRobot
      */
     public void robotInit()
     {
-        oi = new OI();
+        oi = OI.getInstance();
         //m_chooser.addDefault("Default Auto", new ExampleCommand());
         // chooser.addObject("My Auto", new MyAutoCommand());
         dt = Drivetrain.getInstance();
@@ -74,6 +74,8 @@ public class Robot extends TimedRobot
         SmartDashboard.putData("Auto mode", m_chooser);
         System.out.println("robot initialized");
     }
+    
+    
 
     /**
      * Performs all commands to initialize the talons.
@@ -347,7 +349,7 @@ public class Robot extends TimedRobot
      * @param speed the speed in fps
      * @return the converted encoder value
      */
-    private double speedToEncoderUnits(double speed)
+    public static double speedToEncoderUnits(double speed)
     {
         return speed * 12.0 / (RobotMap.WHEELDIAMETER * Math.PI) * RobotMap.TICKS_PER_REV / 10.0;
     }
@@ -596,6 +598,8 @@ public class Robot extends TimedRobot
         driveTrainTalonInit();
         elevatorTalonInit();
         intakeTalonInit();
+        
+        //Intake.pn.getSolenoid(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY).set(RobotMap.INTAKE_COMPRESS); 
     }
 
     /**
@@ -603,6 +607,7 @@ public class Robot extends TimedRobot
      */
     public void teleopPeriodic() 
     {
+        Scheduler.getInstance().run();
          //drivePeriodic();
         
         // POSITION PID
@@ -619,7 +624,7 @@ public class Robot extends TimedRobot
           
         
         
-        SmartDashboard.putNumber("Elevator Velocity",
+        /*SmartDashboard.putNumber("Elevator Velocity",
                 el.getBottomRightTalon().getSelectedSensorVelocity(RobotMap.EL_VEL_PID));
         SmartDashboard.putNumber("Motor Voltage", 
                 el.getBottomRightTalon().getMotorOutputVoltage());
@@ -632,7 +637,7 @@ public class Robot extends TimedRobot
         }
         catch(IOException e){
            e.printStackTrace();
-        }
+        }*/
          
         /*
          * double targetPos = -1 * jt.getY() * RobotMap.TICKS_PER_REV * 3;
@@ -687,7 +692,7 @@ public class Robot extends TimedRobot
     /**
      * Represents important commands to be called for a standard teleoperated drive period.
      */
-    private void drivePeriodic() throws IOException
+    /*private void drivePeriodic() throws IOException
     {
         DriveWithVelocityCommand adc = new DriveWithVelocityCommand();
         
@@ -703,7 +708,11 @@ public class Robot extends TimedRobot
         
         tc.execute(true);
           
-        SetSolenoidCommand ssc = new SetSolenoidCommand(); 
+        SetSolenoidCommand intakeUp = new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP);
+        SetSolenoidCommand intakeDown = new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN);
+        SetSolenoidCommand intakeCompress = new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS);
+        SetSolenoidCommand intakeDecompress = new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS);
+        
         int i = oi.getGamepad().getDPad();
          
          if (i > -1 && i <= 1) 
@@ -757,7 +766,7 @@ public class Robot extends TimedRobot
          SmartDashboard.putNumber("Elevator Position", el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.POS_PID));*/
          
          
-         SmartDashboard.putNumber("Axis 0", jt.getRawAxis(0));
+        /* SmartDashboard.putNumber("Axis 0", jt.getRawAxis(0));
          SmartDashboard.putNumber("Axis 1", jt.getRawAxis(1));
          SmartDashboard.putNumber("Axis 2", jt.getRawAxis(2));
          SmartDashboard.putNumber("Axis 3", jt.getRawAxis(3));
@@ -768,7 +777,7 @@ public class Robot extends TimedRobot
          
         
         
-    }
+    }*/
 
     /**
      * This function is called periodically during test mode.

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.commands.IntakeOuttakeCubeCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -20,14 +21,18 @@ public class Intake extends Subsystem
     
     private TalonSRX leftTalon;
     private TalonSRX rightTalon;
+    
+    public Intake()
+    {
+        leftTalon = new TalonSRX(RobotMap.INTAKE_TALON_LEFT);
+        rightTalon = new TalonSRX(RobotMap.INTAKE_TALON_RIGHT);
+    }
     /**
      * Initializes the command using the ports for the left and right Talons.
      */
     protected void initDefaultCommand()
     {
-        // TODO Auto-generated method stub
-        leftTalon = new TalonSRX(RobotMap.INTAKE_TALON_LEFT);
-        rightTalon = new TalonSRX(RobotMap.INTAKE_TALON_RIGHT);
+        setDefaultCommand(new IntakeOuttakeCubeCommand());
     }
 
     /**

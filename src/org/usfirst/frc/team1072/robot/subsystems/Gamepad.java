@@ -26,8 +26,8 @@ public class Gamepad extends Subsystem
     private boolean isAnalogTrigger;
 
     /**
-     * Creates a new deadband.
-     * @param deadband
+     * Creates a new gamepad.
+     * @param deadband the range for which the gamepad range will be considered zero
      * @param invertY whether or not to invert the Y stick
      * @param ports a map containing the ports of buttons and axes
      * @param port the joystick port 
