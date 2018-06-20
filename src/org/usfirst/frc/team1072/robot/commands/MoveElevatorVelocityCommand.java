@@ -32,7 +32,14 @@ public class MoveElevatorVelocityCommand extends Command
             boolean reverseBeyondLimit = Robot.el.getBottomRightTalon()
                     .getSelectedSensorPosition(RobotMap.POS_PID) <= RobotMap.EL_REVERSE_SOFT;
             if (isDown && !reverseBeyondLimit)
-              Robot.el.moveElevatorVelocity(oi.getGamepad().getRightY());
+            {
+                double speed = oi.getGamepad().getRightY();
+                if (Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.EL_POS_PID) <= RobotMap.EL_SLOW_DOWN_POS)
+                {
+                    speed *= 0.01;
+                }
+                Robot.el.moveElevatorVelocity(speed);
+            }
             else if (isDown && reverseBeyondLimit)
                 Robot.el.moveElevatorVelocity(0);
             else

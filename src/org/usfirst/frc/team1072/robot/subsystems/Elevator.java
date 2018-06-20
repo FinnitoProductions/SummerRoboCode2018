@@ -39,7 +39,7 @@ public class Elevator extends Subsystem
 
     protected void initDefaultCommand()
     {
-        setDefaultCommand(new MoveElevatorVelocityCommand());
+        //setDefaultCommand(new MoveElevatorVelocityCommand());
     }
     
     /**

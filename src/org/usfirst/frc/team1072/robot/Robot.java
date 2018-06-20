@@ -9,6 +9,7 @@ package org.usfirst.frc.team1072.robot;
 
 import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
 
+import java.io.File;
 import java.io.IOException;
 
 //import org.harker.robotics.harkerrobolib.*;
@@ -27,10 +28,13 @@ import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Gamepad;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 
+import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -39,6 +43,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
 
 /**
  * Represents the central code for the robot.
@@ -68,8 +74,9 @@ public class Robot extends TimedRobot
         
         //m_chooser.addDefault("Default Auto", new ExampleCommand());
         // chooser.addObject("My Auto", new MyAutoCommand());
-        dt = Drivetrain.getInstance();
+        
         intake = Intake.getInstance();
+        dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         SmartDashboard.putData("Auto mode", m_chooser);
         System.out.println("robot initialized");
@@ -124,10 +131,12 @@ public class Robot extends TimedRobot
         elZeroSensors();
 
         elConfigurePositionClosedLoop();
+        
         elConfigureMotionMagic();
 
     }
 
+    
     /**
      * Sets the ramp rate for closed loop elevator motion.
      * @param rampRate the time from zero to full voltage
@@ -578,12 +587,45 @@ public class Robot extends TimedRobot
         driveTrainTalonInit();
         elevatorTalonInit();
         intakeTalonInit();
+        File leftFile = new File ("paths/test_5ft/test_5ft_left.csv");
+        File rightFile = new File ("paths/test_5ft/test_5ft_right.csv");
+        Trajectory leftPath = Pathfinder.readFromCSV(leftFile);
+        Trajectory rightPath = Pathfinder.readFromCSV(rightFile);
+        
     }
 
+    public void pigeonInit()
+    {
+        dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
+        dt.getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
+        
+        dt.getRightTalon().configRemoteFeedbackFilter( 0x00, 
+                 RemoteSensorSource.Off, 
+                RobotMap.REMOTE_0,  
+                RobotMap.TIMEOUT);
+        dt.getRightTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
+                RemoteSensorSource.Pigeon_Yaw, 
+                RobotMap.REMOTE_1, 
+                RobotMap.TIMEOUT);
+        dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 
+                RobotMap.PID_TURN, 
+                RobotMap.TIMEOUT);
+        //intake.getRightTalon().configSelectedFeedbackCoefficient(RobotMap.PIGEON_TURN_TRAVEL_PER_ROTATION/RobotMap.PIGEON_TURN_TRAVEL_PER_ROTATION,
+                //RobotMap.PID_TURN, RobotMap.TIMEOUT);
+        //intake.getRightTalon().selectProfileSlot(2, 2);
+        
+        //intake.getRightTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
+    }
+    
+    
+    
     /**
      * This function is called periodically during autonomous.
      */
-    public void autonomousPeriodic(){ /* Scheduler.getInstance().run();*/ }
+    public void autonomousPeriodic()
+    { 
+        /* Scheduler.getInstance().run();*/ 
+    }
 
     /**
      * Calls necessary methods to initialize for the teleoperated period.
@@ -599,6 +641,7 @@ public class Robot extends TimedRobot
         driveTrainTalonInit();
         elevatorTalonInit();
         intakeTalonInit();
+        pigeonInit();
         
         //Intake.pn.getSolenoid(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY).set(RobotMap.INTAKE_COMPRESS); 
     }
@@ -609,6 +652,19 @@ public class Robot extends TimedRobot
     public void teleopPeriodic() 
     {
         Scheduler.getInstance().run();
+   
+        double[] ypr = new double[3];
+        dt.getPigeon().getYawPitchRoll(ypr);
+        //SmartDashboard.putNumber("Pigeon Yaw", ypr[0]);
+        SmartDashboard.putNumber("Pigeon SensorPos 0", dt.getRightTalon().getSelectedSensorPosition(0));
+        SmartDashboard.putNumber("Pigeon SensorPos 1", dt.getRightTalon().getSelectedSensorPosition(1));
+        SmartDashboard.putNumber("Pigeon SensorPos 2", dt.getRightTalon().getSelectedSensorPosition(2));
+        SmartDashboard.putNumber("Pigeon SensorPos 3", dt.getRightTalon().getSelectedSensorPosition(3));
+
+        SmartDashboard.putNumber("pigeon ID", dt.getPigeon().getDeviceID());
+        //SmartDashboard.putNumber("Pigeon Pitch", ypr[1]);
+        //SmartDashboard.putNumber("Pigeon Roll", ypr[2]);
+        
          //drivePeriodic();
         
         // POSITION PID

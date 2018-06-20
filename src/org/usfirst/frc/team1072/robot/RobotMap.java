@@ -25,6 +25,7 @@ public class RobotMap {
     public static int ELEVATOR_VICTOR_TOPRIGHT = 10;
     public static int INTAKE_TALON_LEFT = 6;
     public static int INTAKE_TALON_RIGHT = 1;
+    public static int DT_PIGEON_PORT = 1;
     
     public static int JOYSTICK = 0;
     
@@ -32,6 +33,7 @@ public class RobotMap {
     
     public static int VEL_PID = 1;
     public static int POS_PID = 0;
+    public static int DT_ANGLE_PID = 2;
     
     public static double MAX_RAMP_TIME = 0;
     
@@ -63,6 +65,8 @@ public class RobotMap {
     public static double VEL_KI_RIGHT = 0;
     public static double VEL_KD_RIGHT = 10;
     
+    public static double EL_SLOW_DOWN_POS = 2000;
+    
     // tune (double) until oscillating, then tune KD
     public static double POS_KF_LEFT = 0;
     public static double POS_KP_LEFT = 0.1; //0.2 
@@ -85,6 +89,8 @@ public class RobotMap {
     public static int DT_PEAK_CURRENT_LIMIT = 60;
     public static int DT_PEAK_TIME_MS = 200;
     public static int DT_CONTINUOUS_CURRENT_LIMIT = 40;
+    
+    
     
     public static final int COMPRESSOR_PORT = 0;
     
@@ -126,7 +132,7 @@ public class RobotMap {
     public static int EL_POS_ALLOWABLE_ERROR = 75;
     
     public static int EL_FORWARD_SOFT = 34500;
-    public static int EL_REVERSE_SOFT = 1000;
+    public static int EL_REVERSE_SOFT = 2000;
     public static double EL_RAMP_RATE = 0.75;
     
     // elevator max RPM: 500 RPM
@@ -143,7 +149,20 @@ public class RobotMap {
     public static int EL_SWITCH_HEIGHT = 10000;
     public static int EL_SCALE_LOW_HEIGHT = 20000;
     public static int EL_SCALE_HIGH_HEIGHT = 34000;
+    
+    public static int EL_MANUAL_VEL_KF = 0;
+    public static int EL_MANUAL_VEL_KP = 0;
+    public static int EL_MANUAL_VEL_KI = 0;
+    public static int EL_MANUAL_VEL_KD = 0;
             
+    public static int PIGEON_TURN_TRAVEL_PER_ROTATION = 3600;
+    public static int PIGEON_UNITS_PER_ROTATION = 8192;
+    public static int REMOTE_0 = 0;
+    public static int REMOTE_1 = 1;
+    public static int PID_TURN = 1;
+    public static int PID_ANGLE_KP = 1;
+    public static int PID_ANGLE_KI = 0;
+    public static int PID_ANGLE_KD = 0;
     
     public static int INT_PEAK_CURRENT_LIMIT = 15;
     public static int INT_PEAK_TIME_MS = 2000;

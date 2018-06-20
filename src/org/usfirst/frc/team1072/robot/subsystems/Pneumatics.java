@@ -22,12 +22,9 @@ public class Pneumatics extends Subsystem
     private DoubleSolenoid intake_updown;
     private DoubleSolenoid intake_compressdecompress;
     
-    /**
-     * Initializes the command, setting up all the objects and the map of solenoids.
-     */
-    protected void initDefaultCommand()
+    public Pneumatics ()
     {
-        c = new Compressor(RobotMap.COMPRESSOR_PORT);
+        //c = new Compressor(RobotMap.COMPRESSOR_PORT);
         // stores all the solenoids by a String key representing their purpose (in RobotMap)
         solMap = new HashMap<String, DoubleSolenoid>();
         intake_updown = new DoubleSolenoid(/*RobotMap.FIRST_PCM_ID, */
@@ -36,6 +33,13 @@ public class Pneumatics extends Subsystem
                 RobotMap.INTAKE_COMPRESS_SOL, RobotMap.INTAKE_DECOMPRESS_SOL); 
         solMap.put(RobotMap.INTAKE_UPDOWN_KEY, intake_updown);
         solMap.put(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, intake_compressdecompress);
+    }
+    /**
+     * Initializes the command, setting up all the objects and the map of solenoids.
+     */
+    protected void initDefaultCommand()
+    {
+        
     }
     
     /**

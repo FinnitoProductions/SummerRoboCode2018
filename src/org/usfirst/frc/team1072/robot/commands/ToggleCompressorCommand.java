@@ -15,7 +15,10 @@ public class ToggleCompressorCommand extends Command
     /**
      * Sets up the command, requiring the pneumatics subsystem.
      */
-    public ToggleCompressorCommand() { requires(Intake.pn); }
+    public ToggleCompressorCommand() 
+    { 
+        requires(Intake.pn); 
+    }
 
     /**
      * Determines whether the commmand has finished.
@@ -25,6 +28,9 @@ public class ToggleCompressorCommand extends Command
     /**
      * Executes the command to toggle the compressor.
      */
-    public void execute() { Intake.pn.setCompressor(!Intake.pn.getCompressor().getClosedLoopControl()); }
+    public void execute() 
+    { 
+        Intake.pn.setCompressor(!Intake.pn.getCompressor().getClosedLoopControl()); 
+    }
 
 }

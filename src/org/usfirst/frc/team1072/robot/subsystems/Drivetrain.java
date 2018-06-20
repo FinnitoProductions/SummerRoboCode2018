@@ -1,11 +1,14 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
+import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
+import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -21,6 +24,7 @@ public class Drivetrain extends Subsystem
     private TalonSRX rightTalon;
     private VictorSPX leftVictor;
     private VictorSPX rightVictor;
+    private PigeonIMU pigeon;
     
     public Drivetrain()
     {
@@ -29,6 +33,9 @@ public class Drivetrain extends Subsystem
         rightTalon = new TalonSRX (RobotMap.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (RobotMap.LEFT_CIM_VICTOR);
         rightVictor = new VictorSPX (RobotMap.RIGHT_CIM_VICTOR);
+        pigeon = new PigeonIMU(Robot.intake.getRightTalon());
+        
+
     }
     /**
      * Initializes the command using the four ports for the Talons/Victors.
@@ -36,7 +43,7 @@ public class Drivetrain extends Subsystem
     public void initDefaultCommand()
     {
         setDefaultCommand(new DriveWithVelocityCommand());
-        
+        //setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
     /**
@@ -94,6 +101,15 @@ public class Drivetrain extends Subsystem
     {
         if (instance == null) instance = new Drivetrain();
         return instance;
+    }
+    
+    /**
+     * Gets the pigeon for this drivetrain.
+     * @return the pigeon
+     */
+    public PigeonIMU getPigeon()
+    {
+        return pigeon;
     }
 
 }
