@@ -5,6 +5,7 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Commands the drivetrain to drive with a given velocity. Vel PID
@@ -14,7 +15,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveWithVelocityCommand extends Command
 {
-
+    private double driveSpeed;
+    private double turnSpeed;
     /**
      * Creates a new DriveWithVelocityCommand object requiring the Drivetrain.
      */
@@ -32,13 +34,24 @@ public class DriveWithVelocityCommand extends Command
     public void execute() 
     { 
         OI oi = OI.getInstance();
-        double driveSpeed = Robot.speedToEncoderUnits(oi.getGamepad().getLeftY() * RobotMap.MAX_DRIVE_SPEED); 
-        double turnSpeed = Robot.speedToEncoderUnits(-1 * oi.getGamepad().getLeftX() * RobotMap.MAX_TURN_SPEED);
+        driveSpeed = .5 * Robot.speedToEncoderUnits(oi.getGamepad().getLeftY() * RobotMap.MAX_DRIVE_SPEED); 
+        turnSpeed = Robot.speedToEncoderUnits(-1 * oi.getGamepad().getLeftX() * RobotMap.MAX_TURN_SPEED);
+        
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 
                 turnSpeed); 
+        SmartDashboard.putNumber("Drivetrain Input Speed", driveSpeed);
     }
     
+    public double getDriveSpeed()
+    {
+        return driveSpeed;
+    }
+    
+    public double getTurnSpeed()
+    {
+        return turnSpeed;
+    }
     /**
      * Determines whether the command has finished.
      */

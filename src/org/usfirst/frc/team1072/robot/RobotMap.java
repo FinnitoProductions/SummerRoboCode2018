@@ -34,6 +34,7 @@ public class RobotMap {
     public static int VEL_PID = 1;
     public static int POS_PID = 0;
     public static int DT_ANGLE_PID = 2;
+    public static int DT_MOTION_PROFILE_PID = 3;
     
     public static double MAX_RAMP_TIME = 0;
     
@@ -54,16 +55,16 @@ public class RobotMap {
     public static boolean EL_TALON_INVERT = false;
     public static boolean EL_TOP_RIGHT_VICTOR_INVERT = false;
     
-    public static double VEL_KF_LEFT = .178;
+    public static double VEL_KF_LEFT = .197; //0.178
     // when modifying KP, double until disastrous
-    public static double VEL_KP_LEFT = 0.3;
-    public static double VEL_KI_LEFT = 0;
-    public static double VEL_KD_LEFT = 10;
+    public static double VEL_KP_LEFT = 0; //0.3;
+    public static double VEL_KI_LEFT = 0;//0;
+    public static double VEL_KD_LEFT = 0; //10;
     
-    public static double VEL_KF_RIGHT = .18;
-    public static double VEL_KP_RIGHT = 0.3;
-    public static double VEL_KI_RIGHT = 0;
-    public static double VEL_KD_RIGHT = 10;
+    public static double VEL_KF_RIGHT = .188; //0.18
+    public static double VEL_KP_RIGHT = 0;//0.3;
+    public static double VEL_KI_RIGHT = 0;//0;
+    public static double VEL_KD_RIGHT = 0;//10;
     
     public static double EL_SLOW_DOWN_POS = 2000;
     
@@ -110,6 +111,9 @@ public class RobotMap {
     
     public static final String INTAKE_UPDOWN_KEY = "UPDOWN";
     public static final String INTAKE_COMPRESSDECOMPRESS_KEY = "COMPRESSDE";
+    
+    // in autonomous, adds this value to all trajectory times
+    public static final int AUTON_BASE_PERIOD = 0;
     
     
     public static int EL_MANUAL_CURRENT_LIMIT_CONT = 10;
@@ -167,4 +171,26 @@ public class RobotMap {
     public static int INT_PEAK_CURRENT_LIMIT = 15;
     public static int INT_PEAK_TIME_MS = 2000;
     public static int INT_CONTINUOUS_CURRENT_LIMIT = 5;
+    
+    public static boolean NO_MANUAL_INTAKE = false;
+    public static boolean INTAKE_BOOL = true;
+    public static boolean OUTTAKE_BOOL = false;
+    // Conversion constants
+    public static final double DEGREES_PER_RADIAN = 180 / Math.PI;
+    public static final int MS_PER_SEC = 1000;
+    
+    public static final int PERIOD_IN_MS = 10;
+    public static final int PRIMARY_PID = 0;
+    public static final int AUXILIARY_PID = 1;
+    
+    // motion profiling constants
+    public static double DT_MOTION_PROF_KF_LEFT = 0;
+    public static double DT_MOTION_PROF_KP_LEFT = 0.1; //0.2 
+    public static double DT_MOTION_PROF_KI_LEFT = 0.000004; //
+    public static double DT_MOTION_PROF_KD_LEFT = 25;
+    
+    public static double DT_MOTION_PROF_KF_RIGHT = 0;
+    public static double DT_MOTION_PROF_KP_RIGHT = 0.1;
+    public static double DT_MOTION_PROF_KI_RIGHT = 0.000004; // 
+    public static double DT_MOTION_PROF_KD_RIGHT = 25;
 }

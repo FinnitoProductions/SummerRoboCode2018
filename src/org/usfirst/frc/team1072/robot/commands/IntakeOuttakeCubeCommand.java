@@ -13,12 +13,22 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class IntakeOuttakeCubeCommand extends Command
 {
+    private boolean manual;
+    private boolean intake;
+    
     /**
      * Constructs a new command requiring the intake.
      */
     public IntakeOuttakeCubeCommand() 
     { 
         requires(Robot.intake); 
+        manual = true;
+    }
+    
+    public IntakeOuttakeCubeCommand(boolean manual, boolean intake)
+    {
+        this.manual = manual;
+        this.intake = intake;
     }
     
     public void initialize()
@@ -31,13 +41,25 @@ public class IntakeOuttakeCubeCommand extends Command
      */
     public void execute() 
     {
-        OI oi = OI.getInstance();
-        if (oi.getGamepad().getLeftTriggerPressed())
-            Robot.intake.intakeOuttakeCube(oi.getGamepad().getLeftTrigger());
-        else if (oi.getGamepad().getRightTriggerPressed())
-            Robot.intake.intakeOuttakeCube(-1 * oi.getGamepad().getRightTrigger());
+        if (manual)
+        {
+            OI oi = OI.getInstance();
+            if (oi.getGamepad().getLeftTriggerPressed())
+                Robot.intake.intakeOuttakeCube(oi.getGamepad().getLeftTrigger());
+            else if (oi.getGamepad().getRightTriggerPressed())
+                Robot.intake.intakeOuttakeCube(-1 * oi.getGamepad().getRightTrigger());
+            else
+                Robot.intake.intakeOuttakeCube(0);
+        }
         else
-            Robot.intake.intakeOuttakeCube(0);
+        {
+            if (intake)
+            {
+                Robot.intake.intakeOuttakeCube(1);
+            }
+            else
+                Robot.intake.intakeOuttakeCube(-1);
+        }
     }
     
     public void end()

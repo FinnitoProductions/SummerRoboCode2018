@@ -4,6 +4,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.commands.IntakeOuttakeCubeCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -57,13 +58,59 @@ public class Intake extends Subsystem
     }
     
     /**
-     * Gets the left Talon on the intake.
+     * Initializes the intake talons.
+     */
+    public void talonInit()
+    {
+        intakeSetNeutralMode(NeutralMode.Brake);
+        intakeSetCurrentLimit(RobotMap.INT_PEAK_CURRENT_LIMIT, RobotMap.INT_PEAK_TIME_MS,
+                RobotMap.INT_CONTINUOUS_CURRENT_LIMIT);
+    }
+
+    /**
+     * Sets the neutral mode for the Talons
+     * 
+     * @param nm the neutral mode
+     */
+    private void intakeSetNeutralMode(NeutralMode nm)
+    {
+        getLeftTalon().setNeutralMode(nm);
+        getRightTalon().setNeutralMode(nm);
+    }
+
+    /**
+     * Sets the current limit on the 
+     * 
+     * @param peakCurrentLimit
+     *            the peak limit (only temporary)
+     * @param peakTime
+     *            the time (in ms) for the peak limit to be allowed
+     * @param continuousLimit
+     *            the continuous current limit (after peak has expired)
+     */
+    private void intakeSetCurrentLimit(int peakCurrentLimit, int peakTime, int continuousLimit)
+    {
+        getLeftTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+
+        getLeftTalon().configPeakCurrentDuration(peakTime, RobotMap.TIMEOUT);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+
+        getLeftTalon().configContinuousCurrentLimit(continuousLimit, RobotMap.TIMEOUT);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+
+        getLeftTalon().enableCurrentLimit(true);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+    }
+    
+    /**
+     * Gets the left Talon on the 
      * @return the left Talon
      */
     public TalonSRX getLeftTalon() { return leftTalon; }
 
     /**
-     * Gets the right Talon on the intake.
+     * Gets the right Talon on the 
      * @return the right Talon
      */
     public TalonSRX getRightTalon() { return rightTalon; }
