@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Pathfinder;
@@ -148,12 +149,12 @@ public class Robot extends TimedRobot
          */
 
         // schedule the autonomous command (example)
-        if (m_autonomousCommand != null)
-            m_autonomousCommand.start();
+
         dt.talonInit();
         el.talonInit();
         intake.talonInit();
-        new AutonomousCommand().start();
+        (m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn})).start();
+        
         
         
     }
@@ -188,6 +189,10 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
+        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
+        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
+        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));
+        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorPosition(RobotMap.VEL_PID));
         Scheduler.getInstance().run();
     }
 

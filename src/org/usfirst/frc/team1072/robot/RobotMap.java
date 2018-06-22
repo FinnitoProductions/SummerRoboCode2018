@@ -179,17 +179,17 @@ public class RobotMap {
     public static final double DEGREES_PER_RADIAN = 180 / Math.PI;
     public static final int MS_PER_SEC = 1000;
     
-    public static final int PERIOD_IN_MS = 10;
+    public static final int PERIOD_IN_MS = 50;
     public static final int PRIMARY_PID = 0;
     public static final int AUXILIARY_PID = 1;
     
     // motion profiling constants
-    public static double DT_MOTION_PROF_KF_LEFT = 0;
+    public static double DT_MOTION_PROF_KF_LEFT = .182; //0.197
     public static double DT_MOTION_PROF_KP_LEFT = 0.1; //0.2 
     public static double DT_MOTION_PROF_KI_LEFT = 0.000004; //
     public static double DT_MOTION_PROF_KD_LEFT = 25;
     
-    public static double DT_MOTION_PROF_KF_RIGHT = 0;
+    public static double DT_MOTION_PROF_KF_RIGHT = .178; //0.188
     public static double DT_MOTION_PROF_KP_RIGHT = 0.1;
     public static double DT_MOTION_PROF_KI_RIGHT = 0.000004; // 
     public static double DT_MOTION_PROF_KD_RIGHT = 25;

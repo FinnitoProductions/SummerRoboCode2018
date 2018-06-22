@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.commands.SetCompressorCommand;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -24,7 +25,7 @@ public class Pneumatics extends Subsystem
     
     public Pneumatics ()
     {
-        //c = new Compressor(RobotMap.COMPRESSOR_PORT);
+        c = new Compressor(RobotMap.COMPRESSOR_PORT);
         // stores all the solenoids by a String key representing their purpose (in RobotMap)
         solMap = new HashMap<String, DoubleSolenoid>();
         intake_updown = new DoubleSolenoid(/*RobotMap.FIRST_PCM_ID, */
@@ -39,7 +40,7 @@ public class Pneumatics extends Subsystem
      */
     protected void initDefaultCommand()
     {
-        
+        setDefaultCommand(new SetCompressorCommand(true));
     }
     
     /**

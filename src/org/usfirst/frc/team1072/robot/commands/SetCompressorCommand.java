@@ -2,15 +2,17 @@ package org.usfirst.frc.team1072.robot.commands;
 
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
  * Represents a command to enable and disable the compressor.
  * @author Finn Frankis
  * @version 6/15/18
  */
-public class SetCompressorCommand extends Command
+public class SetCompressorCommand extends InstantCommand
 {
     boolean state;
+    
     /**
      * Initializes the command, requiring the pneumatics subsystem.
      */
@@ -19,11 +21,6 @@ public class SetCompressorCommand extends Command
         this.state = state;
         requires(Intake.pn); 
     }
-
-    /**
-     * Determines whether the command is finished.
-     */
-    protected boolean isFinished() { return false; }
     
     /**
      * Executes the command given the compressor's state.
