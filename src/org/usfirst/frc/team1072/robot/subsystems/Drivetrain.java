@@ -2,6 +2,7 @@ package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
 import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
 import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
 
@@ -46,6 +47,7 @@ public class Drivetrain extends Subsystem
     public void initDefaultCommand()
     {
         setDefaultCommand(new DriveWithVelocityCommand());
+        //setDefaultCommand(new DriveToPositionCommand());
         //setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
@@ -58,8 +60,8 @@ public class Drivetrain extends Subsystem
     {
         // victor follows talon
         //leftTalon.set(ControlMode.Velocity, speed - turn);
-        getLeftTalon().selectProfileSlot(RobotMap.VEL_PID, 0);
-        getRightTalon().selectProfileSlot(RobotMap.VEL_PID, 0);
+        getLeftTalon().selectProfileSlot(RobotMap.VEL_PID, RobotMap.PRIMARY_PID);
+        getRightTalon().selectProfileSlot(RobotMap.VEL_PID, RobotMap.PRIMARY_PID);
         rightTalon.set(ControlMode.Velocity, speed + turn);  
         leftTalon.set(ControlMode.Velocity, speed - turn);   
     }
@@ -70,6 +72,7 @@ public class Drivetrain extends Subsystem
      */
     public void arcadeDrivePosition (double target)
     {
+        System.out.println("DRIVING TO POSITION");
         getLeftTalon().selectProfileSlot(RobotMap.POS_PID, 0);
         getRightTalon().selectProfileSlot(RobotMap.POS_PID, 0);
         leftTalon.set(ControlMode.Position, target);

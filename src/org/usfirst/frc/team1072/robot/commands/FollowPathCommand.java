@@ -271,7 +271,7 @@ public class FollowPathCommand extends Command
         {
             imc.clearMotionProfileTrajectories();
             imc.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
-            imc.set(ControlMode.PercentOutput, 0, DemandType.AuxPID, 0);
+            // imc.set(ControlMode.MotionProfile, MotionProfile.);
         }
     }
     

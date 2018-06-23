@@ -24,6 +24,9 @@ import jaci.pathfinder.Trajectory.Segment;
 public class AutonomousCommand extends CommandGroup
 {
     private int numPoints = 0;
+    
+    private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_left_detailed.csv";
+    private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_right_detailed.csv";
     public AutonomousCommand(Subsystem[] subsystems)
     {
         for (Subsystem s : subsystems)
@@ -61,8 +64,8 @@ public class AutonomousCommand extends CommandGroup
         addParallel(new MoveElevatorMotionMagicCommand(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS - 1000, RobotMap.EL_SWITCH_HEIGHT));
         if (onLeft)
         {
-             fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
-                    "/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");
+             fpc1 = setupPathFollower(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
+                    "/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
         else
         {

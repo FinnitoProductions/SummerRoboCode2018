@@ -34,13 +34,16 @@ public class DriveWithVelocityCommand extends Command
     public void execute() 
     { 
         OI oi = OI.getInstance();
-        driveSpeed = .5 * Robot.speedToEncoderUnits(oi.getGamepad().getLeftY() * RobotMap.MAX_DRIVE_SPEED); 
+        driveSpeed = Robot.speedToEncoderUnits(oi.getGamepad().getLeftY() * RobotMap.MAX_DRIVE_SPEED); 
         turnSpeed = Robot.speedToEncoderUnits(-1 * oi.getGamepad().getLeftX() * RobotMap.MAX_TURN_SPEED);
-        
+        if (Math.abs(oi.getGamepad().getLeftX()) < 0.1)
+            turnSpeed = 0;
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 
                 turnSpeed); 
-        SmartDashboard.putNumber("Drivetrain Input Speed", driveSpeed);
+        
+        SmartDashboard.putNumber("LEFT TALON ERROR", driveSpeed - Robot.dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
+        SmartDashboard.putNumber("RIGHT TALON ERROR", driveSpeed - Robot.dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
     }
     
     public double getDriveSpeed()
