@@ -193,4 +193,6 @@ public class RobotMap {
     public static double DT_MOTION_PROF_KP_RIGHT = 0.1;
     public static double DT_MOTION_PROF_KI_RIGHT = 0.000004; // 
     public static double DT_MOTION_PROF_KD_RIGHT = 25;
+    
+    public static int TIME_PER_TRAJECTORY_POINT_MS = 50;
 }

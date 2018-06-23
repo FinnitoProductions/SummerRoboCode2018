@@ -32,7 +32,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private final int minPointsInController = 10;
+    private final int minPointsInController = 3;
     private ProcessBuffer p;
     private Notifier notif;
   
@@ -43,17 +43,24 @@ public class FollowPathCommand extends Command
     
     private int pathState;
     
+    
     private double totalTime;
     
     public FollowPathCommand()
     {
-        controllers = new HashMap<IMotorController, Object[]>();
         p = new ProcessBuffer();
-        for (IMotorController imc : controllers.keySet())
-            p.addController(imc);
-        notif = new Notifier(p);
+        controllers = new HashMap<IMotorController, Object[]>();
+    }
+    
+    public void initialize()
+    {
         pathState = 0;
         totalTime = 0;
+        System.out.println("initializing command");
+        double period = 1.0 * RobotMap.PERIOD_IN_MS / RobotMap.MS_PER_SEC / 2 / 2.5;
+        notif = new Notifier(p);
+        notif.startPeriodic(period);
+        System.out.println("Initialized with period " + period);
     }
     
     public void execute()
@@ -65,12 +72,14 @@ public class FollowPathCommand extends Command
             controllers.get(controller)[STAT_INDEX] = motionStatus;
         }
         
+        System.out.println("SWITCHING NOW " + pathState);
         switch(pathState)
         {
             // ready to begin loading
             case 0:
             {
-                notif.startPeriodic(1.0 * RobotMap.PERIOD_IN_MS / RobotMap.MS_PER_SEC / 2); // halve for optimal communication
+                System.out.println("CASE 0");
+                 // halve for optimal communication
                 for (IMotorController controller : controllers.keySet())
                 {
                     controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
@@ -82,22 +91,24 @@ public class FollowPathCommand extends Command
                 }
                 System.out.println("Loaded points correctly.");
                 pathState = 1;
+                break;
             }
             
             // ready to begin 
             case 1:
             {
+                System.out.println("CASE 1");
                 // once enough points have been buffered, begin sequence
-                boolean allReady = false;
+                boolean allReady = true;
                 for (IMotorController controller : controllers.keySet())
                 {
-                    allReady = allReady || getControllerStatus(controller).btmBufferCnt > minPointsInController;
+                    allReady = allReady && getControllerStatus(controller).btmBufferCnt > minPointsInController;
                 }
                 
                 System.out.println("All Ready? " + allReady);
                 if (allReady)
                 {
-                    
+                  
                     System.out.println("I am ready.");
                     for (IMotorController controller : controllers.keySet())
                     {
@@ -111,30 +122,37 @@ public class FollowPathCommand extends Command
                     SmartDashboard.putNumber("ACTIVE LEFT VEL: ", controllers.keySet().iterator().next().getActiveTrajectoryVelocity());
                     SmartDashboard.putNumber("ACTIVE LEFT HEAD: ", controllers.keySet().iterator().next().getActiveTrajectoryHeading());
                 }
+                break;
             }
             
             // check up on profile to see if done
             case 2: 
             {
-                
-                boolean isFinished = false;
+                System.out.println("CASE 2");
+                boolean isFinished = true;
+                System.out.println();
                 for (IMotorController controller : controllers.keySet())
                 {
-                        isFinished = isFinished || 
-                                (getControllerStatus(controller).activePointValid &&
-                                getControllerStatus(controller).isLast);
+                        MotionProfileStatus status = new MotionProfileStatus();
+                        controller.getMotionProfileStatus(status);
+                        System.out.println("Buffer Count: " + status.btmBufferCnt);
+                        isFinished = isFinished && status.btmBufferCnt == 0;
                         
-                        if (getControllerStatus(controller).isUnderrun)
+                        /*if (getControllerStatus(controller).isUnderrun)
                         {
                             controller.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
                             System.out.println(controller.getDeviceID() + " IS UNDERRUN");
-                        }
+                        }*/
                 }
                 
 
                 
                 if (isFinished) 
+                {
+                    System.out.println("FINISHED");
                     pathState = 3;
+                }
+                break;
             }
            
         }
@@ -162,6 +180,7 @@ public class FollowPathCommand extends Command
                 controller.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
                 System.out.println("IS UNDERRUN");
             }
+            
             // clears existing trajectories
             controller.clearMotionProfileTrajectories();
             
@@ -211,11 +230,11 @@ public class FollowPathCommand extends Command
         public void run()
         {
             for (int i = 0; i < motorControllers.size(); i++)
-                motorControllers.get(i).processMotionProfileBuffer();
-            
-            if (motorControllers.size() > 0)
             {
-                SmartDashboard.putNumber("OUTPUT VOLTAGE", motorControllers.get(0).getMotorOutputVoltage());
+                MotionProfileStatus status = new MotionProfileStatus();
+                motorControllers.get(i).getMotionProfileStatus(status);
+                //System.out.println("i= " + i + " BUFFER: " + status.btmBufferCnt);
+                motorControllers.get(i).processMotionProfileBuffer();
             }
         }
         
@@ -229,6 +248,11 @@ public class FollowPathCommand extends Command
     }
     
     @Override
+    public void cancel()
+    {
+        disable();
+    }
+    @Override
     protected void end()
     {
         disable();
@@ -241,13 +265,13 @@ public class FollowPathCommand extends Command
     }
     
     public void disable() {
+        System.out.println("DISABLING");
         notif.stop();
         for (IMotorController imc : controllers.keySet())
         {
             imc.clearMotionProfileTrajectories();
             imc.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
             imc.set(ControlMode.PercentOutput, 0, DemandType.AuxPID, 0);
-            imc.clearStickyFaults(RobotMap.TIMEOUT);
         }
     }
     

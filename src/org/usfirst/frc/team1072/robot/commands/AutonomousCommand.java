@@ -13,14 +13,17 @@ import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Segment;
 
 public class AutonomousCommand extends CommandGroup
 {
+    private int numPoints = 0;
     public AutonomousCommand(Subsystem[] subsystems)
     {
         for (Subsystem s : subsystems)
@@ -30,7 +33,6 @@ public class AutonomousCommand extends CommandGroup
                 "/home/summer2018/paths/test_5ft/test_5ft_right_detailed.csv"));*/
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
-        
         
         oneCubeSwitch(true);
         
@@ -55,29 +57,34 @@ public class AutonomousCommand extends CommandGroup
 
     private void oneCubeSwitch (boolean onLeft)
     {
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
-        
         FollowPathCommand fpc1;
+        addParallel(new MoveElevatorMotionMagicCommand(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS - 1000, RobotMap.EL_SWITCH_HEIGHT));
         if (onLeft)
         {
              fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");
-            addSequential(fpc1);
         }
         else
         {
             fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv");
-            addSequential(fpc1);
         }
-        /*addParallel(new MoveElevatorMotionMagicCommand((fpc1.getTotalTime(Robot.dt.getLeftTalon()) + fpc1.getTotalTime(Robot.dt.getLeftTalon()))/2  - 1000, 
-                RobotMap.EL_SWITCH_HEIGHT));
+        addSequential (fpc1);
+        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
+        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
+        
 
         
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
         
-        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
+        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));
+
+            
+                
+        
+        
+        
     }
     public static Trajectory readTrajectory(String filename) throws FileNotFoundException
     {
@@ -119,6 +126,7 @@ public class AutonomousCommand extends CommandGroup
         }
         fpc.addProfile(leftPath1, Robot.dt.getLeftTalon());
         fpc.addProfile(rightPath1, Robot.dt.getRightTalon());
+        numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         return fpc;
     }
 
