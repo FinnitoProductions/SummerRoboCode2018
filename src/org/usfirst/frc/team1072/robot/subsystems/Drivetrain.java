@@ -29,7 +29,7 @@ public class Drivetrain extends Subsystem
     private PigeonIMU pigeon;
    
     
-    public Drivetrain()
+    private Drivetrain()
     {
         // initialize talons
         leftTalon = new TalonSRX (RobotMap.LEFT_CIM_TALON);
@@ -343,6 +343,11 @@ public class Drivetrain extends Subsystem
     {
         if (instance == null) instance = new Drivetrain();
         return instance;
+    }
+    
+    public static void resetInstance()
+    {
+        instance = null;
     }
     
     /**

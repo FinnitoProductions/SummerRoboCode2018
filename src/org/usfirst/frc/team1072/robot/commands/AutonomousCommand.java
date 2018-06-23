@@ -26,8 +26,15 @@ public class AutonomousCommand extends CommandGroup
         for (Subsystem s : subsystems)
             requires(s);
 
-        addSequential(setupPathFollower("/home/summer2018/paths/test_5ft/test_5ft_left_detailed.csv", 
-                "/home/summer2018/paths/test_5ft/test_5ft_right_detailed.csv"));
+        /*addSequential(setupPathFollower("/home/summer2018/paths/test_5ft/test_5ft_left_detailed.csv", 
+                "/home/summer2018/paths/test_5ft/test_5ft_right_detailed.csv"));*/
+        /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
+                "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
+        
+        
+        oneCubeSwitch(true);
+        
+        
         
         /*addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
@@ -46,6 +53,32 @@ public class AutonomousCommand extends CommandGroup
         addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
     }
 
+    private void oneCubeSwitch (boolean onLeft)
+    {
+        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
+        
+        FollowPathCommand fpc1;
+        if (onLeft)
+        {
+             fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
+                    "/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");
+            addSequential(fpc1);
+        }
+        else
+        {
+            fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
+                    "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv");
+            addSequential(fpc1);
+        }
+        /*addParallel(new MoveElevatorMotionMagicCommand((fpc1.getTotalTime(Robot.dt.getLeftTalon()) + fpc1.getTotalTime(Robot.dt.getLeftTalon()))/2  - 1000, 
+                RobotMap.EL_SWITCH_HEIGHT));
+
+        
+        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
+        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
+        
+        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
+    }
     public static Trajectory readTrajectory(String filename) throws FileNotFoundException
     {
         File f = new File(filename);

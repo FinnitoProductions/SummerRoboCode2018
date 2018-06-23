@@ -101,10 +101,10 @@ public class OI
         leftDPad.whenPressed(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
         rightDPad.whenPressed(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
         
-        gw.getButtonA().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_INTAKE_HEIGHT));
-        gw.getButtonX().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_SWITCH_HEIGHT));
-        gw.getButtonB().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_SCALE_LOW_HEIGHT));
-        gw.getButtonY().whenPressed(new MoveElevatorMotionMagicCommand(RobotMap.EL_SCALE_HIGH_HEIGHT));
+        gw.getButtonA().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_INTAKE_HEIGHT));
+        gw.getButtonX().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_SWITCH_HEIGHT));
+        gw.getButtonB().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_SCALE_LOW_HEIGHT));
+        gw.getButtonY().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_SCALE_HIGH_HEIGHT));
         
         /*gw.getButtonA().whenPressed(new TurnRobotToAngleCommand(90));
         gw.getButtonX().whenPressed(new TurnRobotToAngleCommand(0));

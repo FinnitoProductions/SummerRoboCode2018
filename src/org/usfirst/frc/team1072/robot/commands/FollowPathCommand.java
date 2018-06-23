@@ -13,6 +13,7 @@ import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -31,7 +32,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private int minPointsInController = 10;
+    private final int minPointsInController = 10;
     private ProcessBuffer p;
     private Notifier notif;
   
@@ -40,7 +41,9 @@ public class FollowPathCommand extends Command
     private final int STAT_INDEX = 1;
     private Map<IMotorController, Object[]> controllers;
     
-    private int pathState = 0;
+    private int pathState;
+    
+    private double totalTime;
     
     public FollowPathCommand()
     {
@@ -49,6 +52,8 @@ public class FollowPathCommand extends Command
         for (IMotorController imc : controllers.keySet())
             p.addController(imc);
         notif = new Notifier(p);
+        pathState = 0;
+        totalTime = 0;
     }
     
     public void execute()
@@ -70,6 +75,9 @@ public class FollowPathCommand extends Command
                 {
                     controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
                     loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
+                    MotionProfileStatus status = new MotionProfileStatus();
+                    controller.getMotionProfileStatus(status);
+                    System.out.println(controller.getDeviceID() + " Buffer After Pushed: " + status.btmBufferCnt);
                     
                 }
                 System.out.println("Loaded points correctly.");
@@ -83,10 +91,10 @@ public class FollowPathCommand extends Command
                 boolean allReady = false;
                 for (IMotorController controller : controllers.keySet())
                 {
-                    System.out.println(controller.getDeviceID() + ": " + getControllerStatus(controller).btmBufferCnt);
                     allReady = allReady || getControllerStatus(controller).btmBufferCnt > minPointsInController;
                 }
                 
+                System.out.println("All Ready? " + allReady);
                 if (allReady)
                 {
                     
@@ -142,7 +150,7 @@ public class FollowPathCommand extends Command
         controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.PERIOD_IN_MS / 2));
         p.addController(controller);
         
-        controllers.put(controller, new Object[] {t, null});
+        controllers.put(controller, new Object[] {t, null, new Double(0)});
     }
     
     private void loadTrajectoryToTalon(Trajectory t, IMotorController controller)
@@ -156,18 +164,17 @@ public class FollowPathCommand extends Command
             }
             // clears existing trajectories
             controller.clearMotionProfileTrajectories();
-            MotionProfileStatus status = new MotionProfileStatus();
-            controller.getMotionProfileStatus(status);
-            System.out.println(controller.getDeviceID() + " Buffer After Cleared: " + status.btmBufferCnt);
+            
             // sets up a base period which will be ADDED TO the time of each trajectory point (usually zero)
             //controller.configMotionProfileTrajectoryPeriod(RobotMap.AUTON_BASE_PERIOD, RobotMap.TIMEOUT);
             controller.configMotionProfileTrajectoryPeriod(RobotMap.PERIOD_IN_MS, RobotMap.TIMEOUT);
             // constructs Talon-readable trajectory points out of each segment
             Segment[] segs = t.segments;
+            controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
             for (int i = 0; i < segs.length; i++)
             {
                 TrajectoryPoint tp = new TrajectoryPoint();
-                tp.position = segs[i].position / (RobotMap.WHEELDIAMETER * Math.PI / 12)* RobotMap.TICKS_PER_REV; // convert revolutions to encoder units
+                tp.position = segs[i].position / (RobotMap.WHEELDIAMETER * Math.PI / 12) * RobotMap.TICKS_PER_REV; // convert revolutions to encoder units
                 tp.velocity = segs[i].velocity / (RobotMap.WHEELDIAMETER * Math.PI / 12)  * RobotMap.TICKS_PER_REV / 10; // convert revs/100ms to seconds;
                 tp.headingDeg = segs[i].heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees
                 tp.timeDur = TrajectoryDuration.valueOf((int)segs[i].dt); // convert to correct units
@@ -178,6 +185,7 @@ public class FollowPathCommand extends Command
                 else if (i == (segs.length-1))
                     tp.isLastPoint = true;
                 controller.pushMotionProfileTrajectory(tp); // push point to talon
+                controllers.get(controller)[2] = new Double(segs[i].dt * 1000) + new Double((double) controllers.get(controller)[2]);
             }
         }
         else
@@ -220,6 +228,30 @@ public class FollowPathCommand extends Command
         return pathState == 3;
     }
     
+    @Override
+    protected void end()
+    {
+        disable();
+    }
+    
+    @Override
+    protected void interrupted()
+    {
+        disable();
+    }
+    
+    public void disable() {
+        notif.stop();
+        for (IMotorController imc : controllers.keySet())
+        {
+            imc.clearMotionProfileTrajectories();
+            imc.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
+            imc.set(ControlMode.PercentOutput, 0, DemandType.AuxPID, 0);
+            imc.clearStickyFaults(RobotMap.TIMEOUT);
+        }
+    }
+    
+    
     private MotionProfileStatus getControllerStatus (IMotorController controller)
     {
         return (MotionProfileStatus) controllers.get(controller)[1];//STAT_INDEX];
@@ -228,5 +260,10 @@ public class FollowPathCommand extends Command
     private Trajectory getControllerTrajectory (IMotorController controller)
     {
         return (Trajectory) controllers.get(controller)[TRAJ_INDEX];
+    }
+    
+    public double getTotalTime(IMotorController controller)
+    {
+        return (double) controllers.get(controller)[2];
     }
 }
