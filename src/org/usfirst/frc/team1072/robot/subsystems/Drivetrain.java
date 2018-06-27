@@ -37,7 +37,7 @@ public class Drivetrain extends Subsystem
         rightTalon = new TalonSRX (RobotMap.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (RobotMap.LEFT_CIM_VICTOR);
         rightVictor = new VictorSPX (RobotMap.RIGHT_CIM_VICTOR);
-        pigeon = new PigeonIMU(Robot.intake.getRightTalon());
+        pigeon = new PigeonIMU(RobotMap.PIGEON_ID);
         
 
     }
@@ -46,9 +46,9 @@ public class Drivetrain extends Subsystem
      */
     public void initDefaultCommand()
     {
-        setDefaultCommand(new DriveWithVelocityCommand());
+        //setDefaultCommand(new DriveWithVelocityCommand());
         //setDefaultCommand(new DriveToPositionCommand());
-        //setDefaultCommand(new TurnRobotToAngleCommand());
+       setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
     /**
@@ -59,11 +59,11 @@ public class Drivetrain extends Subsystem
     public void arcadeDriveVelocity(double speed, double turn)
     {
         // victor follows talon
-        //leftTalon.set(ControlMode.Velocity, speed - turn);
-        getLeftTalon().selectProfileSlot(RobotMap.VEL_PID, RobotMap.PRIMARY_PID);
-        getRightTalon().selectProfileSlot(RobotMap.VEL_PID, RobotMap.PRIMARY_PID);
+        getLeftTalon().selectProfileSlot(RobotMap.DT_VEL_PID, RobotMap.PRIMARY_PID);
+        getRightTalon().selectProfileSlot(RobotMap.DT_VEL_PID, RobotMap.PRIMARY_PID);
         rightTalon.set(ControlMode.Velocity, speed + turn);  
-        leftTalon.set(ControlMode.Velocity, speed - turn);   
+        leftTalon.set(ControlMode.Velocity, speed - turn);  
+
     }
     
     /**
@@ -183,6 +183,8 @@ public class Drivetrain extends Subsystem
     {
         getLeftTalon().configVoltageCompSaturation(nomVoltage, RobotMap.TIMEOUT);
         getRightTalon().configVoltageCompSaturation(nomVoltage, RobotMap.TIMEOUT);
+        getLeftTalon().enableVoltageCompensation(true);
+        getRightTalon().enableVoltageCompensation(true);
     }
 
     /**
@@ -194,8 +196,8 @@ public class Drivetrain extends Subsystem
      */
     private void dtConfigureSensors(FeedbackDevice f)
     {
-        getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.VEL_PID, RobotMap.TIMEOUT);
-        getRightTalon().configSelectedFeedbackSensor(f, RobotMap.VEL_PID, RobotMap.TIMEOUT);
+        getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
+        getRightTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
     }
 
     /**
@@ -226,17 +228,17 @@ public class Drivetrain extends Subsystem
         getLeftTalon().configPeakOutputReverse(-1 * RobotMap.DRIVETRAIN_SCALE, RobotMap.TIMEOUT);
         getRightTalon().configPeakOutputReverse(-1 * RobotMap.DRIVETRAIN_SCALE, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kF(RobotMap.VEL_PID, RobotMap.VEL_KF_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kF(RobotMap.VEL_PID, RobotMap.VEL_KF_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kF(RobotMap.DT_VEL_PID, RobotMap.VEL_KF_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kF(RobotMap.DT_VEL_PID, RobotMap.VEL_KF_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kP(RobotMap.VEL_PID, RobotMap.VEL_KP_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kP(RobotMap.VEL_PID, RobotMap.VEL_KP_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kP(RobotMap.DT_VEL_PID, RobotMap.VEL_KP_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(RobotMap.DT_VEL_PID, RobotMap.VEL_KP_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kI(RobotMap.VEL_PID, RobotMap.VEL_KI_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(RobotMap.VEL_PID, RobotMap.VEL_KI_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(RobotMap.DT_VEL_PID, RobotMap.VEL_KI_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(RobotMap.DT_VEL_PID, RobotMap.VEL_KI_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kD(RobotMap.VEL_PID, RobotMap.VEL_KD_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(RobotMap.VEL_PID, RobotMap.VEL_KD_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(RobotMap.DT_VEL_PID, RobotMap.VEL_KD_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(RobotMap.DT_VEL_PID, RobotMap.VEL_KD_RIGHT, RobotMap.TIMEOUT);
       
     }
 
@@ -277,16 +279,16 @@ public class Drivetrain extends Subsystem
         getRightTalon().configAllowableClosedloopError(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
 
         getLeftTalon().config_kF(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KF_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kF(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KF_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kF(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KF_RIGHT, RobotMap.TIMEOUT);
 
         getLeftTalon().config_kP(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KP_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kP(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KP_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KP_RIGHT, RobotMap.TIMEOUT);
 
         getLeftTalon().config_kI(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KI_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KI_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KI_RIGHT, RobotMap.TIMEOUT);
 
         getLeftTalon().config_kD(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KD_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KD_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KD_RIGHT, RobotMap.TIMEOUT);
     }
 
     /**
@@ -360,6 +362,27 @@ public class Drivetrain extends Subsystem
     public PigeonIMU getPigeon()
     {
         return pigeon;
+    }
+    
+    public double getPigeonYaw()
+    {
+        double[] ypr = new double[3];
+        pigeon.getYawPitchRoll(ypr);
+        return ypr[0];
+    }
+    
+    public double getPigeonPitch()
+    {
+        double[] ypr = new double[3];
+        pigeon.getYawPitchRoll(ypr);
+        return ypr[1];
+    }
+    
+    public double getPigeonRoll()
+    {
+        double[] ypr = new double[3];
+        pigeon.getYawPitchRoll(ypr);
+        return ypr[2];
     }
 
 }

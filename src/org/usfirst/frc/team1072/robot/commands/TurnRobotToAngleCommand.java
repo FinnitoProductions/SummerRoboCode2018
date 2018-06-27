@@ -13,6 +13,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class TurnRobotToAngleCommand extends Command
 {
     private double angle;
+    
+    public TurnRobotToAngleCommand()
+    {
+        requires (Robot.dt);
+        angle = 0;
+    }
     public TurnRobotToAngleCommand(double angle)
     {
         requires (Robot.dt);
@@ -23,32 +29,19 @@ public class TurnRobotToAngleCommand extends Command
     public void execute()
     {
         OI oi = new OI();
-        /*double joystickLeft =  oi.getGamepad().getLeftY();
-        double joystickRight = oi.getGamepad().getRightY() * 180.0;
-        Robot.dt.getRightTalon().set(ControlMode.PercentOutput, joystickLeft, DemandType.AuxPID, joystickRight);
-        Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, joystickLeft, DemandType.AuxPID, joystickRight);*/
+
+        double joystickRight = oi.getGamepad().getLeftX() *RobotMap.PIGEON_UNITS_PER_ROTATION / 2;
+        Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
+        Robot.dt.getLeftTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
+        Robot.dt.getLeftTalon().setSensorPhase(true);
+        Robot.dt.getRightTalon().setSensorPhase(true);
+        Robot.dt.getRightTalon().set(ControlMode.Position, joystickRight);
+        Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * joystickRight);
+        SmartDashboard.putNumber("COMMANDED VALUE TO PIGEON", joystickRight);
+        SmartDashboard.putNumber("Pigeon Talon Error", joystickRight - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
         
         
-        double[] ypr = new double[3];
-        Robot.dt.getPigeon().getYawPitchRoll(ypr);
-        SmartDashboard.putNumber("Pigeon Yaw (from COMMAND)", ypr[0]);
-        if (Math.abs(ypr[0] - angle) > .7)
-        {
-            double turnSpeed = .3;//Robot.speedToEncoderUnits(-0.1 * oi.getGamepad().getLeftX() * RobotMap.MAX_TURN_SPEED);
-            System.out.println("not there yet");
-            if (angle < ypr[0])
-            {
-                Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, turnSpeed);
-                Robot.dt.getRightTalon().set(ControlMode.PercentOutput, -turnSpeed);
-            }
-            else if (angle > ypr[0])
-            {
-                Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, -turnSpeed);
-                Robot.dt.getRightTalon().set(ControlMode.PercentOutput, turnSpeed);
-            }
-        }
-        else
-            Robot.dt.arcadeDriveVelocity(0, 0);
+
     }
     @Override
     protected boolean isFinished()

@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team1072.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
@@ -31,7 +33,7 @@ public class RobotMap {
     
     public static int TIMEOUT = 10;
     
-    public static int VEL_PID = 1;
+    public static int DT_VEL_PID = 1;
     public static int POS_PID = 0;
     public static int DT_ANGLE_PID = 2;
     public static int DT_MOTION_PROFILE_PID = 3;
@@ -188,10 +190,10 @@ public class RobotMap {
     public static int PIGEON_UNITS_PER_ROTATION = 8192;
     public static int REMOTE_0 = 0;
     public static int REMOTE_1 = 1;
-    public static int PID_TURN = 1;
-    public static int PID_ANGLE_KP = 1;
-    public static int PID_ANGLE_KI = 0;
-    public static int PID_ANGLE_KD = 0;
+
+    public static double PID_ANGLE_KP = 0.1;
+    public static double PID_ANGLE_KI = 0;//0.001;
+    public static double PID_ANGLE_KD = 0;
     
     public static int INT_PEAK_CURRENT_LIMIT = 15;
     public static int INT_PEAK_TIME_MS = 2000;
@@ -207,6 +209,8 @@ public class RobotMap {
     public static final int PERIOD_IN_MS = 50;
     public static final int PRIMARY_PID = 0;
     public static final int AUXILIARY_PID = 1;
+    public static final int PIGEON_ID = 1;
+    public static final int PIGEON_PERIOD = 3;
     
     // motion profiling constants
     // CONCRETE

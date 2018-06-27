@@ -42,8 +42,10 @@ public class DriveWithVelocityCommand extends Command
                 driveSpeed, 
                 turnSpeed); 
         
-        SmartDashboard.putNumber("LEFT TALON ERROR", driveSpeed - Robot.dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
-        SmartDashboard.putNumber("RIGHT TALON ERROR", driveSpeed - Robot.dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
+        SmartDashboard.putNumber("LEFT Motor Voltage", driveSpeed - Robot.dt.getLeftTalon().getMotorOutputVoltage());
+        SmartDashboard.putNumber("RIGHT Motor Voltage", driveSpeed - Robot.dt.getRightTalon().getMotorOutputVoltage());
+        SmartDashboard.putNumber("LEFT TALON ERROR", driveSpeed - Robot.dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
+        SmartDashboard.putNumber("RIGHT TALON ERROR", driveSpeed - Robot.dt.getRightTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
     }
     
     public double getDriveSpeed()

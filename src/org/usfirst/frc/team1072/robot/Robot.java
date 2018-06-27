@@ -36,6 +36,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -164,24 +165,42 @@ public class Robot extends TimedRobot
         dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
         dt.getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
         
-        intake.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.AUXILIARY_PID);
-        intake.getRightTalon().configRemoteFeedbackFilter( 0x00, 
-                 RemoteSensorSource.Off, 
-                RobotMap.REMOTE_0,  
-                RobotMap.TIMEOUT);
-        intake.getRightTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
+        dt.getLeftTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
+        dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
+
+        dt.getLeftTalon().configRemoteFeedbackFilter(RobotMap.PIGEON_ID, 
                 RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_1, 
+                RobotMap.REMOTE_0, 
                 RobotMap.TIMEOUT);
-        intake.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor1, 
-                RobotMap.AUXILIARY_PID, 
+        dt.getRightTalon().configRemoteFeedbackFilter(RobotMap.PIGEON_ID, 
+                RemoteSensorSource.Pigeon_Yaw, 
+                RobotMap.REMOTE_0, 
                 RobotMap.TIMEOUT);
         
-        //intake.getRightTalon().configSelectedFeedbackCoefficient(RobotMap.PIGEON_TURN_TRAVEL_PER_ROTATION/RobotMap.PIGEON_TURN_TRAVEL_PER_ROTATION,
-                //RobotMap.PID_TURN, RobotMap.TIMEOUT);
-        //intake.getRightTalon().selectProfileSlot(2, 2);
+        dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
+                RobotMap.PRIMARY_PID, 
+                RobotMap.TIMEOUT);
+        dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
+                RobotMap.PRIMARY_PID, 
+                RobotMap.TIMEOUT);
         
-        //intake.getRightTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
+        dt.getLeftTalon().configSelectedFeedbackCoefficient(1,
+                RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
+        dt.getRightTalon().configSelectedFeedbackCoefficient(1,
+                RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
+        
+        dt.getLeftTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
+        dt.getRightTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
+        
+        dt.getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, RobotMap.PIGEON_PERIOD, RobotMap.TIMEOUT);
+        
+        dt.getRightTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
+        dt.getRightTalon().config_kI(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KI, RobotMap.TIMEOUT);
+        dt.getRightTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KD, RobotMap.TIMEOUT);
+        
+        dt.getLeftTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
+        dt.getLeftTalon().config_kI(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KI, RobotMap.TIMEOUT);
+        dt.getLeftTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KD, RobotMap.TIMEOUT);
     }
     
     
@@ -191,10 +210,10 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
-        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
-        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));
-        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorPosition(RobotMap.VEL_PID));
+        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
+        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
+        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_VEL_PID));
+        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_VEL_PID));
         Scheduler.getInstance().run();
     }
 
@@ -227,11 +246,14 @@ public class Robot extends TimedRobot
         Scheduler.getInstance().run();
         /*SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
         SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));*/
-        //SmartDashboard.putNumber("Pigeon Value (Yaw)", intake.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
-        SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.POS_PID));
+        SmartDashboard.putNumber("Pigeon Value Through Talon", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
+        /*SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.POS_PID));
         SmartDashboard.putNumber("LEFT OUTPUT VOLTAGE", dt.getLeftTalon().getMotorOutputVoltage());
         
-        SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));
+        SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));*/
+        SmartDashboard.putNumber("PIGEON YAW", dt.getPigeonYaw());
+        
+        
         
     }
 
