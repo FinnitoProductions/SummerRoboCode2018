@@ -168,13 +168,22 @@ public class Robot extends TimedRobot
         dt.getLeftTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
         dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
 
-        dt.getLeftTalon().configRemoteFeedbackFilter(RobotMap.PIGEON_ID, 
+        dt.getLeftTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_0, 
                 RobotMap.TIMEOUT);
-        dt.getRightTalon().configRemoteFeedbackFilter(RobotMap.PIGEON_ID, 
+        dt.getRightTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_0, 
+                RobotMap.TIMEOUT);
+        
+        dt.getLeftTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
+                RemoteSensorSource.Off, 
+                RobotMap.REMOTE_1, 
+                RobotMap.TIMEOUT);
+        dt.getRightTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
+                RemoteSensorSource.Off, 
+                RobotMap.REMOTE_1, 
                 RobotMap.TIMEOUT);
         
         dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
@@ -184,14 +193,14 @@ public class Robot extends TimedRobot
                 RobotMap.PRIMARY_PID, 
                 RobotMap.TIMEOUT);
         
-        dt.getLeftTalon().configSelectedFeedbackCoefficient(1,
+        dt.getLeftTalon().configSelectedFeedbackCoefficient(1.0,
                 RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
-        dt.getRightTalon().configSelectedFeedbackCoefficient(1,
+        dt.getRightTalon().configSelectedFeedbackCoefficient(1.0,
                 RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
         
         dt.getLeftTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
         dt.getRightTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
-        
+     
         dt.getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, RobotMap.PIGEON_PERIOD, RobotMap.TIMEOUT);
         
         dt.getRightTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
@@ -201,7 +210,8 @@ public class Robot extends TimedRobot
         dt.getLeftTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
         dt.getLeftTalon().config_kI(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KI, RobotMap.TIMEOUT);
         dt.getLeftTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KD, RobotMap.TIMEOUT);
-    }
+ 
+        }
     
     
     
@@ -246,11 +256,13 @@ public class Robot extends TimedRobot
         Scheduler.getInstance().run();
         /*SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
         SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));*/
-        SmartDashboard.putNumber("Pigeon Value Through Talon", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
-        /*SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.POS_PID));
+        SmartDashboard.putNumber("Pigeon Value Through Right Talon", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
+        SmartDashboard.putNumber("Pigeon Value Through Left Talon", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
+        SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.POS_PID));
         SmartDashboard.putNumber("LEFT OUTPUT VOLTAGE", dt.getLeftTalon().getMotorOutputVoltage());
+        SmartDashboard.putNumber("EIGHT OUTPUT VOLTAGE", dt.getRightTalon().getMotorOutputVoltage());
         
-        SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));*/
+        //SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));*/
         SmartDashboard.putNumber("PIGEON YAW", dt.getPigeonYaw());
         
         

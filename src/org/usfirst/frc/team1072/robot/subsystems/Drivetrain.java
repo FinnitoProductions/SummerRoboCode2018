@@ -96,11 +96,10 @@ public class Drivetrain extends Subsystem
 
         dtSetRampTime(RobotMap.MAX_RAMP_TIME);
 
-        dtConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
         dtScaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
 
         dtSetSensorPhase();
-        dtConfigureVelocityClosedLoop();
+        enableVelocityClosedLoop();
         dtConfigurePositionClosedLoop();
         dtConfigureMotionProfileClosedLoop();
 
@@ -194,7 +193,7 @@ public class Drivetrain extends Subsystem
      *            the feedback device to use to configure (either quadrature or
      *            sensor velocity)
      */
-    private void dtConfigureSensors(FeedbackDevice f)
+    public void velocityConfigureSensors(FeedbackDevice f)
     {
         getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
         getRightTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
@@ -214,8 +213,9 @@ public class Drivetrain extends Subsystem
      * 
      * @postcondition nominal and peak output in both directions has been set
      */
-    private void dtConfigureVelocityClosedLoop()
+    private void enableVelocityClosedLoop()
     {
+        velocityConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
         getLeftTalon().configNominalOutputForward(RobotMap.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
         getRightTalon().configNominalOutputForward(RobotMap.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
@@ -241,6 +241,7 @@ public class Drivetrain extends Subsystem
         getRightTalon().config_kD(RobotMap.DT_VEL_PID, RobotMap.VEL_KD_RIGHT, RobotMap.TIMEOUT);
       
     }
+
 
     /**
      * Configures the drivetrain position closed loop.

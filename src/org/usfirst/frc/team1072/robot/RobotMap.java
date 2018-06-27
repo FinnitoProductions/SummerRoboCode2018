@@ -191,9 +191,9 @@ public class RobotMap {
     public static int REMOTE_0 = 0;
     public static int REMOTE_1 = 1;
 
-    public static double PID_ANGLE_KP = 0.1;
-    public static double PID_ANGLE_KI = 0;//0.001;
-    public static double PID_ANGLE_KD = 0;
+    public static double PID_ANGLE_KP = 1;
+    public static double PID_ANGLE_KI = 0.00033;
+    public static double PID_ANGLE_KD = 50;
     
     public static int INT_PEAK_CURRENT_LIMIT = 15;
     public static int INT_PEAK_TIME_MS = 2000;
@@ -210,7 +210,7 @@ public class RobotMap {
     public static final int PRIMARY_PID = 0;
     public static final int AUXILIARY_PID = 1;
     public static final int PIGEON_ID = 1;
-    public static final int PIGEON_PERIOD = 3;
+    public static final int PIGEON_PERIOD = 2;
     
     // motion profiling constants
     // CONCRETE
