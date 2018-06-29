@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
+import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
@@ -14,8 +16,10 @@ import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
@@ -35,6 +39,7 @@ public class FollowPathCommand extends Command
     private final int minPointsInController = 3;
     private ProcessBuffer p;
     private Notifier notif;
+    private Notifier sensorSumPeriodic;
   
     // store trajectory at index 0, status at index 1
     private final int TRAJ_INDEX = 0;
@@ -43,6 +48,9 @@ public class FollowPathCommand extends Command
     
     private int pathState;
     
+    private boolean enableNotifier;
+    private int outerPort;
+    
     
     private double totalTime;
     
@@ -50,16 +58,33 @@ public class FollowPathCommand extends Command
     {
         p = new ProcessBuffer();
         controllers = new HashMap<IMotorController, Object[]>();
+        outerPort = -1;
+        enableNotifier = false;
+    }
+    
+    public FollowPathCommand(int outerPort, boolean enableNotifier)
+    {
+        this.enableNotifier = enableNotifier;
+        this.outerPort = outerPort;
+        
     }
     
     public void initialize()
     {
+        for (IMotorController imc : controllers.keySet())
+        {
+            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID, RobotMap.TIMEOUT);
+            imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, 0, RobotMap.TIMEOUT);
+        }
         pathState = 0;
         totalTime = 0;
         System.out.println("initializing command");
         double period = 1.0 * RobotMap.PERIOD_IN_MS / RobotMap.MS_PER_SEC / 2 / 2.5;
         notif = new Notifier(p);
         notif.startPeriodic(period);
+        if (enableNotifier)
+            sensorSumPeriodic.startPeriodic(RobotMap.TALON_ENCODER_SUM_PERIOD_MS / RobotMap.MS_PER_SEC);
+        
         System.out.println("Initialized with period " + period);
     }
     
@@ -82,6 +107,7 @@ public class FollowPathCommand extends Command
                  // halve for optimal communication
                 for (IMotorController controller : controllers.keySet())
                 {
+                    controller.selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
                     controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
                     loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
                     MotionProfileStatus status = new MotionProfileStatus();
@@ -112,7 +138,7 @@ public class FollowPathCommand extends Command
                     System.out.println("I am ready.");
                     for (IMotorController controller : controllers.keySet())
                     {
-                        controller.selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
+                        
                         System.out.println("Enabling profile.");
                         controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
                         
@@ -155,19 +181,14 @@ public class FollowPathCommand extends Command
                 break;
             }
            
-        }
-        
-            
-        
-        
-        
-            
+        }           
     }
-    public void addProfile (Trajectory t, IMotorController controller)
+    public void addProfile (Trajectory t, IMotorController controller, boolean reversePath)
     {
         controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.PERIOD_IN_MS / 2));
         p.addController(controller);
-        
+        if (reversePath)
+            t = reverseTrajectory(t);
         controllers.put(controller, new Object[] {t, null, new Double(0)});
     }
     
@@ -198,11 +219,18 @@ public class FollowPathCommand extends Command
                 tp.headingDeg = segs[i].heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees
                 tp.timeDur = TrajectoryDuration.valueOf((int)segs[i].dt); // convert to correct units
                 tp.profileSlotSelect0 = RobotMap.DT_MOTION_PROFILE_PID;
+                
+                if (outerPort >= 0) 
+                {
+                    tp.profileSlotSelect1 = outerPort;
+                    tp.auxiliaryPos = tp.headingDeg;
+                }
                 tp.zeroPos = false;
                 if (i == 0)
                     tp.zeroPos = true; // specify that this is the first point
                 else if (i == (segs.length-1))
                     tp.isLastPoint = true;
+                
                 controller.pushMotionProfileTrajectory(tp); // push point to talon
                 controllers.get(controller)[2] = new Double(segs[i].dt * 1000) + new Double((double) controllers.get(controller)[2]);
             }
@@ -240,6 +268,28 @@ public class FollowPathCommand extends Command
         
     }
 
+    class TalonEncoderSumLoop implements java.lang.Runnable {
+
+        @Override
+        public void run()
+        {
+            // TODO Auto-generated method stub
+            int total = 0;
+            int count = 0;
+            for (IMotorController imc : controllers.keySet())
+            {
+                total += imc.getSelectedSensorPosition(RobotMap.PRIMARY_PID);
+                count++;
+            }
+            
+            int avg = total / count;
+            for (IMotorController imc : controllers.keySet())
+            {
+                imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, avg, RobotMap.TIMEOUT);
+            }
+        }
+        
+    }
 
     @Override
     protected boolean isFinished()
@@ -267,6 +317,7 @@ public class FollowPathCommand extends Command
     public void disable() {
         System.out.println("DISABLING");
         notif.stop();
+        sensorSumPeriodic.stop();
         for (IMotorController imc : controllers.keySet())
         {
             imc.clearMotionProfileTrajectories();
@@ -289,5 +340,25 @@ public class FollowPathCommand extends Command
     public double getTotalTime(IMotorController controller)
     {
         return (double) controllers.get(controller)[2];
+    }
+    
+    /**
+     * Reverses a given trajectory (assists in creating backward paths).
+     * @param t the trajectory to reverse 
+     * @return the reversed trajectory
+     */
+    private Trajectory reverseTrajectory(Trajectory t)
+    {
+        Stack<Segment> segments = new Stack<Segment>();
+        for (Segment s : t.segments)
+        {
+            s.velocity *= -1;
+            s.position *= -1;
+            segments.push(s);
+        }
+        for (int i = 0; i < segments.size(); i++)
+            t.segments[i] = segments.pop();
+        
+        return t;
     }
 }

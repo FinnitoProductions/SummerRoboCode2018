@@ -112,6 +112,11 @@ public class Robot extends TimedRobot
     {
         return speed * 12.0 / (RobotMap.WHEELDIAMETER * Math.PI) * RobotMap.TICKS_PER_REV / 10.0;
     }
+    
+    public static double radiansToPigeonUnits(double angle)
+    {
+        return angle / (2 * Math.PI) * RobotMap.PIGEON_UNITS_PER_ROTATION;
+    }
 
     
 
@@ -154,6 +159,7 @@ public class Robot extends TimedRobot
         dt.talonInit();
         el.talonInit();
         intake.talonInit();
+//        pigeonInit();
         (m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn})).start();
         
         
@@ -164,52 +170,8 @@ public class Robot extends TimedRobot
     {
         dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
         dt.getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
-        
-        dt.getLeftTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
-        dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID);
 
-        dt.getLeftTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_0, 
-                RobotMap.TIMEOUT);
-        dt.getRightTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_0, 
-                RobotMap.TIMEOUT);
         
-        dt.getLeftTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Off, 
-                RobotMap.REMOTE_1, 
-                RobotMap.TIMEOUT);
-        dt.getRightTalon().configRemoteFeedbackFilter(dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Off, 
-                RobotMap.REMOTE_1, 
-                RobotMap.TIMEOUT);
-        
-        dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
-                RobotMap.PRIMARY_PID, 
-                RobotMap.TIMEOUT);
-        dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
-                RobotMap.PRIMARY_PID, 
-                RobotMap.TIMEOUT);
-        
-        dt.getLeftTalon().configSelectedFeedbackCoefficient(1.0,
-                RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
-        dt.getRightTalon().configSelectedFeedbackCoefficient(1.0,
-                RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
-        
-        dt.getLeftTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
-        dt.getRightTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
-     
-        dt.getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, RobotMap.PIGEON_PERIOD, RobotMap.TIMEOUT);
-        
-        dt.getRightTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
-        dt.getRightTalon().config_kI(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KI, RobotMap.TIMEOUT);
-        dt.getRightTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KD, RobotMap.TIMEOUT);
-        
-        dt.getLeftTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
-        dt.getLeftTalon().config_kI(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KI, RobotMap.TIMEOUT);
-        dt.getLeftTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KD, RobotMap.TIMEOUT);
  
         }
     
@@ -241,6 +203,7 @@ public class Robot extends TimedRobot
             m_autonomousCommand.cancel();
         }
         dt.talonInit();
+        dt.victorTeleopInit();
         el.talonInit();
         intake.talonInit();
         pigeonInit();

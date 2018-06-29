@@ -15,10 +15,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveToPositionCommand extends Command
 {
+    double leftPosition;
+    double rightPosition;
+    boolean isJoystick;
     /**
      * Initializes the command, requiring the drive train.
      */
-    public DriveToPositionCommand() { requires(Robot.dt); }
+    public DriveToPositionCommand() { requires(Robot.dt); isJoystick = true; leftPosition = 0; rightPosition =0;}
+    
+    public DriveToPositionCommand(double currentLeftPosition, double currentRightPosition)
+    {
+        this.leftPosition = currentLeftPosition;
+        this.rightPosition = currentRightPosition;
+        isJoystick = false;
+    }
     
     /**
      * Executes the command, moving the robot to a given position.
@@ -26,10 +36,16 @@ public class DriveToPositionCommand extends Command
      */
     public void execute() 
     { 
-        double position = OI.getInstance().getGamepad().getLeftY() * RobotMap.TICKS_PER_REV * 3;
-        Robot.dt.arcadeDrivePosition(position); 
-        SmartDashboard.putNumber("LEFT ERROR", position - Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.POS_PID));
-        SmartDashboard.putNumber("RIGHT ERROR", position - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.POS_PID));
+        double position;
+        if (isJoystick)
+        {
+            position = OI.getInstance().getGamepad().getLeftY() * RobotMap.TICKS_PER_REV * 3;
+            Robot.dt.arcadeDrivePosition(position); 
+        }
+        else
+            Robot.dt.arcadeDrivePosition(leftPosition, rightPosition);
+
+        
         }
     
     /**

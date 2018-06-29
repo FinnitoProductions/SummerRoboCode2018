@@ -61,16 +61,16 @@ public class AutonomousCommand extends CommandGroup
     private void oneCubeSwitch (boolean onLeft)
     {
         FollowPathCommand fpc1;
-        addParallel(new MoveElevatorMotionMagicCommand(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS - 1000, RobotMap.EL_SWITCH_HEIGHT));
+        //addParallel(new MoveElevatorMotionMagicCommand(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS - 1000, RobotMap.EL_SWITCH_HEIGHT));
         if (onLeft)
         {
-             fpc1 = setupPathFollower(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
+             fpc1 = setupPathFollower(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
         else
         {
             fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
-                    "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv");
+                    "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", false);
         }
         addSequential (fpc1);
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
@@ -82,6 +82,10 @@ public class AutonomousCommand extends CommandGroup
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
         
         addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));
+        fpc1 = setupPathFollower(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, true);
+        addSequential(fpc1);
+        addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID)));
+        
 
             
                 
@@ -109,11 +113,10 @@ public class AutonomousCommand extends CommandGroup
         }
     }
 
-    private FollowPathCommand setupPathFollower(String leftFileName, String rightFileName)
+    private FollowPathCommand setupPathFollower(String leftFileName, String rightFileName, boolean reverse)
     {
         FollowPathCommand fpc = new FollowPathCommand();
 
-        // file names should be constants (in future)
         Trajectory leftPath1 = null;
         Trajectory rightPath1 = null;
 
@@ -127,8 +130,8 @@ public class AutonomousCommand extends CommandGroup
             e.printStackTrace();
             System.out.println("FILE. NOT. FOUND.");
         }
-        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon());
-        fpc.addProfile(rightPath1, Robot.dt.getRightTalon());
+        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
+        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         return fpc;
     }

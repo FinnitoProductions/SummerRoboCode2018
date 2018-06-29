@@ -191,9 +191,9 @@ public class RobotMap {
     public static int REMOTE_0 = 0;
     public static int REMOTE_1 = 1;
 
-    public static double PID_ANGLE_KP = 1;
-    public static double PID_ANGLE_KI = 0.00033;
-    public static double PID_ANGLE_KD = 50;
+    public static double PID_ANGLE_KP = 1.3;
+    public static double PID_ANGLE_KI = 0.001;
+    public static double PID_ANGLE_KD = 75;
     
     public static int INT_PEAK_CURRENT_LIMIT = 15;
     public static int INT_PEAK_TIME_MS = 2000;
@@ -211,6 +211,10 @@ public class RobotMap {
     public static final int AUXILIARY_PID = 1;
     public static final int PIGEON_ID = 1;
     public static final int PIGEON_PERIOD = 2;
+    public static final int ANGLE_INTEGRAL_BAND = 300;
+    public static final int QUADRATURE_PERIOD_MS = 1;
+    public static final double TALON_ENCODER_SUM_PERIOD_MS = 0.7;
+    public static final boolean ENABLE_NOTIFIER = true;
     
     // motion profiling constants
     // CONCRETE

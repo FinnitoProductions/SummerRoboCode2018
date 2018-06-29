@@ -9,9 +9,14 @@ import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.SensorTerm;
+import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 
@@ -46,9 +51,9 @@ public class Drivetrain extends Subsystem
      */
     public void initDefaultCommand()
     {
-        //setDefaultCommand(new DriveWithVelocityCommand());
+        setDefaultCommand(new DriveWithVelocityCommand());
         //setDefaultCommand(new DriveToPositionCommand());
-       setDefaultCommand(new TurnRobotToAngleCommand());
+        //setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
     /**
@@ -79,6 +84,15 @@ public class Drivetrain extends Subsystem
         rightTalon.set(ControlMode.Position, target);
     }
     
+    public void arcadeDrivePosition (double leftTarget, double rightTarget)
+    {
+        System.out.println("DRIVING TO POSITION");
+        getLeftTalon().selectProfileSlot(RobotMap.POS_PID, 0);
+        getRightTalon().selectProfileSlot(RobotMap.POS_PID, 0);
+        leftTalon.set(ControlMode.Position, leftTarget);
+        rightTalon.set(ControlMode.Position, rightTarget);
+    }
+    
 
     
     /**
@@ -88,7 +102,7 @@ public class Drivetrain extends Subsystem
      */
     public void talonInit()
     {
-        dtSlaveVictors();
+        victorInit();
         // initTalonOutput(0);
 
         dtInvertControllers();
@@ -111,10 +125,28 @@ public class Drivetrain extends Subsystem
     /**
      * Slaves the Victors to directly follow the behavior of their parent talons.
      */
-    private void dtSlaveVictors()
+    private void victorInit()
     {
         getLeftVictor().follow(getLeftTalon());
         getRightVictor().follow(getRightTalon());
+        
+        getLeftVictor().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_0, RobotMap.TIMEOUT);
+        getRightVictor().configRemoteFeedbackFilter(getRightTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_0, RobotMap.TIMEOUT);
+        
+        getLeftVictor().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
+        getRightVictor().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
+        
+        getLeftVictor().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
+        getRightVictor().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
+        
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+    }
+    
+    public void victorTeleopInit()
+    {
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);
     }
 
     /**
@@ -290,6 +322,62 @@ public class Drivetrain extends Subsystem
 
         getLeftTalon().config_kD(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KD_LEFT, RobotMap.TIMEOUT);
         getRightTalon().config_kD(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KD_RIGHT, RobotMap.TIMEOUT);
+    }
+    
+    public void configureAngleClosedLoop()
+    {
+        getLeftTalon().configRemoteFeedbackFilter(getPigeon().getDeviceID(), 
+                RemoteSensorSource.Pigeon_Yaw, 
+                RobotMap.REMOTE_0, 
+                RobotMap.TIMEOUT);
+        getRightTalon().configRemoteFeedbackFilter(getPigeon().getDeviceID(), 
+                RemoteSensorSource.Pigeon_Yaw, 
+                RobotMap.REMOTE_0, 
+                RobotMap.TIMEOUT);
+  
+        
+        getLeftTalon().configSelectedFeedbackCoefficient(1.0,
+                RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
+        getRightTalon().configSelectedFeedbackCoefficient(1.0,
+                RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT); //using native sensor units
+        
+        getLeftTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
+        getRightTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
+     
+        getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, RobotMap.PIGEON_PERIOD, RobotMap.TIMEOUT);
+        
+        getRightTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KI, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KD, RobotMap.TIMEOUT);
+        
+        getLeftTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KP, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KI, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PID_ANGLE_KD, RobotMap.TIMEOUT);
+
+    }
+    
+    public void configureEncoderAverage()
+    {
+        getLeftTalon().configRemoteFeedbackFilter(getRightTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
+        getRightTalon().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
+        
+        getLeftTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+        getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+        getLeftTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
+        getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
+        
+        getLeftTalon().configSelectedFeedbackCoefficient(0.5,
+                RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); //using native sensor units, take average of sum
+        getRightTalon().configSelectedFeedbackCoefficient(0.5,
+                RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); //using native sensor units
+    }
+    
+    public void clearFeedbackCoefficient(int pidSlot)
+    {
+        getLeftTalon().configSelectedFeedbackCoefficient(1,
+                pidSlot, RobotMap.TIMEOUT); //using native sensor units, take average of sum
+        getRightTalon().configSelectedFeedbackCoefficient(1,
+                pidSlot, RobotMap.TIMEOUT); //using native sensor units
     }
 
     /**

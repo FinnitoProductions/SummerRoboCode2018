@@ -29,6 +29,13 @@ public class TurnRobotToAngleCommand extends Command
     public void initialize()
     {
         Robot.dt.velocityConfigureSensors(FeedbackDevice.None);
+        
+        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
+                RobotMap.PRIMARY_PID, 
+                RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
+                RobotMap.PRIMARY_PID, 
+                RobotMap.TIMEOUT);
     }
     @Override
     public void execute()
@@ -44,6 +51,10 @@ public class TurnRobotToAngleCommand extends Command
         Robot.dt.getRightTalon().setSensorPhase(false);
         Robot.dt.getRightTalon().set(ControlMode.Position, joystickRight);
         Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * joystickRight);
+        if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+            Robot.dt.getRightTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID, RobotMap.TIMEOUT);
+        if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+            Robot.dt.getLeftTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID, RobotMap.TIMEOUT);
         SmartDashboard.putNumber("COMMANDED VALUE TO PIGEON", joystickRight);
         SmartDashboard.putNumber("Pigeon Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID));//joystickRight - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
         
