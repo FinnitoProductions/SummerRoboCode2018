@@ -65,7 +65,7 @@ public class Robot extends TimedRobot
     
     public static OI oi;
 
-    Command m_autonomousCommand;
+    public static AutonomousCommand m_autonomousCommand;
     SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     /**
@@ -145,7 +145,6 @@ public class Robot extends TimedRobot
      */
     public void autonomousInit()
     {
-        m_autonomousCommand = m_chooser.getSelected();
 
         /*
          * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");

@@ -1,5 +1,8 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
@@ -8,6 +11,7 @@ import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
@@ -18,14 +22,18 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jaci.pathfinder.Trajectory.Segment;
 
 /**
  * Represents a drive train with two Talons and two Victors.
  * @author Finn Frankis
  * @version 6/11/18
  */
-public class Drivetrain extends Subsystem
+public class Drivetrain extends PIDSubsystem
 {
     private static Drivetrain instance = null;
     private TalonSRX leftTalon;
@@ -33,18 +41,35 @@ public class Drivetrain extends Subsystem
     private VictorSPX leftVictor;
     private VictorSPX rightVictor;
     private PigeonIMU pigeon;
-   
+    private boolean pidEnabled;
+    private double currentPIDOutput;
+    private Map<IMotorController, Object[]> controllers; // for PID
+    private double startTime;
+    
+    private Segment[] leftPoints;
+    private Segment[] rightPoints;
     
     private Drivetrain()
     {
         // initialize talons
+        super("Drivetrain", 
+                RobotMap.POS_KP_LEFT / RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
+                RobotMap.POS_KI_LEFT / RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
+                RobotMap.POS_KD_LEFT /  RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
+                RobotMap.POS_KF_LEFT /  RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
+                RobotMap.PID_OUTPUT_PERIOD_S);
         leftTalon = new TalonSRX (RobotMap.LEFT_CIM_TALON);
         rightTalon = new TalonSRX (RobotMap.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (RobotMap.LEFT_CIM_VICTOR);
         rightVictor = new VictorSPX (RobotMap.RIGHT_CIM_VICTOR);
         pigeon = new PigeonIMU(RobotMap.PIGEON_ID);
-        
+        pidEnabled = false;
 
+    }
+    
+    public double getCurrentPIDOutput()
+    {
+        return currentPIDOutput;
     }
     /**
      * Initializes the command using the four ports for the Talons/Victors.
@@ -113,6 +138,7 @@ public class Drivetrain extends Subsystem
         dtScaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
 
         dtSetSensorPhase();
+        dtsetTalonFramePeriods();
         enableVelocityClosedLoop();
         dtConfigurePositionClosedLoop();
         dtConfigureMotionProfileClosedLoop();
@@ -130,7 +156,7 @@ public class Drivetrain extends Subsystem
         getLeftVictor().follow(getLeftTalon());
         getRightVictor().follow(getRightTalon());
         
-        getLeftVictor().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_0, RobotMap.TIMEOUT);
+        /*getLeftVictor().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_0, RobotMap.TIMEOUT);
         getRightVictor().configRemoteFeedbackFilter(getRightTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_0, RobotMap.TIMEOUT);
         
         getLeftVictor().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
@@ -140,13 +166,13 @@ public class Drivetrain extends Subsystem
         getRightVictor().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
         
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);*/
     }
     
     public void victorTeleopInit()
     {
-        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);
+        /*getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);*/
     }
 
     /**
@@ -159,6 +185,14 @@ public class Drivetrain extends Subsystem
     {
         getLeftTalon().set(ControlMode.Velocity, percentOutput);
         getRightTalon().set(ControlMode.Velocity, percentOutput);
+        
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+    
+        getLeftTalon().configSelectedFeedbackCoefficient(1,
+                RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); //using native sensor units, take average of sum
+        getRightTalon().configSelectedFeedbackCoefficient(1,
+                RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); //using native sensor units
     }
 
     /**
@@ -324,6 +358,34 @@ public class Drivetrain extends Subsystem
         getRightTalon().config_kD(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_MOTION_PROF_KD_RIGHT, RobotMap.TIMEOUT);
     }
     
+    void dtsetTalonFramePeriods()
+    {
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 30, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 30, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 30, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 30, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
+        
+    }
     public void configureAngleClosedLoop()
     {
         getLeftTalon().configRemoteFeedbackFilter(getPigeon().getDeviceID(), 
@@ -472,6 +534,80 @@ public class Drivetrain extends Subsystem
         double[] ypr = new double[3];
         pigeon.getYawPitchRoll(ypr);
         return ypr[2];
+    }
+    @Override
+    protected double returnPIDInput()
+    {
+       double currentTime =  Timer.getFPGATimestamp() * RobotMap.MS_PER_SEC;
+       double timeElapsed = currentTime - startTime;
+       int startPoint = (int) (timeElapsed/RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
+       int endPoint = startPoint + 1;
+       if (endPoint >= leftPoints.length)
+       {
+           setSetpoint((leftPoints[leftPoints.length-1].position + rightPoints[leftPoints.length-1].position)/2);
+       }
+       else
+       {
+           // interpolate to find point for current time
+           double interpStartTime = startPoint * RobotMap.TIME_PER_TRAJECTORY_POINT_MS;
+           double interpEndTime = endPoint * RobotMap.TIME_PER_TRAJECTORY_POINT_MS;
+           
+           double startPosLeft = leftPoints[startPoint].position;
+           double endPosLeft = leftPoints[endPoint].position;
+           double slopeLeft = (endPosLeft - startPosLeft) / (interpEndTime - interpStartTime);
+           
+           double startPosRight = rightPoints[startPoint].position;
+           double endPosRight = rightPoints[endPoint].position;
+           double slopeRight = (endPosRight - startPosRight) / (interpEndTime - interpStartTime);
+           
+           double targetPosLeft = slopeLeft * (currentTime - interpStartTime) + startPosLeft;
+           double targetPosRight = slopeRight * (currentTime - interpStartTime) + startPosRight;
+           
+           SmartDashboard.putNumber("LEFT TARGET POS ", targetPosLeft);
+           SmartDashboard.putNumber("RIGHT TARGET POS ", targetPosRight);
+           setSetpoint((targetPosLeft + targetPosRight)/2);
+       }
+          
+        return (leftTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID) + 
+                rightTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID))/2;
+    }
+    @Override
+    protected void usePIDOutput(double output)
+    {
+        if (pidEnabled)
+        {
+            currentPIDOutput = output;
+            System.out.println("PID OUTPUT : " + output + " TIME SINCE START: " + (Timer.getFPGATimestamp() * 1000 - startTime));
+            SmartDashboard.putNumber("TALON OUTPUT", output);
+            for (IMotorController imc : controllers.keySet())
+            {
+                imc.set(ControlMode.PercentOutput, output);
+            }
+        }
+        else
+            currentPIDOutput = -1;
+        
+    }
+    
+    public void enablePID()
+    {
+        leftTalon.selectProfileSlot(RobotMap.POS_PID, RobotMap.PRIMARY_PID);
+        rightTalon.selectProfileSlot(RobotMap.POS_PID, RobotMap.PRIMARY_PID);
+        pidEnabled = true;
+        
+        controllers = Robot.m_autonomousCommand.getCurrentPath().getControllers();
+        startTime = Robot.m_autonomousCommand.getCurrentPath().getStartTime();
+        
+        Iterator<IMotorController> it = controllers.keySet().iterator();
+        leftPoints = Robot.m_autonomousCommand.getCurrentPath().getControllerTrajectory(it.next()).segments;
+        rightPoints = Robot.m_autonomousCommand.getCurrentPath().getControllerTrajectory(it.next()).segments;
+        this.enable();
+    }
+    
+    public void disablePID()
+    {
+        pidEnabled = false;
+        this.disable();
     }
 
 }

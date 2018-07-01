@@ -27,6 +27,9 @@ public class AutonomousCommand extends CommandGroup
     
     private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_left_detailed.csv";
     private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_right_detailed.csv";
+    
+    private FollowPathRioCommand currentPath;
+    
     public AutonomousCommand(Subsystem[] subsystems)
     {
         for (Subsystem s : subsystems)
@@ -37,9 +40,10 @@ public class AutonomousCommand extends CommandGroup
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
         
-        oneCubeSwitch(true);
-        
-        
+        //oneCubeSwitch(true);
+        FollowPathRioCommand fpc1 = setupPathFollowerRio(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);
+        currentPath = fpc1;
+        addSequential(fpc1);
         
         /*addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
@@ -72,6 +76,7 @@ public class AutonomousCommand extends CommandGroup
             fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", false);
         }
+        //currentPath = fpc1;
         addSequential (fpc1);
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
@@ -134,6 +139,34 @@ public class AutonomousCommand extends CommandGroup
         fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         return fpc;
+    }
+    
+    private FollowPathRioCommand setupPathFollowerRio(String leftFileName, String rightFileName, boolean reverse)
+    {
+        FollowPathRioCommand fpc = new FollowPathRioCommand();
+
+        Trajectory leftPath1 = null;
+        Trajectory rightPath1 = null;
+
+        try
+        {
+            leftPath1 = readTrajectory(leftFileName);
+            rightPath1 = readTrajectory(rightFileName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("FILE. NOT. FOUND.");
+        }
+        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
+        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
+        numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
+        return fpc;
+    }
+    
+    public FollowPathRioCommand getCurrentPath()
+    {
+        return currentPath;
     }
 
 }

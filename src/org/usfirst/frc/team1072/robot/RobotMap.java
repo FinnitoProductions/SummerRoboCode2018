@@ -139,6 +139,7 @@ public class RobotMap {
     public static final String INTAKE_UPDOWN_KEY = "UPDOWN";
     public static final String INTAKE_COMPRESSDECOMPRESS_KEY = "COMPRESSDE";
     
+    //I AM A GOON LIKE MR. MUCKY BECAUSE I GET DISTRACTED VERY EASILY
     // in autonomous, adds this value to all trajectory times
     public static final int AUTON_BASE_PERIOD = 0;
     
@@ -206,15 +207,18 @@ public class RobotMap {
     public static final double DEGREES_PER_RADIAN = 180 / Math.PI;
     public static final int MS_PER_SEC = 1000;
     
-    public static final int PERIOD_IN_MS = 50;
     public static final int PRIMARY_PID = 0;
     public static final int AUXILIARY_PID = 1;
     public static final int PIGEON_ID = 1;
-    public static final int PIGEON_PERIOD = 2;
+    public static final int PIGEON_PERIOD = 4;
     public static final int ANGLE_INTEGRAL_BAND = 300;
-    public static final int QUADRATURE_PERIOD_MS = 1;
+    public static final int QUADRATURE_PERIOD_MS = 160;
     public static final double TALON_ENCODER_SUM_PERIOD_MS = 0.7;
     public static final boolean ENABLE_NOTIFIER = true;
+    //public static final double BUFFER_NEXT_OUTPUT_PERIOD = 1.0/1000;
+    public static final int TIME_PER_TRAJECTORY_POINT_MS = 50;
+    public static final double PID_OUTPUT_PERIOD_S = 3.0/1000;
+    public static final double TALON_MOTOR_OUTPUT_UNITS = 1023;
     
     // motion profiling constants
     // CONCRETE
@@ -239,5 +243,5 @@ public class RobotMap {
   public static double DT_MOTION_PROF_KD_RIGHT = POS_KD_RIGHT;
     
     
-    public static int TIME_PER_TRAJECTORY_POINT_MS = 50;
+    //public static int TIME_PER_TRAJECTORY_POINT_MS = 50;
 }

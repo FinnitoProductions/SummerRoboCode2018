@@ -79,7 +79,7 @@ public class FollowPathCommand extends Command
         pathState = 0;
         totalTime = 0;
         System.out.println("initializing command");
-        double period = 1.0 * RobotMap.PERIOD_IN_MS / RobotMap.MS_PER_SEC / 2 / 2.5;
+        double period = 1.0 * RobotMap.TIME_PER_TRAJECTORY_POINT_MS / RobotMap.MS_PER_SEC / 2 / 2.5;
         notif = new Notifier(p);
         notif.startPeriodic(period);
         if (enableNotifier)
@@ -185,7 +185,7 @@ public class FollowPathCommand extends Command
     }
     public void addProfile (Trajectory t, IMotorController controller, boolean reversePath)
     {
-        controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.PERIOD_IN_MS / 2));
+        controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 2));
         p.addController(controller);
         if (reversePath)
             t = reverseTrajectory(t);
@@ -207,7 +207,7 @@ public class FollowPathCommand extends Command
             
             // sets up a base period which will be ADDED TO the time of each trajectory point (usually zero)
             //controller.configMotionProfileTrajectoryPeriod(RobotMap.AUTON_BASE_PERIOD, RobotMap.TIMEOUT);
-            controller.configMotionProfileTrajectoryPeriod(RobotMap.PERIOD_IN_MS, RobotMap.TIMEOUT);
+            controller.configMotionProfileTrajectoryPeriod(RobotMap.TIME_PER_TRAJECTORY_POINT_MS, RobotMap.TIMEOUT);
             // constructs Talon-readable trajectory points out of each segment
             Segment[] segs = t.segments;
             controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
@@ -223,7 +223,7 @@ public class FollowPathCommand extends Command
                 if (outerPort >= 0) 
                 {
                     tp.profileSlotSelect1 = outerPort;
-                    tp.auxiliaryPos = tp.headingDeg;
+                    tp.auxiliaryPos = Robot.radiansToPigeonUnits(segs[i].heading);
                 }
                 tp.zeroPos = false;
                 if (i == 0)
