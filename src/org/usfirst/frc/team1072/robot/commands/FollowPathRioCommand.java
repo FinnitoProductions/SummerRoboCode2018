@@ -66,11 +66,12 @@ public class FollowPathRioCommand extends Command
         for (IMotorController imc : controllers.keySet())
         {
             ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID, RobotMap.TIMEOUT);
-            imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, 0, RobotMap.TIMEOUT);
+            imc.setSelectedSensorPosition(RobotMap.POS_PID, 0, RobotMap.TIMEOUT);
         }
         startTime = -1;
         pathState = 0;
         totalTime = 0;
+        System.out.println("COMMAND INITIALIZED AGAIN");
     }
     
     public void execute()
@@ -93,6 +94,7 @@ public class FollowPathRioCommand extends Command
             startTime = Timer.getFPGATimestamp() * RobotMap.MS_PER_SEC;
             Robot.dt.getPIDController().setContinuous(false);
             Robot.dt.getPIDController().setAbsoluteTolerance(RobotMap.DT_POS_ALLOWABLE_ERROR);
+            Robot.dt.getPIDController().setToleranceBuffer(RobotMap.DT_POS_TOLERANCE_BUFFER);
             Robot.dt.enablePID();
            
 
@@ -105,6 +107,7 @@ public class FollowPathRioCommand extends Command
             t = reverseTrajectory(t);
         processTrajectory(t);
         controllers.put(controller, new Object[] {t, null, new Double(0)});
+        //System.out.println(getControllerTrajectory(Robot.dt.getLeftTalon()).segments[getControllerTrajectory(Robot.dt.getLeftTalon()).segments.length-1].position);
     }
     
     /**
@@ -116,6 +119,7 @@ public class FollowPathRioCommand extends Command
         for (Segment s : t.segments)
         {
             s.position = s.position / (RobotMap.WHEELDIAMETER * Math.PI / 12) * RobotMap.TICKS_PER_REV; // convert revolutions to encoder units
+            //System.out.println(s.position);
             s.velocity = s.velocity / (RobotMap.WHEELDIAMETER * Math.PI / 12)  * RobotMap.TICKS_PER_REV / 10; // convert revs/100ms to seconds;
             s.heading = s.heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees
         }
@@ -172,7 +176,7 @@ public class FollowPathRioCommand extends Command
                double targetPosLeft = slopeLeft * (currentTime - interpStartTime) + startPosLeft;
                double targetPosRight = slopeRight * (currentTime - interpStartTime) + startPosRight;
                
-               Robot.dt.setSetpoint((targetPosLeft + targetPosRight)/2);
+               //Robot.dt.setSetpoint(24000);//(targetPosLeft + targetPosRight)/2);
                
                
            }

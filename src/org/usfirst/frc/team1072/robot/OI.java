@@ -44,7 +44,7 @@ public class OI
     public static int BLACK_XBOX_RIGHT_TRIGGER = 3;
     public static int BLACK_XBOX_LEFT_BUMPER = 5;
     public static int BLACK_XBOX_RIGHT_BUMPER = 6;
-    public static double BLACK_XBOX_DEADBAND = 0.08;
+    public static double BLACK_XBOX_DEADBAND = 0.15;
     public static boolean BLACK_XBOX_INVERT_Y = true;
     public static int BLACK_XBOX_PORT = 0;
     public static boolean BLACK_XBOX_IS_ANALOG_TRIGGER = true;

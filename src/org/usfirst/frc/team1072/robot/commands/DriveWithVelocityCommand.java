@@ -17,12 +17,15 @@ public class DriveWithVelocityCommand extends Command
 {
     private double driveSpeed;
     private double turnSpeed;
+    private double deadband;
+    
     /**
      * Creates a new DriveWithVelocityCommand object requiring the Drivetrain.
      */
-    public DriveWithVelocityCommand() 
+    public DriveWithVelocityCommand(double deadband) 
     { 
         requires(Robot.dt); 
+        this.deadband = deadband;
     }
     
     /**
@@ -34,10 +37,29 @@ public class DriveWithVelocityCommand extends Command
     public void execute() 
     { 
         OI oi = OI.getInstance();
-        driveSpeed = Robot.speedToEncoderUnits(oi.getGamepad().getLeftY() * RobotMap.MAX_DRIVE_SPEED); 
-        turnSpeed = Robot.speedToEncoderUnits(-1 * oi.getGamepad().getLeftX() * RobotMap.MAX_TURN_SPEED);
-        if (Math.abs(oi.getGamepad().getLeftX()) < 0.1)
-            turnSpeed = 0;
+        
+        double leftX = oi.getGamepad().getLeftX();
+        double leftY = oi.getGamepad().getLeftY();
+        if (Math.abs(leftX) < deadband)
+            leftX = 0;
+        else
+        {
+            leftX -= Math.signum(leftX) * deadband;
+            leftX /= 1- deadband;
+        }
+            
+        
+        if (Math.abs(leftY) < deadband)
+            leftY = 0;
+        else
+        {
+            leftY -= Math.signum(leftY) * deadband;
+            leftY /= 1-deadband;
+        }
+        
+        driveSpeed = Robot.speedToEncoderUnits(leftY * RobotMap.MAX_DRIVE_SPEED); 
+        turnSpeed = Robot.speedToEncoderUnits(-1 * leftX * RobotMap.MAX_TURN_SPEED);
+        
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 
                 turnSpeed); 

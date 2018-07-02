@@ -181,10 +181,16 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
+        /*SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
         SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
         SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_VEL_PID));
         SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_VEL_PID));
+        
+        Robot.dt.getLeftTalon().selectProfileSlot(RobotMap.POS_PID, RobotMap.PRIMARY_PID);
+        Robot.dt.getRightTalon().selectProfileSlot(RobotMap.POS_PID, RobotMap.PRIMARY_PID);*/
+        
+        /*SmartDashboard.putNumber("LEFT POSITION ERROR", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID));
+        SmartDashboard.putNumber("RIGHT POSITION ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID));*/
         Scheduler.getInstance().run();
     }
 

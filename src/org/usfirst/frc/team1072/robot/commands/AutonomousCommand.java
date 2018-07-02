@@ -44,22 +44,7 @@ public class AutonomousCommand extends CommandGroup
         FollowPathRioCommand fpc1 = setupPathFollowerRio(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);
         currentPath = fpc1;
         addSequential(fpc1);
-        
-        /*addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
-        
-        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.INTAKE_BOOL));
-        
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
-        
-        addSequential(new MoveElevatorMotionMagicCommand(RobotMap.EL_SCALE_LOW_HEIGHT));
-        
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
-        
-        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
+
     }
 
     private void oneCubeSwitch (boolean onLeft)

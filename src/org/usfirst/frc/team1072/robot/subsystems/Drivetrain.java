@@ -3,6 +3,7 @@ package org.usfirst.frc.team1072.robot.subsystems;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
@@ -76,7 +77,7 @@ public class Drivetrain extends PIDSubsystem
      */
     public void initDefaultCommand()
     {
-        setDefaultCommand(new DriveWithVelocityCommand());
+        setDefaultCommand(new DriveWithVelocityCommand(OI.BLACK_XBOX_DEADBAND));
         //setDefaultCommand(new DriveToPositionCommand());
         //setDefaultCommand(new TurnRobotToAngleCommand());
     }
@@ -551,23 +552,27 @@ public class Drivetrain extends PIDSubsystem
            // interpolate to find point for current time
            double interpStartTime = startPoint * RobotMap.TIME_PER_TRAJECTORY_POINT_MS;
            double interpEndTime = endPoint * RobotMap.TIME_PER_TRAJECTORY_POINT_MS;
+           double deltaT = interpEndTime - interpStartTime; 
            
            double startPosLeft = leftPoints[startPoint].position;
            double endPosLeft = leftPoints[endPoint].position;
            double slopeLeft = (endPosLeft - startPosLeft) / (interpEndTime - interpStartTime);
+
            
            double startPosRight = rightPoints[startPoint].position;
+           
            double endPosRight = rightPoints[endPoint].position;
            double slopeRight = (endPosRight - startPosRight) / (interpEndTime - interpStartTime);
            
-           double targetPosLeft = slopeLeft * (currentTime - interpStartTime) + startPosLeft;
-           double targetPosRight = slopeRight * (currentTime - interpStartTime) + startPosRight;
-           
-           SmartDashboard.putNumber("LEFT TARGET POS ", targetPosLeft);
-           SmartDashboard.putNumber("RIGHT TARGET POS ", targetPosRight);
+           double targetPosLeft = slopeLeft * (timeElapsed - interpStartTime) + startPosLeft;
+           double targetPosRight = slopeRight * (timeElapsed - interpStartTime) + startPosRight;
+           System.out.println(" " + targetPosLeft + " " + targetPosRight); 
+           SmartDashboard.putNumber("TARGET POS ", (targetPosLeft + targetPosRight)/2);
+           SmartDashboard.putNumber("ERROR", (targetPosLeft+targetPosRight) / 2 
+                   - (getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID) +getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID))/2 );
            setSetpoint((targetPosLeft + targetPosRight)/2);
        }
-          
+
         return (leftTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID) + 
                 rightTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID))/2;
     }
@@ -577,12 +582,18 @@ public class Drivetrain extends PIDSubsystem
         if (pidEnabled)
         {
             currentPIDOutput = output;
-            System.out.println("PID OUTPUT : " + output + " TIME SINCE START: " + (Timer.getFPGATimestamp() * 1000 - startTime));
-            SmartDashboard.putNumber("TALON OUTPUT", output);
+            //System.out.println("PID OUTPUT : " + output + " TIME SINCE START: " + (Timer.getFPGATimestamp() * 1000 - startTime));
+            SmartDashboard.putNumber("TALON OUTPUT", output + Math.random() * 0.0000000000001);
+            SmartDashboard.putNumber("POSITION ERROR", this.getPIDController().getError());
+            SmartDashboard.putNumber("ENCODER POSITION", getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID));
+            //SmartDashboard.putNumber("RIGHT POSITION ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID));
             for (IMotorController imc : controllers.keySet())
             {
                 imc.set(ControlMode.PercentOutput, output);
+                
+                //this.getPIDController().setOutputRange(0, 1);
             }
+            
         }
         else
             currentPIDOutput = -1;
@@ -601,6 +612,7 @@ public class Drivetrain extends PIDSubsystem
         Iterator<IMotorController> it = controllers.keySet().iterator();
         leftPoints = Robot.m_autonomousCommand.getCurrentPath().getControllerTrajectory(it.next()).segments;
         rightPoints = Robot.m_autonomousCommand.getCurrentPath().getControllerTrajectory(it.next()).segments;
+
         this.enable();
     }
     
