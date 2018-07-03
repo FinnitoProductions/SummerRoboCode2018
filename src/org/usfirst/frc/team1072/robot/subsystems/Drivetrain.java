@@ -384,6 +384,7 @@ public class Drivetrain extends PIDSubsystem
     }
     public void configureAngleClosedLoop()
     {
+        pigeonInit();
         getLeftTalon().configRemoteFeedbackFilter(getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_0, 
@@ -392,6 +393,8 @@ public class Drivetrain extends PIDSubsystem
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_0, 
                 RobotMap.TIMEOUT);
+        
+        getRightTalon().configSelectedFeedbackSensor(RobotMap.PIGEON_REMOTE_SENSOR_TYPE, RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT);
         
         getLeftTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
         getRightTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
@@ -408,6 +411,12 @@ public class Drivetrain extends PIDSubsystem
 
     }
     
+    private void pigeonInit()
+    {
+        getPigeon().setYaw(0, RobotMap.TIMEOUT);
+        
+    }
+
     private void configureMotionProfileClosedLoop()
     {
         //getLeftTalon().setSelectedSensorPosition(0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
@@ -454,11 +463,15 @@ public class Drivetrain extends PIDSubsystem
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 30, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
+        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
+        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10, RobotMap.TIMEOUT);
+        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, RobotMap.TIMEOUT);
+        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrame.Status_10_Targets, 10, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 10, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
         
     }
    
@@ -468,14 +481,17 @@ public class Drivetrain extends PIDSubsystem
         {
             getRightTalon().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
             
+            getLeftTalon().configRemoteFeedbackFilter(getRightTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
+            getRightTalon().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
+            
             getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
             getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
             
             getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
             getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-            getRightTalon().configSelectedFeedbackSensor(RobotMap.PIGEON_REMOTE_SENSOR_TYPE, RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT);
             
-
+            
+            //getLeftTalon().configAuxPIDPolarity(arg0, RobotMap.TIMEOUT);
             getRightTalon().configSelectedFeedbackCoefficient(0.5,
                     RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); // set to average
         }

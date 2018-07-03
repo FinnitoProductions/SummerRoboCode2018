@@ -50,12 +50,12 @@ public class AutonomousCommand extends CommandGroup
         //addParallel(new MoveElevatorMotionMagicCommand(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS - 1000, RobotMap.EL_SWITCH_HEIGHT));
         if (onLeft)
         {
-             fpc1 = setupPathFollower(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
+             fpc1 = setupPathFollowerArc(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
         else
         {
-            fpc1 = setupPathFollower("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
+            fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", false);
         }
         //currentPath = fpc1;
@@ -70,8 +70,8 @@ public class AutonomousCommand extends CommandGroup
         
         addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
 
-        addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)));
-        
+        //addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)));
+        addSequential(new TurnRobotToAngleCommand(0));
 
             
                 
@@ -121,6 +121,31 @@ public class AutonomousCommand extends CommandGroup
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         return fpc;
     }
+    
+    private FollowPathCommand setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse)
+    {
+        FollowPathArcCommand fpc = new FollowPathArcCommand();
+
+        Trajectory leftPath1 = null;
+        Trajectory rightPath1 = null;
+
+        try
+        {
+            leftPath1 = readTrajectory(leftFileName);
+            rightPath1 = readTrajectory(rightFileName);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("FILE. NOT. FOUND.");
+        }
+        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
+        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
+        numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
+        return fpc;
+    }
+    
+    
     
     private FollowPathRioCommand setupPathFollowerRio(String leftFileName, String rightFileName, boolean reverse)
     {

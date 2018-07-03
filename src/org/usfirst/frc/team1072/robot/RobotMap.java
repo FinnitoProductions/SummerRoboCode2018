@@ -103,9 +103,9 @@ public class RobotMap {
     public static double DT_POS_KD_LEFT = 3.5;//40;//40;
     
     public static double DT_POS_KF_RIGHT = 0;
-    public static double DT_POS_KP_RIGHT = 0;//0.05;//0.22;
-    public static double DT_POS_KI_RIGHT = 0.00001;//0.00001; // 
-    public static double DT_POS_KD_RIGHT = 40;//40;
+    public static double DT_POS_KP_RIGHT = 0.09;;//0.05;//0.22;
+    public static double DT_POS_KI_RIGHT = 0.000015;//0.00001;//0.00001; // 
+    public static double DT_POS_KD_RIGHT = 3.5;//40;
     
     public static int DT_POS_ALLOWABLE_ERROR = 100;
     public static int DT_POS_TOLERANCE_BUFFER = 100;
@@ -238,14 +238,14 @@ public class RobotMap {
 //    public static double DT_MOTION_PROF_KD_RIGHT = 25;
     
     public static double DT_MOTION_PROF_KF_LEFT = DT_VEL_KF_LEFT; //0.197
-  public static double DT_MOTION_PROF_KP_LEFT = DT_POS_KP_LEFT; //0.2 
-  public static double DT_MOTION_PROF_KI_LEFT = DT_POS_KI_LEFT; //
-  public static double DT_MOTION_PROF_KD_LEFT = DT_POS_KD_LEFT;
+  public static double DT_MOTION_PROF_KP_LEFT = 0.22; //0.2 
+  public static double DT_MOTION_PROF_KI_LEFT = 0.00001; //
+  public static double DT_MOTION_PROF_KD_LEFT = 40;
   
   public static double DT_MOTION_PROF_KF_RIGHT = DT_VEL_KF_RIGHT; //0.188
-  public static double DT_MOTION_PROF_KP_RIGHT = DT_POS_KP_RIGHT;
-  public static double DT_MOTION_PROF_KI_RIGHT = DT_POS_KI_RIGHT; // 
-  public static double DT_MOTION_PROF_KD_RIGHT = DT_POS_KD_RIGHT;
+  public static double DT_MOTION_PROF_KP_RIGHT = 0.22;
+  public static double DT_MOTION_PROF_KI_RIGHT = 0.00001; // 
+  public static double DT_MOTION_PROF_KD_RIGHT = 40;
     
     
     //public static int TIME_PER_TRAJECTORY_POINT_MS = 50;

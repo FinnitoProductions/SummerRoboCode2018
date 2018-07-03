@@ -65,6 +65,8 @@ public class FollowPathCommand extends Command
     
     public FollowPathCommand(int outerPort, boolean enableNotifier)
     {
+        p = new ProcessBuffer();
+        controllers = new HashMap<IMotorController, Object[]>();
         this.enableNotifier = enableNotifier;
         this.outerPort = outerPort;
         
@@ -121,7 +123,6 @@ public class FollowPathCommand extends Command
             // ready to begin loading
             case 0:
             {
-                System.out.println("CASE 0");
                  // halve for optimal communication
                 for (IMotorController controller : controllers.keySet())
                 {
@@ -141,7 +142,6 @@ public class FollowPathCommand extends Command
             // ready to begin 
             case 1:
             {
-                System.out.println("CASE 1");
                 // once enough points have been buffered, begin sequence
                 boolean allReady = true;
                 for (IMotorController controller : controllers.keySet())
@@ -172,7 +172,6 @@ public class FollowPathCommand extends Command
             // check up on profile to see if done
             case 2: 
             {
-                System.out.println("CASE 2");
                 boolean isFinished = true;
                 System.out.println();
                 for (IMotorController controller : controllers.keySet())
@@ -199,7 +198,12 @@ public class FollowPathCommand extends Command
                 break;
             }
            
-        }           
+        }   
+        SmartDashboard.putNumber("RIGHT SUM", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("LEFT SUM", Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        double[] ypr = new double[3];
+        Robot.dt.getPigeon().getYawPitchRoll(ypr);
+        SmartDashboard.putNumber("ANGLE VALUE", ypr[0]);
     }
     public void addProfile (Trajectory t, IMotorController controller, boolean reversePath)
     {
@@ -234,7 +238,7 @@ public class FollowPathCommand extends Command
                 TrajectoryPoint tp = new TrajectoryPoint();
                 tp.position = segs[i].position / (RobotMap.WHEELDIAMETER * Math.PI / 12) * RobotMap.TICKS_PER_REV; // convert revolutions to encoder units
                 tp.velocity = segs[i].velocity / (RobotMap.WHEELDIAMETER * Math.PI / 12)  * RobotMap.TICKS_PER_REV / 10; // convert revs/100ms to seconds;
-                tp.headingDeg = segs[i].heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees
+                
                 tp.timeDur = TrajectoryDuration.valueOf((int)segs[i].dt); // convert to correct units
                 tp.profileSlotSelect0 = RobotMap.DT_MOTION_PROFILE_PID;
                 
@@ -243,6 +247,8 @@ public class FollowPathCommand extends Command
                     tp.profileSlotSelect1 = outerPort;
                     tp.auxiliaryPos = Robot.radiansToPigeonUnits(segs[i].heading);
                 }
+                else
+                    tp.headingDeg = segs[i].heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees
                 tp.zeroPos = false;
                 if (i == 0)
                     tp.zeroPos = true; // specify that this is the first point
@@ -282,6 +288,7 @@ public class FollowPathCommand extends Command
                 //System.out.println("i= " + i + " BUFFER: " + status.btmBufferCnt);
                 motorControllers.get(i).processMotionProfileBuffer();
             }
+            
         }
         
     }
@@ -335,7 +342,6 @@ public class FollowPathCommand extends Command
     public void disable() {
         System.out.println("DISABLING");
         notif.stop();
-        sensorSumPeriodic.stop();
         for (IMotorController imc : controllers.keySet())
         {
             imc.clearMotionProfileTrajectories();
