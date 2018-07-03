@@ -74,7 +74,7 @@ public class AutonomousCommand extends CommandGroup
         addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));
         fpc1 = setupPathFollower(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, true);
         addSequential(fpc1);
-        addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID)));
+        addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)));
         
 
             

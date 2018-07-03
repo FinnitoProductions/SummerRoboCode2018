@@ -57,8 +57,8 @@ public class DriveWithVelocityCommand extends Command
             leftY /= 1-deadband;
         }
         
-        driveSpeed = Robot.speedToEncoderUnits(leftY * RobotMap.MAX_DRIVE_SPEED); 
-        turnSpeed = Robot.speedToEncoderUnits(-1 * leftX * RobotMap.MAX_TURN_SPEED);
+        driveSpeed = Robot.speedToEncoderUnits(leftY * RobotMap.MAX_DRIVE_SPEED_FPS); 
+        turnSpeed = Robot.speedToEncoderUnits(-1 * leftX * RobotMap.MAX_TURN_SPEED_FPS);
         
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 

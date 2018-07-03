@@ -73,7 +73,7 @@ public class FollowPathCommand extends Command
     {
         for (IMotorController imc : controllers.keySet())
         {
-            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID, RobotMap.TIMEOUT);
+            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, 0, RobotMap.TIMEOUT);
         }
         pathState = 0;
@@ -107,7 +107,7 @@ public class FollowPathCommand extends Command
                  // halve for optimal communication
                 for (IMotorController controller : controllers.keySet())
                 {
-                    controller.selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
+                    controller.selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
                     controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
                     loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
                     MotionProfileStatus status = new MotionProfileStatus();
@@ -278,7 +278,7 @@ public class FollowPathCommand extends Command
             int count = 0;
             for (IMotorController imc : controllers.keySet())
             {
-                total += imc.getSelectedSensorPosition(RobotMap.PRIMARY_PID);
+                total += imc.getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX);
                 count++;
             }
             

@@ -70,16 +70,16 @@ public class RobotMap {
     public static double VEL_KD_RIGHT = 0;//10;*/
     
     // CARPET CONSTANTS
-    public static double VEL_KF_LEFT = 0.197; //0.178
+    public static double DT_VEL_KF_LEFT = 0.197; //0.178
     // when modifying KP, double until disastrous
-    public static double VEL_KP_LEFT = 0.5; //0.3;
-    public static double VEL_KI_LEFT = 0;//0;
-    public static double VEL_KD_LEFT = 0; //10;
+    public static double DT_VEL_KP_LEFT = 0.5; //0.3;
+    public static double DT_VEL_KI_LEFT = 0;//0;
+    public static double DT_VEL_KD_LEFT = 0; //10;
     
-    public static double VEL_KF_RIGHT = 0.197; //0.18
-    public static double VEL_KP_RIGHT = 0.5;//0.3;
-    public static double VEL_KI_RIGHT = 0;//0;
-    public static double VEL_KD_RIGHT = 0;//10;
+    public static double DT_VEL_KF_RIGHT = 0.197; //0.18
+    public static double DT_VEL_KP_RIGHT = 0.5;//0.3;
+    public static double DT_VEL_KI_RIGHT = 0;//0;
+    public static double DT_VEL_KD_RIGHT = 0;//10;
     
     public static double EL_SLOW_DOWN_POS = 2000;
     
@@ -96,15 +96,15 @@ public class RobotMap {
 //    public static double POS_KD_RIGHT = 25;
     
     // CARPET 
-    public static double POS_KF_LEFT = 0;
-    public static double POS_KP_LEFT = 0.09;//0.22; //0.2 
-    public static double POS_KI_LEFT = 0.000015;//.0008;//0.00001;//0.00001; //
-    public static double POS_KD_LEFT = 3.5;//40;//40;
+    public static double DT_POS_KF_LEFT = 0;
+    public static double DT_POS_KP_LEFT = 0.09;//0.22; //0.2 
+    public static double DT_POS_KI_LEFT = 0.000015;//.0008;//0.00001;//0.00001; //
+    public static double DT_POS_KD_LEFT = 3.5;//40;//40;
     
-    public static double POS_KF_RIGHT = 0;
-    public static double POS_KP_RIGHT = 0;//0.05;//0.22;
-    public static double POS_KI_RIGHT = 0.00001;//0.00001; // 
-    public static double POS_KD_RIGHT = 40;//40;
+    public static double DT_POS_KF_RIGHT = 0;
+    public static double DT_POS_KP_RIGHT = 0;//0.05;//0.22;
+    public static double DT_POS_KI_RIGHT = 0.00001;//0.00001; // 
+    public static double DT_POS_KD_RIGHT = 40;//40;
     
     public static int DT_POS_ALLOWABLE_ERROR = 100;
     public static int DT_POS_TOLERANCE_BUFFER = 100;
@@ -112,8 +112,8 @@ public class RobotMap {
     public static int TICKS_PER_REV = 4096;
     public static double WHEELDIAMETER = 4.0;
     
-    public static double MAX_DRIVE_SPEED = 14.0;
-    public static double MAX_TURN_SPEED = 14; 
+    public static double MAX_DRIVE_SPEED_FPS = 14.0;
+    public static double MAX_TURN_SPEED_FPS = 14; 
     
     public static int DT_PEAK_CURRENT_LIMIT = 60;
     public static int DT_PEAK_TIME_MS = 200;
@@ -193,9 +193,9 @@ public class RobotMap {
     public static int REMOTE_0 = 0;
     public static int REMOTE_1 = 1;
 
-    public static double PID_ANGLE_KP = 1.3;
-    public static double PID_ANGLE_KI = 0.001;
-    public static double PID_ANGLE_KD = 75;
+    public static double PIGEON_ANGLE_KP = 1.3;
+    public static double PIGEON_ANGLE_KI = 0.001;
+    public static double PIGEON_ANGLE_KD = 75;
     
     public static int INT_PEAK_CURRENT_LIMIT = 15;
     public static int INT_PEAK_TIME_MS = 2000;
@@ -208,10 +208,10 @@ public class RobotMap {
     public static final double DEGREES_PER_RADIAN = 180 / Math.PI;
     public static final int MS_PER_SEC = 1000;
     
-    public static final int PRIMARY_PID = 0;
-    public static final int AUXILIARY_PID = 1;
+    public static final int PRIMARY_PID_INDEX = 0;
+    public static final int AUXILIARY_PID_INDEX = 1;
     public static final int PIGEON_ID = 1;
-    public static final int PIGEON_PERIOD = 4;
+    public static final int PIGEON_PERIOD_MS = 4;
     public static final int ANGLE_INTEGRAL_BAND = 300;
     public static final int QUADRATURE_PERIOD_MS = 160;
     public static final double TALON_ENCODER_SUM_PERIOD_MS = 0.7;
@@ -233,15 +233,15 @@ public class RobotMap {
 //    public static double DT_MOTION_PROF_KI_RIGHT = 0.000004; // 
 //    public static double DT_MOTION_PROF_KD_RIGHT = 25;
     
-    public static double DT_MOTION_PROF_KF_LEFT = VEL_KF_LEFT; //0.197
-  public static double DT_MOTION_PROF_KP_LEFT = POS_KP_LEFT; //0.2 
-  public static double DT_MOTION_PROF_KI_LEFT = POS_KI_LEFT; //
-  public static double DT_MOTION_PROF_KD_LEFT = POS_KD_LEFT;
+    public static double DT_MOTION_PROF_KF_LEFT = DT_VEL_KF_LEFT; //0.197
+  public static double DT_MOTION_PROF_KP_LEFT = DT_POS_KP_LEFT; //0.2 
+  public static double DT_MOTION_PROF_KI_LEFT = DT_POS_KI_LEFT; //
+  public static double DT_MOTION_PROF_KD_LEFT = DT_POS_KD_LEFT;
   
-  public static double DT_MOTION_PROF_KF_RIGHT = VEL_KF_RIGHT; //0.188
-  public static double DT_MOTION_PROF_KP_RIGHT = POS_KP_RIGHT;
-  public static double DT_MOTION_PROF_KI_RIGHT = POS_KI_RIGHT; // 
-  public static double DT_MOTION_PROF_KD_RIGHT = POS_KD_RIGHT;
+  public static double DT_MOTION_PROF_KF_RIGHT = DT_VEL_KF_RIGHT; //0.188
+  public static double DT_MOTION_PROF_KP_RIGHT = DT_POS_KP_RIGHT;
+  public static double DT_MOTION_PROF_KI_RIGHT = DT_POS_KI_RIGHT; // 
+  public static double DT_MOTION_PROF_KD_RIGHT = DT_POS_KD_RIGHT;
     
     
     //public static int TIME_PER_TRAJECTORY_POINT_MS = 50;

@@ -65,7 +65,7 @@ public class FollowPathRioCommand extends Command
     {
         for (IMotorController imc : controllers.keySet())
         {
-            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID, RobotMap.TIMEOUT);
+            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             imc.setSelectedSensorPosition(RobotMap.POS_PID, 0, RobotMap.TIMEOUT);
         }
         startTime = -1;
