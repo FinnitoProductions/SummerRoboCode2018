@@ -17,6 +17,7 @@ import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -73,19 +74,36 @@ public class FollowPathCommand extends Command
     {
         for (IMotorController imc : controllers.keySet())
         {
-            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
             imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, 0, RobotMap.TIMEOUT);
         }
         pathState = 0;
         totalTime = 0;
         System.out.println("initializing command");
-        double period = 1.0 * RobotMap.TIME_PER_TRAJECTORY_POINT_MS / RobotMap.MS_PER_SEC / 2 / 2.5;
+        double period = 1.0 * RobotMap.TIME_PER_TRAJECTORY_POINT_MS / RobotMap.MS_PER_SEC / 2;
         notif = new Notifier(p);
         notif.startPeriodic(period);
-        if (enableNotifier)
-            sensorSumPeriodic.startPeriodic(RobotMap.TALON_ENCODER_SUM_PERIOD_MS / RobotMap.MS_PER_SEC);
+        /*if (enableNotifier)
+            sensorSumPeriodic.startPeriodic(RobotMap.TALON_ENCODER_SUM_PERIOD_MS / RobotMap.MS_PER_SEC);*/
         
         System.out.println("Initialized with period " + period);
+        
+        if (outerPort == -1) // no auxiliary
+        {
+            for (IMotorController imc : controllers.keySet())
+            {
+                Robot.dt.selectProfileSlots(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
+            }
+        }
+        else
+        {
+            Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
+            
+            Robot.dt.getLeftTalon().selectProfileSlot(RobotMap.DT_POS_PID, RobotMap.PRIMARY_PID_INDEX);
+            
+            Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
+            Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
+        }
     }
     
     public void execute()

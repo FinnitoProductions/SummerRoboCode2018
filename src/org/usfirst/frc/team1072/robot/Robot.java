@@ -155,7 +155,7 @@ public class Robot extends TimedRobot
 
         // schedule the autonomous command (example)
 
-        dt.talonInit();
+        dt.talonInitAutonomous();
         el.talonInit();
         intake.talonInit();
 //        pigeonInit();
@@ -165,17 +165,6 @@ public class Robot extends TimedRobot
         
     }
 
-    public void pigeonInit()
-    {
-        dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
-        dt.getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
-
-        
- 
-        }
-    
-    
-    
     /**
      * This function is called periodically during autonomous.
      */
@@ -207,11 +196,11 @@ public class Robot extends TimedRobot
         {
             m_autonomousCommand.cancel();
         }
-        dt.talonInit();
+        dt.talonInitTeleop();
         dt.victorTeleopInit();
         el.talonInit();
         intake.talonInit();
-        pigeonInit();
+        dt.zeroPigeon();
         
         //Intake.pn.getSolenoid(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY).set(RobotMap.INTAKE_COMPRESS); 
     }
@@ -226,7 +215,7 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));*/
         SmartDashboard.putNumber("Pigeon Value Through Right Talon", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
         SmartDashboard.putNumber("Pigeon Value Through Left Talon", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
-        SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.POS_PID));
+        SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_POS_PID));
         SmartDashboard.putNumber("LEFT OUTPUT VOLTAGE", dt.getLeftTalon().getMotorOutputVoltage());
         SmartDashboard.putNumber("EIGHT OUTPUT VOLTAGE", dt.getRightTalon().getMotorOutputVoltage());
         

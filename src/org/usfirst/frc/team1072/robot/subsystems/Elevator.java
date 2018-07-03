@@ -192,7 +192,7 @@ public class Elevator extends Subsystem
         
         getBottomRightTalon().config_kD(RobotMap.EL_POS_PID, RobotMap.EL_POS_KD, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configAllowableClosedloopError(RobotMap.POS_PID, RobotMap.EL_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(RobotMap.DT_POS_PID, RobotMap.EL_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
     }
     
     /**
@@ -239,7 +239,7 @@ public class Elevator extends Subsystem
      */
     private void elConfigureSensors(FeedbackDevice fd)
     {
-        getBottomRightTalon().configSelectedFeedbackSensor(fd, RobotMap.POS_PID, RobotMap.TIMEOUT);
+        getBottomRightTalon().configSelectedFeedbackSensor(fd, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
     }
 
     /**
@@ -247,7 +247,7 @@ public class Elevator extends Subsystem
      */
     private void elZeroSensors()
     {
-        getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.POS_PID, RobotMap.TIMEOUT);
+        getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
     }
     /**
      * Gets the top right Victor on the elevator.

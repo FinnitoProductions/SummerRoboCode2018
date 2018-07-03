@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team1072.robot;
 
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -34,7 +35,7 @@ public class RobotMap {
     public static int TIMEOUT = 10;
     
     public static int DT_VEL_PID = 1;
-    public static int POS_PID = 0;
+    public static int DT_POS_PID = 0;
     public static int DT_ANGLE_PID = 2;
     public static int DT_MOTION_PROFILE_PID = 3;
     
@@ -213,13 +214,16 @@ public class RobotMap {
     public static final int PIGEON_ID = 1;
     public static final int PIGEON_PERIOD_MS = 4;
     public static final int ANGLE_INTEGRAL_BAND = 300;
-    public static final int QUADRATURE_PERIOD_MS = 160;
+    public static final int MAX_TALON_FRAME_PERIOD_MS = 160;
     public static final double TALON_ENCODER_SUM_PERIOD_MS = 0.7;
     public static final boolean ENABLE_NOTIFIER = true;
     //public static final double BUFFER_NEXT_OUTPUT_PERIOD = 1.0/1000;
     public static final int TIME_PER_TRAJECTORY_POINT_MS = 50;
     public static final double PID_OUTPUT_PERIOD_S = 3.0/1000;
     public static final double TALON_MOTOR_OUTPUT_UNITS = 1023;
+    public static final RemoteFeedbackDevice PIGEON_REMOTE_SENSOR_TYPE = RemoteFeedbackDevice.RemoteSensor0;
+    public static final int NUM_PID_SLOTS = 4;
+
     
     // motion profiling constants
     // CONCRETE

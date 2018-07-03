@@ -28,7 +28,7 @@ public class TurnRobotToAngleCommand extends Command
     
     public void initialize()
     {
-        Robot.dt.velocityConfigureSensors(FeedbackDevice.None);
+        Robot.dt.selectProfileSlots(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
                 RobotMap.PRIMARY_PID_INDEX, 
@@ -71,7 +71,6 @@ public class TurnRobotToAngleCommand extends Command
     @Override
     public void end()
     {
-        Robot.dt.velocityConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
     }
 
 }

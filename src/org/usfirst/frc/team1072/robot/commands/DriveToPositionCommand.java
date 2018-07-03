@@ -30,6 +30,11 @@ public class DriveToPositionCommand extends Command
         isJoystick = false;
     }
     
+    @Override
+    public void initialize()
+    {
+        Robot.dt.selectProfileSlots(RobotMap.DT_POS_PID, RobotMap.PRIMARY_PID_INDEX);
+    }
     /**
      * Executes the command, moving the robot to a given position.
      * @param position the position to which the robot should move

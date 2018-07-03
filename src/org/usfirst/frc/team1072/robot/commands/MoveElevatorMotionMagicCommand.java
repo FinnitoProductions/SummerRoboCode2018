@@ -50,7 +50,7 @@ public class MoveElevatorMotionMagicCommand extends Command
     * @return true if the command has finished; false otherwise
     */
     protected boolean isFinished() {
-        return Math.abs(Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.POS_PID) - position) <= 
+        return Math.abs(Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.DT_POS_PID) - position) <= 
                 RobotMap.EL_POS_ALLOWABLE_ERROR;
     }
     

@@ -40,10 +40,7 @@ public class AutonomousCommand extends CommandGroup
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
         
-        //oneCubeSwitch(true);
-        FollowPathRioCommand fpc1 = setupPathFollowerRio(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);
-        currentPath = fpc1;
-        addSequential(fpc1);
+        oneCubeSwitch(true);
 
     }
 
@@ -63,7 +60,7 @@ public class AutonomousCommand extends CommandGroup
         }
         //currentPath = fpc1;
         addSequential (fpc1);
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
+        /*(addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
         
 
@@ -71,9 +68,8 @@ public class AutonomousCommand extends CommandGroup
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
         
-        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));
-        fpc1 = setupPathFollower(CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, true);
-        addSequential(fpc1);
+        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
+
         addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)));
         
 

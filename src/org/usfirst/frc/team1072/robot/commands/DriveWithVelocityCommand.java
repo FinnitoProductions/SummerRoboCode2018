@@ -28,6 +28,10 @@ public class DriveWithVelocityCommand extends Command
         this.deadband = deadband;
     }
     
+    public void initialize()
+    {
+        Robot.dt.selectProfileSlots(RobotMap.DT_VEL_PID, RobotMap.PRIMARY_PID_INDEX);
+    }
     /**
      * Executes the command to drive with a given velocity.
      * @param speed the speed at which the robot will drive
