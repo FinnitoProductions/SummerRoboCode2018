@@ -83,48 +83,6 @@ public class Robot extends TimedRobot
         oi = OI.getInstance();
     }
     
-    
-
-
-    /**
-     * Converts an encoder value in units of ticks per 100 ms to a speed value in
-     * fps (feet-per-second).
-     * 
-     * @param encoderVal the encoder value in ticks per 100 ms
-     * @return the converted speed
-     */
-    public static double encoderUnitsToSpeed(int encoderVal)
-    {
-        // encoder value is stored in ticks per 100 ms
-        return encoderVal * 10.0 // convert to ticks per second
-                / RobotMap.TICKS_PER_REV // convert to revolutions per second
-                * (RobotMap.WHEELDIAMETER * Math.PI) // convert to inches per second
-                / 12.0; // convert to feet per second
-    }
-
-    /**
-     * Converts a speed value in fps to encoder units of ticks per 100 ms
-     * 
-     * @param speed the speed in fps
-     * @return the converted encoder value
-     */
-    public static double speedToEncoderUnits(double speed)
-    {
-        return speed * 12.0 / (RobotMap.WHEELDIAMETER * Math.PI) * RobotMap.TICKS_PER_REV / 10.0;
-    }
-    
-    /**
-     * Converts a given angle in radians (from Jaci's pathfinder) to pigeon units (where one rotation is
-     * 8192 units)
-     * @param angle the angle to convert, in radians
-     * @return the original angle, but converted to radians
-     */
-    public static double radiansToPigeonUnits(double angle)
-    {
-        return angle / (2 * Math.PI) * RobotMap.PIGEON_UNITS_PER_ROTATION;
-    }
-
-    
 
     /**
      * This function is called once each time the robot enters Disabled mode. You

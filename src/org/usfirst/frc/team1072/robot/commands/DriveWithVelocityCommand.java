@@ -3,6 +3,8 @@ package org.usfirst.frc.team1072.robot.commands;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.util.Speed;
+import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
@@ -66,8 +68,8 @@ public class DriveWithVelocityCommand extends Command
             leftY /= 1-deadband;
         }
         
-        driveSpeed = Robot.speedToEncoderUnits(leftY * RobotMap.MAX_DRIVE_SPEED_FPS); 
-        turnSpeed = Robot.speedToEncoderUnits(-1 * leftX * RobotMap.MAX_TURN_SPEED_FPS);
+        driveSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, leftY * RobotMap.MAX_DRIVE_SPEED_FPS, RobotMap.WHEELDIAMETER).getEncoderUnits(); 
+        turnSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, -1 * leftX * RobotMap.MAX_TURN_SPEED_FPS, RobotMap.WHEELDIAMETER).getEncoderUnits();
         
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 

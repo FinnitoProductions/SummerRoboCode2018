@@ -9,6 +9,14 @@ import java.util.Stack;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.util.Angle;
+import org.usfirst.frc.team1072.util.Angle.AngleUnit;
+import org.usfirst.frc.team1072.util.Position;
+import org.usfirst.frc.team1072.util.Position.PositionUnit;
+import org.usfirst.frc.team1072.util.Speed;
+import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
+import org.usfirst.frc.team1072.util.Time;
+import org.usfirst.frc.team1072.util.Time.TimeUnit;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
@@ -82,7 +90,8 @@ public class FollowPathCommand extends Command
         
         pathState = 0;
         totalTime = 0;
-        double period = 1.0 * RobotMap.TIME_PER_TRAJECTORY_POINT_MS / RobotMap.MS_PER_SEC / 2;
+        double period = new Time(TimeUnit.MILLISECONDS, RobotMap.TIME_PER_TRAJECTORY_POINT_MS).getSeconds() / 2;
+
         notif = new Notifier(p);
         notif.startPeriodic(period);
         
@@ -91,10 +100,7 @@ public class FollowPathCommand extends Command
         
         if (outerPort == -1) // no auxiliary/arc
         {
-            for (IMotorController imc : controllers.keySet())
-            {
-                Robot.dt.selectProfileSlots(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
-            }
+            Robot.dt.selectProfileSlots(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
         }
         else
         {
@@ -211,8 +217,8 @@ public class FollowPathCommand extends Command
             for (int i = 0; i < segs.length; i++)
             {
                 TrajectoryPoint tp = new TrajectoryPoint();
-                tp.position = segs[i].position / (RobotMap.WHEELDIAMETER * Math.PI / 12) * RobotMap.TICKS_PER_REV; // convert revolutions to encoder units
-                tp.velocity = segs[i].velocity / (RobotMap.WHEELDIAMETER * Math.PI / 12)  * RobotMap.TICKS_PER_REV / 10; // convert revs/100ms to seconds;
+                tp.position = new Position(PositionUnit.FEET, segs[i].position, RobotMap.WHEELDIAMETER).getEncoderUnits(); // convert revolutions to encoder units
+                tp.velocity = new Speed(SpeedUnit.FEET_PER_SECOND, segs[i].velocity, RobotMap.WHEELDIAMETER).getEncoderUnits(); // convert fps to encoder units
                 
                 tp.timeDur = TrajectoryDuration.valueOf((int)segs[i].dt); // convert to correct units
                 tp.profileSlotSelect0 = RobotMap.DT_MOTION_PROFILE_PID;
@@ -220,7 +226,7 @@ public class FollowPathCommand extends Command
                 if (outerPort >= 0) 
                 {
                     tp.profileSlotSelect1 = outerPort;
-                    tp.auxiliaryPos = Robot.radiansToPigeonUnits(segs[i].heading - 2 * Math.PI);
+                    tp.auxiliaryPos = new Angle(AngleUnit.RADIANS, segs[i].heading - 2 * Math.PI).getPigeonUnits();
                 }
                 else
                     //tp.headingDeg = segs[i].heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees

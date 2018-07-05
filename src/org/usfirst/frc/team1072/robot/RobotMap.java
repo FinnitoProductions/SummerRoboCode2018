@@ -110,7 +110,7 @@ public class RobotMap {
     public static int DT_POS_ALLOWABLE_ERROR = 100;
     public static int DT_POS_TOLERANCE_BUFFER = 100;
     
-    public static int TICKS_PER_REV = 4096;
+
     public static double WHEELDIAMETER = 4.0;
     
     public static double MAX_DRIVE_SPEED_FPS = 14.0;
@@ -190,7 +190,7 @@ public class RobotMap {
     public static int EL_MANUAL_VEL_KD = 0;
             
     public static int PIGEON_TURN_TRAVEL_PER_ROTATION = 3600;
-    public static int PIGEON_UNITS_PER_ROTATION = 8192;
+
     public static int REMOTE_0 = 0;
     public static int REMOTE_1 = 1;
 
@@ -206,8 +206,8 @@ public class RobotMap {
     public static boolean INTAKE_BOOL = true;
     public static boolean OUTTAKE_BOOL = false;
     // Conversion constants
-    public static final double DEGREES_PER_RADIAN = 180 / Math.PI;
-    public static final int MS_PER_SEC = 1000;
+
+
     
     public static final int PRIMARY_PID_INDEX = 0;
     public static final int AUXILIARY_PID_INDEX = 1;

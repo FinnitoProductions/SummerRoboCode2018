@@ -3,6 +3,8 @@ package org.usfirst.frc.team1072.robot.commands;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.util.Position;
+import org.usfirst.frc.team1072.util.Position.PositionUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
@@ -52,7 +54,7 @@ public class DriveToPositionCommand extends Command
         double position;
         if (isJoystick)
         {
-            position = OI.getInstance().getGamepad().getLeftY() * RobotMap.TICKS_PER_REV * 3;
+            position = new Position(PositionUnit.FEET, OI.getInstance().getGamepad().getLeftY() * 5, RobotMap.WHEELDIAMETER).getEncoderUnits();
             Robot.dt.arcadeDrivePosition(position); 
         }
         else

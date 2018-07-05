@@ -3,6 +3,9 @@ package org.usfirst.frc.team1072.robot.commands;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.util.Angle;
+import org.usfirst.frc.team1072.util.Angle.AngleUnit;
+import org.usfirst.frc.team1072.util.ConversionFactors;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -27,7 +30,7 @@ public class TurnRobotToAngleCommand extends Command
     public TurnRobotToAngleCommand(double angle)
     {
         requires (Robot.dt);
-        this.angle = angle * RobotMap.PIGEON_UNITS_PER_ROTATION/360;
+        this.angle = new Angle(AngleUnit.DEGREES, angle).getPigeonUnits();
     }
     
     public void initialize()
@@ -57,7 +60,7 @@ public class TurnRobotToAngleCommand extends Command
         {
             OI oi = new OI();
     
-            double joystickRight = oi.getGamepad().getLeftX() *RobotMap.PIGEON_UNITS_PER_ROTATION / 2;
+            double joystickRight = oi.getGamepad().getLeftX() * ConversionFactors.PIGEON_UNITS_PER_ROTATION / 2;
             if (Math.abs(oi.getGamepad().getLeftX()) < 0.1)
                 joystickRight = 0;
             Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
