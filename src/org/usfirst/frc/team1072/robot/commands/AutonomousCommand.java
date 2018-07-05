@@ -71,9 +71,8 @@ public class AutonomousCommand extends CommandGroup
         addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
 
         //addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)));
-        addSequential(new TurnRobotToAngleCommand(0));
-
-            
+        //addSequential(new TurnRobotToAngleCommand(90));
+        
                 
         
         

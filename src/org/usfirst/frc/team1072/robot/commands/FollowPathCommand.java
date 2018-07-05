@@ -19,6 +19,9 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.IMotorController;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.SensorTerm;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -76,15 +79,19 @@ public class FollowPathCommand extends Command
     {
         for (IMotorController imc : controllers.keySet())
         {
-            ((TalonSRX) imc).configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-            imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, 0, RobotMap.TIMEOUT);
+            imc.setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+            imc.setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
         }
+        
         pathState = 0;
         totalTime = 0;
         System.out.println("initializing command");
         double period = 1.0 * RobotMap.TIME_PER_TRAJECTORY_POINT_MS / RobotMap.MS_PER_SEC / 2;
         notif = new Notifier(p);
         notif.startPeriodic(period);
+        
+        Robot.dt.getLeftTalon().setSensorPhase(RobotMap.DT_LEFT_TALON_PHASE);
+        Robot.dt.getRightTalon().setSensorPhase(RobotMap.DT_RIGHT_TALON_PHASE);
         /*if (enableNotifier)
             sensorSumPeriodic.startPeriodic(RobotMap.TALON_ENCODER_SUM_PERIOD_MS / RobotMap.MS_PER_SEC);*/
         
@@ -101,10 +108,23 @@ public class FollowPathCommand extends Command
         {
             Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
             
-            Robot.dt.getLeftTalon().selectProfileSlot(RobotMap.DT_POS_PID, RobotMap.PRIMARY_PID_INDEX);
-            
             Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
             Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
+            
+            Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
+            
+
+            
+            Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+            Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
+            
+            Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+            Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+            Robot.dt.getRightTalon().configSelectedFeedbackSensor(RobotMap.PIGEON_REMOTE_SENSOR_TYPE, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+            
+            Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
+                    RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
+            
         }
     }
     
@@ -123,9 +143,9 @@ public class FollowPathCommand extends Command
             // ready to begin loading
             case 0:
             {
+                System.out.println("CASE 0");
                  // halve for optimal communication
-                for (IMotorController controller : controllers.keySet())
-                {
+                    IMotorController controller = Robot.dt.getRightTalon();
                     controller.selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
                     controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
                     loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
@@ -133,7 +153,7 @@ public class FollowPathCommand extends Command
                     controller.getMotionProfileStatus(status);
                     System.out.println(controller.getDeviceID() + " Buffer After Pushed: " + status.btmBufferCnt);
                     
-                }
+                
                 System.out.println("Loaded points correctly.");
                 pathState = 1;
                 break;
@@ -143,24 +163,20 @@ public class FollowPathCommand extends Command
             case 1:
             {
                 // once enough points have been buffered, begin sequence
-                boolean allReady = true;
-                for (IMotorController controller : controllers.keySet())
-                {
-                    allReady = allReady && getControllerStatus(controller).btmBufferCnt > minPointsInController;
-                }
+                boolean allReady = getControllerStatus(Robot.dt.getRightTalon()).btmBufferCnt > minPointsInController;
+
+
                 
                 System.out.println("All Ready? " + allReady);
                 if (allReady)
                 {
                   
                     System.out.println("I am ready.");
-                    for (IMotorController controller : controllers.keySet())
-                    {
+                    IMotorController controller = Robot.dt.getRightTalon();
                         
                         System.out.println("Enabling profile.");
                         controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Enable.value);
                         
-                    }
                     pathState = 2;
                     SmartDashboard.putNumber("ACTIVE LEFT POS: ", controllers.keySet().iterator().next().getActiveTrajectoryPosition());
                     SmartDashboard.putNumber("ACTIVE LEFT VEL: ", controllers.keySet().iterator().next().getActiveTrajectoryVelocity());
@@ -169,13 +185,13 @@ public class FollowPathCommand extends Command
                 break;
             }
             
+            
             // check up on profile to see if done
             case 2: 
             {
                 boolean isFinished = true;
                 System.out.println();
-                for (IMotorController controller : controllers.keySet())
-                {
+                IMotorController controller = Robot.dt.getRightTalon();
                         MotionProfileStatus status = new MotionProfileStatus();
                         controller.getMotionProfileStatus(status);
                         System.out.println("Buffer Count: " + status.btmBufferCnt);
@@ -186,7 +202,7 @@ public class FollowPathCommand extends Command
                             controller.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
                             System.out.println(controller.getDeviceID() + " IS UNDERRUN");
                         }*/
-                }
+                
                 
 
                 
@@ -197,14 +213,14 @@ public class FollowPathCommand extends Command
                 }
                 break;
             }
-           
-        }   
-        SmartDashboard.putNumber("RIGHT SUM", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("LEFT SUM", Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        double[] ypr = new double[3];
+        }
+          
+
+        /*double[] ypr = new double[3];
         Robot.dt.getPigeon().getYawPitchRoll(ypr);
-        SmartDashboard.putNumber("ANGLE VALUE", ypr[0]);
+        SmartDashboard.putNumber("ANGLE VALUE", ypr[0]);*/
     }
+    
     public void addProfile (Trajectory t, IMotorController controller, boolean reversePath)
     {
         controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 2));
@@ -245,10 +261,10 @@ public class FollowPathCommand extends Command
                 if (outerPort >= 0) 
                 {
                     tp.profileSlotSelect1 = outerPort;
-                    tp.auxiliaryPos = Robot.radiansToPigeonUnits(segs[i].heading);
+                    tp.auxiliaryPos = Robot.radiansToPigeonUnits(segs[i].heading - 2 * Math.PI);//Robot.radiansToPigeonUnits(segs[i].heading);
                 }
                 else
-                    tp.headingDeg = segs[i].heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees
+                    //tp.headingDeg = segs[i].heading * RobotMap.DEGREES_PER_RADIAN; // convert radians to degrees
                 tp.zeroPos = false;
                 if (i == 0)
                     tp.zeroPos = true; // specify that this is the first point
@@ -281,13 +297,11 @@ public class FollowPathCommand extends Command
         
         public void run()
         {
-            for (int i = 0; i < motorControllers.size(); i++)
-            {
+
                 MotionProfileStatus status = new MotionProfileStatus();
-                motorControllers.get(i).getMotionProfileStatus(status);
+                Robot.dt.getRightTalon().getMotionProfileStatus(status);
                 //System.out.println("i= " + i + " BUFFER: " + status.btmBufferCnt);
-                motorControllers.get(i).processMotionProfileBuffer();
-            }
+                Robot.dt.getRightTalon().processMotionProfileBuffer();
             
         }
         
@@ -310,7 +324,7 @@ public class FollowPathCommand extends Command
             int avg = total / count;
             for (IMotorController imc : controllers.keySet())
             {
-                imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, avg, RobotMap.TIMEOUT);
+                //imc.setSelectedSensorPosition(RobotMap.DT_MOTION_PROFILE_PID, avg, RobotMap.TIMEOUT);
             }
         }
         
@@ -342,12 +356,13 @@ public class FollowPathCommand extends Command
     public void disable() {
         System.out.println("DISABLING");
         notif.stop();
-        for (IMotorController imc : controllers.keySet())
-        {
-            imc.clearMotionProfileTrajectories();
-            imc.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
-            // imc.set(ControlMode.MotionProfile, MotionProfile.);
-        }
+        //for (IMotorController imc : controllers.keySet())
+        //{
+            //imc.clearMotionProfileTrajectories();
+            Robot.dt.getRightTalon().set(ControlMode.MotionProfile, 2);//SetValueMotionProfile.Hold.value);
+            //imc.clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
+            
+        //}
     }
     
     

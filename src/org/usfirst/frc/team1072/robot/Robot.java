@@ -180,6 +180,10 @@ public class Robot extends TimedRobot
         
         /*SmartDashboard.putNumber("LEFT POSITION ERROR", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID));
         SmartDashboard.putNumber("RIGHT POSITION ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID));*/
+        SmartDashboard.putNumber("RIGHT Position ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        /*SmartDashboard.putNumber("RIGHT SUM", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("LEFT SUM", Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("PIGEON THRU TALON", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));*/
         Scheduler.getInstance().run();
     }
 
@@ -196,12 +200,19 @@ public class Robot extends TimedRobot
         {
             m_autonomousCommand.cancel();
         }
+        
         dt.talonInitTeleop();
         dt.victorTeleopInit();
         el.talonInit();
         intake.talonInit();
         dt.zeroPigeon();
         
+        // setSelectedFeedback(pos, loopindex, timeout)
+        // configSelectedFeedback(feedbackdevice, loopindex, timeout)
+        // getSelectedFeedback
+        //System.out.println("INITIALIZING TELEOP SETTING POSITION");
+        //Robot.dt.getLeftTalon().getSelectedSensorPosition(4942197);
+        //System.out.println("POSITION SET");
         //Intake.pn.getSolenoid(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY).set(RobotMap.INTAKE_COMPRESS); 
     }
 
@@ -210,17 +221,17 @@ public class Robot extends TimedRobot
      */
     public void teleopPeriodic() 
     {
-        Scheduler.getInstance().run();
-        /*SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
-        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));*/
-        SmartDashboard.putNumber("Pigeon Value Through Right Talon", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
-        SmartDashboard.putNumber("Pigeon Value Through Left Talon", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
-        SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_POS_PID));
-        SmartDashboard.putNumber("LEFT OUTPUT VOLTAGE", dt.getLeftTalon().getMotorOutputVoltage());
-        SmartDashboard.putNumber("EIGHT OUTPUT VOLTAGE", dt.getRightTalon().getMotorOutputVoltage());
-        
-        //SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));*/
-        SmartDashboard.putNumber("PIGEON YAW", dt.getPigeonYaw());
+          Scheduler.getInstance().run();
+//        /*SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
+//        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));*/
+//        SmartDashboard.putNumber("Pigeon Value Through Right Talon", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
+//        SmartDashboard.putNumber("Pigeon Value Through Left Talon", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
+//        SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_POS_PID));
+//        SmartDashboard.putNumber("LEFT OUTPUT VOLTAGE", dt.getLeftTalon().getMotorOutputVoltage());
+//        SmartDashboard.putNumber("EIGHT OUTPUT VOLTAGE", dt.getRightTalon().getMotorOutputVoltage());
+//        
+//        //SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));*/
+//        SmartDashboard.putNumber("PIGEON YAW", dt.getPigeonYaw());
         
         
         

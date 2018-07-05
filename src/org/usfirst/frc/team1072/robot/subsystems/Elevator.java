@@ -247,7 +247,7 @@ public class Elevator extends Subsystem
      */
     private void elZeroSensors()
     {
-        getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
+        getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     }
     /**
      * Gets the top right Victor on the elevator.

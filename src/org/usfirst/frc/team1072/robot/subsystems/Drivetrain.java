@@ -288,8 +288,8 @@ public class Drivetrain extends PIDSubsystem
      */
     public void velocityConfigureSensors(FeedbackDevice f)
     {
-        getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
-        getRightTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
+        //getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
+        //getRightTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
     }
 
     /**
@@ -368,8 +368,8 @@ public class Drivetrain extends PIDSubsystem
     
     private void positionConfigureSensors(FeedbackDevice f)
     {
-        getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
-        getRightTalon().configSelectedFeedbackSensor(f, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
+        //getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        //getRightTalon().configSelectedFeedbackSensor(f, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     }
 
     /**
@@ -394,11 +394,6 @@ public class Drivetrain extends PIDSubsystem
                 RobotMap.REMOTE_0, 
                 RobotMap.TIMEOUT);
         
-        getRightTalon().configSelectedFeedbackSensor(RobotMap.PIGEON_REMOTE_SENSOR_TYPE, RobotMap.DT_ANGLE_PID, RobotMap.TIMEOUT);
-        
-        getLeftTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
-        getRightTalon().setSelectedSensorPosition(RobotMap.DT_ANGLE_PID, 0, RobotMap.TIMEOUT);
-     
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, RobotMap.PIGEON_PERIOD_MS, RobotMap.TIMEOUT);
         
         getRightTalon().config_kP(RobotMap.DT_ANGLE_PID, RobotMap.PIGEON_ANGLE_KP, RobotMap.TIMEOUT);
@@ -478,27 +473,18 @@ public class Drivetrain extends PIDSubsystem
     public void setupMotionProfile(boolean isArc)
     {
         if (isArc)
-        {
-            getRightTalon().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
-            
-            getLeftTalon().configRemoteFeedbackFilter(getRightTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
-            getRightTalon().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
-            
-            getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
-            getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
-            
-            getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-            getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
+        {            
+            //getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
+           // getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
             
             
             //getLeftTalon().configAuxPIDPolarity(arg0, RobotMap.TIMEOUT);
-            getRightTalon().configSelectedFeedbackCoefficient(0.5,
-                    RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); // set to average
+
         }
         else
         {
-            getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-            getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
+            //getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
+            //getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
         }
     }
     

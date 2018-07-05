@@ -20,10 +20,14 @@ public class TurnRobotToAngleCommand extends Command
         requires (Robot.dt);
         angle = -1;
     }
+    /**
+     * 
+     * @param angle the angle to which the robot should turn (in degrees)
+     */
     public TurnRobotToAngleCommand(double angle)
     {
         requires (Robot.dt);
-        this.angle = angle;
+        this.angle = angle * RobotMap.PIGEON_UNITS_PER_ROTATION/360;
     }
     
     public void initialize()
@@ -36,10 +40,19 @@ public class TurnRobotToAngleCommand extends Command
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
                 RobotMap.PRIMARY_PID_INDEX, 
                 RobotMap.TIMEOUT);
+        
+        Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
+        Robot.dt.getLeftTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
     }
     @Override
     public void execute()
     {
+        Robot.dt.getLeftTalon().setSensorPhase(false);
+        Robot.dt.getRightTalon().setSensorPhase(false);
         if (angle == -1)
         {
             OI oi = new OI();
@@ -49,8 +62,6 @@ public class TurnRobotToAngleCommand extends Command
                 joystickRight = 0;
             Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
             Robot.dt.getLeftTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
-            Robot.dt.getLeftTalon().setSensorPhase(false);
-            Robot.dt.getRightTalon().setSensorPhase(false);
             Robot.dt.getRightTalon().set(ControlMode.Position, joystickRight);
             Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * joystickRight);
             if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > RobotMap.ANGLE_INTEGRAL_BAND)   
@@ -62,7 +73,13 @@ public class TurnRobotToAngleCommand extends Command
         }
         else
         {
+            if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+                Robot.dt.getRightTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+            if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+                Robot.dt.getLeftTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             
+            Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * angle);
+            Robot.dt.getRightTalon().set(ControlMode.Position, angle);
         }
         
 
@@ -70,8 +87,8 @@ public class TurnRobotToAngleCommand extends Command
     @Override
     protected boolean isFinished()
     {
-        // TODO Auto-generated method stub
         return false;
+        //return Robot.dt.getRightTalon().getClosedLoopError(arg0) < RobotMap.ANGLE_INTEGRAL_BAND;
     }
     
     @Override
