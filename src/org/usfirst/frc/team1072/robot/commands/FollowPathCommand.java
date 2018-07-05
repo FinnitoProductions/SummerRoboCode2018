@@ -68,7 +68,6 @@ public class FollowPathCommand extends Command
     {
         p = new ProcessBuffer();
         controllers = new HashMap<IMotorController, Object[]>();
-        this.enableNotifier = enableNotifier;
         this.outerPort = outerPort;
         
     }
@@ -130,20 +129,19 @@ public class FollowPathCommand extends Command
         {
             MotionProfileStatus motionStatus = new MotionProfileStatus();
             controller.getMotionProfileStatus(motionStatus);
-            controllers.get(controller)[STAT_INDEX] = status;
-
+            controllers.get(controller)[STAT_INDEX] = motionStatus;
+        }
         switch(pathState)
         {
             // ready to begin loading
             case 0:
             {
-                 // halve for optimal communication
-                    IMotorController controller = Robot.dt.getRightTalon();
-                    controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
-                    loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
-                    MotionProfileStatus status = new MotionProfileStatus();
-                    controller.getMotionProfileStatus(status);
-                    System.out.println(controller.getDeviceID() + " Buffer After Pushed: " + status.btmBufferCnt);
+                IMotorController controller = Robot.dt.getRightTalon();
+                controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
+                loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
+                MotionProfileStatus status = new MotionProfileStatus();
+                controller.getMotionProfileStatus(status);
+                System.out.println(controller.getDeviceID() + " Buffer After Pushed: " + status.btmBufferCnt);
                     
                 
                 System.out.println("Loaded points correctly.");
@@ -191,6 +189,7 @@ public class FollowPathCommand extends Command
                     pathState = 3;
                 }
                 break;
+            }
         }
     }
     
