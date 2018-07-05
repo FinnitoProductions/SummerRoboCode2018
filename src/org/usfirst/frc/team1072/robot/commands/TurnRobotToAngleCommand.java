@@ -3,6 +3,8 @@ package org.usfirst.frc.team1072.robot.commands;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Angle;
 import org.usfirst.frc.team1072.util.Angle.AngleUnit;
 import org.usfirst.frc.team1072.util.ConversionFactors;
@@ -35,7 +37,7 @@ public class TurnRobotToAngleCommand extends Command
     
     public void initialize()
     {
-        Robot.dt.selectProfileSlots(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, 
                 RobotMap.PRIMARY_PID_INDEX, 
@@ -63,22 +65,22 @@ public class TurnRobotToAngleCommand extends Command
             double joystickRight = oi.getGamepad().getLeftX() * ConversionFactors.PIGEON_UNITS_PER_ROTATION / 2;
             if (Math.abs(oi.getGamepad().getLeftX()) < 0.1)
                 joystickRight = 0;
-            Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
-            Robot.dt.getLeftTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
+            Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
+            Robot.dt.getLeftTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
             Robot.dt.getRightTalon().set(ControlMode.Position, joystickRight);
             Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * joystickRight);
-            if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+            if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
                 Robot.dt.getRightTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+            if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
                 Robot.dt.getLeftTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             SmartDashboard.putNumber("COMMANDED VALUE TO PIGEON", joystickRight);
             SmartDashboard.putNumber("Pigeon Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));//joystickRight - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
         }
         else
         {
-            if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+            if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
                 Robot.dt.getRightTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > RobotMap.ANGLE_INTEGRAL_BAND)   
+            if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
                 Robot.dt.getLeftTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             
             Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * angle);

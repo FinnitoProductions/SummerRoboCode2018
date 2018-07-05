@@ -3,6 +3,7 @@ package org.usfirst.frc.team1072.robot.commands;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.util.Speed;
 import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
 
@@ -34,7 +35,7 @@ public class DriveWithVelocityCommand extends Command
     
     public void initialize()
     {
-        Robot.dt.selectProfileSlots(RobotMap.DT_VEL_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.selectProfileSlots(DrivetrainConstants.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
@@ -68,8 +69,8 @@ public class DriveWithVelocityCommand extends Command
             leftY /= 1-deadband;
         }
         
-        driveSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, leftY * RobotMap.MAX_DRIVE_SPEED_FPS, RobotMap.WHEELDIAMETER).getEncoderUnits(); 
-        turnSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, -1 * leftX * RobotMap.MAX_TURN_SPEED_FPS, RobotMap.WHEELDIAMETER).getEncoderUnits();
+        driveSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, leftY * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); 
+        turnSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, -1 * leftX * DrivetrainConstants.MAX_TURN_SPEED_FPS, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits();
         
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 
@@ -77,8 +78,8 @@ public class DriveWithVelocityCommand extends Command
         
         SmartDashboard.putNumber("LEFT Motor Voltage", driveSpeed - Robot.dt.getLeftTalon().getMotorOutputVoltage());
         SmartDashboard.putNumber("RIGHT Motor Voltage", driveSpeed - Robot.dt.getRightTalon().getMotorOutputVoltage());
-        SmartDashboard.putNumber("LEFT TALON ERROR", driveSpeed - Robot.dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
-        SmartDashboard.putNumber("RIGHT TALON ERROR", driveSpeed - Robot.dt.getRightTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
+        SmartDashboard.putNumber("LEFT TALON ERROR", driveSpeed - Robot.dt.getLeftTalon().getSelectedSensorVelocity(DrivetrainConstants.VEL_PID));
+        SmartDashboard.putNumber("RIGHT TALON ERROR", driveSpeed - Robot.dt.getRightTalon().getSelectedSensorVelocity(DrivetrainConstants.VEL_PID));
     }
     
     public double getDriveSpeed()

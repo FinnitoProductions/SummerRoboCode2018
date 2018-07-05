@@ -2,7 +2,8 @@ package org.usfirst.frc.team1072.robot.commands;
 
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,11 +31,11 @@ public class MoveElevatorVelocityCommand extends Command
         {
             boolean isDown = oi.getGamepad().getRightY() < 0;
             boolean reverseBeyondLimit = Robot.el.getBottomRightTalon()
-                    .getSelectedSensorPosition(RobotMap.DT_POS_PID) <= RobotMap.EL_REVERSE_SOFT;
+                    .getSelectedSensorPosition(DrivetrainConstants.POS_PID) <= ElevatorConstants.REVERSE_SOFT;
             if (isDown && !reverseBeyondLimit)
             {
                 double speed = oi.getGamepad().getRightY();
-                if (Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.EL_POS_PID) <= RobotMap.EL_SLOW_DOWN_POS)
+                if (Robot.el.getBottomRightTalon().getSelectedSensorPosition(ElevatorConstants.POS_PID) <= ElevatorConstants.SLOW_DOWN_POS)
                 {
                     speed *= 0.01;
                 }

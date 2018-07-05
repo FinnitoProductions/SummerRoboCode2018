@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
+import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.IntakeOuttakeCubeCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -25,8 +27,8 @@ public class Intake extends Subsystem
     
     public Intake()
     {
-        leftTalon = new TalonSRX(RobotMap.INTAKE_TALON_LEFT);
-        rightTalon = new TalonSRX(RobotMap.INTAKE_TALON_RIGHT);
+        leftTalon = new TalonSRX(CAN_IDs.INTAKE_TALON_LEFT);
+        rightTalon = new TalonSRX(CAN_IDs.INTAKE_TALON_RIGHT);
     }
     /**
      * Initializes the command using the ports for the left and right Talons.
@@ -63,8 +65,8 @@ public class Intake extends Subsystem
     public void talonInit()
     {
         intakeSetNeutralMode(NeutralMode.Brake);
-        intakeSetCurrentLimit(RobotMap.INT_PEAK_CURRENT_LIMIT, RobotMap.INT_PEAK_TIME_MS,
-                RobotMap.INT_CONTINUOUS_CURRENT_LIMIT);
+        intakeSetCurrentLimit(IntakeConstants.PEAK_CURRENT_LIMIT, IntakeConstants.PEAK_TIME_MS,
+                IntakeConstants.CONTINUOUS_CURRENT_LIMIT);
     }
 
     /**

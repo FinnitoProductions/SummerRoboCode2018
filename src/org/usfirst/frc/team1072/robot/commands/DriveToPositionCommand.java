@@ -3,6 +3,7 @@ package org.usfirst.frc.team1072.robot.commands;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.util.Position;
 import org.usfirst.frc.team1072.util.Position.PositionUnit;
 
@@ -37,7 +38,7 @@ public class DriveToPositionCommand extends Command
     @Override
     public void initialize()
     {
-        Robot.dt.selectProfileSlots(RobotMap.DT_POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
@@ -54,7 +55,7 @@ public class DriveToPositionCommand extends Command
         double position;
         if (isJoystick)
         {
-            position = new Position(PositionUnit.FEET, OI.getInstance().getGamepad().getLeftY() * 5, RobotMap.WHEELDIAMETER).getEncoderUnits();
+            position = new Position(PositionUnit.FEET, OI.getInstance().getGamepad().getLeftY() * 5, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits();
             Robot.dt.arcadeDrivePosition(position); 
         }
         else

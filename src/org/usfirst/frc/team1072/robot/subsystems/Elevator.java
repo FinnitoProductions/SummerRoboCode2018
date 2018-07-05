@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
 import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
 import org.usfirst.frc.team1072.robot.commands.MoveElevatorVelocityCommand;
@@ -33,10 +36,10 @@ public class Elevator extends Subsystem
      */
     public Elevator()
     {
-        topRightVictor = new VictorSPX(RobotMap.ELEVATOR_VICTOR_TOPRIGHT);
-        topLeftVictor = new VictorSPX (RobotMap.ELEVATOR_VICTOR_TOPLEFT);
-        bottomLeftVictor = new VictorSPX(RobotMap.ELEVATOR_VICTOR_BOTTOMLEFT);
-        bottomRightTalon = new TalonSRX(RobotMap.ELEVATOR_TALON);
+        topRightVictor = new VictorSPX(CAN_IDs.ELEVATOR_VICTOR_TOPRIGHT);
+        topLeftVictor = new VictorSPX (CAN_IDs.ELEVATOR_VICTOR_TOPLEFT);
+        bottomLeftVictor = new VictorSPX(CAN_IDs.ELEVATOR_VICTOR_BOTTOMLEFT);
+        bottomRightTalon = new TalonSRX(CAN_IDs.ELEVATOR_TALON);
     }
 
     protected void initDefaultCommand()
@@ -79,13 +82,13 @@ public class Elevator extends Subsystem
     {
         elSlaveVictors();
         elSetNeutralMode(NeutralMode.Brake);
-        elSetCurrentLimit(RobotMap.EL_PEAK_CURRENT_LIMIT, RobotMap.EL_PEAK_TIME_MS,
-                RobotMap.EL_CONTINOUS_CURRENT_LIMIT);
+        elSetCurrentLimit(ElevatorConstants.PEAK_CURRENT_LIMIT, ElevatorConstants.PEAK_TIME_MS,
+                ElevatorConstants.CONTINOUS_CURRENT_LIMIT);
         elInvertControllers();
-        elScaleVoltage(RobotMap.EL_NOMINAL_OUTPUT);
-        elSetSoftLimit(RobotMap.EL_FORWARD_SOFT, RobotMap.EL_REVERSE_SOFT);
+        elScaleVoltage(ElevatorConstants.NOMINAL_OUTPUT);
+        elSetSoftLimit(ElevatorConstants.FORWARD_SOFT, ElevatorConstants.REVERSE_SOFT);
 
-        elSetRampRate (RobotMap.EL_RAMP_RATE);
+        elSetRampRate (ElevatorConstants.RAMP_RATE);
         elScaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
         elConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
         elZeroSensors();
@@ -121,10 +124,10 @@ public class Elevator extends Subsystem
      */
     private void elInvertControllers()
     {
-        getBottomLeftVictor().setInverted(RobotMap.EL_BOTTOM_LEFT_VICTOR_INVERT);
-        getBottomRightTalon().setInverted(RobotMap.EL_TALON_INVERT);
-        getTopRightVictor().setInverted(RobotMap.EL_TOP_RIGHT_VICTOR_INVERT);
-        getTopLeftVictor().setInverted(RobotMap.EL_TOP_LEFT_VICTOR_INVERT);
+        getBottomLeftVictor().setInverted(ElevatorConstants.BOTTOM_LEFT_VICTOR_INVERT);
+        getBottomRightTalon().setInverted(ElevatorConstants.TALON_INVERT);
+        getTopRightVictor().setInverted(ElevatorConstants.TOP_RIGHT_VICTOR_INVERT);
+        getTopLeftVictor().setInverted(ElevatorConstants.TOP_LEFT_VICTOR_INVERT);
     }
 
     /**
@@ -176,23 +179,23 @@ public class Elevator extends Subsystem
      */
     private void elConfigurePositionClosedLoop()
     {
-        getBottomRightTalon().configNominalOutputForward(RobotMap.EL_NOMINAL_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configNominalOutputForward(ElevatorConstants.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configNominalOutputReverse(-1 * RobotMap.EL_NOMINAL_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configNominalOutputReverse(-1 * ElevatorConstants.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configPeakOutputForward(RobotMap.EL_PEAK_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configPeakOutputForward(ElevatorConstants.PEAK_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configPeakOutputReverse(-1 * RobotMap.EL_PEAK_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configPeakOutputReverse(-1 * ElevatorConstants.PEAK_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kF(RobotMap.EL_POS_PID, RobotMap.EL_POS_KF, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kF(ElevatorConstants.POS_PID, ElevatorConstants.POS_KF, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kP(RobotMap.EL_POS_PID, RobotMap.EL_POS_KP, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kP(ElevatorConstants.POS_PID, ElevatorConstants.POS_KP, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kI(RobotMap.EL_POS_PID, RobotMap.EL_POS_KI, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kI(ElevatorConstants.POS_PID, ElevatorConstants.POS_KI, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kD(RobotMap.EL_POS_PID, RobotMap.EL_POS_KD, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kD(ElevatorConstants.POS_PID, ElevatorConstants.POS_KD, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configAllowableClosedloopError(RobotMap.DT_POS_PID, RobotMap.EL_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(DrivetrainConstants.POS_PID, ElevatorConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
     }
     
     /**
@@ -201,16 +204,16 @@ public class Elevator extends Subsystem
     private void elConfigureMotionMagic()
     {
         // set motion magic port to be the velocity PID port 
-        getBottomRightTalon().selectProfileSlot(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_PID);
-        getBottomRightTalon().config_kF(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KF, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kP(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KP, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kI(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KI, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kD(RobotMap.EL_VEL_PID, RobotMap.EL_VEL_KD, RobotMap.TIMEOUT);
+        getBottomRightTalon().selectProfileSlot(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_PID);
+        getBottomRightTalon().config_kF(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KF, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kP(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KP, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kI(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KI, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kD(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KD, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configMotionCruiseVelocity(RobotMap.EL_VEL_VEL, RobotMap.TIMEOUT);
-        getBottomRightTalon().configMotionAcceleration(RobotMap.EL_VEL_ACCEL, RobotMap.TIMEOUT);
+        getBottomRightTalon().configMotionCruiseVelocity(ElevatorConstants.VEL_VEL, RobotMap.TIMEOUT);
+        getBottomRightTalon().configMotionAcceleration(ElevatorConstants.VEL_ACCEL, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configAllowableClosedloopError(RobotMap.DT_VEL_PID, RobotMap.EL_VEL_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(DrivetrainConstants.VEL_PID, ElevatorConstants.VEL_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         
     }
 
@@ -239,7 +242,7 @@ public class Elevator extends Subsystem
      */
     private void elConfigureSensors(FeedbackDevice fd)
     {
-        getBottomRightTalon().configSelectedFeedbackSensor(fd, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
+        getBottomRightTalon().configSelectedFeedbackSensor(fd, DrivetrainConstants.POS_PID, RobotMap.TIMEOUT);
     }
 
     /**

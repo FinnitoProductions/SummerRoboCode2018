@@ -2,7 +2,8 @@ package org.usfirst.frc.team1072.robot.commands;
 
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -50,8 +51,8 @@ public class MoveElevatorMotionMagicCommand extends Command
     * @return true if the command has finished; false otherwise
     */
     protected boolean isFinished() {
-        return Math.abs(Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.DT_POS_PID) - position) <= 
-                RobotMap.EL_POS_ALLOWABLE_ERROR;
+        return Math.abs(Robot.el.getBottomRightTalon().getSelectedSensorPosition(DrivetrainConstants.POS_PID) - position) <= 
+                ElevatorConstants.POS_ALLOWABLE_ERROR;
     }
     
 }

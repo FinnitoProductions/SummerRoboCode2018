@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
+import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
 import org.usfirst.frc.team1072.robot.commands.SetSolenoidCommand;
 import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
@@ -96,15 +98,15 @@ public class OI
         DPadButtonWrapper downDPad = new DPadButtonWrapper (gw, 180);
         DPadButtonWrapper rightDPad = new DPadButtonWrapper (gw, 90);
         
-        upDPad.whenPressed(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
-        downDPad.whenPressed( new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
-        leftDPad.whenPressed(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
-        rightDPad.whenPressed(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
+        upDPad.whenPressed(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+        downDPad.whenPressed( new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+        leftDPad.whenPressed(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
+        rightDPad.whenPressed(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         
-        gw.getButtonA().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_INTAKE_HEIGHT));
-        gw.getButtonX().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_SWITCH_HEIGHT));
-        gw.getButtonB().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_SCALE_LOW_HEIGHT));
-        gw.getButtonY().whenPressed(new MoveElevatorMotionMagicCommand(0, RobotMap.EL_SCALE_HIGH_HEIGHT));
+        gw.getButtonA().whenPressed(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.INTAKE_HEIGHT));
+        gw.getButtonX().whenPressed(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT));
+        gw.getButtonB().whenPressed(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SCALE_LOW_HEIGHT));
+        gw.getButtonY().whenPressed(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SCALE_HIGH_HEIGHT));
         
         /*gw.getButtonA().whenPressed(new TurnRobotToAngleCommand(90));
         gw.getButtonX().whenPressed(new TurnRobotToAngleCommand(0));

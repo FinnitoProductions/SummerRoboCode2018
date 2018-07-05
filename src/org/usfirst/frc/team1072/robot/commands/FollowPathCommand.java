@@ -9,6 +9,8 @@ import java.util.Stack;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Angle;
 import org.usfirst.frc.team1072.util.Angle.AngleUnit;
 import org.usfirst.frc.team1072.util.Position;
@@ -95,21 +97,21 @@ public class FollowPathCommand extends Command
         notif = new Notifier(p);
         notif.startPeriodic(period);
         
-        Robot.dt.getLeftTalon().setSensorPhase(RobotMap.DT_LEFT_TALON_PHASE);
-        Robot.dt.getRightTalon().setSensorPhase(RobotMap.DT_RIGHT_TALON_PHASE);
+        Robot.dt.getLeftTalon().setSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE);
+        Robot.dt.getRightTalon().setSensorPhase(DrivetrainConstants.RIGHT_TALON_PHASE);
         
         if (outerPort == -1) // no auxiliary/arc
         {
-            Robot.dt.selectProfileSlots(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
+            Robot.dt.selectProfileSlots(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
         }
         else
         {
             Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
             
-            Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
-            Robot.dt.getRightTalon().selectProfileSlot(RobotMap.DT_ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
+            Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
+            Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
             
-            Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
+            Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
             
 
             
@@ -118,7 +120,7 @@ public class FollowPathCommand extends Command
             
             Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            Robot.dt.getRightTalon().configSelectedFeedbackSensor(RobotMap.PIGEON_REMOTE_SENSOR_TYPE, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+            Robot.dt.getRightTalon().configSelectedFeedbackSensor(PigeonConstants.REMOTE_SENSOR_SLOT, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
             
             Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
                     RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
@@ -217,11 +219,11 @@ public class FollowPathCommand extends Command
             for (int i = 0; i < segs.length; i++)
             {
                 TrajectoryPoint tp = new TrajectoryPoint();
-                tp.position = new Position(PositionUnit.FEET, segs[i].position, RobotMap.WHEELDIAMETER).getEncoderUnits(); // convert revolutions to encoder units
-                tp.velocity = new Speed(SpeedUnit.FEET_PER_SECOND, segs[i].velocity, RobotMap.WHEELDIAMETER).getEncoderUnits(); // convert fps to encoder units
+                tp.position = new Position(PositionUnit.FEET, segs[i].position, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); // convert revolutions to encoder units
+                tp.velocity = new Speed(SpeedUnit.FEET_PER_SECOND, segs[i].velocity, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); // convert fps to encoder units
                 
                 tp.timeDur = TrajectoryDuration.valueOf((int)segs[i].dt); // convert to correct units
-                tp.profileSlotSelect0 = RobotMap.DT_MOTION_PROFILE_PID;
+                tp.profileSlotSelect0 = DrivetrainConstants.MOTION_PROFILE_PID;
                 
                 if (outerPort >= 0) 
                 {
