@@ -68,6 +68,7 @@ public class FollowPathCommand extends Command
     {
         p = new ProcessBuffer();
         controllers = new HashMap<IMotorController, Object[]>();
+        this.enableNotifier = enableNotifier;
         this.outerPort = outerPort;
         
     }
@@ -126,17 +127,30 @@ public class FollowPathCommand extends Command
         {
             MotionProfileStatus motionStatus = new MotionProfileStatus();
             controller.getMotionProfileStatus(motionStatus);
-            controllers.get(controller)[STAT_INDEX] = motionStatus;
-        }
+            controllers.get(controller)[STAT_INDEX] = status;
+
         switch(pathState)
         {
             // ready to begin loading
             case 0:
             {
+<<<<<<< HEAD
                 IMotorController controller = Robot.dt.getRightTalon();
                 controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
                 loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
 
+=======
+                 // halve for optimal communication
+                    IMotorController controller = Robot.dt.getRightTalon();
+                    controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
+                    loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
+                    MotionProfileStatus status = new MotionProfileStatus();
+                    controller.getMotionProfileStatus(status);
+                    System.out.println(controller.getDeviceID() + " Buffer After Pushed: " + status.btmBufferCnt);
+                    
+                
+                System.out.println("Loaded points correctly.");
+>>>>>>> parent of 1b81f40... Fixed compilation errors
                 pathState = 1;
                 break;
             }
@@ -178,7 +192,6 @@ public class FollowPathCommand extends Command
                     pathState = 3;
                 }
                 break;
-            }
         }
     }
     
