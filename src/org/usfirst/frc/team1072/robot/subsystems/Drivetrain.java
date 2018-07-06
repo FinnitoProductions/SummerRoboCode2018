@@ -36,7 +36,7 @@ import jaci.pathfinder.Trajectory.Segment;
  * @author Finn Frankis
  * @version 6/11/18
  */
-public class Drivetrain extends PIDSubsystem
+public class Drivetrain extends Subsystem
 {
     private static Drivetrain instance = null;
     private TalonSRX leftTalon;
@@ -55,12 +55,6 @@ public class Drivetrain extends PIDSubsystem
     private Drivetrain()
     {
         // initialize talons
-        super("Drivetrain", 
-                RobotMap.DT_POS_KP_LEFT / RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
-                RobotMap.DT_POS_KI_LEFT / RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
-                RobotMap.DT_POS_KD_LEFT /  RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
-                RobotMap.DT_POS_KF_LEFT /  RobotMap.TALON_MOTOR_OUTPUT_UNITS, 
-                RobotMap.PID_OUTPUT_PERIOD_S);
         leftTalon = new TalonSRX (RobotMap.LEFT_CIM_TALON);
         rightTalon = new TalonSRX (RobotMap.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (RobotMap.LEFT_CIM_VICTOR);
@@ -92,8 +86,6 @@ public class Drivetrain extends PIDSubsystem
     public void arcadeDriveVelocity(double speed, double turn)
     {
         // victor follows talon
-        getLeftTalon().selectProfileSlot(RobotMap.DT_VEL_PID, RobotMap.PRIMARY_PID_INDEX);
-        getRightTalon().selectProfileSlot(RobotMap.DT_VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         rightTalon.set(ControlMode.Velocity, speed + turn);  
         leftTalon.set(ControlMode.Velocity, speed - turn);  
 
@@ -105,9 +97,6 @@ public class Drivetrain extends PIDSubsystem
      */
     public void arcadeDrivePosition (double target)
     {
-        System.out.println("DRIVING TO POSITION");
-        getLeftTalon().selectProfileSlot(RobotMap.DT_POS_PID, 0);
-        getRightTalon().selectProfileSlot(RobotMap.DT_POS_PID, 0);
         leftTalon.set(ControlMode.Position, target);
         rightTalon.set(ControlMode.Position, target);
     }
@@ -128,14 +117,14 @@ public class Drivetrain extends PIDSubsystem
     public void talonInitAutonomous()
     {
         talonInit();
-
-        setupMotionProfile(true);
     }
     
+    /**
+     * Performs teleop-specific commands on the Talon.
+     */
     public void talonInitTeleop()
     {
         talonInit();
-        disableMotionProfile();
     }
     /**
      * Performs all commands to initialize the talons.
@@ -175,38 +164,6 @@ public class Drivetrain extends PIDSubsystem
     {
         getLeftVictor().follow(getLeftTalon());
         getRightVictor().follow(getRightTalon());
-        /*getLeftVictor().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_0, RobotMap.TIMEOUT);
-        getRightVictor().configRemoteFeedbackFilter(getRightTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_0, RobotMap.TIMEOUT);
-        
-        getLeftVictor().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-        getRightVictor().configSelectedFeedbackSensor(FeedbackDevice.RemoteSensor0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-        
-        getLeftVictor().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
-        getRightVictor().selectProfileSlot(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.PRIMARY_PID);
-        
-        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.QUADRATURE_PERIOD_MS, RobotMap.TIMEOUT);*/
-    }
-    
-    public void victorTeleopInit()
-    {
-        /*getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, 100, RobotMap.TIMEOUT);*/
-    }
-
-    /**
-     * Initializes the Talon output.
-     * 
-     * @param percentOutput
-     *            the output to which the Talons should be initialized
-     */
-    private void dtInitTalonOutput(int percentOutput)
-    {
-        getLeftTalon().set(ControlMode.Velocity, percentOutput);
-        getRightTalon().set(ControlMode.Velocity, percentOutput);
-        
-    
-        
     }
     
     private void resetTalonCoefficients()
@@ -279,18 +236,6 @@ public class Drivetrain extends PIDSubsystem
         getRightTalon().enableVoltageCompensation(true);
     }
 
-    /**
-     * Configures the encoders either to use pulse width or quadrature velocity.
-     * 
-     * @param f
-     *            the feedback device to use to configure (either quadrature or
-     *            sensor velocity)
-     */
-    public void velocityConfigureSensors(FeedbackDevice f)
-    {
-        //getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
-        //getRightTalon().configSelectedFeedbackSensor(f, RobotMap.DT_VEL_PID, RobotMap.TIMEOUT);
-    }
 
     /**
      * Aligns the sensor phase of the encoders to match the motions of the motors.
@@ -308,7 +253,6 @@ public class Drivetrain extends PIDSubsystem
      */
     private void configureVelocityClosedLoop()
     {
-        velocityConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
         getLeftTalon().configNominalOutputForward(RobotMap.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
         getRightTalon().configNominalOutputForward(RobotMap.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
@@ -345,10 +289,6 @@ public class Drivetrain extends PIDSubsystem
      */
     private void configurePositionClosedLoop()
     {
-        positionConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
-        
-        getLeftTalon().setSelectedSensorPosition(0, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
-        getRightTalon().setSelectedSensorPosition(0, RobotMap.DT_POS_PID, RobotMap.TIMEOUT);
 
         getLeftTalon().configAllowableClosedloopError(RobotMap.DT_POS_PID, RobotMap.DT_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         getRightTalon().configAllowableClosedloopError(RobotMap.DT_POS_PID, RobotMap.DT_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
@@ -366,12 +306,6 @@ public class Drivetrain extends PIDSubsystem
         getRightTalon().config_kD(RobotMap.DT_POS_PID, RobotMap.DT_POS_KD_RIGHT, RobotMap.TIMEOUT);
     }
     
-    private void positionConfigureSensors(FeedbackDevice f)
-    {
-        //getLeftTalon().configSelectedFeedbackSensor(f, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        //getRightTalon().configSelectedFeedbackSensor(f, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-    }
-
     /**
      * Selects the profile slots of both talons to their correct places.
      * @param pidSlot the PID slot on the Talon [0, 3]
@@ -384,7 +318,7 @@ public class Drivetrain extends PIDSubsystem
     }
     public void configureAngleClosedLoop()
     {
-        pigeonInit();
+        zeroPigeon();
         getLeftTalon().configRemoteFeedbackFilter(getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_0, 
@@ -405,18 +339,9 @@ public class Drivetrain extends PIDSubsystem
         getLeftTalon().config_kD(RobotMap.DT_ANGLE_PID, RobotMap.PIGEON_ANGLE_KD, RobotMap.TIMEOUT);
 
     }
-    
-    private void pigeonInit()
-    {
-        getPigeon().setYaw(0, RobotMap.TIMEOUT);
-        
-    }
 
     private void configureMotionProfileClosedLoop()
     {
-        //getLeftTalon().setSelectedSensorPosition(0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-        //getRightTalon().setSelectedSensorPosition(0, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-
         getLeftTalon().configAllowableClosedloopError(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         getRightTalon().configAllowableClosedloopError(RobotMap.DT_MOTION_PROFILE_PID, RobotMap.DT_POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
 
@@ -434,7 +359,7 @@ public class Drivetrain extends PIDSubsystem
     }
     
     /**
-     * Resets the talon frame periods.
+     * Resets the Talon frame periods.
      */
     private void dtsetTalonFramePeriods()
     {
@@ -468,54 +393,6 @@ public class Drivetrain extends PIDSubsystem
         getRightTalon().setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
         
-    }
-   
-    public void setupMotionProfile(boolean isArc)
-    {
-        if (isArc)
-        {            
-            //getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-           // getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-            
-            
-            //getLeftTalon().configAuxPIDPolarity(arg0, RobotMap.TIMEOUT);
-
-        }
-        else
-        {
-            //getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-            //getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT);
-        }
-    }
-    
-    public void disableMotionProfile()
-    {
-        
-    }
-    
-    @Deprecated
-    public void configureEncoderAverage()
-    {
-        getLeftTalon().configRemoteFeedbackFilter(getRightTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
-        getRightTalon().configRemoteFeedbackFilter(getLeftTalon().getDeviceID(), RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_1, RobotMap.TIMEOUT);
-        
-        getLeftTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
-        getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
-        getLeftTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
-        getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
-        
-        getLeftTalon().configSelectedFeedbackCoefficient(0.5,
-                RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); //using native sensor units, take average of sum
-        getRightTalon().configSelectedFeedbackCoefficient(0.5,
-                RobotMap.DT_MOTION_PROFILE_PID, RobotMap.TIMEOUT); //using native sensor units
-    }
-    
-    public void clearFeedbackCoefficient(int pidSlot)
-    {
-        getLeftTalon().configSelectedFeedbackCoefficient(1,
-                pidSlot, RobotMap.TIMEOUT); //using native sensor units, take average of sum
-        getRightTalon().configSelectedFeedbackCoefficient(1,
-                pidSlot, RobotMap.TIMEOUT); //using native sensor units
     }
 
     /**
@@ -576,12 +453,6 @@ public class Drivetrain extends PIDSubsystem
         if (instance == null) instance = new Drivetrain();
         return instance;
     }
-    
-    public static void resetInstance()
-    {
-        instance = null;
-    }
-    
     /**
      * Gets the pigeon for this drivetrain.
      * @return the pigeon
@@ -611,91 +482,7 @@ public class Drivetrain extends PIDSubsystem
         pigeon.getYawPitchRoll(ypr);
         return ypr[2];
     }
-    @Override
-    protected double returnPIDInput()
-    {
-       double currentTime =  Timer.getFPGATimestamp() * RobotMap.MS_PER_SEC;
-       double timeElapsed = currentTime - startTime;
-       int startPoint = (int) (timeElapsed/RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
-       int endPoint = startPoint + 1;
-       if (endPoint >= leftPoints.length)
-       {
-           setSetpoint((leftPoints[leftPoints.length-1].position + rightPoints[leftPoints.length-1].position)/2);
-       }
-       else
-       {
-           // interpolate to find point for current time
-           double interpStartTime = startPoint * RobotMap.TIME_PER_TRAJECTORY_POINT_MS;
-           double interpEndTime = endPoint * RobotMap.TIME_PER_TRAJECTORY_POINT_MS;
-           double deltaT = interpEndTime - interpStartTime; 
-           
-           double startPosLeft = leftPoints[startPoint].position;
-           double endPosLeft = leftPoints[endPoint].position;
-           double slopeLeft = (endPosLeft - startPosLeft) / (interpEndTime - interpStartTime);
-
-           
-           double startPosRight = rightPoints[startPoint].position;
-           
-           double endPosRight = rightPoints[endPoint].position;
-           double slopeRight = (endPosRight - startPosRight) / (interpEndTime - interpStartTime);
-           
-           double targetPosLeft = slopeLeft * (timeElapsed - interpStartTime) + startPosLeft;
-           double targetPosRight = slopeRight * (timeElapsed - interpStartTime) + startPosRight;
-           System.out.println(" " + targetPosLeft + " " + targetPosRight); 
-           SmartDashboard.putNumber("TARGET POS ", (targetPosLeft + targetPosRight)/2);
-           SmartDashboard.putNumber("ERROR", (targetPosLeft+targetPosRight) / 2 
-                   - (getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) +getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX))/2 );
-           setSetpoint((targetPosLeft + targetPosRight)/2);
-       }
-
-        return (leftTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) + 
-                rightTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX))/2;
-    }
-    @Override
-    protected void usePIDOutput(double output)
-    {
-        if (pidEnabled)
-        {
-            currentPIDOutput = output;
-            //System.out.println("PID OUTPUT : " + output + " TIME SINCE START: " + (Timer.getFPGATimestamp() * 1000 - startTime));
-            SmartDashboard.putNumber("TALON OUTPUT", output + Math.random() * 0.0000000000001);
-            SmartDashboard.putNumber("POSITION ERROR", this.getPIDController().getError());
-            SmartDashboard.putNumber("ENCODER POSITION", getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-            //SmartDashboard.putNumber("RIGHT POSITION ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID));
-            for (IMotorController imc : controllers.keySet())
-            {
-                imc.set(ControlMode.PercentOutput, output);
-                
-                //this.getPIDController().setOutputRange(0, 1);
-            }
-            
-        }
-        else
-            currentPIDOutput = -1;
-        
-    }
-    
-    public void enablePID()
-    {
-        leftTalon.selectProfileSlot(RobotMap.DT_POS_PID, RobotMap.PRIMARY_PID_INDEX);
-        rightTalon.selectProfileSlot(RobotMap.DT_POS_PID, RobotMap.PRIMARY_PID_INDEX);
-        pidEnabled = true;
-        
-        controllers = Robot.m_autonomousCommand.getCurrentPath().getControllers();
-        startTime = Robot.m_autonomousCommand.getCurrentPath().getStartTime();
-        
-        Iterator<IMotorController> it = controllers.keySet().iterator();
-        leftPoints = Robot.m_autonomousCommand.getCurrentPath().getControllerTrajectory(it.next()).segments;
-        rightPoints = Robot.m_autonomousCommand.getCurrentPath().getControllerTrajectory(it.next()).segments;
-
-        this.enable();
-    }
-    
-    public void disablePID()
-    {
-        pidEnabled = false;
-        this.disable();
-    }
+ 
 
     public void zeroPigeon()
     {
