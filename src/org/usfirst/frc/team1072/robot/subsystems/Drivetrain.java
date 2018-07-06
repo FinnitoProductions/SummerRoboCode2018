@@ -47,14 +47,16 @@ public class Drivetrain extends Subsystem
     private VictorSPX leftVictor;
     private VictorSPX rightVictor;
     private PigeonIMU pigeon;
-    private boolean pidEnabled;
-    private double currentPIDOutput;
+    
     private Map<IMotorController, Object[]> controllers; // for PID
     private double startTime;
     
     private Segment[] leftPoints;
     private Segment[] rightPoints;
     
+    /**
+     * Initializes this subsystem.
+     */
     private Drivetrain()
     {
         // initialize talons
@@ -63,16 +65,10 @@ public class Drivetrain extends Subsystem
         leftVictor = new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR);
         rightVictor = new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR);
         pigeon = new PigeonIMU(RobotMap.PIGEON_ID);
-        pidEnabled = false;
-
     }
-    
-    public double getCurrentPIDOutput()
-    {
-        return currentPIDOutput;
-    }
+  
     /**
-     * Initializes the command using the four ports for the Talons/Victors.
+     * Initializes the command using the necessary default command.
      */
     public void initDefaultCommand()
     {
@@ -104,15 +100,16 @@ public class Drivetrain extends Subsystem
         rightTalon.set(ControlMode.Position, target);
     }
     
+    /**
+     * Moves the robot left and right sides to given positions using PID.
+     * @param leftTarget the target position for the left side
+     * @param rightTarget the target position for the right side
+     */
     public void arcadeDrivePosition (double leftTarget, double rightTarget)
     {
-        System.out.println("DRIVING TO POSITION");
-        getLeftTalon().selectProfileSlot(DrivetrainConstants.POS_PID, 0);
-        getRightTalon().selectProfileSlot(DrivetrainConstants.POS_PID, 0);
         leftTalon.set(ControlMode.Position, leftTarget);
         rightTalon.set(ControlMode.Position, rightTarget);
     }
-    
 
     /**
      * Performs autonomous-specific commands on the Talon.
@@ -318,6 +315,11 @@ public class Drivetrain extends Subsystem
         getLeftTalon().selectProfileSlot(pidSlot, pidIndex);
         getRightTalon().selectProfileSlot(pidSlot, pidIndex);
     }
+    /**
+     * Configures the angle closed loop.
+     * 
+     * @postcondition P, I, and D have been set for both sides; the pigeon zeroed; the frame period set
+     */
     public void configureAngleClosedLoop()
     {
         zeroPigeon();
@@ -335,6 +337,11 @@ public class Drivetrain extends Subsystem
 
     }
 
+    /**
+     * Configures the motion profile closed loop.
+     * 
+     * @postcondition P, I, and D have been set for both sides; the allowable error configured
+     */
     private void configureMotionProfileClosedLoop()
     {
         getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
@@ -457,6 +464,10 @@ public class Drivetrain extends Subsystem
         return pigeon;
     }
     
+    /**
+     * Gets the current yaw value of the pigeon.
+     * @return the yaw
+     */
     public double getPigeonYaw()
     {
         double[] ypr = new double[3];
@@ -464,6 +475,10 @@ public class Drivetrain extends Subsystem
         return ypr[0];
     }
     
+    /**
+     * Gets the current pitch value of the pigeon.
+     * @return the pitch
+     */
     public double getPigeonPitch()
     {
         double[] ypr = new double[3];
@@ -471,6 +486,10 @@ public class Drivetrain extends Subsystem
         return ypr[1];
     }
     
+    /**
+     * Gets the current roll value of the pigeon.
+     * @return the roll
+     */
     public double getPigeonRoll()
     {
         double[] ypr = new double[3];
@@ -478,7 +497,9 @@ public class Drivetrain extends Subsystem
         return ypr[2];
     }
  
-
+    /**
+     * Zeros the pigeon.
+     */
     public void zeroPigeon()
     {
         getPigeon().setYaw(0, RobotMap.TIMEOUT);

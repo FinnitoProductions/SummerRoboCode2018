@@ -36,6 +36,10 @@ public class AutonomousCommand extends CommandGroup
     private final String PATH_TEST_LEFT = "/home/summer2018/paths/simplepathtest/simplepathtest_left_detailed.csv";
     private final String PATH_TEST_RIGHT = "/home/summer2018/paths/simplepathtest/simplepathtest_right_detailed.csv";
     
+    /**
+     * Constructs a new command
+     * @param subsystems the list of subsystems
+     */
     public AutonomousCommand(Subsystem[] subsystems)
     {
         for (Subsystem s : subsystems)
@@ -50,6 +54,10 @@ public class AutonomousCommand extends CommandGroup
 
     }
 
+    /**
+     * The command to be performed for a one-cube switch autonomous.
+     * @param onLeft true if the switch is on the left; false otherwise
+     */
     private void oneCubeSwitch (boolean onLeft)
     {
         FollowPathCommand fpc1;

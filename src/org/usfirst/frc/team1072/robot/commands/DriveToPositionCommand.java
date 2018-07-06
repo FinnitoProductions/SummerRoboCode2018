@@ -36,6 +36,9 @@ public class DriveToPositionCommand extends Command
     }
     
     @Override
+    /**
+     * Initializes the command.
+     */
     public void initialize()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);

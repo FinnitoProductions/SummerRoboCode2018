@@ -44,7 +44,7 @@ import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Segment;
 
 /**
- * 
+ * A command to follow a unidirectional motion profile.
  * @author Finn Frankis
  * @version 6/20/18
  */
@@ -67,6 +67,9 @@ public class FollowPathCommand extends Command
     
     private double totalTime;
     
+    /**
+     * Constructs a new command. 
+     */
     public FollowPathCommand()
     {
         p = new ProcessBuffer();
@@ -74,6 +77,10 @@ public class FollowPathCommand extends Command
         outerPort = -1;
     }
     
+    /**
+     * Constructs a new command.
+     * @param outerPort the outer PID slot
+     */
     public FollowPathCommand(int outerPort)
     {
         p = new ProcessBuffer();
@@ -82,11 +89,11 @@ public class FollowPathCommand extends Command
         
     }
     
+    /**
+     * Initializes the command (called each time the command is started) by setting up sensors and the notifier.
+     */
     public void initialize()
     {
-
-            
-        
         
         pathState = 0;
         totalTime = 0;
@@ -139,17 +146,18 @@ public class FollowPathCommand extends Command
         }
     }
     
+    /**
+     * Executes the command periodically 
+     */
     public void execute()
     {
-        for (IMotorController controller : controllers.keySet())
-        {
-            MotionProfileStatus motionStatus = new MotionProfileStatus();
-            controller.getMotionProfileStatus(motionStatus);
-            controllers.get(controller)[STAT_INDEX] = motionStatus;
-        }
+        MotionProfileStatus motionStatus = new MotionProfileStatus();
+        IMotorController imc = Robot.dt.getRightTalon();
+        imc.getMotionProfileStatus(motionStatus);
+        controllers.get(imc)[STAT_INDEX] = motionStatus;
         switch(pathState)
         {
-            // ready to begin loading
+            // ready to begin loading trajectories
             case 0:
             {
                 IMotorController controller = Robot.dt.getRightTalon();
@@ -201,6 +209,12 @@ public class FollowPathCommand extends Command
         }
     }
     
+    /**
+     * Adds a controller and its trajectory to the map.
+     * @param t the trajectory which this controller should follow
+     * @param controller the controller which is being added
+     * @param reversePath true if the path should be formed in reverse order; false otherwise
+     */
     public void addProfile (Trajectory t, IMotorController controller, boolean reversePath)
     {
         controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 2));
@@ -210,6 +224,11 @@ public class FollowPathCommand extends Command
         controllers.put(controller, new Object[] {t, null, new Double(0)});
     }
     
+    /**
+     * Loads a given set of trajectory points to a controller.
+     * @param t the trajectory to be loaded
+     * @param controller the controller onto which the points should be loaded
+     */
     private void loadTrajectoryToTalon(Trajectory t, IMotorController controller)
     {
         if (t != null)
@@ -267,7 +286,11 @@ public class FollowPathCommand extends Command
         }
     }
     
-    
+    /**
+     * A class to periodically buffer the Talon points.
+     * @author Finn Frankis
+     * @version 6/20/18
+     */
     class ProcessBuffer implements java.lang.Runnable {
         private List<IMotorController> motorControllers;
         
@@ -289,6 +312,9 @@ public class FollowPathCommand extends Command
     }
 
     @Override
+    /**
+     * Determines whether the command has completed operation.
+     */
     protected boolean isFinished()
     {
         return pathState == 3;
@@ -311,6 +337,9 @@ public class FollowPathCommand extends Command
         disable();
     }
     
+    /**
+     * To be called when the command is either cancelled, interrrupted, or ended.
+     */
     public void disable() {
         System.out.println("DISABLING");
         notif.stop();
@@ -323,12 +352,21 @@ public class FollowPathCommand extends Command
         //}
     }
     
-    
+    /**
+     * Gets the controller status of a given controller in the map.
+     * @param controller the controller for which the status will be retrieved
+     * @return the status of this controller
+     */
     private MotionProfileStatus getControllerStatus (IMotorController controller)
     {
         return (MotionProfileStatus) controllers.get(controller)[1];//STAT_INDEX];
     }
     
+    /**
+     * Gets the trajectory of a given controller in the map.
+     * @param controller the controller for which the status will be retrieved
+     * @return the trajectory of this controller
+     */
     private Trajectory getControllerTrajectory (IMotorController controller)
     {
         return (Trajectory) controllers.get(controller)[TRAJ_INDEX];
