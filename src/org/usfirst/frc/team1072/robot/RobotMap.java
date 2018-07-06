@@ -144,15 +144,15 @@ public class RobotMap {
 //        public static double DT_MOTION_PROF_KI_RIGHT = 0.000004; // 
 //        public static double DT_MOTION_PROF_KD_RIGHT = 25;
         // CARPET
-        public static double MOTION_PROF_KF_LEFT = VEL_KF_LEFT; //0.197
-        public static double MOTION_PROF_KP_LEFT = 0.22; //0.2 
-        public static double MOTION_PROF_KI_LEFT = 0.00001; //
-        public static double MOTION_PROF_KD_LEFT = 40;
+        public static double MOTION_PROF_KF_LEFT = 0;//VEL_KF_LEFT; //0.197
+        public static double MOTION_PROF_KP_LEFT = 0;//0.22; //0.2 
+        public static double MOTION_PROF_KI_LEFT = 0;//0.00001; //
+        public static double MOTION_PROF_KD_LEFT = 0;//40;
         
         public static double MOTION_PROF_KF_RIGHT = VEL_KF_RIGHT; //0.188
-        public static double MOTION_PROF_KP_RIGHT = 0.22;
-        public static double MOTION_PROF_KI_RIGHT = 0.00001; // 
-        public static double MOTION_PROF_KD_RIGHT = 40;
+        public static double MOTION_PROF_KP_RIGHT = 1;
+        public static double MOTION_PROF_KI_RIGHT = 0;//.00001 / 2; // 
+        public static double MOTION_PROF_KD_RIGHT = 0;//40 / 2;
         
     }
     
@@ -273,7 +273,7 @@ public class RobotMap {
     public static final double TALON_ENCODER_SUM_PERIOD_MS = 0.7;
 
     //public static final double BUFFER_NEXT_OUTPUT_PERIOD = 1.0/1000;
-    public static final int TIME_PER_TRAJECTORY_POINT_MS = 50;
+    public static final int TIME_PER_TRAJECTORY_POINT_MS = 6;
     public static final double PID_OUTPUT_PERIOD_S = 3.0/1000;
     public static final double TALON_MOTOR_OUTPUT_UNITS = 1023;
     public static final int NUM_PID_SLOTS = 4;

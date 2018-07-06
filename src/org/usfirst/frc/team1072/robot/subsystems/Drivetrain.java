@@ -292,7 +292,6 @@ public class Drivetrain extends Subsystem
      */
     private void configurePositionClosedLoop()
     {
-
         getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         getRightTalon().configAllowableClosedloopError(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
 
@@ -322,14 +321,7 @@ public class Drivetrain extends Subsystem
     public void configureAngleClosedLoop()
     {
         zeroPigeon();
-        getLeftTalon().configRemoteFeedbackFilter(getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_SLOT_0, 
-                RobotMap.TIMEOUT);
-        getRightTalon().configRemoteFeedbackFilter(getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_SLOT_0, 
-                RobotMap.TIMEOUT);
+
         
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         

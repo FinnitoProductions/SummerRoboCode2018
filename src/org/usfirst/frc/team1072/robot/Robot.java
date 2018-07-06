@@ -125,8 +125,6 @@ public class Robot extends TimedRobot
 //        pigeonInit();
         (m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn})).start();
         
-        
-        
     }
 
     /**
@@ -144,10 +142,16 @@ public class Robot extends TimedRobot
         
         /*SmartDashboard.putNumber("LEFT POSITION ERROR", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID));
         SmartDashboard.putNumber("RIGHT POSITION ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID));*/
-        SmartDashboard.putNumber("RIGHT Position ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        //SmartDashboard.putNumber("RIGHT Position ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         /*SmartDashboard.putNumber("RIGHT SUM", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("LEFT SUM", Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("PIGEON THRU TALON", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));*/
+        SmartDashboard.putNumber("Right Talon Primary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("Right Talon Auxiliary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        SmartDashboard.putNumber("Right Talon Error", dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        
+        SmartDashboard.putNumber("Right Quadrature", dt.getRightTalon().getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putNumber("Left Quadrature", dt.getLeftTalon().getSensorCollection().getQuadraturePosition());
         Scheduler.getInstance().run();
     }
 
@@ -169,6 +173,7 @@ public class Robot extends TimedRobot
         el.talonInit();
         intake.talonInit();
         dt.zeroPigeon();
+       
         
         // setSelectedFeedback(pos, loopindex, timeout)
         // configSelectedFeedback(feedbackdevice, loopindex, timeout)
@@ -195,6 +200,7 @@ public class Robot extends TimedRobot
 //        
 //        //SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));*/
 //        SmartDashboard.putNumber("PIGEON YAW", dt.getPigeonYaw());
+          
         
         
         
