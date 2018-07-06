@@ -6,6 +6,6 @@ public class FollowPathArcCommand extends FollowPathCommand
 {
     public FollowPathArcCommand()
     {
-        super(RobotMap.DT_ANGLE_PID, RobotMap.ENABLE_NOTIFIER);
+        super(RobotMap.DT_ANGLE_PID);
     }
 }

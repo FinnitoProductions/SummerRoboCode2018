@@ -113,6 +113,12 @@ public class Robot extends TimedRobot
         return speed * 12.0 / (RobotMap.WHEELDIAMETER * Math.PI) * RobotMap.TICKS_PER_REV / 10.0;
     }
     
+    /**
+     * Converts a given angle in radians (from Jaci's pathfinder) to pigeon units (where one rotation is
+     * 8192 units)
+     * @param angle the angle to convert, in radians
+     * @return the original angle, but converted to radians
+     */
     public static double radiansToPigeonUnits(double angle)
     {
         return angle / (2 * Math.PI) * RobotMap.PIGEON_UNITS_PER_ROTATION;
