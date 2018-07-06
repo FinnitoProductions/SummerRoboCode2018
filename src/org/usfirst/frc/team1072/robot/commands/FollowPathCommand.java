@@ -64,7 +64,7 @@ public class FollowPathCommand extends Command
         outerPort = -1;
     }
     
-    public FollowPathCommand(int outerPort, boolean enableNotifier)
+    public FollowPathCommand(int outerPort)
     {
         p = new ProcessBuffer();
         controllers = new HashMap<IMotorController, Object[]>();
@@ -82,15 +82,12 @@ public class FollowPathCommand extends Command
         
         pathState = 0;
         totalTime = 0;
-        System.out.println("initializing command");
         double period = 1.0 * RobotMap.TIME_PER_TRAJECTORY_POINT_MS / RobotMap.MS_PER_SEC / 2;
         notif = new Notifier(p);
         notif.startPeriodic(period);
         
         Robot.dt.getLeftTalon().setSensorPhase(RobotMap.DT_LEFT_TALON_PHASE);
         Robot.dt.getRightTalon().setSensorPhase(RobotMap.DT_RIGHT_TALON_PHASE);
-        
-        System.out.println("Initialized with period " + period);
         
         if (outerPort == -1) // no auxiliary/arc
         {
@@ -139,12 +136,7 @@ public class FollowPathCommand extends Command
                 IMotorController controller = Robot.dt.getRightTalon();
                 controller.set(ControlMode.MotionProfile, SetValueMotionProfile.Disable.value);
                 loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
-                MotionProfileStatus status = new MotionProfileStatus();
-                controller.getMotionProfileStatus(status);
-                System.out.println(controller.getDeviceID() + " Buffer After Pushed: " + status.btmBufferCnt);
-                    
-                
-                System.out.println("Loaded points correctly.");
+
                 pathState = 1;
                 break;
             }
@@ -155,8 +147,6 @@ public class FollowPathCommand extends Command
                 // once enough points have been buffered, begin sequence
                 boolean allReady = getControllerStatus(Robot.dt.getRightTalon()).btmBufferCnt > minPointsInController;
 
-
-                
                 System.out.println("All Ready? " + allReady);
                 if (allReady)
                 {
@@ -172,16 +162,15 @@ public class FollowPathCommand extends Command
                 break;
             }
             
-            
             // check up on profile to see if done
             case 2:
             {
             
                 IMotorController controller = Robot.dt.getRightTalon();
-                        MotionProfileStatus status = new MotionProfileStatus();
-                        controller.getMotionProfileStatus(status);
-                        System.out.println("Buffer Count: " + status.btmBufferCnt);
-                        boolean isFinished = status.btmBufferCnt == 0;    
+                MotionProfileStatus status = new MotionProfileStatus();
+                controller.getMotionProfileStatus(status);
+                System.out.println("Buffer Count: " + status.btmBufferCnt);
+                boolean isFinished = status.btmBufferCnt == 0;    
                 
                 if (isFinished) 
                 {
