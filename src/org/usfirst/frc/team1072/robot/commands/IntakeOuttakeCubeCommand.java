@@ -35,6 +35,10 @@ public class IntakeOuttakeCubeCommand extends Command
             Robot.intake.intakeOuttakeCube(0);
     }
     
+    /**
+     * Calls when the command is interrupted or cancelled.
+     */
+    @Override
     public void end()
     {
         Robot.intake.intakeOuttakeCube(0);

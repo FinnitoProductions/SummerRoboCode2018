@@ -30,6 +30,9 @@ public class MoveElevatorMotionMagicCommand extends Command
         this.timeout = timeout;
     }
     
+    /**
+     * Initializes the command.
+     */
     public void initialize()
     {
         try { Thread.sleep((long) timeout); } catch (Exception e) {e.printStackTrace(); }

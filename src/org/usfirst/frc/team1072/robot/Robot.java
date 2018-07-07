@@ -117,7 +117,7 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Right Talon Primary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("Right Talon Auxiliary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
         SmartDashboard.putNumber("Left Talon Primary", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("Right Talon Error", dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+
         
         SmartDashboard.putNumber("Right Quadrature", dt.getRightTalon().getSensorCollection().getQuadraturePosition());
         SmartDashboard.putNumber("Left Quadrature", dt.getLeftTalon().getSensorCollection().getQuadraturePosition());

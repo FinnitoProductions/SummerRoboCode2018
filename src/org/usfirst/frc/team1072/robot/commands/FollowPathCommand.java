@@ -94,7 +94,6 @@ public class FollowPathCommand extends Command
      */
     public void initialize()
     {
-        
         pathState = 0;
         totalTime = 0;
         double period = new Time(TimeUnit.MILLISECONDS, RobotMap.TIME_PER_TRAJECTORY_POINT_MS).getSeconds() / 2;
@@ -144,6 +143,7 @@ public class FollowPathCommand extends Command
             Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+            SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         }
     }
     
@@ -152,6 +152,7 @@ public class FollowPathCommand extends Command
      */
     public void execute()
     {
+        SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         MotionProfileStatus motionStatus = new MotionProfileStatus();
         IMotorController imc = Robot.dt.getRightTalon();
         imc.getMotionProfileStatus(motionStatus);
