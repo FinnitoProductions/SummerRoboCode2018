@@ -77,9 +77,6 @@ public class Robot extends TimedRobot
      */
     public void robotInit()
     {
-        //m_chooser.addDefault("Default Auto", new ExampleCommand());
-        // chooser.addObject("My Auto", new MyAutoCommand());j
-        
         intake = Intake.getInstance();
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
@@ -100,32 +97,13 @@ public class Robot extends TimedRobot
     public void disabledPeriodic() { Scheduler.getInstance().run(); }
 
     /**
-     * This autonomous (along with the chooser code above) shows how to select
-     * between different autonomous modes using the dashboard. The sendable chooser
-     * code works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard,
-     * remove all of the chooser code and uncomment the getString code to get the
-     * auto name from the text box below the Gyro
-     *
-     * You can add additional auto modes by adding additional commands to the
-     * chooser code above (like the commented example) or additional comparisons to
-     * the switch structure below with additional strings & commands.
+     * Initializes the autonomous period of the robot.
      */
     public void autonomousInit()
     {
-
-        /*
-         * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
-         * switch(autoSelected) { case "My Auto": autonomousCommand = new
-         * MyAutoCommand(); break; case "Default Auto": default: autonomousCommand = new
-         * ExampleCommand(); break; }
-         */
-
-        // schedule the autonomous command (example)
-
         dt.talonInitAutonomous();
         el.talonInit();
         intake.talonInit();
-        //Robot.dt.zeroPigeon();
         (m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn})).start();
         
     }
@@ -135,20 +113,7 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-        /*SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
-        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.DT_VEL_PID));
-        SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_VEL_PID));
-        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_VEL_PID));
-        
-        Robot.dt.getLeftTalon().selectProfileSlot(RobotMap.POS_PID, RobotMap.PRIMARY_PID);
-        Robot.dt.getRightTalon().selectProfileSlot(RobotMap.POS_PID, RobotMap.PRIMARY_PID);*/
-        
-        /*SmartDashboard.putNumber("LEFT POSITION ERROR", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID));
-        SmartDashboard.putNumber("RIGHT POSITION ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID));*/
-        //SmartDashboard.putNumber("RIGHT Position ERROR", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
-        /*SmartDashboard.putNumber("RIGHT SUM", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("LEFT SUM", Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("PIGEON THRU TALON", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));*/
+// for debugging (should be removed)
         SmartDashboard.putNumber("Right Talon Primary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("Right Talon Auxiliary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
         SmartDashboard.putNumber("Left Talon Primary", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
@@ -171,10 +136,7 @@ public class Robot extends TimedRobot
      */
     public void teleopInit()
     {
-        // This makes sure that the autonomous stops running when
-        // teleop starts running. If you want the autonomous to
-        // continue until interrupted by another command, remove
-        // this line or comment it out.
+        // stops autonomous command when teleop begins
         if (m_autonomousCommand != null)
         {
             m_autonomousCommand.cancel();
@@ -183,16 +145,7 @@ public class Robot extends TimedRobot
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
-        dt.zeroPigeon();
-       
-        
-        // setSelectedFeedback(pos, loopindex, timeout)
-        // configSelectedFeedback(feedbackdevice, loopindex, timeout)
-        // getSelectedFeedback
-        //System.out.println("INITIALIZING TELEOP SETTING POSITION");
-        //Robot.dt.getLeftTalon().getSelectedSensorPosition(4942197);
-        //System.out.println("POSITION SET");
-        //Intake.pn.getSolenoid(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY).set(RobotMap.INTAKE_COMPRESS); 
+        dt.zeroPigeon();        
     }
 
     /**
@@ -201,20 +154,6 @@ public class Robot extends TimedRobot
     public void teleopPeriodic() 
     {
           Scheduler.getInstance().run();
-//        /*SmartDashboard.putNumber("Drivetrain Left Speed", dt.getLeftTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));
-//        SmartDashboard.putNumber("Drivetrain Right Speed", dt.getRightTalon().getSelectedSensorVelocity(RobotMap.VEL_PID));*/
-//        SmartDashboard.putNumber("Pigeon Value Through Right Talon", dt.getRightTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
-//        SmartDashboard.putNumber("Pigeon Value Through Left Talon", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_ANGLE_PID));
-//        SmartDashboard.putNumber("LEFT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.DT_POS_PID));
-//        SmartDashboard.putNumber("LEFT OUTPUT VOLTAGE", dt.getLeftTalon().getMotorOutputVoltage());
-//        SmartDashboard.putNumber("EIGHT OUTPUT VOLTAGE", dt.getRightTalon().getMotorOutputVoltage());
-//        
-//        //SmartDashboard.putNumber("RIGHT POSITION", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.VEL_PID));*/
-//        SmartDashboard.putNumber("PIGEON YAW", dt.getPigeonYaw());
-          
-        
-        
-        
     }
 
     /**
