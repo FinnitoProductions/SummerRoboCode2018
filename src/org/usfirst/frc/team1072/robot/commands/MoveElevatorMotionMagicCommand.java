@@ -2,8 +2,11 @@ package org.usfirst.frc.team1072.robot.commands;
 
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -31,6 +34,8 @@ public class MoveElevatorMotionMagicCommand extends Command
     {
         try { Thread.sleep((long) timeout); } catch (Exception e) {e.printStackTrace(); }
        
+        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
         Robot.el.moveElevatorMotionMagic(position);
     }
     /**

@@ -1,6 +1,9 @@
 package org.usfirst.frc.team1072.robot.commands;
 
 import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -19,12 +22,20 @@ public class MoveElevatorPositionCommand extends Command
     { 
         requires(Robot.el); 
     }
-
+    
+    /**
+     * Initializes the command with necessary sensors.
+     */
+    public void initialize()
+    {
+        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+    }
     /**
      * Executes the command given the position to which the elevator should move. 
      * @param position the position to move to
      */
-    public void execute(double position) { Robot.el.moveElevatorPosition(position); }
+    @Override
+    public void execute() { Robot.el.moveElevatorPosition(position); }
 
     /**
      * Determines whether the command is complete.

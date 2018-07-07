@@ -21,12 +21,6 @@ public class IntakeOuttakeCubeCommand extends Command
         requires(Robot.intake); 
     }
 
-    
-    public void initialize()
-    {
-        
-        //Robot.intake.intakeOuttakeCube(new OI().getGamePad().getLeft=
-    }
     /**
      * Executes the intake/outtake command given a left and right speed, using the trigger.
      */

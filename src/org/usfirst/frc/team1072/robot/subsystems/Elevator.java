@@ -90,7 +90,7 @@ public class Elevator extends Subsystem
 
         elSetRampRate (ElevatorConstants.RAMP_RATE);
         elScaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
-        elConfigureSensors(FeedbackDevice.CTRE_MagEncoder_Relative);
+
         elZeroSensors();
 
         elConfigurePositionClosedLoop();
@@ -204,7 +204,7 @@ public class Elevator extends Subsystem
     private void elConfigureMotionMagic()
     {
         // set motion magic port to be the velocity PID port 
-        getBottomRightTalon().selectProfileSlot(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_PID);
+        getBottomRightTalon().selectProfileSlot(ElevatorConstants.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         getBottomRightTalon().config_kF(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KF, RobotMap.TIMEOUT);
         getBottomRightTalon().config_kP(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KP, RobotMap.TIMEOUT);
         getBottomRightTalon().config_kI(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KI, RobotMap.TIMEOUT);
@@ -233,16 +233,6 @@ public class Elevator extends Subsystem
         getBottomRightTalon().configPeakCurrentDuration(peakTime, RobotMap.TIMEOUT);
         getBottomRightTalon().configContinuousCurrentLimit(continuousLimit, RobotMap.TIMEOUT);
         getBottomRightTalon().enableCurrentLimit(true);
-    }
-
-    /**
-     * Configures the elevator sensor given the feedback device.
-     * 
-     * @param fd the feedback device, either quadrature or absolute
-     */
-    private void elConfigureSensors(FeedbackDevice fd)
-    {
-        //getBottomRightTalon().configSelectedFeedbackSensor(fd, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     }
 
     /**

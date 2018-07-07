@@ -2,8 +2,11 @@ package org.usfirst.frc.team1072.robot.commands;
 
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,6 +23,13 @@ public class MoveElevatorVelocityCommand extends Command
      */
     public MoveElevatorVelocityCommand() { requires(Robot.el); }
     
+    /**
+     * Initializes the command, including necessary sensors.
+     */
+    public void initialize()
+    {
+        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+    }
     /**
      * Executes the command given a speed.
      * @param speed the speed by which the elevator will be moved
