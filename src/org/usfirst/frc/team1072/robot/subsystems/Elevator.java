@@ -54,7 +54,7 @@ public class Elevator extends Subsystem
     public void moveElevatorVelocity(double speed)
     {
         // feed forward counterracts gravity
-        //bottomRightTalon.set(ControlMode.PercentOutput, speed, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
+        bottomRightTalon.set(ControlMode.PercentOutput, speed, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
     }
     
     /**
@@ -63,7 +63,7 @@ public class Elevator extends Subsystem
      */
     public void moveElevatorPosition(double position)
     {
-        //bottomRightTalon.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
+        bottomRightTalon.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
     }
     
     /**
@@ -72,7 +72,7 @@ public class Elevator extends Subsystem
      */
     public void moveElevatorMotionMagic(double targetPos)
     {
-        //bottomRightTalon.set(ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward, RobotMap.EL_POS_FGRAV);
+        bottomRightTalon.set(ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
     }
     
     /**
