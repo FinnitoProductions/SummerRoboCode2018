@@ -12,6 +12,7 @@ import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
 import java.io.File;
 import java.io.IOException;
 
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.commands.AutonomousCommand;
 //import org.harker.robotics.harkerrobolib.*;
 //import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
@@ -28,6 +29,8 @@ import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Gamepad;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
+import org.usfirst.frc.team1072.util.Speed;
+import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
 
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -153,6 +156,13 @@ public class Robot extends TimedRobot
         
         SmartDashboard.putNumber("Right Quadrature", dt.getRightTalon().getSensorCollection().getQuadraturePosition());
         SmartDashboard.putNumber("Left Quadrature", dt.getLeftTalon().getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putNumber("Right Velocity", new Speed(SpeedUnit.ENCODER_UNITS, dt.getRightTalon().getSelectedSensorVelocity(RobotMap.PRIMARY_PID_INDEX), 
+                DrivetrainConstants.WHEELDIAMETER).getFeetPerSecond());
+        int anglerror = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.AUXILIARY_PID_INDEX);
+        SmartDashboard.putNumber("Angle Error", anglerror);
+        SmartDashboard.putNumber("Angle Target", anglerror + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        SmartDashboard.putNumber("Position Target", Robot.dt.getRightTalon().getClosedLoopTarget(RobotMap.PRIMARY_PID_INDEX));
+
         Scheduler.getInstance().run();
     }
 

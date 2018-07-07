@@ -97,7 +97,7 @@ public class FollowPathCommand extends Command
         
         pathState = 0;
         totalTime = 0;
-        double period = new Time(TimeUnit.MILLISECONDS, RobotMap.TIME_PER_TRAJECTORY_POINT_MS).getSeconds() / 4;
+        double period = new Time(TimeUnit.MILLISECONDS, RobotMap.TIME_PER_TRAJECTORY_POINT_MS).getSeconds() / 2;
 
         notif = new Notifier(p);
         notif.startPeriodic(period);
@@ -251,9 +251,11 @@ public class FollowPathCommand extends Command
                 TrajectoryPoint tp = new TrajectoryPoint();
                 tp.position = new Position(PositionUnit.FEET, segs[i].position, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); // convert revolutions to encoder units
                 //System.out.println()
-                tp.velocity = new Speed(SpeedUnit.FEET_PER_SECOND, segs[i].velocity, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); // convert fps to encoder units
+                tp.velocity = new Speed(SpeedUnit.FEET_PER_SECOND, (segs[i].velocity + 
+                        getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].velocity)/2, 
+                        DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); // convert fps to encoder units
                 
-                tp.timeDur = TrajectoryDuration.valueOf(RobotMap.TIME_PER_TRAJECTORY_POINT_MS); // convert to correct units
+                tp.timeDur = TrajectoryDuration.valueOf(0); // convert to correct units
                 tp.profileSlotSelect0 = DrivetrainConstants.MOTION_PROFILE_PID;
                 
                 if (outerPort >= 0) 
@@ -334,13 +336,10 @@ public class FollowPathCommand extends Command
     public void disable() {
         System.out.println("DISABLING");
         notif.stop();
-        //for (IMotorController imc : controllers.keySet())
-        //{
-            Robot.dt.getRightTalon().clearMotionProfileTrajectories();
-            Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
-            Robot.dt.getRightTalon().clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
-            
-        //}
+
+        Robot.dt.getRightTalon().clearMotionProfileTrajectories();
+        Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
+        Robot.dt.getRightTalon().clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
     }
     
     /**

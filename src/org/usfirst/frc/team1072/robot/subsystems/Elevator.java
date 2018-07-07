@@ -242,7 +242,7 @@ public class Elevator extends Subsystem
      */
     private void elConfigureSensors(FeedbackDevice fd)
     {
-        getBottomRightTalon().configSelectedFeedbackSensor(fd, DrivetrainConstants.POS_PID, RobotMap.TIMEOUT);
+        //getBottomRightTalon().configSelectedFeedbackSensor(fd, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     }
 
     /**

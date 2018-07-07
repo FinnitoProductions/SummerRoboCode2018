@@ -60,8 +60,8 @@ public class RobotMap {
     public static class DrivetrainConstants
     {
         public static int VEL_PID = 1;
-        public static int POS_PID = 0;
-        public static int ANGLE_PID = 2;
+        public static int POS_PID = 2;
+        public static int ANGLE_PID = 0;
         
         public static int MOTION_PROFILE_PID = 3;
         public static double MAX_RAMP_TIME = 0;
@@ -148,10 +148,10 @@ public class RobotMap {
         public static double MOTION_PROF_KI_LEFT = 0;//0.00001; //
         public static double MOTION_PROF_KD_LEFT = 0;//40;
         
-        public static double MOTION_PROF_KF_RIGHT = 0.197; //0.188
-        public static double MOTION_PROF_KP_RIGHT = 0.5;//0.22 / 2;
-        public static double MOTION_PROF_KI_RIGHT = .00001; // 
-        public static double MOTION_PROF_KD_RIGHT = 10;//10;//40;
+        public static double MOTION_PROF_KF_RIGHT =  0.303; //0.197
+        public static double MOTION_PROF_KP_RIGHT = 0;//0.5;//0.22 / 2;
+        public static double MOTION_PROF_KI_RIGHT = 0;//.00001; // 
+        public static double MOTION_PROF_KD_RIGHT = 0;//10;//10;//40;
         
     }
     
@@ -254,8 +254,8 @@ public class RobotMap {
     public static class PigeonConstants
     {
         public static double KP = 1.3;
-        public static double KI = 0.001;
-        public static double KD = 75;
+        public static double KI = 0;//.001;
+        public static double KD = 30;
         
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset
@@ -269,11 +269,8 @@ public class RobotMap {
     public static final int PRIMARY_PID_INDEX = 0;
     public static final int AUXILIARY_PID_INDEX = 1;
     public static final int PIGEON_ID = 1;
-    public static final double TALON_ENCODER_SUM_PERIOD_MS = 0.7;
 
-    //public static final double BUFFER_NEXT_OUTPUT_PERIOD = 1.0/1000;
     public static final int TIME_PER_TRAJECTORY_POINT_MS = 10;
-    public static final double PID_OUTPUT_PERIOD_S = 3.0/1000;
     public static final double TALON_MOTOR_OUTPUT_UNITS = 1023;
     public static final int NUM_PID_SLOTS = 4;
     public static final int MAX_TALON_FRAME_PERIOD_MS = 160;
