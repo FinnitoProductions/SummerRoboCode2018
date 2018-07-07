@@ -379,7 +379,7 @@ public class Drivetrain extends Subsystem
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 5, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, 30, RobotMap.TIMEOUT);
@@ -391,7 +391,7 @@ public class Drivetrain extends Subsystem
         //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, RobotMap.TIMEOUT);
         //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrame.Status_10_Targets, 10, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 10, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrame.Status_12_Feedback1, 5, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 10, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
         

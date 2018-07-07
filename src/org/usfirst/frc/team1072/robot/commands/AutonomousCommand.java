@@ -33,8 +33,11 @@ public class AutonomousCommand extends CommandGroup
     private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_left_detailed.csv";
     private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_right_detailed.csv";
     
-    private final String PATH_TEST_LEFT = "/home/summer2018/paths/simplepathtest/simplepathtest_left_detailed.csv";
-    private final String PATH_TEST_RIGHT = "/home/summer2018/paths/simplepathtest/simplepathtest_right_detailed.csv";
+    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_LEFT = "/home/summer2018/paths/center_left_headon(switch_1)/center_left_headon(switch_1)_left_detailed.csv";
+    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT = "/home/summer2018/paths/center_left_headon(switch_1)/center_left_headon(switch_1)_right_detailed.csv";
+    
+    private final String PATH_TEST_LEFT = "/home/summer2018/paths/Goonballtesting/Goonballtesting_left_detailed.csv";
+    private final String PATH_TEST_RIGHT = "/home/summer2018/paths/Goonballtesting/Goonballtesting_right_detailed.csv";
     
     /**
      * Constructs a new command
@@ -64,7 +67,7 @@ public class AutonomousCommand extends CommandGroup
         //addParallel(new MoveElevatorMotionMagicCommand(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS - 1000, RobotMap.EL_SWITCH_HEIGHT));
         if (onLeft)
         {
-             fpc1 = setupPathFollowerArc(PATH_TEST_LEFT, PATH_TEST_RIGHT, false);//CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
+             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT, false);//CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     //"/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
         else

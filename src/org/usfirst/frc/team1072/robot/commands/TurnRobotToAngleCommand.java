@@ -56,11 +56,9 @@ public class TurnRobotToAngleCommand extends Command
                 RobotMap.PRIMARY_PID_INDEX, 
                 RobotMap.TIMEOUT);
         
+        System.out.println("ZEROING");
         Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        
-        Robot.dt.getLeftTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
     }
     @Override
@@ -92,7 +90,7 @@ public class TurnRobotToAngleCommand extends Command
                 Robot.dt.getRightTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
                 Robot.dt.getLeftTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            
+            System.out.println("CLOSED LOOPING");
             Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * angle);
             Robot.dt.getRightTalon().set(ControlMode.Position, angle);
         }
