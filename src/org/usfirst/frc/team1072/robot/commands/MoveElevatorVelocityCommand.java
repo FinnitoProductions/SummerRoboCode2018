@@ -50,6 +50,7 @@ public class MoveElevatorVelocityCommand extends Command
                     speed *= 0.01;
                 }
                 Robot.el.moveElevatorVelocity(speed);
+                System.out.println("EXECUTING " + speed);
             }
             else if (isDown && reverseBeyondLimit)
                 Robot.el.moveElevatorVelocity(0);
@@ -59,7 +60,6 @@ public class MoveElevatorVelocityCommand extends Command
         else
             Robot.el.moveElevatorVelocity(0);
         
-        SmartDashboard.putNumber("Joystick Value", oi.getGamepad().getRightY());
     }
     
     /**
