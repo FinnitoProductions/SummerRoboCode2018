@@ -102,7 +102,7 @@ public class FollowPathCommand extends Command
         pathState = 0;
         
         masterControllers.add(Robot.dt.getRightTalon());
-        if (controlMode.equals(ControlMode.MotionProfile))
+        if (controlMode == ControlMode.MotionProfile)
             masterControllers.add(Robot.dt.getLeftTalon());
         
         double period = new Time(TimeUnit.MILLISECONDS, RobotMap.TIME_PER_TRAJECTORY_POINT_MS).getSeconds() / 2;
@@ -113,7 +113,7 @@ public class FollowPathCommand extends Command
         Robot.dt.getLeftTalon().setSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE);
         Robot.dt.getRightTalon().setSensorPhase(DrivetrainConstants.RIGHT_TALON_PHASE);
         
-        if (controlMode.equals(ControlMode.MotionProfile)) // no auxiliary/arc
+        if (controlMode == ControlMode.MotionProfile) // no auxiliary/arc
         {
             Robot.dt.selectProfileSlots(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
         }
@@ -273,7 +273,7 @@ public class FollowPathCommand extends Command
                 tp.timeDur = TrajectoryDuration.valueOf(0); // convert to correct units
                 tp.profileSlotSelect0 = DrivetrainConstants.MOTION_PROFILE_PID;
                 
-                if (controlMode.equals(ControlMode.MotionProfileArc))
+                if (controlMode == ControlMode.MotionProfileArc)
                 {
                     tp.profileSlotSelect1 = outerPort;
                     tp.auxiliaryPos = new Angle(AngleUnit.RADIANS, segs[i].heading).getPigeonUnits();
@@ -317,7 +317,7 @@ public class FollowPathCommand extends Command
     class ProcessBuffer implements java.lang.Runnable {       
         public void run()
         {
-            if (controlMode.equals(ControlMode.MotionProfile))
+            if (controlMode == ControlMode.MotionProfile)
                 Robot.dt.getLeftTalon().processMotionProfileBuffer();
             Robot.dt.getRightTalon().processMotionProfileBuffer();
         }
