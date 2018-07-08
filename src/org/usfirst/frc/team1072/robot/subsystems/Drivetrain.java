@@ -370,7 +370,6 @@ public class Drivetrain extends Subsystem
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
@@ -383,7 +382,6 @@ public class Drivetrain extends Subsystem
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_6_Misc, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 20, RobotMap.TIMEOUT);
         //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
