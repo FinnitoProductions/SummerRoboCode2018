@@ -50,7 +50,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private final int minPointsInController = 3;
+    private final int minPointsInController = 10;
     private ProcessBuffer p;
     private Notifier notif;
   
@@ -142,8 +142,12 @@ public class FollowPathCommand extends Command
             
             Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
             Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+            
+            Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.ANGLE_PID, PigeonConstants.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+            
+            Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+            Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
             //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
-            SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         }
     }
     
@@ -153,6 +157,12 @@ public class FollowPathCommand extends Command
     public void execute()
     {
         SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("Right Talon Setpoint", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        if (getControllerStatus(Robot.dt.getRightTalon()) != null)
+                SmartDashboard.putNumber("Right Talon Points", getControllerStatus(Robot.dt.getRightTalon()).btmBufferCnt);
+        SmartDashboard.putNumber("Right Talon Position Status", Robot.dt.getRightTalon().getActiveTrajectoryPosition());
+        SmartDashboard.putNumber("Talon Output Percent", Robot.dt.getRightTalon().getMotorOutputPercent());
+        SmartDashboard.putNumber("Right Talon Pigeon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.AUXILIARY_PID_INDEX));
         MotionProfileStatus motionStatus = new MotionProfileStatus();
         IMotorController imc = Robot.dt.getRightTalon();
         imc.getMotionProfileStatus(motionStatus);
@@ -208,6 +218,11 @@ public class FollowPathCommand extends Command
                 }
                 break;
             }
+            case 3:
+            {
+                Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
+            }
+            break;
         }
     }
     
@@ -229,6 +244,7 @@ public class FollowPathCommand extends Command
      * Loads a given set of trajectory points to a controller.
      * @param t the trajectory to be loaded
      * @param controller the controller onto which the points should be loaded
+     * @throws InterruptedException 
      */
     private void loadTrajectoryToTalon(Trajectory t, IMotorController controller)
     {
@@ -255,6 +271,8 @@ public class FollowPathCommand extends Command
                 tp.velocity = new Speed(SpeedUnit.FEET_PER_SECOND, (segs[i].velocity + 
                         getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].velocity)/2, 
                         DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); // convert fps to encoder units
+
+
                 
                 tp.timeDur = TrajectoryDuration.valueOf(0); // convert to correct units
                 tp.profileSlotSelect0 = DrivetrainConstants.MOTION_PROFILE_PID;
@@ -266,6 +284,16 @@ public class FollowPathCommand extends Command
                     tp.position = (tp.position + 
                             new Position(PositionUnit.FEET, getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].position, 
                                     RobotMap.DrivetrainConstants.WHEELDIAMETER).getEncoderUnits())/2;
+                    try
+                    {
+                        Thread.sleep(5l);
+                    }
+                    catch (InterruptedException e)
+                    {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    SmartDashboard.putNumber("Right Talon Traj Position", tp.position);
                 }
                 //tp.headingDeg = new Angle(AngleUnit.RADIANS, segs[i].heading).getDegrees(); // convert radians to degrees
                 tp.zeroPos = false;
@@ -311,7 +339,7 @@ public class FollowPathCommand extends Command
      */
     protected boolean isFinished()
     {
-        return pathState == 3;
+        return false; //pathState == 3;
     }
     
     @Override
@@ -338,7 +366,6 @@ public class FollowPathCommand extends Command
         System.out.println("DISABLING");
         notif.stop();
 
-        Robot.dt.getRightTalon().clearMotionProfileTrajectories();
         Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
         Robot.dt.getRightTalon().clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
     }

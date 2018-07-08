@@ -75,11 +75,6 @@ public class DriveWithVelocityCommand extends Command
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 
                 turnSpeed); 
-        
-        SmartDashboard.putNumber("LEFT Motor Voltage", driveSpeed - Robot.dt.getLeftTalon().getMotorOutputVoltage());
-        SmartDashboard.putNumber("RIGHT Motor Voltage", driveSpeed - Robot.dt.getRightTalon().getMotorOutputVoltage());
-        SmartDashboard.putNumber("LEFT TALON ERROR", driveSpeed - Robot.dt.getLeftTalon().getSelectedSensorVelocity(DrivetrainConstants.VEL_PID));
-        SmartDashboard.putNumber("RIGHT TALON ERROR", driveSpeed - Robot.dt.getRightTalon().getSelectedSensorVelocity(DrivetrainConstants.VEL_PID));
     }
     
     public double getDriveSpeed()

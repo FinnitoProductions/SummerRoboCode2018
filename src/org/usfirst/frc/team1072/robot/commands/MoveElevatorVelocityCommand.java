@@ -58,8 +58,6 @@ public class MoveElevatorVelocityCommand extends Command
         }
         else
             Robot.el.moveElevatorVelocity(0);
-        
-        SmartDashboard.putNumber("Joystick Value", oi.getGamepad().getRightY());
     }
     
     /**

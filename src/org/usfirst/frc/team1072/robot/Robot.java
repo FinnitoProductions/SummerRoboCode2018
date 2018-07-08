@@ -113,21 +113,6 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-// for debugging (should be removed)
-        SmartDashboard.putNumber("Right Talon Primary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("Right Talon Auxiliary", dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-        SmartDashboard.putNumber("Left Talon Primary", dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-
-        
-        SmartDashboard.putNumber("Right Quadrature", dt.getRightTalon().getSensorCollection().getQuadraturePosition());
-        SmartDashboard.putNumber("Left Quadrature", dt.getLeftTalon().getSensorCollection().getQuadraturePosition());
-        SmartDashboard.putNumber("Right Velocity", new Speed(SpeedUnit.ENCODER_UNITS, dt.getRightTalon().getSelectedSensorVelocity(RobotMap.PRIMARY_PID_INDEX), 
-                DrivetrainConstants.WHEELDIAMETER).getFeetPerSecond());
-        int anglerror = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.AUXILIARY_PID_INDEX);
-        SmartDashboard.putNumber("Angle Error", anglerror);
-        SmartDashboard.putNumber("Angle Target", anglerror + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-        SmartDashboard.putNumber("Position Target", Robot.dt.getRightTalon().getClosedLoopTarget(RobotMap.PRIMARY_PID_INDEX));
-
         Scheduler.getInstance().run();
     }
 

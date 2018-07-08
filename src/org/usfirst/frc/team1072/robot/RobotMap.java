@@ -119,7 +119,7 @@ public class RobotMap {
         public static double POS_KI_RIGHT = 0.000015;//0.00001;//0.00001; // 
         public static double POS_KD_RIGHT = 3.5;//40;
         
-        public static int POS_ALLOWABLE_ERROR = 100;
+        public static int POS_ALLOWABLE_ERROR = 25;
         public static int POS_TOLERANCE_BUFFER = 100;
         
         public static double WHEELDIAMETER = 4.0;
@@ -148,10 +148,10 @@ public class RobotMap {
         public static double MOTION_PROF_KI_LEFT = 0;//0.00001; //
         public static double MOTION_PROF_KD_LEFT = 0;//40;
         
-        public static double MOTION_PROF_KF_RIGHT =  0.197; //0.303
-        public static double MOTION_PROF_KP_RIGHT = 0.22;//0.5;//0.22 / 2;
-        public static double MOTION_PROF_KI_RIGHT = 0;//.00001; // 
-        public static double MOTION_PROF_KD_RIGHT = 0;//10;//10;//40;
+        public static double MOTION_PROF_KF_RIGHT =  0.197; //0.197
+        public static double MOTION_PROF_KP_RIGHT = 1;//4;//0.5;//0.22 / 2;
+        public static double MOTION_PROF_KI_RIGHT = 0;//0.00001;//.00001; // 
+        public static double MOTION_PROF_KD_RIGHT = 0;//10;//10;//10;//40;
         
     }
     
@@ -253,13 +253,14 @@ public class RobotMap {
      */
     public static class PigeonConstants
     {
-        public static double KP = 0;//1.3;
+        public static double KP = 1.3;
         public static double KI = 0;//.001;
         public static double KD = 0;//75;
         
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset
         public static final RemoteFeedbackDevice REMOTE_SENSOR_SLOT = RemoteFeedbackDevice.RemoteSensor0;
+        public static final int ANGLE_ALLOWABLE_ERROR = 0;
     }
     
 
