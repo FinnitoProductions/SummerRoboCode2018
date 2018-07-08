@@ -163,6 +163,7 @@ public class FollowPathCommand extends Command
         SmartDashboard.putNumber("Right Talon Position Status", Robot.dt.getRightTalon().getActiveTrajectoryPosition());
         SmartDashboard.putNumber("Talon Output Percent", Robot.dt.getRightTalon().getMotorOutputPercent());
         SmartDashboard.putNumber("Right Talon Pigeon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.AUXILIARY_PID_INDEX));
+
         MotionProfileStatus motionStatus = new MotionProfileStatus();
         IMotorController imc = Robot.dt.getRightTalon();
         imc.getMotionProfileStatus(motionStatus);

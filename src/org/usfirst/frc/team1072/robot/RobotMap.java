@@ -148,10 +148,12 @@ public class RobotMap {
         public static double MOTION_PROF_KI_LEFT = 0;//0.00001; //
         public static double MOTION_PROF_KD_LEFT = 0;//40;
         
-        public static double MOTION_PROF_KF_RIGHT =  0.197; //0.197
-        public static double MOTION_PROF_KP_RIGHT = 1;//4;//0.5;//0.22 / 2;
-        public static double MOTION_PROF_KI_RIGHT = 0;//0.00001;//.00001; // 
-        public static double MOTION_PROF_KD_RIGHT = 0;//10;//10;//10;//40;
+        public static double MOTION_PROF_KF_RIGHT =  0.207; //0.197
+        public static double MOTION_PROF_KP_RIGHT = 4.5;//4;//0.5;//0.22 / 2;
+        public static double MOTION_PROF_KI_RIGHT = 0.000023;//0.00001;//.00001; // 
+        public static double MOTION_PROF_KD_RIGHT = 2.8;//6;//10;//10;//10;//40;
+     
+        
         
     }
     

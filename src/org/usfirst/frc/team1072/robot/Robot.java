@@ -105,7 +105,6 @@ public class Robot extends TimedRobot
         el.talonInit();
         intake.talonInit();
         (m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn})).start();
-        
     }
 
     /**
