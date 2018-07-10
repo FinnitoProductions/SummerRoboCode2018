@@ -13,6 +13,7 @@ import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -50,7 +51,7 @@ public class AutonomousCommand extends CommandGroup
     {
         for (Subsystem s : subsystems)
             requires(s);
-
+        System.out.println("ALL SUBSYSTEMS INITIALIZED " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
         /*addSequential(setupPathFollower("/home/summer2018/paths/test_5ft/test_5ft_left_detailed.csv", 
                 "/home/summer2018/paths/test_5ft/test_5ft_right_detailed.csv"));*/
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
@@ -78,7 +79,9 @@ public class AutonomousCommand extends CommandGroup
             fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", false);
         }
+        System.out.println("PATH FOLLOWER ARC SET UP " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
         addSequential (fpc1);
+        System.out.println("SEQUENTIAL COMMAND ADDED " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
         /*(addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
         addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
         

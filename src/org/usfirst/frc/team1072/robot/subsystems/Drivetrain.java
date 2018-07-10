@@ -134,7 +134,7 @@ public class Drivetrain extends Subsystem
     public void talonInit()
     {
         victorInit();
-        // initTalonOutput(0);
+        initTalonOutput(0);
 
         invertControllers();
         setNeutralMode(NeutralMode.Brake);
@@ -157,6 +157,11 @@ public class Drivetrain extends Subsystem
 
     }
     
+    public void initTalonOutput(double output)
+    {
+        getLeftTalon().set(ControlMode.PercentOutput, output);
+        getRightTalon().set(ControlMode.PercentOutput, output);
+    }
     /**
      * Slaves the Victors to directly follow the behavior of their parent talons.
      */

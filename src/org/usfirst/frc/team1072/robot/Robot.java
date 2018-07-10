@@ -43,6 +43,7 @@ import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -65,6 +66,7 @@ public class Robot extends TimedRobot
 
     public static Joystick jt = new Joystick (OI.XBOX_360_PORT);
 
+    public static double startTime;
     
     public static OI oi;
 
@@ -81,6 +83,7 @@ public class Robot extends TimedRobot
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         oi = OI.getInstance();
+        startTime = Timer.getFPGATimestamp();
     }
     
 
@@ -101,10 +104,13 @@ public class Robot extends TimedRobot
      */
     public void autonomousInit()
     {
+        System.out.println("INITIALIZING AUTON " + 1000 * (Timer.getFPGATimestamp() - startTime));
         dt.talonInitAutonomous();
         el.talonInit();
         intake.talonInit();
+        System.out.println("DRIVE/EL/INT AUTON INITIALIZED" + 1000 * (Timer.getFPGATimestamp() - startTime));
         (m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn})).start();
+        System.out.println("AUTON COMMAND STARTED" + 1000 * (Timer.getFPGATimestamp() - startTime));
     }
 
     /**
@@ -145,5 +151,10 @@ public class Robot extends TimedRobot
      */
     public void testPeriodic()
     {
+    }
+    
+    public static double getCurrentTimeMs()
+    {
+        return 1000 * (Timer.getFPGATimestamp() - startTime);
     }
 }
