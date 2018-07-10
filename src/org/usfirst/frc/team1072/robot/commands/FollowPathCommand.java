@@ -2,6 +2,7 @@ package org.usfirst.frc.team1072.robot.commands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -414,25 +415,16 @@ public class FollowPathCommand extends Command
      * @return the reversed trajectory
      */
     private Trajectory reverseTrajectory(Trajectory t)
-    {
-        System.out.println("REVERSING THE TRAJECTORY");
-
-        Stack<Segment> segmentStack = new Stack<Segment>();
-        Segment[] segs = new Segment[t.segments.length];
-        
+    {   
         for (Segment s : t.segments)
         {
             s.velocity *= -1;
-            s.position = s.position - t.segments[t.segments.length - 1].position;
-            segmentStack.push(s);
+            s.position -= t.segments[t.segments.length - 1].position;
         }
+        List<Segment> list = Arrays.asList(t.segments);
+        Collections.reverse(list);
         
-        for (int i = 0; i < segmentStack.size(); i++)
-        {
-            segs[i] = segmentStack.pop();
-        }
-        
-        t.segments = segs;
+        t.segments = (Segment[]) list.toArray();
 
         return t;
 
