@@ -149,9 +149,9 @@ public class RobotMap {
         public static double MOTION_PROF_KD_LEFT = 0;//40;
         
         public static double MOTION_PROF_KF_RIGHT =  0.207; //0.197
-        public static double MOTION_PROF_KP_RIGHT = 4.7;//4;//0.5;//0.22 / 2;
-        public static double MOTION_PROF_KI_RIGHT = 0.00023/5;//0.00001;//.00001; // 
-        public static double MOTION_PROF_KD_RIGHT = 4.23;//6;//10;//10;//10;//40;
+        public static double MOTION_PROF_KP_RIGHT = 4.5;//4;//0.5;//0.22 / 2;
+        public static double MOTION_PROF_KI_RIGHT = 0.00023;//0.00001;//.00001; // 
+        public static double MOTION_PROF_KD_RIGHT = 4.15;//6;//10;//10;//10;//40;
      
         
         
@@ -245,7 +245,6 @@ public class RobotMap {
         public static boolean NO_MANUAL_INTAKE = false;
         public static boolean INTAKE_BOOL = true;
         public static boolean OUTTAKE_BOOL = false;
-        
     }
     
     /**
@@ -256,8 +255,8 @@ public class RobotMap {
     public static class PigeonConstants
     {
         public static double KP = 1.301;
-        public static double KI = .00001;
-        public static double KD = 82;
+        public static double KI = .001;
+        public static double KD = 80;
         
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset

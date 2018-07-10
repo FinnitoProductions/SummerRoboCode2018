@@ -92,7 +92,13 @@ public class Robot extends TimedRobot
      * can use it to reset any subsystem information you want to clear when the
      * robot is disabled.
      */
-    public void disabledInit() { }
+    public void disabledInit() 
+    { 
+        Robot.dt.getLeftTalon().setNeutralMode(NeutralMode.Coast);
+        Robot.dt.getRightTalon().setNeutralMode(NeutralMode.Coast);
+        Robot.dt.getLeftVictor().setNeutralMode(NeutralMode.Coast);
+        Robot.dt.getRightVictor().setNeutralMode(NeutralMode.Coast);
+    }
 
     /**
      * Called periodically while the robot is disabled.

@@ -137,7 +137,7 @@ public class Drivetrain extends Subsystem
         initTalonOutput(0);
 
         invertControllers();
-        setNeutralMode(NeutralMode.Brake);
+        setNeutralMode(NeutralMode.Coast);
 
         setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
 
