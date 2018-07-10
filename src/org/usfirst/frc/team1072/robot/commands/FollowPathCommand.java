@@ -175,12 +175,12 @@ public class FollowPathCommand extends Command
         SmartDashboard.putNumber("Talon Output Percent", Robot.dt.getRightTalon().getMotorOutputPercent());
         SmartDashboard.putNumber("Right Talon Pigeon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.AUXILIARY_PID_INDEX));
 
-        System.out.println("STARTING EXECUTE " + Robot.getCurrentTimeMs());
+        //System.out.println("STARTING EXECUTE " + Robot.getCurrentTimeMs());
         MotionProfileStatus motionStatus = new MotionProfileStatus();
         IMotorController imc = Robot.dt.getRightTalon();
         imc.getMotionProfileStatus(motionStatus);
         controllers.get(imc)[STAT_INDEX] = motionStatus;
-        System.out.println("STATUS SET " + Robot.getCurrentTimeMs());
+        //System.out.println("STATUS SET " + Robot.getCurrentTimeMs());
         switch(pathState)
         {
             // ready to begin loading trajectories
@@ -206,7 +206,7 @@ public class FollowPathCommand extends Command
                   
                     IMotorController controller = Robot.dt.getRightTalon();
                         
-                    System.out.println("ENABLING PROFILE " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
+                    //System.out.println("ENABLING PROFILE " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                         
                     pathState = 2;
@@ -309,8 +309,8 @@ public class FollowPathCommand extends Command
                             * ConversionFactors.INCHES_PER_FOOT // convert to inches per 100 ms
                             / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions per 100ms
                             * ConversionFactors.TICKS_PER_REV))/2; // convert to ticks per 100ms)
- 
-                    SmartDashboard.putNumber("Right Talon Traj Position", tp.position);
+
+
                 }
                 //tp.headingDeg = new Angle(AngleUnit.RADIANS, segs[i].heading).getDegrees(); // convert radians to degrees
                 tp.zeroPos = false;
@@ -415,16 +415,29 @@ public class FollowPathCommand extends Command
      */
     private Trajectory reverseTrajectory(Trajectory t)
     {
-        Stack<Segment> segments = new Stack<Segment>();
+        System.out.println("REVERSING THE TRAJECTORY");
+
+        Stack<Segment> segmentStack = new Stack<Segment>();
+        Segment[] segs = new Segment[t.segments.length];
+        
         for (Segment s : t.segments)
         {
             s.velocity *= -1;
-            s.position *= -1;
-            segments.push(s);
+            s.position = s.position - t.segments[t.segments.length - 1].position;
+            segmentStack.push(s);
         }
-        for (int i = 0; i < segments.size(); i++)
-            t.segments[i] = segments.pop();
         
+        for (int i = 0; i < segmentStack.size(); i++)
+        {
+            segs[i] = segmentStack.pop();
+        }
+        
+        t.segments = segs;
+
         return t;
+
     }
+         
+
+    
 }
