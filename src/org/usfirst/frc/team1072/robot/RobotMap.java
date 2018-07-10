@@ -272,7 +272,7 @@ public class RobotMap {
     public static final int AUXILIARY_PID_INDEX = 1;
     public static final int PIGEON_ID = 1;
 
-    public static final int TIME_PER_TRAJECTORY_POINT_MS = 10;
+    public static final int TIME_PER_TRAJECTORY_POINT_MS = 50;
     public static final double TALON_MOTOR_OUTPUT_UNITS = 1023;
     public static final int NUM_PID_SLOTS = 4;
     public static final int MAX_TALON_FRAME_PERIOD_MS = 160;
