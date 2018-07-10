@@ -43,8 +43,8 @@ public class AutonomousCommand extends CommandGroup
     private final String STRAIGHT_LEFT = "/home/summer2018/paths/straight/straight_left_detailed.csv";
     private final String STRAIGHT_RIGHT = "/home/summer2018/paths/straight/straight_right_detailed.csv";
     
-    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT= "home/summer2018/paths/center_left_headonTest(switch_1)/goonballswitchtesting_left_detailed.csv";
-    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT = "home/summer2018/paths/center_left_headonTest(switch_1)/goonballswitchtesting_right_detailed.csv";
+    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT= "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
+    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_right_detailed.csv";
     
     /**
      * Constructs a new command

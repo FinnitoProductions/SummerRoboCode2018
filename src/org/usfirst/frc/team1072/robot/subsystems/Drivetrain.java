@@ -137,7 +137,7 @@ public class Drivetrain extends Subsystem
         initTalonOutput(0);
 
         invertControllers();
-        setNeutralMode(NeutralMode.Coast);
+        setNeutralMode(NeutralMode.Brake);
 
         setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
 
@@ -264,11 +264,11 @@ public class Drivetrain extends Subsystem
         getLeftTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
         getRightTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().configPeakOutputForward(DrivetrainConstants.DRIVETRAIN_SCALE, RobotMap.TIMEOUT);
-        getRightTalon().configPeakOutputForward(DrivetrainConstants.DRIVETRAIN_SCALE, RobotMap.TIMEOUT);
+        getLeftTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().configPeakOutputReverse(-1 * DrivetrainConstants.DRIVETRAIN_SCALE, RobotMap.TIMEOUT);
-        getRightTalon().configPeakOutputReverse(-1 * DrivetrainConstants.DRIVETRAIN_SCALE, RobotMap.TIMEOUT);
+        getLeftTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
         getLeftTalon().config_kF(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KF_LEFT, RobotMap.TIMEOUT);
         getRightTalon().config_kF(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KF_RIGHT, RobotMap.TIMEOUT);

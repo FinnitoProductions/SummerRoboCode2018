@@ -221,6 +221,7 @@ public class FollowPathCommand extends Command
                 IMotorController controller = Robot.dt.getRightTalon();
                 MotionProfileStatus status = new MotionProfileStatus();
                 controller.getMotionProfileStatus(status);
+                controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                 //System.out.println("Buffer Count: " + status.btmBufferCnt);
                 boolean isFinished = status.btmBufferCnt == 0;    
                 

@@ -65,10 +65,10 @@ public class RobotMap {
         
         public static int MOTION_PROFILE_PID = 3;
         public static double MAX_RAMP_TIME = 0;
-        public static double PEAK_OUTPUT_LEFT = 1.0;
-        public static double PEAK_OUTPUT_RIGHT = 1.0;
-        public static double NOMINAL_OUTPUT_LEFT = 0.04;
-        public static double NOMINAL_OUTPUT_RIGHT = 0.04;
+        public static double NOMINAL_OUTPUT_LEFT = 0.08; //0.084;
+        public static double NOMINAL_OUTPUT_RIGHT = 0.08; //0.084;
+        public static double PEAK_OUTPUT_LEFT = 1;//1.0;
+        public static double PEAK_OUTPUT_RIGHT = 1;//1.0;
         public static double DRIVETRAIN_SCALE = 1;
         
         public static boolean LEFT_TALON_PHASE = false;
@@ -148,10 +148,10 @@ public class RobotMap {
         public static double MOTION_PROF_KI_LEFT = 0;//0.00001; //
         public static double MOTION_PROF_KD_LEFT = 0;//40;
         
-        public static double MOTION_PROF_KF_RIGHT =  0.207; //0.197
-        public static double MOTION_PROF_KP_RIGHT = 4.5;//4;//0.5;//0.22 / 2;
-        public static double MOTION_PROF_KI_RIGHT = 0.00023;//0.00001;//.00001; // 
-        public static double MOTION_PROF_KD_RIGHT = 4.15;//6;//10;//10;//10;//40;
+        public static double MOTION_PROF_KF_RIGHT = 0.24;//0.38;//0.38;//207; //0.197
+        public static double MOTION_PROF_KP_RIGHT = 0.9;//4.5 / 10;//4;//0.5;//0.22 / 2; //0.1
+        public static double MOTION_PROF_KI_RIGHT = 0; //0.00015;//0.000015;//0.00023 / 10;//0.00001;//.00001; // //0.00004 
+        public static double MOTION_PROF_KD_RIGHT = 8; //3.5//6;//10;//10;//10;//40; //25
      
         
         
@@ -254,9 +254,9 @@ public class RobotMap {
      */
     public static class PigeonConstants
     {
-        public static double KP = 1.301;
-        public static double KI = .001;
-        public static double KD = 80;
+        public static double KP = 1.1; // 1.3
+        public static double KI = 0;//.001;
+        public static double KD = 7;//75;
         
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset
@@ -272,7 +272,7 @@ public class RobotMap {
     public static final int AUXILIARY_PID_INDEX = 1;
     public static final int PIGEON_ID = 1;
 
-    public static final int TIME_PER_TRAJECTORY_POINT_MS = 50;
+    public static final int TIME_PER_TRAJECTORY_POINT_MS = 10;
     public static final double TALON_MOTOR_OUTPUT_UNITS = 1023;
     public static final int NUM_PID_SLOTS = 4;
     public static final int MAX_TALON_FRAME_PERIOD_MS = 160;

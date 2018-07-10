@@ -56,7 +56,7 @@ public class DriveWithVelocityCommand extends Command
             leftX = 0;
         else
         {
-            leftX -= Math.signum(leftX) * deadband;
+            leftX = leftX -  Math.signum(leftX) * deadband;
             leftX /= 1- deadband;
         }
             
