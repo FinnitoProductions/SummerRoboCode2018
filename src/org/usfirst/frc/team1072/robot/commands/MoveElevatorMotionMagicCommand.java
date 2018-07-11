@@ -35,7 +35,7 @@ public class MoveElevatorMotionMagicCommand extends Command
      */
     public void initialize()
     {
-        //try { Thread.sleep((long) timeout); } catch (Exception e) {e.printStackTrace(); }
+        try { Thread.sleep((long) timeout); } catch (Exception e) {e.printStackTrace(); }
        
         Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
