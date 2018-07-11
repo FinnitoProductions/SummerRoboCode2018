@@ -348,7 +348,7 @@ public class Drivetrain extends Subsystem
      * 
      * @postcondition P, I, and D have been set for both sides; the allowable error configured
      */
-    private void configureMotionProfileClosedLoop()
+    public void configureMotionProfileClosedLoop()
     {
         getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);

@@ -53,7 +53,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private final int minPointsInController = 13;
+    private final int minPointsInController = 7;
     private ProcessBuffer p;
     private Notifier notif;
   
@@ -61,6 +61,7 @@ public class FollowPathCommand extends Command
     private final int TRAJ_INDEX = 0;
     private final int STAT_INDEX = 1;
     private Map<IMotorController, Object[]> controllers;
+    boolean pathReversed;
     
     private int pathState;
     
@@ -79,6 +80,7 @@ public class FollowPathCommand extends Command
         controllers = new HashMap<IMotorController, Object[]>();
         outerPort = -1;
         requires(Robot.dt);
+        totalTime = -1;
     }
     
     /**
@@ -91,7 +93,17 @@ public class FollowPathCommand extends Command
         controllers = new HashMap<IMotorController, Object[]>();
         this.outerPort = outerPort;
         requires(Robot.dt);
-        
+        totalTime = -1;
+    }
+    
+    public void setTotalTime (double newTotalTime)
+    {
+        totalTime = newTotalTime;
+    }
+    
+    public double getTotalTime()
+    {
+        return totalTime;
     }
     
     /**
@@ -99,6 +111,7 @@ public class FollowPathCommand extends Command
      */
     public void initialize()
     {
+        pathReversed = false;
         System.out.println("INITIALIZED FIRST CALLED " + Robot.getCurrentTimeMs());
         pathState = 0;
         totalTime = 0;
@@ -111,6 +124,7 @@ public class FollowPathCommand extends Command
         Robot.dt.getLeftTalon().setSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE);
         Robot.dt.getRightTalon().setSensorPhase(DrivetrainConstants.RIGHT_TALON_PHASE);
         
+        Robot.dt.configureMotionProfileClosedLoop();
         if (outerPort == -1) // no auxiliary/arc
         {
             Robot.dt.selectProfileSlots(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
@@ -134,8 +148,7 @@ public class FollowPathCommand extends Command
             Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
                     RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
             
-            Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+           
             
             Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
             Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
@@ -148,10 +161,8 @@ public class FollowPathCommand extends Command
             Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
                     RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
             
-            Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
             
-            Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+
             
 
             Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.ANGLE_PID, PigeonConstants.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
@@ -173,7 +184,8 @@ public class FollowPathCommand extends Command
         if (getControllerStatus(Robot.dt.getRightTalon()) != null)
                 SmartDashboard.putNumber("Right Talon Points", getControllerStatus(Robot.dt.getRightTalon()).btmBufferCnt);
         SmartDashboard.putNumber("Right Talon Position Status", Robot.dt.getRightTalon().getActiveTrajectoryPosition());
-        SmartDashboard.putNumber("Talon Output Percent", Robot.dt.getRightTalon().getMotorOutputPercent());
+        SmartDashboard.putNumber("Right Talon Output Percent", Robot.dt.getRightTalon().getMotorOutputPercent());
+        SmartDashboard.putNumber("Left Talon Output Percent", Robot.dt.getLeftTalon().getMotorOutputPercent());
         SmartDashboard.putNumber("Right Talon Pigeon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.AUXILIARY_PID_INDEX));
 
         //System.out.println("STARTING EXECUTE " + Robot.getCurrentTimeMs());
@@ -208,6 +220,15 @@ public class FollowPathCommand extends Command
                     IMotorController controller = Robot.dt.getRightTalon();
                         
                     //System.out.println("ENABLING PROFILE " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
+                    controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
+                    
+                    Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    
+                    Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    
+                    Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                         
                     pathState = 2;
@@ -222,6 +243,7 @@ public class FollowPathCommand extends Command
                 IMotorController controller = Robot.dt.getRightTalon();
                 MotionProfileStatus status = new MotionProfileStatus();
                 controller.getMotionProfileStatus(status);
+
                 controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                 //System.out.println("Buffer Count: " + status.btmBufferCnt);
                 boolean isFinished = status.btmBufferCnt == 0;    
@@ -254,6 +276,7 @@ public class FollowPathCommand extends Command
         if (reversePath)
             t = reverseTrajectory(t);
         controllers.put(controller, new Object[] {t, null, new Double(0)});
+        pathReversed = reversePath;
     }
     
     /**
@@ -278,8 +301,10 @@ public class FollowPathCommand extends Command
             controller.configMotionProfileTrajectoryPeriod(RobotMap.TIME_PER_TRAJECTORY_POINT_MS, RobotMap.TIMEOUT);
             // constructs Talon-readable trajectory points out of each segment
             Segment[] segs = t.segments;
-            controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
+
             System.out.println("STARTING LOAD TRAJECTORY " + Robot.getCurrentTimeMs());
+            double velocityAddFactor = DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT;
+
             for (int i = 0; i < segs.length; i++)
             {
                 TrajectoryPoint tp = new TrajectoryPoint();
@@ -287,10 +312,7 @@ public class FollowPathCommand extends Command
                         / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions
                         * ConversionFactors.TICKS_PER_REV;; // convert revolutions to encoder units
                 //System.out.println()
-                tp.velocity = segs[i].velocity / 10.0 // convert to feet per 100 ms
-                        * ConversionFactors.INCHES_PER_FOOT // convert to inches per 100 ms
-                        / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions per 100ms
-                        * ConversionFactors.TICKS_PER_REV; // convert to ticks per 100ms
+                tp.velocity = segs[i].velocity;// convert to ticks per 100ms
                         // convert fps to encoder units
 
 
@@ -306,29 +328,29 @@ public class FollowPathCommand extends Command
                             (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].position * ConversionFactors.INCHES_PER_FOOT // convert to inches
                             / (RobotMap.DrivetrainConstants.WHEELDIAMETER* Math.PI) // convert to revolutions
                             * ConversionFactors.TICKS_PER_REV))/2;
-                    tp.velocity = (tp.velocity + (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].velocity / 10.0 // convert to feet per 100 ms
-                            * ConversionFactors.INCHES_PER_FOOT // convert to inches per 100 ms
-                            / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions per 100ms
-                            * ConversionFactors.TICKS_PER_REV))/2; // convert to ticks per 100ms)
+                    tp.velocity = (tp.velocity + (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].velocity)) / 2; // convert to ticks per 100ms)
 
 
                 }
+                if (pathReversed)
+                {
+                    tp.velocity += Math.max(0 ,velocityAddFactor * -1);
+                }
+                else
+                    tp.velocity += Math.max(0 ,velocityAddFactor);
+
+                velocityAddFactor -= DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT * (RobotMap.TIME_PER_TRAJECTORY_POINT_MS / DrivetrainConstants.TIME_TO_OVERCOME_S_FRICTION_MS);
                 //tp.headingDeg = new Angle(AngleUnit.RADIANS, segs[i].heading).getDegrees(); // convert radians to degrees
+                tp.velocity = tp.velocity / 10.0 // convert to feet per 100 ms
+                * ConversionFactors.INCHES_PER_FOOT // convert to inches per 100 ms
+                / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions per 100ms
+                * ConversionFactors.TICKS_PER_REV; 
                 tp.zeroPos = false;
 
                 //System.out.println("AUXILIARY POSITION " + tp.auxiliaryPos);
                 if (i == (segs.length-1))
                     tp.isLastPoint = true;
-                if (i == 0)
-                {
-                    //System.out.println("POSITION: " + tp.position);
 
-
-                    //System.out.println("TIME: " + tp.timeDur);
-                    //System.out.println("INNER PORT: " + tp.profileSlotSelect0);
-                    //System.out.println("OUTER PORT: " + tp.profileSlotSelect1);
-
-                }
                 controller.pushMotionProfileTrajectory(tp); // push point to talon
             }
         }
@@ -358,7 +380,7 @@ public class FollowPathCommand extends Command
      */
     protected boolean isFinished()
     {
-        return false; //pathState == 3;
+        return pathState == 3 && Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) < RobotMap.MOTION_PROFILE_END_ERROR;
     }
     
     @Override

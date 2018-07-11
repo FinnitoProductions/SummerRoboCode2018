@@ -83,7 +83,6 @@ public class Robot extends TimedRobot
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         oi = OI.getInstance();
-        startTime = Timer.getFPGATimestamp();
     }
     
 
@@ -110,11 +109,14 @@ public class Robot extends TimedRobot
      */
     public void autonomousInit()
     {
-        System.out.println("INITIALIZING AUTON " + 1000 * (Timer.getFPGATimestamp() - startTime));
+        startTime = Timer.getFPGATimestamp();
+        System.out.println("INITIALIZING AUTON " + Robot.getCurrentTimeMs());
         dt.talonInitAutonomous();
+        System.out.println("DRIVE INITIALIZED " + Robot.getCurrentTimeMs());
         el.talonInit();
+        System.out.println("ELEVATOR INITIALIZED " + Robot.getCurrentTimeMs());
         intake.talonInit();
-        System.out.println("DRIVE/EL/INT AUTON INITIALIZED" + 1000 * (Timer.getFPGATimestamp() - startTime));
+        System.out.println("DRIVE/EL/INT AUTON INITIALIZED " + Robot.getCurrentTimeMs());
         (m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn})).start();
         System.out.println("AUTON COMMAND STARTED" + 1000 * (Timer.getFPGATimestamp() - startTime));
     }

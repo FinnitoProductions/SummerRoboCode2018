@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.IMotorController;
@@ -70,11 +72,12 @@ public class AutonomousCommand extends CommandGroup
      */
     private void oneCubeSwitch (boolean onLeft)
     {
+        addParallel(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+        addParallel(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         FollowPathCommand fpc1;
-        //addParallel(new MoveElevatorMotionMagicCommand(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS - 1000, RobotMap.EL_SWITCH_HEIGHT));
         if (onLeft)
         {
-             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, true);//CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
+             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);//CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     //"/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
         else
@@ -82,11 +85,18 @@ public class AutonomousCommand extends CommandGroup
             fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", true);
         }
+       addParallel(new MoveElevatorMotionMagicCommand(fpc1.getTotalTime() - 100, ElevatorConstants.SWITCH_HEIGHT));
+        /*addParallel(new DelayCommand(fpc1.getTotalTime() - 300, 
+                new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS)));
+        addParallel(new DelayCommand(fpc1.getTotalTime() - 300, 
+                new IntakeOuttakeTimedCommand(2, IntakeConstants.OUTTAKE_BOOL)));*/
+        System.out.println("TOTAL PATH TIME: " + fpc1.getTotalTime());
         System.out.println("PATH FOLLOWER ARC SET UP " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
         addSequential (fpc1);
+        /*fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, true);
+        addSequential(fpc1);*/
         System.out.println("SEQUENTIAL COMMAND ADDED " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
-        /*(addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_UP));
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_COMPRESS));
+        /*
         
 
         
@@ -101,6 +111,11 @@ public class AutonomousCommand extends CommandGroup
                 
         
         
+        
+    }
+    
+    private void multiCubeSwitch()
+    {
         
     }
     /**
@@ -150,6 +165,7 @@ public class AutonomousCommand extends CommandGroup
         fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
         fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
+        fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
         return fpc;
     }
     
@@ -180,6 +196,7 @@ public class AutonomousCommand extends CommandGroup
         fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
         fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
+        fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
         return fpc;
     }
 }
