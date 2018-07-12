@@ -50,6 +50,8 @@ public class AutonomousCommand extends BranchedCommandGroup
     private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT= "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
     private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_right_detailed.csv";
     
+    //private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT_PART2 = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
+    
     /**
      * Constructs a new command
      * @param subsystems the list of subsystems
@@ -80,9 +82,12 @@ public class AutonomousCommand extends BranchedCommandGroup
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
          
         FollowPathCommand fpc1;
+        FollowPathCommand fpc2;
         if (onLeft)
         {
-             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);//CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
+             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);
+             //fpc2 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);
+             //CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     //"/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
         else
@@ -92,19 +97,23 @@ public class AutonomousCommand extends BranchedCommandGroup
         }
         ArrayList<Command> branch0 = new ArrayList<Command>();
         branch0.add(fpc1);
+        //branch0.add(fpc2);
         addBranch(branch0);
         
         
 
         ArrayList<Command> branch1 = new ArrayList<Command>();
-        branch1.add(new DelayCommand(fpc1.getTotalTime()/1000 - 1));
+        branch1.add(new DelayCommand(fpc1.getTotalTime()/1000 - 1.1));
         branch1.add(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON));
         addBranch(branch1);
         
-        addBranch(new DelayCommand(fpc1.getTotalTime()/1000 - 0.25));
-        addBranch(2, new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+        ArrayList<Command> branch2 = new ArrayList<Command>();
+        branch2.add(new DelayCommand(fpc1.getTotalTime()/1000-0.05));
+        branch2.add(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                 IntakeConstants.DECOMPRESS));
-        addBranch(2, new IntakeOuttakeTimedCommand(1, IntakeConstants.OUTTAKE_BOOL));
+        addBranch(branch2);
+        
+       
         
         
         
