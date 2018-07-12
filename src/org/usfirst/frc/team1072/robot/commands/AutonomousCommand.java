@@ -95,35 +95,22 @@ public class AutonomousCommand extends BranchedCommandGroup
             fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", true);
         }
-        ArrayList<Command> branch0 = new ArrayList<Command>();
-        branch0.add(fpc1);
-        //branch0.add(fpc2);
-        addBranch(branch0);
         
-        
-
-        ArrayList<Command> branch1 = new ArrayList<Command>();
-        branch1.add(new DelayCommand(fpc1.getTotalTime()/1000 - 1.1));
-        branch1.add(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON));
-        addBranch(branch1);
-        
-        ArrayList<Command> branch2 = new ArrayList<Command>();
-        branch2.add(new DelayCommand(fpc1.getTotalTime()/1000-0.05));
-        branch2.add(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
-                IntakeConstants.DECOMPRESS));
-        addBranch(branch2);
-        
+        // addCommand returns the branch itself, allowing for multiple addCommand methods in one line
+        addBranch(new Branch(0)
+                .addCommand(fpc1));
        
         
+        addBranch(new Branch(1)
+                .addCommand(new DelayCommand(fpc1.getTotalTime()/1000 - 1.1))
+                .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON)));
         
-        
-        //addBranch(1, new WaitCommand(fpc1.getTotalTime() / 1000 - 1));
+        addBranch(new Branch(2)
+                .addCommand(new DelayCommand(fpc1.getTotalTime()/1000-0.05))
+                .addCommand(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+                        IntakeConstants.DECOMPRESS)));
+                        
 
-
-        /*addParallel(new DelayCommand(fpc1.getTotalTime() - 300, 
-                new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS)));
-        addParallel(new DelayCommand(fpc1.getTotalTime() - 300, 
-                new IntakeOuttakeTimedCommand(2, IntakeConstants.OUTTAKE_BOOL)));*/
         System.out.println("TOTAL PATH TIME: " + fpc1.getTotalTime());
         System.out.println("PATH FOLLOWER ARC SET UP " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
 
