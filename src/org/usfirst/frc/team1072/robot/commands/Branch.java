@@ -16,6 +16,9 @@ public class Branch extends Command
     private boolean hasStartedCommand; // whether the command at currentIndex has started
     private boolean didCommandRun; // whether the command at currentIndex has run at any point
     
+    /**
+     * Constructs a new Branch starting at the first command.
+     */
     public Branch()
     {
         currentIndex = 0;
@@ -23,45 +26,108 @@ public class Branch extends Command
         didCommandRun = false;
     }
     
+    public void execute()
+    {
+        if (currentIndex < branch.size())
+        {
+            Command currentCommand = getCommand(currentIndex);
+            if (!hasStartedCommand)
+            {
+                hasStartedCommand = true;
+                currentCommand.start();
+            }
+            if (currentCommand.isRunning())
+                didCommandRun = true;
+            if (!currentCommand.isRunning() && didCommandRun)
+            {
+                incrementCurrentIndex();
+                didCommandRun = false;
+                didCommandRun = false;
+            }
+
+        }
+    }
+    /**
+     * Adds a new command to this branch. Should be called before execution
+     * @param c the command to be added
+     * @return this branch
+     */
     public Branch addCommand(Command c)
     {
         branch.add(c);
         return this;
     }
     
+    /**
+     * The index of the current command in the branch (how many commands gotten through).
+     * @return the index of the current command
+     */
     public int getCurrentIndex()
     {
         return currentIndex;
     }
 
+    /**
+     * Increments the current index by one.
+     */
     public void incrementCurrentIndex()
     {
         currentIndex++;
     }
     
+    /**
+     * Sets the current index to be a certain value.
+     * @param value the value to replace the current index
+     */
     public void setCurrentIndex (int value)
     {
         currentIndex = value;
     }
 
-    public boolean isHasStartedNextCommand()
+    /**
+     * Determines whether the current command has been told to start (using .start) yet.
+     * @return true if the command has been told to start; false otherwise
+     */
+    public boolean isHasStartedCommand()
     {
         return hasStartedCommand;
     }
 
-    public void setHasStartedNextCommand(boolean hasStartedNextCommand)
+    /**
+     * Sets whether the command has been started yet.
+     * @param hasStartedCommand the value to set hasStarted command to
+     */
+    public void setHasStartedCommand(boolean hasStartedCommand)
     {
-        this.hasStartedCommand = hasStartedNextCommand;
+        this.hasStartedCommand = hasStartedCommand;
     }
 
+    /**
+     * Determines whether the current command has ever been run.
+     * @return true if the command has ever been run
+     */
     public boolean isDidCommandRun()
     {
         return didCommandRun;
     }
 
+    /**
+     * Sets whether the command has ever been run.
+     * @param didCommandRun the value to set didCommandRun to
+     */
     public void setCommandRun(boolean didCommandRun)
     {
         this.didCommandRun = didCommandRun;
+    }
+    
+    /**
+     * Gets the command in the branch at the given index.
+     * @param index the index of the command in the branch to be obtained
+     * @return the command at index
+     */
+    public Command getCommand(int index)
+    {
+        return branch.get(index);
     }
 
     /**
@@ -72,6 +138,8 @@ public class Branch extends Command
     {
         return currentIndex >= branch.size();
     }
+    
+    
 
     
 }
