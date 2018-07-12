@@ -90,15 +90,21 @@ public class AutonomousCommand extends BranchedCommandGroup
             fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", true);
         }
-        addBranch(0, fpc1);
-
-        addBranch(1, new WaitCommand(fpc1.getTotalTime()/1000 - 1));
-        addBranch(1, new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON));
+        ArrayList<Command> branch0 = new ArrayList<Command>();
+        branch0.add(fpc1);
+        addBranch(branch0);
         
-        addBranch(2, new WaitCommand(fpc1.getTotalTime()/1000 - 0.25));
+        
+
+        ArrayList<Command> branch1 = new ArrayList<Command>();
+        //branch1.add(new WaitCommand(fpc1.getTotalTime()/1000 - 1));
+        branch1.add(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON));
+        addBranch(branch1);
+        
+        /*addBranch(2, new WaitCommand(fpc1.getTotalTime()/1000 - 0.25));
         addBranch(2, new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                 IntakeConstants.DECOMPRESS));
-        addBranch(2, new IntakeOuttakeTimedCommand(1, IntakeConstants.OUTTAKE_BOOL));
+        addBranch(2, new IntakeOuttakeTimedCommand(1, IntakeConstants.OUTTAKE_BOOL));*/
         
         
         

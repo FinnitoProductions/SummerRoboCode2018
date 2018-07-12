@@ -18,106 +18,69 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class BranchedCommandGroup extends Command
 {
-    private Map<Integer, LinkedList<Command>> branches = new HashMap<Integer, LinkedList<Command>>();
-    private Map<Command, Boolean> startedCommands = new HashMap<Command, Boolean>();
-    private Map<LinkedList<Command>, Boolean> startedBranches = new HashMap<LinkedList<Command>, Boolean>();
+    private ArrayList<ArrayList<Command>> branches;
+    private ArrayList<Integer> currentCommandIndices;
+    private ArrayList<Boolean> hasCommandStarted;
+    private ArrayList<Boolean> wasCommandRunning;
     
-    private Stack<LinkedList<Command>> branchesToRemove = new Stack<LinkedList<Command>>();
+    public BranchedCommandGroup()
+    {
+        branches = new ArrayList<ArrayList<Command>>();
+        currentCommandIndices = new ArrayList<Integer>();
+        hasCommandStarted = new ArrayList<Boolean>();
+        wasCommandRunning = new ArrayList<Boolean>();
+        
+    }
+    public void addBranch(ArrayList<Command> branch)
+    {
+        branches.add(branch);
+        currentCommandIndices.add(0);
+        hasCommandStarted.add(false);
+        wasCommandRunning.add(false);
+    }
     
-    @Override
     public void execute()
     {
-        for (Integer i : branches.keySet()) 
+        for (int i = 0; i < branches.size(); i++)
         {
-            LinkedList<Command> currentBranch = branches.get(i);
-            if (currentBranch != null)
+            ArrayList<Command> currentBranch = branches.get(i);
+            double currentIndex = currentCommandIndices.get(i);
+            if (currentIndex != -1 && currentIndex < currentBranch.size())
             {
-                Command currentCommand = currentBranch.peek();
-                if(!startedBranches.containsKey(currentBranch) || !startedBranches.get(currentBranch))
+                Command currentCommand = currentBranch.get(currentCommandIndices.get(i));
+                if (!hasCommandStarted.get(i))
                 {
+                    hasCommandStarted.set(i, true);
                     currentCommand.start();
-                    startedBranches.put(currentBranch, true);
                 }
-                if (currentCommand != null)
+                if (currentCommand.isRunning())
+                    wasCommandRunning.set(i, true);
+                if (!currentCommand.isRunning() && wasCommandRunning.get(i))
                 {
-                    if (currentCommand.isRunning())
-                    {
-                        startedCommands.put(currentCommand, true);
-                    }
-                    System.out.println("STARTED: " + getStarted(currentCommand));
-                    if (!currentCommand.isRunning() && getStarted(currentCommand))
-                    { 
-                        System.out.println("REMOVING");
-                        currentBranch.remove();
-                        startedBranches.put(currentBranch, false);
-                    }
-                    else
-                        branchesToRemove.add(currentBranch);
+                    currentCommandIndices.set(i, currentCommandIndices.get(i)+1);
+                    hasCommandStarted.set(i, false);
+                    wasCommandRunning.set(i,  false);
                 }
+
             }
-        }
-        while (!branchesToRemove.isEmpty())
-        {
-            startedBranches.remove(branchesToRemove.pop());
+            else
+                currentCommandIndices.size();
         }
     }
+    
     
     /**
     * @return
     */
     @Override
-    protected boolean isFinished()
+    public boolean isFinished()
     {
-        boolean isFinished = !branches.isEmpty();
-        for (Integer i : branches.keySet())
+        boolean isFinished = true;
+        for (int i : currentCommandIndices)
         {
-            for (Command c : branches.get(i))
-            {
-                isFinished = isFinished && getFinished(c);
-            }
+            isFinished = isFinished && (i == -1);
         }
         return isFinished;
-    }
-    
-    public boolean getFinished()
-    {
-        return isFinished();
-    }
-    
-    protected void end()
-    {
-        for (Integer i : branches.keySet())
-        {
-            for (Command c : branches.get(i))
-            {
-                c.cancel();
-            }
-        }
-    }
-    
-    public BranchedCommandGroup addBranch(int branch, Command c)
-    {
-        if (!branches.containsKey(branch) || branches.get(branch) == null)
-            branches.put(branch, new LinkedList<Command>());
-        branches.get(branch).add(c);
-        startedCommands.put(c, false);
-        startedBranches.put(branches.get(branch), false);
-        return this;
-    }
-    
-    public boolean getStarted(Command c)
-    {
-        return startedCommands.get(c);
-    }
-    
-    public boolean getFinished(Command c)
-    {
-        if (startedCommands.containsKey(c))
-        {
-            return getStarted(c) && (c.isCanceled() || !c.isRunning());     
-        }
-            
-        return false;
     }
 
 }
