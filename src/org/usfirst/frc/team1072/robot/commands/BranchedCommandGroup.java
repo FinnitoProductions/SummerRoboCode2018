@@ -11,6 +11,7 @@ import java.util.Stack;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * 
@@ -68,6 +69,7 @@ public class BranchedCommandGroup extends Command
         private boolean hasStartedCommand; // whether the command at currentIndex has started
         private boolean didCommandRun; // whether the command at currentIndex has run at any point
         private int number;
+        private Subsystem required;
         
         /**
          * Constructs a new Branch starting at the first command.
@@ -96,6 +98,12 @@ public class BranchedCommandGroup extends Command
                     
                 }
             }
+        }
+        
+        public Branch (Subsystem s)
+        {
+            requires(s);
+            this.setRequired(s);
         }
         
 
@@ -226,6 +234,26 @@ public class BranchedCommandGroup extends Command
         protected boolean isFinished()
         {
             return currentIndex >= branch.size();
+        }
+
+        /**
+         * Gets the required.
+         * @return the required
+         */
+        public Subsystem getRequired()
+        {
+            return required;
+        }
+
+        /**
+         * Sets required to a given value.
+         * @param required the required to set
+         *
+         * @postcondition the required has been changed to required
+         */
+        public void setRequired(Subsystem required)
+        {
+            this.required = required;
         }
     
     }
