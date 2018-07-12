@@ -18,8 +18,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.command.TimedCommand;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Segment;
@@ -29,7 +31,7 @@ import jaci.pathfinder.Trajectory.Segment;
  * @author Finn Frankis
  * @version 6/20/18
  */
-public class AutonomousCommand extends CommandGroup
+public class AutonomousCommand extends BranchedCommandGroup
 {
     private int numPoints = 0;
     
@@ -72,8 +74,11 @@ public class AutonomousCommand extends CommandGroup
      */
     private void oneCubeSwitch (boolean onLeft)
     {
-        addParallel(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-        addParallel(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+        // sequential commands are run first, take complete precedence over parallel
+        //addParallel(new IntakeOuttakeTimedCommand(2, IntakeConstants.OUTTAKE_BOOL));
+        
+        //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+         
         FollowPathCommand fpc1;
         if (onLeft)
         {
@@ -85,14 +90,28 @@ public class AutonomousCommand extends CommandGroup
             fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", true);
         }
-       addParallel(new MoveElevatorMotionMagicCommand(fpc1.getTotalTime() - 100, ElevatorConstants.SWITCH_HEIGHT));
+        addBranch(0, fpc1);
+
+        addBranch(1, new WaitCommand(fpc1.getTotalTime() - 1000));
+        addBranch(1, new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON));
+        
+        addBranch(2, new WaitCommand(fpc1.getTotalTime() - 250));
+        addBranch(2, new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+                IntakeConstants.DECOMPRESS));
+        addBranch(2, new IntakeOuttakeTimedCommand(1, IntakeConstants.OUTTAKE_BOOL));
+        
+        
+        
+        //addBranch(1, new WaitCommand(fpc1.getTotalTime() / 1000 - 1));
+
+
         /*addParallel(new DelayCommand(fpc1.getTotalTime() - 300, 
                 new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS)));
         addParallel(new DelayCommand(fpc1.getTotalTime() - 300, 
                 new IntakeOuttakeTimedCommand(2, IntakeConstants.OUTTAKE_BOOL)));*/
         System.out.println("TOTAL PATH TIME: " + fpc1.getTotalTime());
         System.out.println("PATH FOLLOWER ARC SET UP " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
-        addSequential (fpc1);
+
         /*fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, true);
         addSequential(fpc1);*/
         System.out.println("SEQUENTIAL COMMAND ADDED " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
@@ -108,7 +127,6 @@ public class AutonomousCommand extends CommandGroup
         //addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)));
         //addSequential(new TurnRobotToAngleCommand(90));
         
-                
         
         
         

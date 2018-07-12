@@ -32,6 +32,7 @@ public class SetSolenoidCommand extends InstantCommand
      */
     public void initialize()
     {
+        System.out.println("ACTUATING SOLENOID " + solenoidKey);
         Intake.pn.getSolenoid(solenoidKey).set(solenoidState); 
     }
 }

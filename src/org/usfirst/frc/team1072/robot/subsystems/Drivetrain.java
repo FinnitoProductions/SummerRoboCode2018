@@ -133,9 +133,11 @@ public class Drivetrain extends Subsystem
      */
     public void talonInit()
     {
-        victorInit();
+        clearTrajectoryPoints();
         initTalonOutput(0);
-
+        victorInit();
+        zeroAllSensors();
+        
         invertControllers();
         setNeutralMode(NeutralMode.Brake);
 
@@ -155,6 +157,12 @@ public class Drivetrain extends Subsystem
         dtSetCurrentLimit(DrivetrainConstants.PEAK_CURRENT_LIMIT, DrivetrainConstants.PEAK_TIME_MS,
                 DrivetrainConstants.CONTINUOUS_CURRENT_LIMIT);
 
+    }
+    
+    public void clearTrajectoryPoints()
+    {
+        Robot.dt.getLeftTalon().clearMotionProfileTrajectories();
+        Robot.dt.getRightTalon().clearMotionProfileTrajectories();
     }
     
     public void initTalonOutput(double output)
@@ -180,6 +188,15 @@ public class Drivetrain extends Subsystem
                     slot, RobotMap.TIMEOUT); 
             getRightTalon().configSelectedFeedbackCoefficient(1,
                     slot, RobotMap.TIMEOUT); 
+        }
+    }
+    
+    private void zeroAllSensors()
+    {
+        for (int slot = 0; slot < 2; slot++)
+        {
+            getLeftTalon().setSelectedSensorPosition(0, slot, RobotMap.TIMEOUT);
+            getRightTalon().setSelectedSensorPosition(0, slot, RobotMap.TIMEOUT);
         }
     }
    

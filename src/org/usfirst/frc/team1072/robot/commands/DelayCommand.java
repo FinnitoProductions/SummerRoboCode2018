@@ -1,13 +1,15 @@
 package org.usfirst.frc.team1072.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
  * 
  * @author Finn Frankis
  * @version Jul 10, 2018
  */
-public class DelayCommand extends Command
+public class DelayCommand extends CommandGroup
 {
     private double delay;
     private Command command;
@@ -17,6 +19,12 @@ public class DelayCommand extends Command
         delay = 0;
         this.command = command;
     }
+    /**
+     * 
+     * Constructs a new DelayCommand.
+     * @param delay the delay before starting the command, in seconds
+     * @param command
+     */
     public DelayCommand (double delay, Command command)
     {
         this.delay = delay;
@@ -25,17 +33,10 @@ public class DelayCommand extends Command
     
     public void initialize()
     {
-        try
-        {
-            Thread.sleep((long)delay);
-        }
-        catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        command.start();
+        addSequential(new WaitCommand(delay));
+        addSequential(command);
     }
+    
     /**
     * @return
     */

@@ -77,6 +77,7 @@ public class FollowPathCommand extends Command
     public FollowPathCommand()
     {
         p = new ProcessBuffer();
+        notif = new Notifier(p);
         controllers = new HashMap<IMotorController, Object[]>();
         outerPort = -1;
         requires(Robot.dt);
@@ -90,6 +91,7 @@ public class FollowPathCommand extends Command
     public FollowPathCommand(int outerPort)
     {
         p = new ProcessBuffer();
+        notif = new Notifier(p);
         controllers = new HashMap<IMotorController, Object[]>();
         this.outerPort = outerPort;
         requires(Robot.dt);
@@ -117,7 +119,6 @@ public class FollowPathCommand extends Command
         totalTime = 0;
         double period = new Time(TimeUnit.MILLISECONDS, RobotMap.TIME_PER_TRAJECTORY_POINT_MS).getSeconds() / 2;
 
-        notif = new Notifier(p);
         notif.startPeriodic(period);
         System.out.println("NOTIFIER STARTED " + Robot.getCurrentTimeMs());
         
@@ -179,6 +180,7 @@ public class FollowPathCommand extends Command
      */
     public void execute()
     {
+        //System.out.println("EXECUTING FPC");
         SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("Right Talon Setpoint", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         if (getControllerStatus(Robot.dt.getRightTalon()) != null)
@@ -232,6 +234,7 @@ public class FollowPathCommand extends Command
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                         
                     pathState = 2;
+                    System.out.println("MOT PROF ENABLED");
                 }
                 break;
             }
@@ -239,7 +242,7 @@ public class FollowPathCommand extends Command
             // check up on profile to see if done
             case 2:
             {
-            
+                
                 IMotorController controller = Robot.dt.getRightTalon();
                 MotionProfileStatus status = new MotionProfileStatus();
                 controller.getMotionProfileStatus(status);
@@ -404,7 +407,7 @@ public class FollowPathCommand extends Command
      * To be called when the command is either cancelled, interrupted, or ended.
      */
     public void disable() {
-        System.out.println("DISABLING");
+        //System.out.println("DISABLING");
         notif.stop();
 
         Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
@@ -451,7 +454,15 @@ public class FollowPathCommand extends Command
         return t;
 
     }
+    
+    public boolean isSetupComplete()
+    {
+        return pathState >= 2;
+    }
          
-
+    public boolean getFinished()
+    {
+        return isFinished();
+    }
     
 }
