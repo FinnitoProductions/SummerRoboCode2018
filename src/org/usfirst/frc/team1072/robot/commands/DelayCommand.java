@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
@@ -12,29 +13,12 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class DelayCommand extends CommandGroup
 {
     private double delay;
-    private Command command;
+    private double startTime;
     
-    public DelayCommand (Command command)
+    public DelayCommand (double time)
     {
-        delay = 0;
-        this.command = command;
-    }
-    /**
-     * 
-     * Constructs a new DelayCommand.
-     * @param delay the delay before starting the command, in seconds
-     * @param command
-     */
-    public DelayCommand (double delay, Command command)
-    {
-        this.delay = delay;
-        this.command = command;
-    }
-    
-    public void initialize()
-    {
-        addSequential(new WaitCommand(delay));
-        addSequential(command);
+        delay = time;
+        startTime = Timer.getFPGATimestamp();
     }
     
     /**
@@ -43,12 +27,7 @@ public class DelayCommand extends CommandGroup
     @Override
     protected boolean isFinished()
     {
-        return command.isCompleted();
+        return Timer.getFPGATimestamp() - startTime >= delay;
     }
     
-    @Override
-    protected void end ()
-    {
-        command.cancel();
-    }
 }
