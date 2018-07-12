@@ -105,7 +105,7 @@ public class FollowPathCommand extends Command
     
     public double getTotalTime()
     {
-        return totalTime;
+        return totalTime / 1000;
     }
     
     /**
