@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version Jul 11, 2018
  */
-public class Branch
+public class Branch extends Command
 {
     private ArrayList<Command> branch;
     private int currentIndex; // 
@@ -62,6 +62,15 @@ public class Branch
     public void setCommandRun(boolean didCommandRun)
     {
         this.didCommandRun = didCommandRun;
+    }
+
+    /**
+    * @return true if all the commands in this branch have been executed.
+    */
+    @Override
+    protected boolean isFinished()
+    {
+        return currentIndex >= branch.size();
     }
 
     
