@@ -210,7 +210,7 @@ public class RobotMap {
         public static int MANUAL_VEL_KI = 0;
         public static int MANUAL_VEL_KD = 0;
         
-        public static double SLOW_DOWN_POS = 2000;
+        public static double SLOW_DOWN_POS = 1000;
         public static boolean BOTTOM_LEFT_VICTOR_INVERT = true;
         public static boolean TOP_LEFT_VICTOR_INVERT = false;
         public static boolean TALON_INVERT = false;
