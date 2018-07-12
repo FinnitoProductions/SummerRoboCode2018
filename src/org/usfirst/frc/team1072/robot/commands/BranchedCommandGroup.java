@@ -45,7 +45,7 @@ public class BranchedCommandGroup extends Command
     * @return whether this command group has finished
     */
     @Override
-    protected boolean isFinished()
+    public boolean isFinished()
     {
         boolean isFinished = true;
         for (Branch b : branches)

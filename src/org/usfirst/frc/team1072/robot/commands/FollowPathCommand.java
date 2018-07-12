@@ -464,5 +464,15 @@ public class FollowPathCommand extends Command
     {
         return isFinished();
     }
+
+    /**
+     * @return the current state of this path (0 if just initialized, 1 if still buffering points, 2 if 
+     * in execution mode, and 3 if the path is complete)
+     */
+    public int getPathState()
+    {
+        // TODO Auto-generated method stub
+        return pathState;
+    }
     
 }

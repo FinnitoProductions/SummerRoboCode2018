@@ -127,11 +127,6 @@ public class Robot extends TimedRobot
     public void autonomousPeriodic()
     { 
         Scheduler.getInstance().run();
-        if (!m_autonomousCommand.isFinished())
-        {
-            System.out.println("EXECUTING");
-            m_autonomousCommand.execute();
-        }
     }
 
     /**
