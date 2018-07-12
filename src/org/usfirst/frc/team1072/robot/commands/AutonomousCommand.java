@@ -92,10 +92,10 @@ public class AutonomousCommand extends BranchedCommandGroup
         }
         addBranch(0, fpc1);
 
-        addBranch(1, new WaitCommand(fpc1.getTotalTime() - 1000));
+        addBranch(1, new WaitCommand(fpc1.getTotalTime()/1000 - 1));
         addBranch(1, new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON));
         
-        addBranch(2, new WaitCommand(fpc1.getTotalTime() - 250));
+        addBranch(2, new WaitCommand(fpc1.getTotalTime()/1000 - 0.25));
         addBranch(2, new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                 IntakeConstants.DECOMPRESS));
         addBranch(2, new IntakeOuttakeTimedCommand(1, IntakeConstants.OUTTAKE_BOOL));

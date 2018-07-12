@@ -27,10 +27,8 @@ public class BranchedCommandGroup extends Command
     @Override
     public void execute()
     {
-        System.out.println(branches);
         for (Integer i : branches.keySet()) 
         {
-            System.out.println(i);
             LinkedList<Command> currentBranch = branches.get(i);
             if (currentBranch != null)
             {
@@ -43,9 +41,13 @@ public class BranchedCommandGroup extends Command
                 if (currentCommand != null)
                 {
                     if (currentCommand.isRunning())
+                    {
                         startedCommands.put(currentCommand, true);
-                    if ((currentCommand.isCanceled() || !currentCommand.isRunning()) && getStarted(currentCommand))
+                    }
+                    System.out.println("STARTED: " + getStarted(currentCommand));
+                    if (!currentCommand.isRunning() && getStarted(currentCommand))
                     { 
+                        System.out.println("REMOVING");
                         currentBranch.remove();
                         startedBranches.put(currentBranch, false);
                     }
