@@ -10,6 +10,8 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
+import org.usfirst.frc.team1072.robot.commands.PauseUntilPathBeginsCommand.PauseType;
+import org.usfirst.frc.team1072.robot.subsystems.Intake;
 
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motorcontrol.IMotorController;
@@ -47,9 +49,11 @@ public class AutonomousCommand extends BranchedCommandGroup
     private final String STRAIGHT_LEFT = "/home/summer2018/paths/straight/straight_left_detailed.csv";
     private final String STRAIGHT_RIGHT = "/home/summer2018/paths/straight/straight_right_detailed.csv";
     
-    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT= "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
+    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
     private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_right_detailed.csv";
     
+    private final String CENTER_LEFT_HEAD_ON_BACKUP_CUBES_LEFT = "";
+    private final String CENTER_LEFT_HEAD_ON_BACKUP_CUBES_RIGHT = "";
     //private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT_PART2 = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
     
     /**
@@ -82,11 +86,13 @@ public class AutonomousCommand extends BranchedCommandGroup
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
          
         FollowPathCommand fpc1;
-        FollowPathCommand fpc2;
+        FollowPathCommand backupToCubes;
         if (onLeft)
         {
-             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);
-             //fpc2 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);
+             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, 
+                     CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);
+             backupToCubes = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_BACKUP_CUBES_LEFT, 
+                     CENTER_LEFT_HEAD_ON_BACKUP_CUBES_RIGHT, true);
              //CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     //"/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
@@ -94,21 +100,34 @@ public class AutonomousCommand extends BranchedCommandGroup
         {
             fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
                     "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", true);
+            backupToCubes = null;
         }
         
         // addCommand returns the branch itself, allowing for multiple addCommand methods in one line
-        addBranch(new Branch(0)
-                .addCommand(fpc1));
+        addBranch(new Branch(Robot.dt)
+                .addCommand(fpc1)
+                .addCommand(backupToCubes));
        
         
-        addBranch(new Branch(1)
-                .addCommand(new DelayCommand(fpc1.getTotalTime()/1000 - 1.1))
-                .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON)));
+        addBranch(new Branch(Robot.el)
+                .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 1.1))
+                .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON))
+                .addCommand(new PauseUntilPathBeginsCommand(backupToCubes, PauseType.START_OF_PATH, 0.1))
+                .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.INTAKE_HEIGHT))
+                        );
         
-        addBranch(new Branch(2)
-                .addCommand(new DelayCommand(fpc1.getTotalTime()/1000-0.05))
+        addBranch(new Branch(Intake.pn)
+                .addCommand (new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.05))
                 .addCommand(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.DECOMPRESS)));
+        
+        addBranch (new Branch(Robot.intake)
+                .addCommand (new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.05))
+                .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.OUTTAKE_BOOL))
+                .addCommand(new PauseUntilPathBeginsCommand(backupToCubes, PauseType.END_OF_PATH, 0))
+                .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.INTAKE_BOOL)));
+        
+        
                         
 
         System.out.println("TOTAL PATH TIME: " + fpc1.getTotalTime());
