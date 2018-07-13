@@ -291,7 +291,7 @@ public class FollowPathCommand extends Command
         controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 2));
         if (reversePath)
             t = reverseTrajectory(t);
-        controllers.put(controller, new Object[] {t, null, new Double(0)});
+        controllers.put(controller, new Object[] {t, null});
         pathReversed = reversePath;
     }
     

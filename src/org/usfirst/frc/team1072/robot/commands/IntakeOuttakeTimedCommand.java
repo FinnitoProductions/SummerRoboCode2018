@@ -24,16 +24,9 @@ public class IntakeOuttakeTimedCommand extends TimedCommand
     {
         if (intake)
         {
-            Robot.intake.intakeOuttakeCube(0.5);
+            Robot.intake.intakeOuttakeCube(1);
         }
         else
-            Robot.intake.intakeOuttakeCube(-0.5);
+            Robot.intake.intakeOuttakeCube(-1);
     }
-    
-    @Override
-    public boolean isFinished()
-    {
-        return this.isTimedOut();
-    }
-
 }
