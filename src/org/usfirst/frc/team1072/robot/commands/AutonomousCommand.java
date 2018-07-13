@@ -107,7 +107,7 @@ public class AutonomousCommand extends BranchedCommandGroup
         addBranch(new Branch(0)
                 .addCommand(fpc1));
         addBranch(new Branch(1)
-                //.addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 1.1))
+                .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.START_OF_PATH, 1.1))
                 .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON)));
                 //.addCommand(backupToCubes));
        

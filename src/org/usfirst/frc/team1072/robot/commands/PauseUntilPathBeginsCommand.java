@@ -63,12 +63,14 @@ public class PauseUntilPathBeginsCommand extends Command
             {
                 hasInitializedModifiedDelay = true;
                 modifiedDelay = fpc.getTotalTime()/1000 - delay;
+                System.out.println("INIT MODDED DELAY");
             }
 
             if (!hasInitializedStartTime && fpc.isSetupComplete())
             {
                 hasInitializedStartTime = true;
                 startTime = Timer.getFPGATimestamp();
+                System.out.println("INIT START TIME");
             }
         }
     }
@@ -79,6 +81,6 @@ public class PauseUntilPathBeginsCommand extends Command
         System.out.println("NULL: " + fpc == null);
         System.out.println("PATH FINISHED? " + fpc.getFinished());
         System.out.println("START TIME? " + startTime);
-        return fpc != null && fpc.getFinished() && Timer.getFPGATimestamp() - startTime >= modifiedDelay;
+        return fpc != null && fpc.isSetupComplete() && Timer.getFPGATimestamp() - startTime >= modifiedDelay;
     }
 }

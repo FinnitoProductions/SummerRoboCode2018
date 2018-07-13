@@ -53,7 +53,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private final int minPointsInController = 7;
+    private final int minPointsInController = 20;
     private ProcessBuffer p;
     private Notifier notif;
   
@@ -181,7 +181,7 @@ public class FollowPathCommand extends Command
      */
     public void execute()
     {
-        System.out.println("EXECUTING FPC");
+        //System.out.println("EXECUTING FPC");
         SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("Right Talon Setpoint", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         if (getControllerStatus(Robot.dt.getRightTalon()) != null)

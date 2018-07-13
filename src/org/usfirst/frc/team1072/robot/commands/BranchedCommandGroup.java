@@ -136,25 +136,21 @@ public class BranchedCommandGroup extends Command
         
         public void execute()
         {
-            System.out.println("BEGINNING EXECUTE");
             if (currentIndex < branch.size())
             {
                 Command currentCommand = getCommand(currentIndex);
-                System.out.println("EXECUTING" + currentCommand);
                 if (!hasStartedCommand)
                 {
                     hasStartedCommand = true;
-                    System.out.println("STARTING COMMAND");
                     Scheduler.getInstance().add(currentCommand);
                 }
                 if (currentCommand.isRunning())
                 {
                     didCommandRun = true;
-                    System.out.println("COMMAND IS RUNNING");
                 }
                 if (!currentCommand.isRunning() && didCommandRun)
                 {
-                    System.out.println("CANCELLING");
+                    System.out.println("CANCELLING " + currentCommand);
                     
                     incrementCurrentIndex();
                     didCommandRun = false;
