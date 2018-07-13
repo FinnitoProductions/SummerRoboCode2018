@@ -75,6 +75,20 @@ public class Elevator extends Subsystem
         bottomRightTalon.set(ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
     }
     
+    public void talonInitAutonomous()
+    {
+        talonInit();
+    }
+    
+    public void talonInitTeleop()
+    {
+        talonInit();
+        elSetSoftLimit(ElevatorConstants.FORWARD_SOFT, ElevatorConstants.REVERSE_SOFT);
+        elSetCurrentLimit(ElevatorConstants.PEAK_CURRENT_LIMIT, ElevatorConstants.PEAK_TIME_MS,
+                ElevatorConstants.CONTINOUS_CURRENT_LIMIT);
+        elSetRampRate (ElevatorConstants.RAMP_RATE);
+        elConfigurePositionClosedLoop();
+    }
     /**
      * Initializes the talons and victors on the elevator.
      */
@@ -82,18 +96,10 @@ public class Elevator extends Subsystem
     {
         elSlaveVictors();
         elSetNeutralMode(NeutralMode.Brake);
-        elSetCurrentLimit(ElevatorConstants.PEAK_CURRENT_LIMIT, ElevatorConstants.PEAK_TIME_MS,
-                ElevatorConstants.CONTINOUS_CURRENT_LIMIT);
+
         elInvertControllers();
-        elScaleVoltage(ElevatorConstants.NOMINAL_OUTPUT);
-        elSetSoftLimit(ElevatorConstants.FORWARD_SOFT, ElevatorConstants.REVERSE_SOFT);
 
-        elSetRampRate (ElevatorConstants.RAMP_RATE);
         elScaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
-
-        elZeroSensors();
-
-        elConfigurePositionClosedLoop();
         
         elConfigureMotionMagic();
 
@@ -113,10 +119,9 @@ public class Elevator extends Subsystem
      */
     private void elSlaveVictors()
     {
-        TalonSRX talon = getBottomRightTalon();
-        getBottomLeftVictor().follow(talon);
-        getTopLeftVictor().follow(talon);
-        getTopRightVictor().follow(talon);
+        getBottomLeftVictor().follow(getBottomRightTalon());
+        getTopLeftVictor().follow(getBottomRightTalon());
+        getTopRightVictor().follow(getBottomRightTalon());
     }
 
     /**
@@ -125,9 +130,6 @@ public class Elevator extends Subsystem
     private void elInvertControllers()
     {
         getBottomLeftVictor().setInverted(ElevatorConstants.BOTTOM_LEFT_VICTOR_INVERT);
-        getBottomRightTalon().setInverted(ElevatorConstants.TALON_INVERT);
-        getTopRightVictor().setInverted(ElevatorConstants.TOP_RIGHT_VICTOR_INVERT);
-        getTopLeftVictor().setInverted(ElevatorConstants.TOP_LEFT_VICTOR_INVERT);
     }
 
     /**

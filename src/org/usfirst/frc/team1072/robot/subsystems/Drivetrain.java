@@ -125,6 +125,9 @@ public class Drivetrain extends Subsystem
     public void talonInitTeleop()
     {
         talonInit();
+        setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
+        zeroAllSensors();
+        resetTalonCoefficients();
     }
     /**
      * Performs all commands to initialize the talons.
@@ -136,16 +139,14 @@ public class Drivetrain extends Subsystem
         clearTrajectoryPoints();
         initTalonOutput(0);
         victorInit();
-        zeroAllSensors();
         
         invertControllers();
         setNeutralMode(NeutralMode.Brake);
 
-        setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
+
 
         scaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
 
-        resetTalonCoefficients();
         setTalonSensorPhase();
         
         dtsetTalonFramePeriods();
@@ -213,8 +214,6 @@ public class Drivetrain extends Subsystem
         
         // Invert the following direction (left Talons and Victors were wired
         // oppositely)
-        getRightTalon().setInverted(false);
-        getRightVictor().setInverted(false);
     }
 
     /**

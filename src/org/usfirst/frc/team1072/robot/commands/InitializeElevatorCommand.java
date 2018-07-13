@@ -15,7 +15,7 @@ public class InitializeElevatorCommand extends Command
     public void initialize()
     {
         System.out.println("INITIALIZING ELEVATOR " + Robot.getCurrentTimeMs());
-        Robot.el.talonInit();
+        Robot.el.talonInitAutonomous();
         isFinished = true;
     }
 

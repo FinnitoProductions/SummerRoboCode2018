@@ -150,9 +150,9 @@ public class AutonomousCommand extends CommandGroup
             CommandGroup pathGroupIntakeThirdCube = new CommandGroup();
             pathGroupIntakeThirdCube.addParallel(fpc6);
             pathGroupIntakeThirdCube.addParallel(fpc7);
-        //addSequential(intakeThirdCube);*/
+        //addSequential(intakeThirdCube);
         fpc8 = setupPathFollowerArc(AutonomousPaths.CLH_P8_LEFT_REV, AutonomousPaths.CLH_P8_RIGHT_REV, true);
-        fpc9 = setupPathFollowerArc(AutonomousPaths.CLH_P9_LEFT, AutonomousPaths.CLH_P9_RIGHT, false);
+        fpc9 = setupPathFollowerArc(AutonomousPaths.CLH_P9_LEFT, AutonomousPaths.CLH_P9_RIGHT, false);*/
 
 
         /*addBranch(new Branch(Robot.dt)
@@ -226,10 +226,6 @@ public class AutonomousCommand extends CommandGroup
         
     }
     
-    private void multiCubeSwitch()
-    {
-        
-    }
     /**
      * Reads in a trajectory (from Jaci's pathfinder) given the filename as a CSV.
      * @param filename the file name
