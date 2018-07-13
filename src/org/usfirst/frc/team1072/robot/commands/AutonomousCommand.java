@@ -56,7 +56,7 @@ public class AutonomousCommand extends CommandGroup
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
         
-        oneCubeSwitch(true);
+        switchAuton(true);
 
     }
 
@@ -64,14 +64,14 @@ public class AutonomousCommand extends CommandGroup
      * The command to be performed for a one-cube switch autonomous.
      * @param onLeft true if the switch is on the left; false otherwise
      */
-    private void oneCubeSwitch (boolean onLeft)
+    private void switchAuton (boolean onLeft)
     {
         // sequential commands are run first, take complete precedence over parallel
         //addParallel(new IntakeOuttakeTimedCommand(2, IntakeConstants.OUTTAKE_BOOL));
         
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
          
-        FollowPathCommand fpc1, fpc2, fpc3, fpc4, fpc5;
+        FollowPathCommand fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         
         fpc1 = setupPathFollowerArc(AutonomousPaths.CLH_P1_LEFT, AutonomousPaths.CLH_P1_RIGHT, false)
                 .zeroPigeonAtStart(true);
@@ -80,6 +80,10 @@ public class AutonomousCommand extends CommandGroup
         fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
         fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
         fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
+        fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
+        fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
+        fpc8 = setupPathFollowerArc(AutonomousPaths.CLH_P8_LEFT_REV, AutonomousPaths.CLH_P8_RIGHT_REV, true);
+        fpc9 = setupPathFollowerArc(AutonomousPaths.CLH_P9_LEFT, AutonomousPaths.CLH_P9_RIGHT, false);
        
         CommandGroup firstCube = new CommandGroup();
             firstCube.addParallel(fpc1);
@@ -123,17 +127,29 @@ public class AutonomousCommand extends CommandGroup
             intakeSecondCube.addParallel(intakeCube);
         addSequential(intakeSecondCube);
         
-        CommandGroup outtakeSecondCube = new CommandGroup();
+        CommandGroup scoreSecondCube = new CommandGroup();
             CommandGroup pathGroupOuttakeSecondCube = new CommandGroup();
                 pathGroupOuttakeSecondCube.addSequential(fpc4);
                 pathGroupOuttakeSecondCube.addSequential(fpc5);
-            outtakeSecondCube.addParallel(pathGroupOuttakeSecondCube);
+            scoreSecondCube.addParallel(pathGroupOuttakeSecondCube);
             CommandGroup elevatorRaiseSecondCube = new CommandGroup();
                 elevatorRaiseSecondCube.addSequential(new PauseUntilPathBeginsCommand(fpc3, PauseType.START_OF_PATH, 
                         1, fpc3.getTotalTime()));
                 elevatorRaiseSecondCube.addSequential(new MoveElevatorMotionMagicCommand(ElevatorConstants.SWITCH_HEIGHT_AUTON));
-            outtakeSecondCube.addParallel(elevatorRaiseSecondCube);
+            scoreSecondCube.addParallel(elevatorRaiseSecondCube);
+            CommandGroup outtakeSecondCube = new CommandGroup();
+                outtakeSecondCube.addSequential(
+                        new PauseUntilPathBeginsCommand(fpc5, PauseType.END_OF_PATH, 0.8, fpc5.getTotalTime()));
+         
+            
         addSequential(outtakeSecondCube);
+        
+        CommandGroup intakeThirdCube = new CommandGroup();
+            CommandGroup pathGroupIntakeThirdCube = new CommandGroup();
+            pathGroupIntakeThirdCube.addParallel(fpc6);
+            pathGroupIntakeThirdCube.addParallel(fpc7);
+        addSequential(intakeThirdCube);
+        
 
 
         /*addBranch(new Branch(Robot.dt)
