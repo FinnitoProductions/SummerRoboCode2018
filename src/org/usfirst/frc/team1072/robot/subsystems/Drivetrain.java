@@ -147,7 +147,7 @@ public class Drivetrain extends Subsystem
 
         resetTalonCoefficients();
         setTalonSensorPhase();
-        dtsetTalonFramePeriods();
+        //dtsetTalonFramePeriods();
         
         configureVelocityClosedLoop();
         configurePositionClosedLoop();

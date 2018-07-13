@@ -76,7 +76,7 @@ public class AutonomousCommand extends CommandGroup
         fpc1 = setupPathFollowerArc(AutonomousPaths.CLH_P1_LEFT, AutonomousPaths.CLH_P1_RIGHT, false)
                 .zeroPigeonAtStart(true);
         fpc2 = setupPathFollowerArc(AutonomousPaths.CLH_P2_LEFT_REV, AutonomousPaths.CLH_P2_RIGHT_REV, true)
-                .zeroPigeonAtStart(true);
+                .zeroPigeonAtStart(false);
         fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
         fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
         fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
@@ -86,6 +86,11 @@ public class AutonomousCommand extends CommandGroup
         fpc9 = setupPathFollowerArc(AutonomousPaths.CLH_P9_LEFT, AutonomousPaths.CLH_P9_RIGHT, false);
        
         CommandGroup firstCube = new CommandGroup();
+            CommandGroup initSubsystems = new CommandGroup();
+                initSubsystems.addParallel(new InitializeDrivetrainCommand());
+                initSubsystems.addParallel(new InitializeElevatorCommand());
+                initSubsystems.addParallel(new InitializeIntakeCommand());
+            firstCube.addParallel(initSubsystems);
             firstCube.addParallel(fpc1);
             CommandGroup raiseElevatorFirstCube = new CommandGroup();
                 raiseElevatorFirstCube.addSequential(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.9, fpc1.getTotalTime()));
@@ -99,7 +104,7 @@ public class AutonomousCommand extends CommandGroup
             firstCube.addParallel(outtakeFirstCube);
         addSequential(firstCube);
         
-        CommandGroup intakeSecondCube = new CommandGroup();
+        /*CommandGroup intakeSecondCube = new CommandGroup();
             CommandGroup pathGroupSecondCube = new CommandGroup();
                 pathGroupSecondCube.addSequential(fpc2);
                 pathGroupSecondCube.addSequential(fpc3);
@@ -146,7 +151,7 @@ public class AutonomousCommand extends CommandGroup
             CommandGroup pathGroupIntakeThirdCube = new CommandGroup();
             pathGroupIntakeThirdCube.addParallel(fpc6);
             pathGroupIntakeThirdCube.addParallel(fpc7);
-        //addSequential(intakeThirdCube);
+        //addSequential(intakeThirdCube);*/
         
 
 

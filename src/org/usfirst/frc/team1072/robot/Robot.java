@@ -110,13 +110,6 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
-        System.out.println("INITIALIZING AUTON " + Robot.getCurrentTimeMs());
-        dt.talonInitAutonomous();
-        System.out.println("DRIVE INITIALIZED " + Robot.getCurrentTimeMs());
-        el.talonInit();
-        System.out.println("ELEVATOR INITIALIZED " + Robot.getCurrentTimeMs());
-        intake.talonInit();
-        System.out.println("DRIVE/EL/INT AUTON INITIALIZED " + Robot.getCurrentTimeMs());
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
         m_autonomousCommand.start();
         System.out.println("AUTON COMMAND STARTED" + 1000 * (Timer.getFPGATimestamp() - startTime));
@@ -128,8 +121,6 @@ public class Robot extends TimedRobot
     public void autonomousPeriodic()
     { 
         Scheduler.getInstance().run();
-        /*if (!m_autonomousCommand.isFinished())
-            m_autonomousCommand.execute();*/
     }
 
     /**

@@ -53,7 +53,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private final int minPointsInController = 20;
+    private final int minPointsInController = 13;
     private ProcessBuffer p;
     private Notifier notif;
   
@@ -124,12 +124,12 @@ public class FollowPathCommand extends Command
      */
     public void initialize()
     {
-        System.out.println("INITIALIZED");
+        System.out.println("INITIALIZED" + Robot.getCurrentTimeMs());
         pathReversed = false;
         System.out.println("INITIALIZED FIRST CALLED " + Robot.getCurrentTimeMs());
         pathState = 0;
         totalTime = 0;
-        double period = new Time(TimeUnit.MILLISECONDS, RobotMap.TIME_PER_TRAJECTORY_POINT_MS).getSeconds() / 2;
+        double period = RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 1000 / 2;
 
         notif.startPeriodic(period);
         System.out.println("NOTIFIER STARTED " + Robot.getCurrentTimeMs());
@@ -232,7 +232,7 @@ public class FollowPathCommand extends Command
                   
                     IMotorController controller = Robot.dt.getRightTalon();
                         
-                    //System.out.println("ENABLING PROFILE " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
+                    System.out.println("ENABLING PROFILE " + Robot.getCurrentTimeMs());
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
                     
                     Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
@@ -266,6 +266,7 @@ public class FollowPathCommand extends Command
                 
                 if (isFinished) 
                 {
+                    System.out.println("PATH FINISHED" + Robot.getCurrentTimeMs());
                     pathState = 3;
                 }
                 break;
