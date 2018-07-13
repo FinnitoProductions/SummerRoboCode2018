@@ -17,26 +17,22 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class MoveElevatorMotionMagicCommand extends Command
 {
-    double position;
-    double timeout;
+    private double position;
     
     /**
      * Creates a new command requiring the elevator.
      */
-    public MoveElevatorMotionMagicCommand(double timeout, double position) 
+    public MoveElevatorMotionMagicCommand(double position) 
     { 
         requires(Robot.el); 
         this.position = position;
-        this.timeout = timeout;
     }
     
     /**
      * Initializes the command.
      */
     public void initialize()
-    {
-        try { Thread.sleep((long) timeout); } catch (Exception e) {e.printStackTrace(); }
-       
+    {  
         Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
         Robot.el.moveElevatorMotionMagic(position);

@@ -267,6 +267,41 @@ public class RobotMap {
         public static final int ANGLE_ALLOWABLE_ERROR = 0;
     }
     
+    /**
+     * Stores the file paths for every trajectory to be loaded in.
+     * 
+     * @author Finn Frankis
+     * @version Jul 13, 2018
+     */
+    public static class AutonomousPaths
+    {
+        public static final String CLH_P1_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/Test1/Test1_left_detailed.csv";
+        public static final String CLH_P1_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/Test1/Test1_right_detailed.csv";
+        
+        public static final String CLH_P2_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/Test1/Test1 _left_detailed.csv";
+        public static final String CLH_P2_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/Test1/Test1 _right_detailed.csv";
+        
+        public static final String CLH_P3_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/3f/part3_left_detailed.csv";
+        public static final String CLH_P3_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/3f/part3_right_detailed.csv";
+
+        public static final String CLH_P4_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_left_detailed.csv";
+        public static final String CLH_P4_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_right_detailed.csv";
+        
+        public static final String CLH_P5_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5_left_detailed.csv";
+        public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5_right_detailed.csv";
+        
+        public static final String CLH_P6_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/6b/part6_left_detailed.csv";
+        public static final String CLH_P6_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/6b/part6_right_detailed.csv";
+        
+        public static final String CLH_P7_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/7f/part7_left_detailed.csv";
+        public static final String CLH_P7_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/7f/part7_right_detailed.csv";
+        
+        public static final String CLH_P8_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/8b/part8_left_detailed.csv";
+        public static final String CLH_P8_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/8b/part8_right_detailed.csv";
+        
+        public static final String CLH_P9_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/9f/part9_left_detailed.csv";
+        public static final String CLH_P9_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/9f/part9_right_detailed.csv";
+    }
 
     public static int REMOTE_SLOT_0 = 0;
     public static int REMOTE_SLOT_1 = 1;
