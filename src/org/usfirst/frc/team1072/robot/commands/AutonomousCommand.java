@@ -111,6 +111,12 @@ public class AutonomousCommand extends BranchedCommandGroup
                 .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON)));
                 //.addCommand(backupToCubes));
         
+        addBranch (new Branch(Robot.intake)
+                .addCommand (new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.3, fpc1.getTotalTime()))
+                .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.OUTTAKE_BOOL)));
+                /*.addCommand(new PauseUntilPathBeginsCommand(backupToCubes, PauseType.END_OF_PATH, 0, fpc1.getTotalTime()))
+                .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.INTAKE_BOOL)));*/
+        
        System.out.println("TOTAL TIME AUTON: " + fpc1.getTotalTime());
         
         /*addBranch(new Branch(Robot.el)
