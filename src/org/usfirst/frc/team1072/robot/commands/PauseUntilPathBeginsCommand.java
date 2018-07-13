@@ -15,6 +15,8 @@ public class PauseUntilPathBeginsCommand extends Command
     private double modifiedDelay;
     private double startTime;
     private PauseType pauseType;
+    private boolean hasInitializedStartTime;
+    private boolean hasInitializedModifiedDelay;
     
     public enum PauseType
     {
@@ -27,6 +29,8 @@ public class PauseUntilPathBeginsCommand extends Command
         delay = 0;
         modifiedDelay = 0;
         pauseType = PauseType.START_OF_PATH;
+        hasInitializedStartTime = false;
+        hasInitializedModifiedDelay = false;
     }
     
     /**
@@ -40,27 +44,41 @@ public class PauseUntilPathBeginsCommand extends Command
         this.fpc = fpc;
         this.pauseType = pauseType;
         if (pauseType == PauseType.END_OF_PATH)
+        {
             modifiedDelay = Double.MAX_VALUE;
+            hasInitializedModifiedDelay = false;
+        }
         else
             modifiedDelay = delay;
         this.delay = delay;
         startTime = Double.MAX_VALUE;
+        hasInitializedStartTime = false;
     }
     
     public void execute()
     {
         if (fpc != null)
         {
-            if (modifiedDelay > (Double.MAX_VALUE - 100) && pauseType == PauseType.END_OF_PATH)
-                modifiedDelay = fpc.getTotalTime() - delay;
-            if (startTime > Double.MAX_VALUE - 100 && fpc.isSetupComplete())
+            if (!hasInitializedModifiedDelay && pauseType == PauseType.END_OF_PATH)
+            {
+                hasInitializedModifiedDelay = true;
+                modifiedDelay = fpc.getTotalTime()/1000 - delay;
+            }
+
+            if (!hasInitializedStartTime && fpc.isSetupComplete())
+            {
+                hasInitializedStartTime = true;
                 startTime = Timer.getFPGATimestamp();
+            }
         }
     }
     
     @Override
     public boolean isFinished()
     {
+        System.out.println("NULL: " + fpc == null);
+        System.out.println("PATH FINISHED? " + fpc.getFinished());
+        System.out.println("START TIME? " + startTime);
         return fpc != null && fpc.getFinished() && Timer.getFPGATimestamp() - startTime >= modifiedDelay;
     }
 }

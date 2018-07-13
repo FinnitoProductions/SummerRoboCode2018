@@ -113,6 +113,7 @@ public class FollowPathCommand extends Command
      */
     public void initialize()
     {
+        System.out.println("INITIALIZED");
         pathReversed = false;
         System.out.println("INITIALIZED FIRST CALLED " + Robot.getCurrentTimeMs());
         pathState = 0;
@@ -180,7 +181,7 @@ public class FollowPathCommand extends Command
      */
     public void execute()
     {
-        //System.out.println("EXECUTING FPC");
+        System.out.println("EXECUTING FPC");
         SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("Right Talon Setpoint", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         if (getControllerStatus(Robot.dt.getRightTalon()) != null)
@@ -205,7 +206,7 @@ public class FollowPathCommand extends Command
                 controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
                 System.out.println("TRAJECTORY LOADED " + Robot.getCurrentTimeMs());
                 loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
-
+                
                 pathState = 1;
                 break;
             }
@@ -464,6 +465,8 @@ public class FollowPathCommand extends Command
     {
         return isFinished();
     }
+    
+ 
 
     /**
      * @return the current state of this path (0 if just initialized, 1 if still buffering points, 2 if 

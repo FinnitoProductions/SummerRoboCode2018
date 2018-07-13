@@ -36,9 +36,17 @@ public class BranchedCommandGroup extends Command
     {
         for (Branch b : branches)
         {
-            b.start();
             Scheduler.getInstance().add(b);
         }
+    }
+    
+    public void execute()
+    {
+        /*for (Branch b : branches)
+        {
+            if (!b.isFinished())
+                b.execute();
+        }*/
     }
     
     /**
@@ -98,10 +106,12 @@ public class BranchedCommandGroup extends Command
                     
                 }
             }
+            this.number = number;
         }
         
         public Branch (Subsystem s)
         {
+            initBranch();
             requires(s);
             this.setRequired(s);
         }
@@ -110,6 +120,7 @@ public class BranchedCommandGroup extends Command
 
         private void initBranch()
         {
+            branch = new ArrayList<Command>();
             currentIndex = 0;
             hasStartedCommand = false;
             didCommandRun = false;
@@ -125,21 +136,29 @@ public class BranchedCommandGroup extends Command
         
         public void execute()
         {
+            System.out.println("BEGINNING EXECUTE");
             if (currentIndex < branch.size())
             {
                 Command currentCommand = getCommand(currentIndex);
+                System.out.println("EXECUTING" + currentCommand);
                 if (!hasStartedCommand)
                 {
                     hasStartedCommand = true;
-                    currentCommand.start();
+                    System.out.println("STARTING COMMAND");
+                    Scheduler.getInstance().add(currentCommand);
                 }
                 if (currentCommand.isRunning())
+                {
                     didCommandRun = true;
+                    System.out.println("COMMAND IS RUNNING");
+                }
                 if (!currentCommand.isRunning() && didCommandRun)
                 {
+                    System.out.println("CANCELLING");
+                    
                     incrementCurrentIndex();
                     didCommandRun = false;
-                    didCommandRun = false;
+                    hasStartedCommand = false;
                 }
 
             }

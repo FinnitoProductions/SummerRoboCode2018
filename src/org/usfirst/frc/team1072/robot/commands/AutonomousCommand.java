@@ -91,8 +91,8 @@ public class AutonomousCommand extends BranchedCommandGroup
         {
              fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, 
                      CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);
-             backupToCubes = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_BACKUP_CUBES_LEFT, 
-                     CENTER_LEFT_HEAD_ON_BACKUP_CUBES_RIGHT, true);
+             /*backupToCubes = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_BACKUP_CUBES_LEFT, 
+                     CENTER_LEFT_HEAD_ON_BACKUP_CUBES_RIGHT, true);*/
              //CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     //"/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
         }
@@ -104,12 +104,15 @@ public class AutonomousCommand extends BranchedCommandGroup
         }
         
         // addCommand returns the branch itself, allowing for multiple addCommand methods in one line
-        addBranch(new Branch(Robot.dt)
-                .addCommand(fpc1)
-                .addCommand(backupToCubes));
+        addBranch(new Branch(0)
+                .addCommand(fpc1));
+        addBranch(new Branch(1)
+                //.addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 1.1))
+                .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON)));
+                //.addCommand(backupToCubes));
        
         
-        addBranch(new Branch(Robot.el)
+        /*addBranch(new Branch(Robot.el)
                 .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 1.1))
                 .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON))
                 .addCommand(new PauseUntilPathBeginsCommand(backupToCubes, PauseType.START_OF_PATH, 0.1))
@@ -125,7 +128,7 @@ public class AutonomousCommand extends BranchedCommandGroup
                 .addCommand (new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.05))
                 .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.OUTTAKE_BOOL))
                 .addCommand(new PauseUntilPathBeginsCommand(backupToCubes, PauseType.END_OF_PATH, 0))
-                .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.INTAKE_BOOL)));
+                .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.INTAKE_BOOL)));*/
         
         
                         
@@ -234,6 +237,7 @@ public class AutonomousCommand extends BranchedCommandGroup
         }
         fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
         fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
+
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
         return fpc;
