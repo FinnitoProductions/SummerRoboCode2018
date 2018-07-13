@@ -93,10 +93,10 @@ public class Robot extends TimedRobot
      */
     public void disabledInit() 
     { 
-        Robot.dt.getLeftTalon().setNeutralMode(NeutralMode.Coast);
-        Robot.dt.getRightTalon().setNeutralMode(NeutralMode.Coast);
-        Robot.dt.getLeftVictor().setNeutralMode(NeutralMode.Coast);
-        Robot.dt.getRightVictor().setNeutralMode(NeutralMode.Coast);
+        Robot.dt.getLeftTalon().setNeutralMode(NeutralMode.Brake);
+        Robot.dt.getRightTalon().setNeutralMode(NeutralMode.Brake);
+        Robot.dt.getLeftVictor().setNeutralMode(NeutralMode.Brake);
+        Robot.dt.getRightVictor().setNeutralMode(NeutralMode.Brake);
     }
 
     /**
@@ -118,8 +118,8 @@ public class Robot extends TimedRobot
         intake.talonInit();
         System.out.println("DRIVE/EL/INT AUTON INITIALIZED " + Robot.getCurrentTimeMs());
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
+        m_autonomousCommand.start();
         System.out.println("AUTON COMMAND STARTED" + 1000 * (Timer.getFPGATimestamp() - startTime));
-        Scheduler.getInstance().add(m_autonomousCommand);
     }
 
     /**

@@ -71,6 +71,8 @@ public class FollowPathCommand extends Command
     
     private double totalTime;
     
+    private boolean zeroAux;
+    
     /**
      * Constructs a new command. 
      */
@@ -98,6 +100,11 @@ public class FollowPathCommand extends Command
         totalTime = -1;
     }
     
+    public FollowPathCommand zeroPigeonAtStart(boolean zeroPigeon)
+    {
+        zeroAux = zeroPigeon;
+        return this;
+    }
     public void setTotalTime (double newTotalTime)
     {
         totalTime = newTotalTime;
@@ -175,7 +182,7 @@ public class FollowPathCommand extends Command
             
             Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
             Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-            //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+        
             System.out.println("TALONS CONFIGURED " + Robot.getCurrentTimeMs());
         }
     }
@@ -235,6 +242,8 @@ public class FollowPathCommand extends Command
                     
                     Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
                     Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    if (zeroAux)
+                        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                         
                     pathState = 2;
@@ -257,7 +266,6 @@ public class FollowPathCommand extends Command
                 
                 if (isFinished) 
                 {
-                    System.out.println("FINISHED");
                     pathState = 3;
                 }
                 break;
@@ -387,7 +395,8 @@ public class FollowPathCommand extends Command
      */
     protected boolean isFinished()
     {
-        return pathState == 3 && Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) < RobotMap.MOTION_PROFILE_END_ERROR;
+        return pathState == 3 && 
+                Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_END_ERROR;
     }
     
     @Override

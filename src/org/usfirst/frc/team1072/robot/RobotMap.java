@@ -60,7 +60,7 @@ public class RobotMap {
     public static class DrivetrainConstants
     {
         public static final double MOT_PROF_ADD_TO_VEL_INIT = 7;
-        public static final double TIME_TO_OVERCOME_S_FRICTION_MS = 75;
+        public static final double TIME_TO_OVERCOME_S_FRICTION_MS = 45;
         public static int VEL_PID = 1;
         public static int POS_PID = 2;
         public static int ANGLE_PID = 0;
@@ -166,7 +166,7 @@ public class RobotMap {
      */
     public static class ElevatorConstants
     {
-        public static final double SWITCH_HEIGHT_AUTON = 10000;
+        public static final double SWITCH_HEIGHT_AUTON = 12000;
         public static int MANUAL_CURRENT_LIMIT_CONT = 10;
         public static int PEAK_CURRENT_LIMIT = 10; //25
         public static int PEAK_TIME_MS = 750;

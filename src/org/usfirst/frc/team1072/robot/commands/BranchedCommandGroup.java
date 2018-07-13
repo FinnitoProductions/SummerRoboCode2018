@@ -146,6 +146,7 @@ public class BranchedCommandGroup extends Command
                 }
                 if (currentCommand.isRunning())
                 {
+                    System.out.println("IS RUNNING");
                     didCommandRun = true;
                 }
                 if (!currentCommand.isRunning() && didCommandRun)
@@ -155,6 +156,7 @@ public class BranchedCommandGroup extends Command
                     incrementCurrentIndex();
                     didCommandRun = false;
                     hasStartedCommand = false;
+                    System.out.println("STARTING NEXT COMMAND");
                 }
 
             }

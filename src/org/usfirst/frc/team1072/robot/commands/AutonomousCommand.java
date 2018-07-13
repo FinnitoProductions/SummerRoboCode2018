@@ -33,27 +33,24 @@ import jaci.pathfinder.Trajectory.Segment;
  * @author Finn Frankis
  * @version 6/20/18
  */
-public class AutonomousCommand extends BranchedCommandGroup
+public class AutonomousCommand extends CommandGroup
 {
     private int numPoints = 0;
     
-    private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_left_detailed.csv";
-    private final String CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT = "/home/summer2018/paths/center_right_headon(switch_1)/center_right_headon(switch_1)_right_detailed.csv";
+    private final String CLH_P1_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/Test1/Test1_left_detailed.csv";
+    private final String CLH_P1_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/Test1/Test1_right_detailed.csv";
     
-    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_LEFT = "/home/summer2018/paths/center_left_headon(switch_1)/center_left_headon(switch_1)_left_detailed.csv";
-    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT = "/home/summer2018/paths/center_left_headon(switch_1)/center_left_headon(switch_1)_right_detailed.csv";
+    private final String CLH_P2_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/Test1/Test1 _left_detailed.csv";
+    private final String CLH_P2_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/Test1/Test1 _right_detailed.csv";
     
-    private final String PATH_TEST_LEFT = "/home/summer2018/paths/Goonballtesting/Goonballtesting_left_detailed.csv";
-    private final String PATH_TEST_RIGHT = "/home/summer2018/paths/Goonballtesting/Goonballtesting_right_detailed.csv";
+    private final String CLH_P3_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/3f/part3_left_detailed.csv";
+    private final String CLH_P3_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/3f/part3_right_detailed.csv";
+
+    private final String CLH_P4_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_left_detailed.csv";
+    private final String CLH_P4_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_right_detailed.csv";
     
-    private final String STRAIGHT_LEFT = "/home/summer2018/paths/straight/straight_left_detailed.csv";
-    private final String STRAIGHT_RIGHT = "/home/summer2018/paths/straight/straight_right_detailed.csv";
-    
-    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
-    private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_right_detailed.csv";
-    
-    private final String CENTER_LEFT_HEAD_ON_BACKUP_CUBES_LEFT = "";
-    private final String CENTER_LEFT_HEAD_ON_BACKUP_CUBES_RIGHT = "";
+    private final String CLH_P5_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5_left_detailed.csv";
+    private final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5_right_detailed.csv";
     //private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT_PART2 = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
     
     /**
@@ -85,28 +82,68 @@ public class AutonomousCommand extends BranchedCommandGroup
         
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
          
-        FollowPathCommand fpc1;
-        FollowPathCommand backupToCubes;
-        if (onLeft)
-        {
-             fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, 
-                     CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, false);
+        FollowPathCommand fpc1, fpc2, fpc3, fpc4, fpc5;
+        
+        fpc1 = setupPathFollowerArc(CLH_P1_LEFT, CLH_P1_RIGHT, false).zeroPigeonAtStart(true);
+        fpc2 = setupPathFollowerArc(CLH_P2_LEFT_REV, CLH_P2_RIGHT_REV, true).zeroPigeonAtStart(true);
+        fpc3 = setupPathFollowerArc(CLH_P3_LEFT, CLH_P3_RIGHT, false);
+        fpc4 = setupPathFollowerArc(CLH_P4_LEFT_REV, CLH_P4_RIGHT_REV, true);
+        fpc5 = setupPathFollowerArc(CLH_P5_LEFT, CLH_P5_RIGHT, false);
+       
+        CommandGroup firstCube = new CommandGroup();
+            firstCube.addParallel(fpc1);
+            CommandGroup raiseElevatorFirstCube = new CommandGroup();
+                raiseElevatorFirstCube.addSequential(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.9, fpc1.getTotalTime()));
+                raiseElevatorFirstCube.addSequential(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON));
+            firstCube.addParallel(raiseElevatorFirstCube);
+            CommandGroup outtakeFirstCube = new CommandGroup();
+                outtakeFirstCube.addSequential(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.1, fpc1.getTotalTime()));
+                outtakeFirstCube.addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+                        IntakeConstants.DECOMPRESS));
+                outtakeFirstCube.addSequential(new IntakeOuttakeTimedCommand(0.8, RobotMap.IntakeConstants.OUTTAKE_BOOL));
+            firstCube.addParallel(outtakeFirstCube);
+        addSequential(firstCube);
+        
+        CommandGroup intakeSecondCube = new CommandGroup();
+            CommandGroup pathGroupSecondCube = new CommandGroup();
+                pathGroupSecondCube.addSequential(fpc2);
+                pathGroupSecondCube.addSequential(fpc3);
+            intakeSecondCube.addParallel(pathGroupSecondCube);
+            CommandGroup elevatorLowerSecondCube = new CommandGroup();
+                elevatorLowerSecondCube.addSequential(new PauseUntilPathBeginsCommand
+                        (fpc2, PauseType.START_OF_PATH, 0.7, fpc2.getTotalTime()));
+                elevatorLowerSecondCube.addSequential(new MoveElevatorMotionMagicCommand
+                        (0, RobotMap.ElevatorConstants.INTAKE_HEIGHT));
+                elevatorLowerSecondCube.addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY,
+                        IntakeConstants.DOWN));
+            intakeSecondCube.addParallel(elevatorLowerSecondCube);
+            CommandGroup intakeCube = new CommandGroup();
+                intakeSecondCube.addSequential(new PauseUntilPathBeginsCommand
+                        (fpc2, PauseType.END_OF_PATH, 0.2, fpc2.getTotalTime()));
+                intakeSecondCube.addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY,
+                        IntakeConstants.DOWN));
+                intakeSecondCube.addSequential(new IntakeOuttakeTimedCommand(1, IntakeConstants.INTAKE_BOOL));
+                intakeSecondCube.addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+                        IntakeConstants.COMPRESS));
+            intakeSecondCube.addParallel(intakeCube);
+        addSequential(intakeSecondCube);
+
+
+        /*addBranch(new Branch(Robot.dt)
+                .addCommand(fpc1)
+                .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON))
+                .addCommand(fpc2));*/
+                //.addCommand(fpc3)
+                //.addCommand(fpc4)
+                //.addCommand(fpc5));
              /*backupToCubes = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_BACKUP_CUBES_LEFT, 
                      CENTER_LEFT_HEAD_ON_BACKUP_CUBES_RIGHT, true);*/
              //CENTER_RIGHT_HEAD_ON_ONE_CUBE_LEFT, CENTER_RIGHT_HEAD_ON_ONE_CUBE_RIGHT, false);/*"/home/summer2018/paths/test_switch_auton/test_switch_auton_left_detailed.csv", 
                     //"/home/summer2018/paths/test_switch_auton/test_switch_auton_right_detailed.csv");*/ /**/
-        }
-        else
-        {
-            fpc1 = setupPathFollowerArc("/home/summer2018/paths/test_switch_auton/right_switch_auton_left_detailed.csv", 
-                    "/home/summer2018/paths/test_switch_auton/right_switch_auton_right_detailed.csv", true);
-            backupToCubes = null;
-        }
         
         // addCommand returns the branch itself, allowing for multiple addCommand methods in one line
-        addBranch(new Branch(Robot.dt)
-                .addCommand(fpc1));
-        addBranch(new Branch(Robot.el)
+
+        /*addBranch(new Branch(Robot.el)
                 .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.7, fpc1.getTotalTime()))
                 .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON)));
                 //.addCommand(backupToCubes));
@@ -117,7 +154,7 @@ public class AutonomousCommand extends BranchedCommandGroup
                 /*.addCommand(new PauseUntilPathBeginsCommand(backupToCubes, PauseType.END_OF_PATH, 0, fpc1.getTotalTime()))
                 .addCommand(new IntakeOuttakeTimedCommand(2, RobotMap.IntakeConstants.INTAKE_BOOL)));*/
         
-       System.out.println("TOTAL TIME AUTON: " + fpc1.getTotalTime());
+       //System.out.println("TOTAL TIME AUTON: " + fpc1.getTotalTime());
         
         /*addBranch(new Branch(Robot.el)
                 .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 1.1))
