@@ -140,15 +140,13 @@ public class AutonomousCommand extends CommandGroup
             CommandGroup outtakeSecondCube = new CommandGroup();
                 outtakeSecondCube.addSequential(
                         new PauseUntilPathBeginsCommand(fpc5, PauseType.END_OF_PATH, 0.8, fpc5.getTotalTime()));
-         
-            
-        addSequential(outtakeSecondCube);
+         //addSequential(scoreSecondCube);
         
         CommandGroup intakeThirdCube = new CommandGroup();
             CommandGroup pathGroupIntakeThirdCube = new CommandGroup();
             pathGroupIntakeThirdCube.addParallel(fpc6);
             pathGroupIntakeThirdCube.addParallel(fpc7);
-        addSequential(intakeThirdCube);
+        //addSequential(intakeThirdCube);
         
 
 
