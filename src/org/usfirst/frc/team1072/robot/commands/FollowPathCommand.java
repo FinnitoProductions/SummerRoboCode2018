@@ -103,9 +103,13 @@ public class FollowPathCommand extends Command
         totalTime = newTotalTime;
     }
     
+    /**
+     * 
+     * @return the total time of the path in seconds
+     */
     public double getTotalTime()
     {
-        return totalTime / 1000;
+        return totalTime;
     }
     
     /**
@@ -181,7 +185,6 @@ public class FollowPathCommand extends Command
      */
     public void execute()
     {
-        //System.out.println("EXECUTING FPC");
         SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("Right Talon Setpoint", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
         if (getControllerStatus(Robot.dt.getRightTalon()) != null)

@@ -104,13 +104,14 @@ public class AutonomousCommand extends BranchedCommandGroup
         }
         
         // addCommand returns the branch itself, allowing for multiple addCommand methods in one line
-        addBranch(new Branch(0)
+        addBranch(new Branch(Robot.dt)
                 .addCommand(fpc1));
-        addBranch(new Branch(1)
-                .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.START_OF_PATH, 1.1))
+        addBranch(new Branch(Robot.el)
+                .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.7, fpc1.getTotalTime()))
                 .addCommand(new MoveElevatorMotionMagicCommand(0, ElevatorConstants.SWITCH_HEIGHT_AUTON)));
                 //.addCommand(backupToCubes));
-       
+        
+       System.out.println("TOTAL TIME AUTON: " + fpc1.getTotalTime());
         
         /*addBranch(new Branch(Robot.el)
                 .addCommand(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 1.1))

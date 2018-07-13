@@ -17,10 +17,11 @@ public class PauseUntilPathBeginsCommand extends Command
     private PauseType pauseType;
     private boolean hasInitializedStartTime;
     private boolean hasInitializedModifiedDelay;
+    private double totalTime;
     
     public enum PauseType
     {
-        START_OF_PATH, END_OF_PATH
+        START_OF_PATH, END_OF_PATH, NO_PAUSE
     }
     public PauseUntilPathBeginsCommand(FollowPathCommand fpc)
     {
@@ -28,7 +29,7 @@ public class PauseUntilPathBeginsCommand extends Command
         startTime = Double.MAX_VALUE;
         delay = 0;
         modifiedDelay = 0;
-        pauseType = PauseType.START_OF_PATH;
+        pauseType = PauseType.NO_PAUSE;
         hasInitializedStartTime = false;
         hasInitializedModifiedDelay = false;
     }
@@ -38,8 +39,9 @@ public class PauseUntilPathBeginsCommand extends Command
      * @param fpc the path to be followed
      * 
      * @param delay the time in seconds to wait either from the beginning or end of the path
+     * @param totalTime the total time for the path to occur (in ms)
      */
-    public PauseUntilPathBeginsCommand(FollowPathCommand fpc, PauseType pauseType, double delay)
+    public PauseUntilPathBeginsCommand(FollowPathCommand fpc, PauseType pauseType, double delay, double totalTime)
     {
         this.fpc = fpc;
         this.pauseType = pauseType;
@@ -49,10 +51,13 @@ public class PauseUntilPathBeginsCommand extends Command
             hasInitializedModifiedDelay = false;
         }
         else
+        {
             modifiedDelay = delay;
+        }
         this.delay = delay;
         startTime = Double.MAX_VALUE;
         hasInitializedStartTime = false;
+        this.totalTime = totalTime / 1000;
     }
     
     public void execute()
@@ -62,8 +67,8 @@ public class PauseUntilPathBeginsCommand extends Command
             if (!hasInitializedModifiedDelay && pauseType == PauseType.END_OF_PATH)
             {
                 hasInitializedModifiedDelay = true;
-                modifiedDelay = fpc.getTotalTime()/1000 - delay;
-                System.out.println("INIT MODDED DELAY");
+                modifiedDelay = totalTime - delay;
+                System.out.println(modifiedDelay);
             }
 
             if (!hasInitializedStartTime && fpc.isSetupComplete())
@@ -78,9 +83,6 @@ public class PauseUntilPathBeginsCommand extends Command
     @Override
     public boolean isFinished()
     {
-        System.out.println("NULL: " + fpc == null);
-        System.out.println("PATH FINISHED? " + fpc.getFinished());
-        System.out.println("START TIME? " + startTime);
         return fpc != null && fpc.isSetupComplete() && Timer.getFPGATimestamp() - startTime >= modifiedDelay;
     }
 }
