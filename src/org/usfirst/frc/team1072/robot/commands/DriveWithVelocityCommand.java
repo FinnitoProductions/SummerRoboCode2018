@@ -10,7 +10,6 @@ import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Commands the drivetrain to drive with a given velocity. Vel PID

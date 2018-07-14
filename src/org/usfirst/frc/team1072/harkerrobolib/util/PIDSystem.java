@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1072.harkerrobolib.util;
 
+import edu.wpi.first.wpilibj.PIDController;
+
 /**
  * A PID Feedback Loop System. This should be integrated with a {@link PIDSystemCommand}
  * for continuous feedback. This should not be confused with the WPILibJ {@link PIDController}

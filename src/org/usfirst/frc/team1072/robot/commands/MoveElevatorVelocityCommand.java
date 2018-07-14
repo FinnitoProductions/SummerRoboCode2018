@@ -9,7 +9,6 @@ import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Represents a command to continually move the elevator given a velocity.

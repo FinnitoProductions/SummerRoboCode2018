@@ -7,52 +7,20 @@
 
 package org.usfirst.frc.team1072.robot;
 
-import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.commands.AutonomousCommand;
-//import org.harker.robotics.harkerrobolib.*;
-//import org.harker.robotics.harkerrobolib.wrappers.GamepadWrapper;
-import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
-//import org.usfirst.frc.team1072.robot.commands.ExampleCommand;
-import org.usfirst.frc.team1072.robot.commands.IntakeOuttakeCubeCommand;
-import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
-import org.usfirst.frc.team1072.robot.commands.MoveElevatorPositionCommand;
-import org.usfirst.frc.team1072.robot.commands.MoveElevatorVelocityCommand;
-import org.usfirst.frc.team1072.robot.commands.SetCompressorCommand;
-import org.usfirst.frc.team1072.robot.commands.SetSolenoidCommand;
-import org.usfirst.frc.team1072.robot.commands.ToggleCompressorCommand;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
-import org.usfirst.frc.team1072.robot.subsystems.Gamepad;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
-import org.usfirst.frc.team1072.util.Speed;
-import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
 
-import com.ctre.phoenix.motion.TrajectoryPoint;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.sensors.PigeonIMU;
-import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import jaci.pathfinder.Pathfinder;
-import jaci.pathfinder.Trajectory;
 
 /**
  * Represents the central code for the robot.

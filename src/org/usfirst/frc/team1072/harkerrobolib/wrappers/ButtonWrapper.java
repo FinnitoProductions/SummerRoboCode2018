@@ -1,8 +1,9 @@
 package org.usfirst.frc.team1072.harkerrobolib.wrappers;
 
+import org.usfirst.frc.team1072.harkerrobolib.commands.CancelCommand;
+
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc.team1072.harkerrobolib.commands.CancelCommand;
 
 
 /**

@@ -3,8 +3,6 @@
  */
 package org.usfirst.frc.team1072.util;
 
-import org.usfirst.frc.team1072.util.Position.PositionUnit;
-
 /**
  * 
  * @author Finn Frankis
@@ -14,7 +12,6 @@ public class Time
 {
     private TimeUnit unit;
     private double value;
-    private double wheelDiameter;
 
     /**
      * Represents the various possible units for a time.

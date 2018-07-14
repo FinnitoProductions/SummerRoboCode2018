@@ -1,47 +1,30 @@
 package org.usfirst.frc.team1072.robot.commands;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
-import org.usfirst.frc.team1072.util.Angle;
 import org.usfirst.frc.team1072.util.ConversionFactors;
-import org.usfirst.frc.team1072.util.Angle.AngleUnit;
-import org.usfirst.frc.team1072.util.Position;
-import org.usfirst.frc.team1072.util.Position.PositionUnit;
-import org.usfirst.frc.team1072.util.Speed;
-import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
-import org.usfirst.frc.team1072.util.Time;
-import org.usfirst.frc.team1072.util.Time.TimeUnit;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.IMotorController;
-import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Segment;
@@ -264,7 +247,7 @@ public class FollowPathCommand extends Command
 
                 controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                 //System.out.println("Buffer Count: " + status.btmBufferCnt);
-                boolean isFinished = status.btmBufferCnt == 0;    
+                boolean isFinished = status.isLast == true;
                 
                 if (isFinished) 
                 {

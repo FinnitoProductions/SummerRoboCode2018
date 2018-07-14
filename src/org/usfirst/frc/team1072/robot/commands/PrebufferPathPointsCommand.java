@@ -1,9 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.usfirst.frc.team1072.robot.Robot;
 
@@ -13,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import jaci.pathfinder.Trajectory;
 
 /**
- * 
+ * Prebuffers the points in a path to improve autonomous speed.
  * @author Finn Frankis
  * @version Jul 13, 2018
  */
@@ -23,6 +20,10 @@ public class PrebufferPathPointsCommand extends Command
     private HashMap<IMotorController, Trajectory> masterControllers;
     private boolean isFinished;
     
+    /**
+     * Constructs a new PrebufferPathPointsCommand.
+     * @param fpc the path to be buffered
+     */
     public PrebufferPathPointsCommand(FollowPathCommand fpc)
     {
         masterControllers = new HashMap<IMotorController, Trajectory>();
@@ -33,7 +34,9 @@ public class PrebufferPathPointsCommand extends Command
         }
     }
     
-    
+    /**
+     * Executes the command by pushing points to the RoboRio buffer.
+     */
     public void execute()
     {
         for (IMotorController imc : masterControllers.keySet())
@@ -43,7 +46,8 @@ public class PrebufferPathPointsCommand extends Command
         isFinished = true;
     }
     /**
-    * @return
+     * Determines whether the command has finished.
+    *  @return true if all the points have been pushed to the RoboRio buffer
     */
     @Override
     protected boolean isFinished()

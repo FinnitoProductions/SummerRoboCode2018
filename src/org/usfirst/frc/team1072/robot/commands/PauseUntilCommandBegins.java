@@ -1,7 +1,5 @@
 package org.usfirst.frc.team1072.robot.commands;
 
-import org.usfirst.frc.team1072.robot.commands.PauseUntilPathBeginsCommand.PauseType;
-
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
