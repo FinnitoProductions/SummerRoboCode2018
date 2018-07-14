@@ -12,6 +12,7 @@ import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
 import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -522,6 +523,14 @@ public class Drivetrain extends Subsystem
     {
         getPigeon().setYaw(0, RobotMap.TIMEOUT);
         getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
+    }
+    
+    public void setBothSensors(FeedbackDevice fd, int pidLoop)
+    {
+        getLeftTalon().configSelectedFeedbackSensor(fd, 
+                    pidLoop, RobotMap.TIMEOUT);
+        getRightTalon().configSelectedFeedbackSensor(fd, 
+                    pidLoop, RobotMap.TIMEOUT);
     }
 
 }

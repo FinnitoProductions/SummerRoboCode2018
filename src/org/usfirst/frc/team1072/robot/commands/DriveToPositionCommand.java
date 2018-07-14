@@ -109,9 +109,9 @@ public class DriveToPositionCommand extends Command
      */
     protected boolean isFinished() 
     {
-        if (hasInitialized)
+        /*if (hasInitialized)
             return Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) < RobotMap.MOTION_PROFILE_END_ERROR
-                    && Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) < RobotMap.MOTION_PROFILE_END_ERROR;
+                    && Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) < RobotMap.MOTION_PROFILE_END_ERROR;*/
         return false;
     }
     
