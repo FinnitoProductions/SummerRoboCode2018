@@ -151,6 +151,32 @@ public class Drivetrain extends Subsystem
 
     }
     
+    /**
+     * Sets both talons to a given value.
+     * @param cm the ControlMode to which both talons will be set (like PercentOutput, Velocity, Position, or Disabled)
+     * @param value the value to which both talons will be set
+     */
+    public void setBoth (ControlMode cm, double value)
+    {
+        setLeft(cm, value);
+        setRight(cm, value);
+    }
+    
+    public void setLeft (ControlMode cm, double value)
+    {
+        Robot.dt.getLeftTalon().set(cm, value);
+    }
+    
+    public void setRight (ControlMode cm, double value)
+    {
+        Robot.dt.getRightTalon().set(cm, value);
+    }
+    
+    public void setBothSensorPositions (int value, int pidLoop)
+    {
+        getLeftTalon().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
+        getRightTalon().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
+    }
     public void clearTrajectoryPoints()
     {
         Robot.dt.getLeftTalon().clearMotionProfileTrajectories();

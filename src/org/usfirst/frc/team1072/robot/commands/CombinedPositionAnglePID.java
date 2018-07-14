@@ -12,19 +12,21 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * 
+ * Combines position and angle for a smoother PID autonomous.
  * @author Finn Frankis
  * @version Jul 14, 2018
  */
 public class CombinedPositionAnglePID extends Command
 {
     private double position;
+    private double angle;
     private double numExecutes;
     private double maxExecutes = 3;
     
-    public CombinedPositionAnglePID (double position)
+    public CombinedPositionAnglePID (double position, double angle)
     {
         this.position = position;
+        this.angle = angle;
     }
     
     public void initialize()
@@ -42,8 +44,9 @@ public class CombinedPositionAnglePID extends Command
        
         //Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
+        
         Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
         
         numExecutes = 0;
     }
@@ -59,8 +62,9 @@ public class CombinedPositionAnglePID extends Command
             numExecutes = -1;
         }
         
-        Robot.dt.getLeftTalon().set(ControlMode.Position, position);
-        Robot.dt.getRightTalon().set(ControlMode.Position, position);
+        Robot.dt.setBoth(ControlMode.Position, position);
+        
+        Robot.dt.setBoth(ControlMode.Position, value);
         
         SmartDashboard.putNumber("PRIMARY ERROR RIGHT", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("PRIMARY ERROR LEFT", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
@@ -74,7 +78,7 @@ public class CombinedPositionAnglePID extends Command
     @Override
     protected boolean isFinished()
     {
-        if (numExecutes == -1)
+        /*if (numExecutes == -1)
         {
             boolean isFinished = Math.abs(Robot.dt.getLeftTalon().
                     getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR
@@ -86,7 +90,7 @@ public class CombinedPositionAnglePID extends Command
                 Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
             }
             return isFinished;
-        }
+        }*/
         return false;
     }
     
