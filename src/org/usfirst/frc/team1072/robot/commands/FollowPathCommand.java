@@ -147,9 +147,6 @@ public class FollowPathCommand extends Command
             System.out.println("CONFIGURING TALONS " + Robot.getCurrentTimeMs());
             Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
             
-
-            
-            
             Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
             Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
             
@@ -301,7 +298,7 @@ public class FollowPathCommand extends Command
      * @param controller the controller onto which the points should be loaded
      * @throws InterruptedException 
      */
-    private void loadTrajectoryToTalon(Trajectory t, IMotorController controller)
+    public void loadTrajectoryToTalon(Trajectory t, IMotorController controller)
     {
         if (t != null)
         {
@@ -443,7 +440,7 @@ public class FollowPathCommand extends Command
      * @param controller the controller for which the status will be retrieved
      * @return the trajectory of this controller
      */
-    private Trajectory getControllerTrajectory (IMotorController controller)
+    public Trajectory getControllerTrajectory (IMotorController controller)
     {
         return (Trajectory) controllers.get(controller)[TRAJ_INDEX];
     }

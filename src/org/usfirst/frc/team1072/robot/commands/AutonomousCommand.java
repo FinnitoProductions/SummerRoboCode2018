@@ -122,7 +122,8 @@ public class AutonomousCommand extends CommandGroup
                         IntakeConstants.DOWN));
             getSecondCube.addParallel(elevatorLowerSecondCube);
             CommandGroup intakeSecondCube = new CommandGroup();
-                getSecondCube.addSequential(new PauseUntilCommandBegins(fpc3, 1));
+                getSecondCube.addSequential(
+                        new PauseUntilPathBeginsCommand(fpc3, PauseType.START_OF_PATH, 0, fpc3.getTotalTime()));
                 CommandGroup secondCubePneumatics = new CommandGroup();
                     secondCubePneumatics.addParallel(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY,
                             IntakeConstants.DOWN));
