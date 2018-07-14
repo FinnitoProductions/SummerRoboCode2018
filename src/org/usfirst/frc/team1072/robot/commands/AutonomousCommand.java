@@ -89,9 +89,11 @@ public class AutonomousCommand extends CommandGroup
         
         CommandGroup firstCube = new CommandGroup();
             firstCube.addParallel(initSubsystems);
-            firstCube.addParallel(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-            firstCube.addParallel(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
-            firstCube.addParallel(fpc1);
+            CommandGroup pathPneumaticsFirstCube = new CommandGroup();
+                pathPneumaticsFirstCube.addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+                pathPneumaticsFirstCube.addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+                pathPneumaticsFirstCube.addSequential(fpc1);
+            firstCube.addParallel(pathPneumaticsFirstCube);
             CommandGroup raiseElevatorFirstCube = new CommandGroup();
                 raiseElevatorFirstCube.addSequential(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.9, fpc1.getTotalTime()));
                 raiseElevatorFirstCube.addSequential(new MoveElevatorMotionMagicCommand(ElevatorConstants.SWITCH_HEIGHT_AUTON));
