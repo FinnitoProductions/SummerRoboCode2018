@@ -187,7 +187,7 @@ public class RobotMap {
         public static double POS_KI = 0.0001;
         public static double POS_KD = 18;
         
-        public static int POS_ALLOWABLE_ERROR = 75;
+        public static int POS_ALLOWABLE_ERROR = 254;
         public static int FORWARD_SOFT = 34500;
         public static int REVERSE_SOFT = 2000;
         public static double RAMP_RATE = 0.75;
@@ -198,8 +198,8 @@ public class RobotMap {
         public static double VEL_KI = 0.0001;
         public static double VEL_KD = 14;
         
-        public static int VEL_ACCEL =  5000; // 9000
-        public static int VEL_VEL = 1500; //2600
+        public static int VEL_ACCEL = 9000 / 2;
+        public static int VEL_VEL = 2600 / 2;
         public static int VEL_ALLOWABLE_ERROR = 100;
         
         public static int INTAKE_HEIGHT = 1000;
