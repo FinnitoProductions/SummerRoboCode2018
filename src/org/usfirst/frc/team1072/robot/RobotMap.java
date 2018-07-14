@@ -263,10 +263,10 @@ public class RobotMap {
         public static double MOT_PROF_KI = 0;//.001;
         public static double MOT_PROF_KD = 7;//75;
         
-        public static double TURN_KP = 1.1; // 1.3
-        public static double TURN_KI = 0;//.001;
-        public static double TURN_KD = 7;//75;
-        public static int TURN_IZONE = 200;//75;
+        public static double TURN_KP = 1.3;
+        public static double TURN_KI = .001;
+        public static double TURN_KD = 75;
+        public static int TURN_IZONE = 1;
         
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset

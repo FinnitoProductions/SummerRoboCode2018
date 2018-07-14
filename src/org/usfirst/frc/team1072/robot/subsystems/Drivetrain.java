@@ -371,6 +371,7 @@ public class Drivetrain extends Subsystem
     
     public void configureAngleClosedLoop()
     {
+        zeroPigeon();
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
         getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KP, RobotMap.TIMEOUT);
@@ -391,6 +392,7 @@ public class Drivetrain extends Subsystem
      */
     public void configureMotionProfileAngleClosedLoop()
     {
+        zeroPigeon();
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
         getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KP, RobotMap.TIMEOUT);
@@ -579,5 +581,7 @@ public class Drivetrain extends Subsystem
         getRightTalon().configSelectedFeedbackSensor(fd, 
                     pidLoop, RobotMap.TIMEOUT);
     }
+    
+    
 
 }

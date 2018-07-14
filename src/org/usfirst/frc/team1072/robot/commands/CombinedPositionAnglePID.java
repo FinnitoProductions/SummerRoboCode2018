@@ -5,6 +5,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Angle;
+import org.usfirst.frc.team1072.util.ConversionFactors;
 import org.usfirst.frc.team1072.util.Angle.AngleUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -84,8 +85,10 @@ public class CombinedPositionAnglePID extends Command
         Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
         Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
         
-        Robot.dt.setLeft(ControlMode.Position, -1 * new Angle(AngleUnit.DEGREES, 90).getPigeonUnits());
-        Robot.dt.setRight(ControlMode.Position, new Angle(AngleUnit.DEGREES, 90).getPigeonUnits());
+        Robot.dt.setLeft(ControlMode.Position, -1 * 90 * 
+                ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
+        Robot.dt.setRight(ControlMode.Position, 90 * 
+                ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
         
         SmartDashboard.putNumber("PRIMARY ERROR RIGHT", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("PRIMARY ERROR LEFT", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
