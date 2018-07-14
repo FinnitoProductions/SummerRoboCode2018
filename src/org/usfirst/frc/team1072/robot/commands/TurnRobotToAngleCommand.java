@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnRobotToAngleCommand extends Command
 {
@@ -26,7 +27,7 @@ public class TurnRobotToAngleCommand extends Command
     }
     /**
      * 
-     * @param angle the angle to which the robot should turn (in degrees)
+     * @param angle the angle to which the robot should turn (in degrees).
      */
     public TurnRobotToAngleCommand(double angle)
     {
@@ -64,41 +65,23 @@ public class TurnRobotToAngleCommand extends Command
     {
         Robot.dt.getLeftTalon().setSensorPhase(false);
         Robot.dt.getRightTalon().setSensorPhase(false);
-        if (angle == -1)
-        {
-            OI oi = new OI();
-    
-            double joystickRight = oi.getGamepad().getLeftX() * ConversionFactors.PIGEON_UNITS_PER_ROTATION / 2;
-            if (Math.abs(oi.getGamepad().getLeftX()) < 0.1)
-                joystickRight = 0;
-            Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
-            Robot.dt.getLeftTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
-            Robot.dt.getRightTalon().set(ControlMode.Position, joystickRight);
-            Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * joystickRight);
-            if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
-                Robot.dt.getRightTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
-                Robot.dt.getLeftTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-           
-        }
-        else
-        {
-            if (Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
-                Robot.dt.getRightTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            if (Math.abs(Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) > PigeonConstants.INTEGRAL_BAND)   
-                Robot.dt.getLeftTalon().setIntegralAccumulator(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            System.out.println("CLOSED LOOPING");
-            Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * angle);
-            Robot.dt.getRightTalon().set(ControlMode.Position, angle);
-        }
+
+        Robot.dt.getLeftTalon().set(ControlMode.Position, -1 * angle);
+        Robot.dt.getRightTalon().set(ControlMode.Position, angle);
+        
+        SmartDashboard.putNumber("PRIMARY ERROR RIGHT", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("PRIMARY ERROR LEFT", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        
         
 
     }
     @Override
     protected boolean isFinished()
     {
-        return false;
-        //return Robot.dt.getRightTalon().getClosedLoopError(arg0) < RobotMap.ANGLE_INTEGRAL_BAND;
+        return 
+                Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < PigeonConstants.ANGLE_ALLOWABLE_ERROR 
+                && Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < PigeonConstants.ANGLE_ALLOWABLE_ERROR;
+        //return 
     }
     
     @Override

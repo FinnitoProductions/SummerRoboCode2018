@@ -36,9 +36,13 @@ public class DriveWithVelocityCommand extends Command
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         
+        
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     
+        Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, 
+                DrivetrainConstants.RIGHT_TALON_PHASE);
+        
         Robot.dt.resetTalonCoefficients(DrivetrainConstants.VEL_PID);
     }
     /**

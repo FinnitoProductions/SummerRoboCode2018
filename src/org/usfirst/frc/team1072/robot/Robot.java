@@ -81,7 +81,7 @@ public class Robot extends TimedRobot
         startTime = Timer.getFPGATimestamp();
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
         m_autonomousCommand.start();
-        System.out.println("AUTON COMMAND STARTED" + 1000 * (Timer.getFPGATimestamp() - startTime));
+        System.out.println("AUTON COMMAND STARTED" + Robot.getCurrentTimeMs());
     }
 
     /**

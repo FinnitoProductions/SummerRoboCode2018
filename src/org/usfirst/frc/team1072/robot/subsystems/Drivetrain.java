@@ -9,6 +9,7 @@ import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
+import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.IMotorController;
@@ -61,9 +62,9 @@ public class Drivetrain extends Subsystem
      */
     public void initDefaultCommand()
     {
-        setDefaultCommand(new DriveWithVelocityCommand(OI.BLACK_XBOX_DEADBAND));
+        //setDefaultCommand(new DriveWithVelocityCommand(OI.BLACK_XBOX_DEADBAND));
         //setDefaultCommand(new DriveToPositionCommand(new Position(PositionUnit.FEET, 3.85, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));
-        //setDefaultCommand(new TurnRobotToAngleCommand());
+        setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
     /**
@@ -85,11 +86,6 @@ public class Drivetrain extends Subsystem
      */
     public void arcadeDrivePosition (double target)
     {
-        SmartDashboard.putNumber("LEFT POSITION", leftTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("RIGHT POSITION", rightTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        
-        SmartDashboard.putNumber("LEFT ERROR", leftTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("RIGHT RIGHT", rightTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         rightTalon.set(ControlMode.Position, target);
     }
     
@@ -100,6 +96,8 @@ public class Drivetrain extends Subsystem
      */
     public void arcadeDrivePosition (double leftTarget, double rightTarget)
     {        
+        SmartDashboard.putNumber("LEFT ERROR", leftTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("RIGHT ERROR", rightTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         leftTalon.set(ControlMode.Position, leftTarget);
         rightTalon.set(ControlMode.Position, rightTarget);
     }
@@ -138,14 +136,14 @@ public class Drivetrain extends Subsystem
 
 
         scaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
-
-        setTalonSensorPhase();
+        configureNominalPeakOutputs();
+        
         dtsetTalonFramePeriods();
         
-        configureVelocityClosedLoop();
+        //configureVelocityClosedLoop();
         configurePositionClosedLoop();
-        configureAngleClosedLoop();
-        configureMotionProfileClosedLoop();
+        //configureAngleClosedLoop();
+        //configureMotionProfileClosedLoop();
 
         dtSetCurrentLimit(DrivetrainConstants.PEAK_CURRENT_LIMIT, DrivetrainConstants.PEAK_TIME_MS,
                 DrivetrainConstants.CONTINUOUS_CURRENT_LIMIT);
@@ -258,10 +256,10 @@ public class Drivetrain extends Subsystem
     /**
      * Aligns the sensor phase of the encoders to match the motions of the motors.
      */
-    private void setTalonSensorPhase()
+    public void setTalonSensorPhase(boolean leftPhase, boolean rightPhase)
     {
-        getLeftTalon().setSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE);
-        getRightTalon().setSensorPhase(DrivetrainConstants.RIGHT_TALON_PHASE);
+        getLeftTalon().setSensorPhase(leftPhase);
+        getRightTalon().setSensorPhase(rightPhase);
     }
 
     /**
@@ -271,18 +269,6 @@ public class Drivetrain extends Subsystem
      */
     private void configureVelocityClosedLoop()
     {
-        getLeftTalon().configNominalOutputForward(DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configNominalOutputForward(DrivetrainConstants.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
-
-        getLeftTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
-
-        getLeftTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
-
-        getLeftTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
-
         getLeftTalon().config_kF(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KF_LEFT, RobotMap.TIMEOUT);
         getRightTalon().config_kF(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KF_RIGHT, RobotMap.TIMEOUT);
 
@@ -297,7 +283,20 @@ public class Drivetrain extends Subsystem
       
     }
 
+    private void configureNominalPeakOutputs()
+    {
+        getLeftTalon().configNominalOutputForward(DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configNominalOutputForward(DrivetrainConstants.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
+        getLeftTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+
+        getLeftTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+
+        getLeftTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+    }
     /**
      * Configures the drivetrain position closed loop.
      * 
@@ -345,8 +344,6 @@ public class Drivetrain extends Subsystem
     {
         zeroPigeon();
 
-
-        
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
         getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.KP, RobotMap.TIMEOUT);
@@ -388,7 +385,7 @@ public class Drivetrain extends Subsystem
     private void dtsetTalonFramePeriods()
     {
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, RobotMap.TIMEOUT);
-        //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
@@ -396,11 +393,11 @@ public class Drivetrain extends Subsystem
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, RobotMap.TIMEOUT);
+        getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, RobotMap.TIMEOUT);
         
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 10, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
         //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
        // getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
@@ -412,8 +409,8 @@ public class Drivetrain extends Subsystem
         //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.TIME_PER_TRAJECTORY_POINT_MS/2, RobotMap.TIMEOUT);
         //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, RobotMap.MAX_TALON_FRAME_PERIOD_MS/*5*/, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, RobotMap.TIMEOUT);
+        getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, RobotMap.TIMEOUT);
 
         
     }

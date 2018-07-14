@@ -5,9 +5,6 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
-import com.ctre.phoenix.motorcontrol.SensorTerm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -19,32 +16,43 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveToPositionCommand extends Command
 {
-    double leftPosition;
-    double rightPosition;
-    boolean isJoystick;
-    private boolean checkIsFinished;
+    private double leftPosition;
+    private double rightPosition;
+    private boolean isJoystick;
+    private boolean hasInitialized;
     private double numExecutes;
-    private double maxExecutes;
     
     /**
      * Initializes the command, requiring the drive train.
      */
     public DriveToPositionCommand() { requires(Robot.dt); isJoystick = true; leftPosition = 0; rightPosition =0;}
     
-    public DriveToPositionCommand (double destPosition, int maxExecutes)
+    /**
+     * Constructs a new DriveToPositionCommand given an encoder position.
+     * @param currentLeftPosition the intended left position 
+     * @param currentRightPosition the intended right position 
+     */
+    public DriveToPositionCommand (double destPosition)
     {
         requires(Robot.dt);
         isJoystick = false;
         leftPosition = destPosition;
         rightPosition = destPosition;
-        this.maxExecutes = maxExecutes;
+        hasInitialized = false;
     }
+    
+    /**
+     * Constructs a new DriveToPositionCommand given left and right encoder positions.
+     * @param currentLeftPosition the intended left position 
+     * @param currentRightPosition the intended right position 
+     */
     public DriveToPositionCommand(double currentLeftPosition, double currentRightPosition)
     {
         requires(Robot.dt);
         this.leftPosition = currentLeftPosition;
         this.rightPosition = currentRightPosition;
         isJoystick = false;
+        hasInitialized = false;
     }
     
     @Override
@@ -53,35 +61,29 @@ public class DriveToPositionCommand extends Command
      */
     public void initialize()
     {
-        Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
-
+        Robot.dt.getLeftTalon().selectProfileSlot(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
-        
-        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
-                RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
-        
-        Robot.dt.getRightTalon().configSelectedFeedbackSensor(
-                FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        
-        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
-        
+
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(
                 FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-
-
-        Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSelectedFeedbackSensor(
+                FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
-        Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
-                RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
+        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(
+                FeedbackDevice.None, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSelectedFeedbackSensor(
+                FeedbackDevice.None, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
         
+        Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, 
+                DrivetrainConstants.RIGHT_TALON_PHASE);
         Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
-        System.out.println("INITIALIZING");
-        numExecutes = 0;
-        checkIsFinished = false;
+        Robot.dt.resetTalonCoefficients(DrivetrainConstants.POS_PID);
+        Robot.dt.arcadeDrivePosition(leftPosition, rightPosition);
+        hasInitialized = false;
+        System.out.println("INITIALIZING POSITION COMMAND");
+
     }
     /**
      * Executes the command, moving the robot to a given position.
@@ -90,14 +92,14 @@ public class DriveToPositionCommand extends Command
     
     public void execute() 
     { 
-        if (numExecutes >= 0 && numExecutes < maxExecutes)
+        if (numExecutes >= 0 && numExecutes < 3)
             numExecutes++;
-        if (numExecutes >= maxExecutes)
+        else
         {
-            checkIsFinished = true;
+            hasInitialized = true;
             numExecutes = -1;
         }
-        Robot.dt.arcadeDrivePosition(rightPosition);
+        Robot.dt.arcadeDrivePosition(leftPosition, rightPosition);
     }
     
     /**
@@ -107,14 +109,10 @@ public class DriveToPositionCommand extends Command
      */
     protected boolean isFinished() 
     {
-        if (checkIsFinished)
-        {
+        if (hasInitialized)
             return Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) < RobotMap.MOTION_PROFILE_END_ERROR
                     && Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) < RobotMap.MOTION_PROFILE_END_ERROR;
-        }
-            
         return false;
-
     }
     
 }

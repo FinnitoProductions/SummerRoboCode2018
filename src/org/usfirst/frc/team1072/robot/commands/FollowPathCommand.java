@@ -119,8 +119,8 @@ public class FollowPathCommand extends Command
         notif.startPeriodic(period);
         System.out.println("NOTIFIER STARTED " + Robot.getCurrentTimeMs());
         
-        Robot.dt.getLeftTalon().setSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE);
-        Robot.dt.getRightTalon().setSensorPhase(DrivetrainConstants.RIGHT_TALON_PHASE);
+        Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, 
+                DrivetrainConstants.RIGHT_TALON_PHASE);
         
         Robot.dt.configureMotionProfileClosedLoop();
         if (outerPort == -1) // no auxiliary/arc
@@ -243,7 +243,7 @@ public class FollowPathCommand extends Command
                 
                 IMotorController controller = Robot.dt.getRightTalon();
                 MotionProfileStatus status = new MotionProfileStatus();
-                controller.getMotionProfileStatus(status);
+                controller.getMotionProfileStatus(status); 
 
                 controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                 //System.out.println("Buffer Count: " + status.btmBufferCnt);

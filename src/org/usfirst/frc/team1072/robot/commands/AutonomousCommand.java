@@ -6,9 +6,12 @@ import java.io.FileNotFoundException;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.AutonomousPaths;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.PauseUntilPathBeginsCommand.PauseType;
+import org.usfirst.frc.team1072.util.Position;
+import org.usfirst.frc.team1072.util.Position.PositionUnit;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -37,38 +40,42 @@ public class AutonomousCommand extends CommandGroup
     {
         for (Subsystem s : subsystems)
             requires(s);
-        System.out.println("ALL SUBSYSTEMS INITIALIZED " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
+        System.out.println("ALL SUBSYSTEMS INITIALIZED " + Robot.getCurrentTimeMs());
         /*addSequential(setupPathFollower("/home/summer2018/paths/test_5ft/test_5ft_left_detailed.csv", 
                 "/home/summer2018/paths/test_5ft/test_5ft_right_detailed.csv"));*/
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
-        
-        switchAuton(true);
+        initSubsystems();
+
+        addSequential(new CombinedPositionAnglePID(
+                new Position(PositionUnit.FEET, 3.85, 
+                DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));
+        //addSequential(new TurnRobotToAngleCommand(90));
+        //switchAuton(true);
 
     }
 
+    private void initSubsystems()
+    {
+        CommandGroup initSubsystems = new CommandGroup();
+            initSubsystems.addParallel(new InitializeDrivetrainCommand());
+            //initSubsystems.addParallel(new InitializeElevatorCommand());
+            //initSubsystems.addParallel(new InitializeIntakeCommand());
+        addSequential(initSubsystems);
+    }
     /**
      * The command to be performed for a one-cube switch autonomous.
      * @param onLeft true if the switch is on the left; false otherwise
      */
     private void switchAuton (boolean onLeft)
     {
-        // sequential commands are run first, take complete precedence over parallel
-        //addParallel(new IntakeOuttakeTimedCommand(2, IntakeConstants.OUTTAKE_BOOL));
-        
-        //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-         
         FollowPathCommand fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
         
         fpc1 = setupPathFollowerArc(AutonomousPaths.CLH_P1_LEFT, AutonomousPaths.CLH_P1_RIGHT, false)
                 .zeroPigeonAtStart(true);
        
-        CommandGroup initSubsystems = new CommandGroup();
-            initSubsystems.addParallel(new InitializeDrivetrainCommand());
-            initSubsystems.addParallel(new InitializeElevatorCommand());
-            initSubsystems.addParallel(new InitializeIntakeCommand());
-        addSequential(initSubsystems);
+
         
         addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
         addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
