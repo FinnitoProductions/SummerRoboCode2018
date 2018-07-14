@@ -21,6 +21,7 @@ public class PrebufferPathPointsCommand extends Command
 {
     private FollowPathCommand fpc;
     private HashMap<IMotorController, Trajectory> masterControllers;
+    private boolean isFinished;
     
     public PrebufferPathPointsCommand(FollowPathCommand fpc)
     {
@@ -37,7 +38,7 @@ public class PrebufferPathPointsCommand extends Command
     {
         for (IMotorController imc : masterControllers.keySet())
             fpc.loadTrajectoryToTalon(masterControllers.get(imc), imc);
-        
+        isFinished = true;
     }
     /**
     * @return
@@ -45,7 +46,6 @@ public class PrebufferPathPointsCommand extends Command
     @Override
     protected boolean isFinished()
     {
-        // TODO Auto-generated method stub
-        return false;
+        return isFinished;
     }
 }

@@ -47,7 +47,7 @@ public class PauseUntilPathBeginsCommand extends Command
         this.pauseType = pauseType;
         if (pauseType == PauseType.END_OF_PATH)
         {
-            modifiedDelay = Double.MAX_VALUE;
+            modifiedDelay = 0;
             hasInitializedModifiedDelay = false;
         }
         else
@@ -55,7 +55,7 @@ public class PauseUntilPathBeginsCommand extends Command
             modifiedDelay = delay;
         }
         this.delay = delay;
-        startTime = Double.MAX_VALUE;
+        startTime = 0;
         hasInitializedStartTime = false;
         this.totalTime = totalTime / 1000;
     }
@@ -64,10 +64,11 @@ public class PauseUntilPathBeginsCommand extends Command
     {
         if (fpc != null)
         {
-            if (!hasInitializedModifiedDelay && pauseType == PauseType.END_OF_PATH)
+            if (!hasInitializedModifiedDelay)
             {
                 hasInitializedModifiedDelay = true;
-                modifiedDelay = totalTime - delay;
+                if (pauseType == PauseType.END_OF_PATH)
+                    modifiedDelay = totalTime - delay;
                 System.out.println(modifiedDelay);
             }
 
@@ -83,6 +84,10 @@ public class PauseUntilPathBeginsCommand extends Command
     @Override
     public boolean isFinished()
     {
-        return fpc != null && fpc.isSetupComplete() && Timer.getFPGATimestamp() - startTime >= modifiedDelay;
+        return fpc != null 
+                && hasInitializedModifiedDelay
+                && hasInitializedStartTime
+                && fpc.isSetupComplete() 
+                && Timer.getFPGATimestamp() - startTime >= modifiedDelay;
     }
 }
