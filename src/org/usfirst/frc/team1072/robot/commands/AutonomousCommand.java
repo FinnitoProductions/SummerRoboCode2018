@@ -84,7 +84,9 @@ public class AutonomousCommand extends CommandGroup
             initSubsystems.addParallel(new InitializeDrivetrainCommand());
             initSubsystems.addParallel(new InitializeElevatorCommand());
             initSubsystems.addParallel(new InitializeIntakeCommand());
-            
+        //addSequential(initSubsystems);
+        
+        
         CommandGroup firstCube = new CommandGroup();
             firstCube.addParallel(initSubsystems);
             firstCube.addParallel(fpc1);
@@ -100,12 +102,12 @@ public class AutonomousCommand extends CommandGroup
             firstCube.addParallel(outtakeFirstCube);
         addSequential(firstCube);
         
+            
         fpc2 = setupPathFollowerArc(AutonomousPaths.CLH_P2_LEFT_REV, AutonomousPaths.CLH_P2_RIGHT_REV, true)
                 .zeroPigeonAtStart(false);
         fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false); /*new DriveToPositionCommand(
                 new Position(PositionUnit.FEET, 3.85, 
                 DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(), 50);*/
-        
         CommandGroup getSecondCube = new CommandGroup();
             CommandGroup pathGroupSecondCube = new CommandGroup();
                 pathGroupSecondCube.addSequential(fpc2);
@@ -128,16 +130,16 @@ public class AutonomousCommand extends CommandGroup
                 getSecondCube.addSequential(new IntakeOuttakeTimedCommand(0.6, IntakeConstants.INTAKE_BOOL));
                 getSecondCube.addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.COMPRESS));
-            getSecondCube.addParallel(intakeSecondCube);
+           getSecondCube.addParallel(intakeSecondCube);
+         addSequential(getSecondCube);
         
-            addSequential(getSecondCube);
-        
+         
         fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
         fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
         CommandGroup scoreSecondCube = new CommandGroup();
             CommandGroup pathGroupOuttakeSecondCube = new CommandGroup();
                 pathGroupOuttakeSecondCube.addSequential(fpc4);
-                pathGroupOuttakeSecondCube.addSequential(fpc5);
+                //pathGroupOuttakeSecondCube.addSequential(fpc5);
             scoreSecondCube.addParallel(pathGroupOuttakeSecondCube);
             CommandGroup elevatorRaiseSecondCube = new CommandGroup();
                 elevatorRaiseSecondCube.addSequential(new PauseUntilPathBeginsCommand(fpc5, PauseType.END_OF_PATH, 
@@ -147,8 +149,8 @@ public class AutonomousCommand extends CommandGroup
             CommandGroup outtakeSecondCube = new CommandGroup();
                 outtakeSecondCube.addSequential(
                         new PauseUntilPathBeginsCommand(fpc5, PauseType.END_OF_PATH, 0.8, fpc5.getTotalTime()));
-         //addSequential(scoreSecondCube);
-        
+        addSequential(scoreSecondCube);
+
         fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
         fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
         
