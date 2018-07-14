@@ -37,7 +37,9 @@ public class PrebufferPathPointsCommand extends Command
     public void execute()
     {
         for (IMotorController imc : masterControllers.keySet())
+        {
             fpc.loadTrajectoryToTalon(masterControllers.get(imc), imc);
+        }
         isFinished = true;
     }
     /**
@@ -46,6 +48,9 @@ public class PrebufferPathPointsCommand extends Command
     @Override
     protected boolean isFinished()
     {
+        isFinished = true;
+        for (IMotorController imc : masterControllers.keySet())
+            isFinished = isFinished && fpc.getControllerTrajectoryLoaded(imc);
         return isFinished;
     }
 }

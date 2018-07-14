@@ -57,9 +57,10 @@ public class FollowPathCommand extends Command
     private ProcessBuffer p;
     private Notifier notif;
   
-    // store trajectory at index 0, status at index 1
+    // store trajectory at index 0, status at index 1, and whether the trajectory has been loaded at index 2
     private final int TRAJ_INDEX = 0;
     private final int STAT_INDEX = 1;
+    private static final int TRAJ_LOADED_INDEX = 2;
     private Map<IMotorController, Object[]> controllers;
     boolean pathReversed;
     
@@ -105,6 +106,7 @@ public class FollowPathCommand extends Command
         zeroAux = zeroPigeon;
         return this;
     }
+    
     public void setTotalTime (double newTotalTime)
     {
         totalTime = newTotalTime;
@@ -212,7 +214,10 @@ public class FollowPathCommand extends Command
                 IMotorController controller = Robot.dt.getRightTalon();
                 controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
                 System.out.println("TRAJECTORY LOADED " + Robot.getCurrentTimeMs());
-                loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
+                if (!getControllerTrajectoryLoaded(controller))
+                {
+                    loadTrajectoryToTalon(getControllerTrajectory(controller), controller);
+                }
                 
                 pathState = 1;
                 break;
@@ -308,64 +313,71 @@ public class FollowPathCommand extends Command
                 System.out.println("IS UNDERRUN");
             }
             
-            // clears existing trajectories
-            controller.clearMotionProfileTrajectories();
-            
-            controller.configMotionProfileTrajectoryPeriod(RobotMap.TIME_PER_TRAJECTORY_POINT_MS, RobotMap.TIMEOUT);
-            // constructs Talon-readable trajectory points out of each segment
-            Segment[] segs = t.segments;
-
-            System.out.println("STARTING LOAD TRAJECTORY " + Robot.getCurrentTimeMs());
-            double velocityAddFactor = DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT;
-
-            for (int i = 0; i < segs.length; i++)
+            if (!getControllerTrajectoryLoaded(controller))
             {
-                TrajectoryPoint tp = new TrajectoryPoint();
-                tp.position = segs[i].position * ConversionFactors.INCHES_PER_FOOT // convert to inches
-                        / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions
-                        * ConversionFactors.TICKS_PER_REV;; // convert revolutions to encoder units
-                //System.out.println()
-                tp.velocity = segs[i].velocity;// convert to ticks per 100ms
-                        // convert fps to encoder units
-
-
-                
-                tp.timeDur = TrajectoryDuration.valueOf(0); // convert to correct units
-                tp.profileSlotSelect0 = DrivetrainConstants.MOTION_PROFILE_PID;
-                
-                if (outerPort >= 0) 
+                controller.configMotionProfileTrajectoryPeriod(RobotMap.TIME_PER_TRAJECTORY_POINT_MS, RobotMap.TIMEOUT);
+                // constructs Talon-readable trajectory points out of each segment
+                Segment[] segs = t.segments;
+    
+                System.out.println("STARTING LOAD TRAJECTORY " + Robot.getCurrentTimeMs());
+                double velocityAddFactor = DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT;
+    
+                for (int i = 0; i < segs.length; i++)
                 {
-                    tp.profileSlotSelect1 = outerPort;
-                    tp.auxiliaryPos = segs[i].heading * ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.RADIANS_PER_ROTATION;
-                    tp.position = (tp.position + 
-                            (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].position * ConversionFactors.INCHES_PER_FOOT // convert to inches
-                            / (RobotMap.DrivetrainConstants.WHEELDIAMETER* Math.PI) // convert to revolutions
-                            * ConversionFactors.TICKS_PER_REV))/2;
-                    tp.velocity = (tp.velocity + (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].velocity)) / 2; // convert to ticks per 100ms)
-
-
+                    TrajectoryPoint tp = new TrajectoryPoint();
+                    tp.position = segs[i].position * ConversionFactors.INCHES_PER_FOOT // convert to inches
+                            / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions
+                            * ConversionFactors.TICKS_PER_REV;; // convert revolutions to encoder units
+                    //System.out.println()
+                    tp.velocity = segs[i].velocity;// convert to ticks per 100ms
+                            // convert fps to encoder units
+    
+    
+                    
+                    tp.timeDur = TrajectoryDuration.valueOf(0); // time to ADD to each point convert to correct units
+                    tp.profileSlotSelect0 = DrivetrainConstants.MOTION_PROFILE_PID;
+                    
+                    if (outerPort >= 0) 
+                    {
+                        tp.profileSlotSelect1 = outerPort;
+                        tp.auxiliaryPos = segs[i].heading * ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.RADIANS_PER_ROTATION;
+                        tp.position = (tp.position + 
+                                (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].position * ConversionFactors.INCHES_PER_FOOT // convert to inches
+                                / (RobotMap.DrivetrainConstants.WHEELDIAMETER* Math.PI) // convert to revolutions
+                                * ConversionFactors.TICKS_PER_REV))/2;
+                        tp.velocity = (tp.velocity + (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].velocity)) / 2; // convert to ticks per 100ms)
+    
+    
+                    }
+                    if (pathReversed)
+                    {
+                        tp.velocity += Math.max(0 ,velocityAddFactor * -1);
+                    }
+                    else
+                        tp.velocity += Math.max(0 ,velocityAddFactor);
+    
+                    //ramp down factor to add to velocity
+                    velocityAddFactor -= 
+                            DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT 
+                            * (RobotMap.TIME_PER_TRAJECTORY_POINT_MS / DrivetrainConstants.TIME_TO_OVERCOME_S_FRICTION_MS);
+                    
+                    //tp.headingDeg = new Angle(AngleUnit.RADIANS, segs[i].heading).getDegrees(); // convert radians to degrees
+                    tp.velocity = tp.velocity / 10.0 // convert to feet per 100 ms
+                    * ConversionFactors.INCHES_PER_FOOT // convert to inches per 100 ms
+                    / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions per 100ms
+                    * ConversionFactors.TICKS_PER_REV; 
+                    tp.zeroPos = false;
+    
+                    //System.out.println("AUXILIARY POSITION " + tp.auxiliaryPos);
+                    if (i == (segs.length-1))
+                        tp.isLastPoint = true;
+    
+                    controller.pushMotionProfileTrajectory(tp); // push point to talon
                 }
-                if (pathReversed)
-                {
-                    tp.velocity += Math.max(0 ,velocityAddFactor * -1);
-                }
-                else
-                    tp.velocity += Math.max(0 ,velocityAddFactor);
-
-                velocityAddFactor -= DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT * (RobotMap.TIME_PER_TRAJECTORY_POINT_MS / DrivetrainConstants.TIME_TO_OVERCOME_S_FRICTION_MS);
-                //tp.headingDeg = new Angle(AngleUnit.RADIANS, segs[i].heading).getDegrees(); // convert radians to degrees
-                tp.velocity = tp.velocity / 10.0 // convert to feet per 100 ms
-                * ConversionFactors.INCHES_PER_FOOT // convert to inches per 100 ms
-                / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions per 100ms
-                * ConversionFactors.TICKS_PER_REV; 
-                tp.zeroPos = false;
-
-                //System.out.println("AUXILIARY POSITION " + tp.auxiliaryPos);
-                if (i == (segs.length-1))
-                    tp.isLastPoint = true;
-
-                controller.pushMotionProfileTrajectory(tp); // push point to talon
+                setControllerTrajectoryLoaded(controller, true);
             }
+            else
+                System.out.println("The trajectory has already been loaded.");
         }
         else
         {
@@ -432,7 +444,7 @@ public class FollowPathCommand extends Command
      */
     private MotionProfileStatus getControllerStatus (IMotorController controller)
     {
-        return (MotionProfileStatus) controllers.get(controller)[1];//STAT_INDEX];
+        return (MotionProfileStatus) controllers.get(controller)[STAT_INDEX];
     }
     
     /**
@@ -443,6 +455,16 @@ public class FollowPathCommand extends Command
     public Trajectory getControllerTrajectory (IMotorController controller)
     {
         return (Trajectory) controllers.get(controller)[TRAJ_INDEX];
+    }
+    
+    public boolean getControllerTrajectoryLoaded (IMotorController controller)
+    {
+        return (boolean) controllers.get(controller)[TRAJ_LOADED_INDEX];
+    }
+    
+    public void setControllerTrajectoryLoaded (IMotorController controller, boolean value)
+    {
+        controllers.get(controller)[TRAJ_LOADED_INDEX] = value;
     }
     
     /**
