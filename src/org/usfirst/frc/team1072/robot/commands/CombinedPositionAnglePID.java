@@ -3,6 +3,9 @@ package org.usfirst.frc.team1072.robot.commands;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
+import org.usfirst.frc.team1072.util.Angle;
+import org.usfirst.frc.team1072.util.Angle.AngleUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -23,15 +26,36 @@ public class CombinedPositionAnglePID extends Command
     private double numExecutes;
     private double maxExecutes = 3;
     
+    /**
+     * Constructs a new CombinedPositionAnglePID.
+     * @param position the final position for the robot
+     * @param angle the final angle for the robot in degrees
+     */
     public CombinedPositionAnglePID (double position, double angle)
     {
         this.position = position;
-        this.angle = angle;
+        this.angle = new Angle(AngleUnit.DEGREES, angle).getPigeonUnits();
     }
     
     public void initialize()
     {
+        initAngle();
+        Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
+        
+        numExecutes = 0;
+    }
+    
+    private void initPosition()
+    {
         Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        
+        Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
+    }
+    private void initAngle()
+    {
+        Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
+        
+        Robot.dt.configureAngleClosedLoop();
         
         Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
@@ -41,16 +65,9 @@ public class CombinedPositionAnglePID extends Command
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_SLOT_0, 
                 RobotMap.TIMEOUT);
-       
-        //Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
+        
         Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
-        
-        Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
-        
-        numExecutes = 0;
     }
-    
 
     
     public void execute()
@@ -62,9 +79,13 @@ public class CombinedPositionAnglePID extends Command
             numExecutes = -1;
         }
         
-        Robot.dt.setBoth(ControlMode.Position, position);
+        //Robot.dt.setBoth(ControlMode.Position, position);
         
-        Robot.dt.setBoth(ControlMode.Position, value);
+        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
+        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
+        
+        Robot.dt.setLeft(ControlMode.Position, -1 * new Angle(AngleUnit.DEGREES, 90).getPigeonUnits());
+        Robot.dt.setRight(ControlMode.Position, new Angle(AngleUnit.DEGREES, 90).getPigeonUnits());
         
         SmartDashboard.putNumber("PRIMARY ERROR RIGHT", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         SmartDashboard.putNumber("PRIMARY ERROR LEFT", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));

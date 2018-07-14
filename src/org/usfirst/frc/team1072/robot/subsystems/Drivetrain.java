@@ -143,7 +143,7 @@ public class Drivetrain extends Subsystem
         
         //configureVelocityClosedLoop();
         configurePositionClosedLoop();
-        //configureAngleClosedLoop();
+        configureMotionProfileAngleClosedLoop();
         //configureMotionProfileClosedLoop();
 
         dtSetCurrentLimit(DrivetrainConstants.PEAK_CURRENT_LIMIT, DrivetrainConstants.PEAK_TIME_MS,
@@ -177,6 +177,7 @@ public class Drivetrain extends Subsystem
         getLeftTalon().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
         getRightTalon().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
     }
+    
     public void clearTrajectoryPoints()
     {
         Robot.dt.getLeftTalon().clearMotionProfileTrajectories();
@@ -187,6 +188,11 @@ public class Drivetrain extends Subsystem
     {
         getLeftTalon().set(ControlMode.PercentOutput, output);
         getRightTalon().set(ControlMode.PercentOutput, output);
+    }
+    
+    public void configRemoteFeedbackFilters()
+    {
+        
     }
     /**
      * Slaves the Victors to directly follow the behavior of their parent talons.
@@ -362,24 +368,38 @@ public class Drivetrain extends Subsystem
         getLeftTalon().selectProfileSlot(pidSlot, pidIndex);
         getRightTalon().selectProfileSlot(pidSlot, pidIndex);
     }
+    
+    public void configureAngleClosedLoop()
+    {
+        getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
+        
+        getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KP, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KI, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KD, RobotMap.TIMEOUT);
+        getRightTalon().config_IntegralZone(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_IZONE, RobotMap.TIMEOUT);
+        
+        getLeftTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KP, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KI, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KD, RobotMap.TIMEOUT);
+        getLeftTalon().config_IntegralZone(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_IZONE, RobotMap.TIMEOUT);
+    }
+    
     /**
      * Configures the angle closed loop.
      * 
      * @postcondition P, I, and D have been set for both sides; the pigeon zeroed; the frame period set
      */
-    public void configureAngleClosedLoop()
+    public void configureMotionProfileAngleClosedLoop()
     {
-        zeroPigeon();
-
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
-        getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.KP, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.KI, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.KD, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KP, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KI, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KD, RobotMap.TIMEOUT);
         
-        getLeftTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.KP, RobotMap.TIMEOUT);
-        getLeftTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.KI, RobotMap.TIMEOUT);
-        getLeftTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.KD, RobotMap.TIMEOUT);
+        getLeftTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KP, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KI, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KD, RobotMap.TIMEOUT);
 
     }
 
@@ -388,7 +408,7 @@ public class Drivetrain extends Subsystem
      * 
      * @postcondition P, I, and D have been set for both sides; the allowable error configured
      */
-    public void configureMotionProfileClosedLoop()
+    public void configureMotionProfileDriveClosedLoop()
     {
         getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
@@ -405,6 +425,7 @@ public class Drivetrain extends Subsystem
         getLeftTalon().config_kD(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KD_LEFT, RobotMap.TIMEOUT);
         getRightTalon().config_kD(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KD_RIGHT, RobotMap.TIMEOUT);
     }
+    
     
     /**
      * Resets the Talon frame periods.

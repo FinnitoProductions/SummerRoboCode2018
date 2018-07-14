@@ -259,14 +259,22 @@ public class RobotMap {
      */
     public static class PigeonConstants
     {
-        public static double KP = 1.1; // 1.3
-        public static double KI = 0;//.001;
-        public static double KD = 7;//75;
+        public static double MOT_PROF_KP = 1.1; // 1.3
+        public static double MOT_PROF_KI = 0;//.001;
+        public static double MOT_PROF_KD = 7;//75;
+        
+        public static double TURN_KP = 1.1; // 1.3
+        public static double TURN_KI = 0;//.001;
+        public static double TURN_KD = 7;//75;
+        public static int TURN_IZONE = 200;//75;
         
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset
         public static final RemoteFeedbackDevice REMOTE_SENSOR_SLOT = RemoteFeedbackDevice.RemoteSensor0;
         public static final int ANGLE_ALLOWABLE_ERROR = 0;
+        
+        public static final boolean LEFT_SENSOR_PHASE = false;
+        public static final boolean RIGHT_SENSOR_PHASE = false;
     }
     
     /**

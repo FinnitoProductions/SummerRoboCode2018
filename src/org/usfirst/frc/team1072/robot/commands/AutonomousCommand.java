@@ -47,9 +47,8 @@ public class AutonomousCommand extends CommandGroup
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
         initSubsystems();
 
-        addSequential(new CombinedPositionAnglePID(
-                new Position(PositionUnit.FEET, 3.85, 
-                DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));
+        addSequential(new CombinedPositionAnglePID(0, 
+                90));
         //addSequential(new TurnRobotToAngleCommand(90));
         //switchAuton(true);
 

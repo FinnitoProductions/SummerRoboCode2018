@@ -122,7 +122,7 @@ public class FollowPathCommand extends Command
         Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, 
                 DrivetrainConstants.RIGHT_TALON_PHASE);
         
-        Robot.dt.configureMotionProfileClosedLoop();
+        Robot.dt.configureMotionProfileDriveClosedLoop();
         if (outerPort == -1) // no auxiliary/arc
         {
             Robot.dt.selectProfileSlots(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
@@ -130,6 +130,7 @@ public class FollowPathCommand extends Command
         else
         {
             System.out.println("CONFIGURING TALONS " + Robot.getCurrentTimeMs());
+            Robot.dt.configureMotionProfileAngleClosedLoop();
             Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
             
             Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
