@@ -112,14 +112,16 @@ public class RobotMap {
 //        public static double POS_KD_RIGHT = 25;
         // CARPET 
         public static double POS_KF_LEFT = 0;
-        public static double POS_KP_LEFT = 0.09;//0.22; //0.2 
-        public static double POS_KI_LEFT = 0.000015;//.0008;//0.00001;//0.00001; //
-        public static double POS_KD_LEFT = 3.5;//40;//40;
+        public static double POS_KP_LEFT = 0.2;//0.22; //0.2 
+        public static double POS_KI_LEFT = 0.001;//.0008;//0.00001;//0.00001; //
+        public static double POS_KD_LEFT = 30;//40;//40;
+        public static int POS_IZONE_LEFT = 250;
         
         public static double POS_KF_RIGHT = 0;
-        public static double POS_KP_RIGHT = 0.09;
-        public static double POS_KI_RIGHT = 0.000015;//0.00001;//0.00001; // 
-        public static double POS_KD_RIGHT = 3.5;//40;
+        public static double POS_KP_RIGHT = 0.19;
+        public static double POS_KI_RIGHT = 0.001;//0.00001;//0.00001; // 
+        public static double POS_KD_RIGHT = 30;//40;
+        public static int POS_IZONE_RIGHT = 250;
         
         public static int POS_ALLOWABLE_ERROR = 25;
         public static int POS_TOLERANCE_BUFFER = 100;

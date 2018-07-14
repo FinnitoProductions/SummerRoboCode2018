@@ -12,6 +12,8 @@ import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
 import org.usfirst.frc.team1072.robot.commands.DriveWithVelocityCommand;
 import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
+import org.usfirst.frc.team1072.util.Position;
+import org.usfirst.frc.team1072.util.Position.PositionUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -73,7 +75,7 @@ public class Drivetrain extends Subsystem
     public void initDefaultCommand()
     {
         setDefaultCommand(new DriveWithVelocityCommand(OI.BLACK_XBOX_DEADBAND));
-        //setDefaultCommand(new DriveToPositionCommand());
+        //setDefaultCommand(new DriveToPositionCommand(new Position(PositionUnit.FEET, 3.85, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));
         //setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
@@ -127,7 +129,6 @@ public class Drivetrain extends Subsystem
         talonInit();
         setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
         zeroAllSensors();
-        resetTalonCoefficients();
     }
     /**
      * Performs all commands to initialize the talons.
@@ -148,7 +149,6 @@ public class Drivetrain extends Subsystem
         scaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
 
         setTalonSensorPhase();
-        
         dtsetTalonFramePeriods();
         
         configureVelocityClosedLoop();
@@ -181,16 +181,21 @@ public class Drivetrain extends Subsystem
         getRightVictor().follow(getRightTalon());
     }
     
-    private void resetTalonCoefficients()
+    public void resetTalonCoefficients()
     {
         // for all PID slots
         for (int slot = 0; slot < RobotMap.NUM_PID_SLOTS; slot++)
         {
-            getLeftTalon().configSelectedFeedbackCoefficient(1,
-                    slot, RobotMap.TIMEOUT); 
-            getRightTalon().configSelectedFeedbackCoefficient(1,
-                    slot, RobotMap.TIMEOUT); 
+            resetTalonCoefficients(slot);
         }
+    }
+    
+    public void resetTalonCoefficients (int pid_slot)
+    {
+        getLeftTalon().configSelectedFeedbackCoefficient(1,
+                pid_slot, RobotMap.TIMEOUT); 
+        getRightTalon().configSelectedFeedbackCoefficient(1,
+                pid_slot, RobotMap.TIMEOUT); 
     }
     
     private void zeroAllSensors()
@@ -325,6 +330,9 @@ public class Drivetrain extends Subsystem
 
         getLeftTalon().config_kD(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KD_LEFT, RobotMap.TIMEOUT);
         getRightTalon().config_kD(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KD_RIGHT, RobotMap.TIMEOUT);
+        
+        getLeftTalon().config_IntegralZone(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_IZONE_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_IntegralZone(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_IZONE_RIGHT, RobotMap.TIMEOUT);
     }
     
     /**

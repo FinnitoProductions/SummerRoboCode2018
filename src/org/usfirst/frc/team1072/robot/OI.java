@@ -5,12 +5,16 @@ import java.util.Map;
 
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
+import org.usfirst.frc.team1072.robot.commands.DriveToPositionCommand;
 import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
 import org.usfirst.frc.team1072.robot.commands.SetSolenoidCommand;
 import org.usfirst.frc.team1072.robot.commands.TurnRobotToAngleCommand;
 import org.usfirst.frc.team1072.robot.subsystems.Gamepad;
+import org.usfirst.frc.team1072.util.Position;
+import org.usfirst.frc.team1072.util.Position.PositionUnit;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
@@ -103,7 +107,9 @@ public class OI
         leftDPad.whenPressed(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
         rightDPad.whenPressed(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         
-        gw.getButtonA().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.INTAKE_HEIGHT));
+        gw.getButtonA().whenPressed(
+                new DriveToPositionCommand
+                (new Position(PositionUnit.FEET, 3.85, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));//new MoveElevatorMotionMagicCommand(ElevatorConstants.INTAKE_HEIGHT));
         gw.getButtonX().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.SWITCH_HEIGHT));
         gw.getButtonB().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.SCALE_LOW_HEIGHT));
         gw.getButtonY().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.SCALE_HIGH_HEIGHT));

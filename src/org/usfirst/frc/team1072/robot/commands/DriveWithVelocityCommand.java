@@ -39,6 +39,8 @@ public class DriveWithVelocityCommand extends Command
         
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+    
+        Robot.dt.resetTalonCoefficients(DrivetrainConstants.VEL_PID);
     }
     /**
      * Executes the command to drive with a given velocity.
