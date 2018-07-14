@@ -89,6 +89,8 @@ public class AutonomousCommand extends CommandGroup
         
         CommandGroup firstCube = new CommandGroup();
             firstCube.addParallel(initSubsystems);
+            firstCube.addParallel(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+            firstCube.addParallel(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
             firstCube.addParallel(fpc1);
             CommandGroup raiseElevatorFirstCube = new CommandGroup();
                 raiseElevatorFirstCube.addSequential(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.9, fpc1.getTotalTime()));
@@ -123,7 +125,7 @@ public class AutonomousCommand extends CommandGroup
             getSecondCube.addParallel(elevatorLowerSecondCube);
             CommandGroup intakeSecondCube = new CommandGroup();
                 getSecondCube.addSequential(
-                        new PauseUntilPathBeginsCommand(fpc3, PauseType.START_OF_PATH, 0, fpc3.getTotalTime()));
+                        new PauseUntilPathBeginsCommand(fpc3, PauseType.END_OF_PATH, 0.5, fpc3.getTotalTime()));
                 CommandGroup secondCubePneumatics = new CommandGroup();
                     secondCubePneumatics.addParallel(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY,
                             IntakeConstants.DOWN));
@@ -140,7 +142,7 @@ public class AutonomousCommand extends CommandGroup
         CommandGroup scoreSecondCube = new CommandGroup();
             CommandGroup pathGroupOuttakeSecondCube = new CommandGroup();
                 pathGroupOuttakeSecondCube.addSequential(fpc4);
-                //pathGroupOuttakeSecondCube.addSequential(fpc5);
+                pathGroupOuttakeSecondCube.addSequential(fpc5);
             scoreSecondCube.addParallel(pathGroupOuttakeSecondCube);
             CommandGroup elevatorRaiseSecondCube = new CommandGroup();
                 elevatorRaiseSecondCube.addSequential(new PauseUntilPathBeginsCommand(fpc5, PauseType.END_OF_PATH, 
