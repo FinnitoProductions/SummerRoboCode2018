@@ -85,16 +85,15 @@ public class CombinedPositionAnglePID extends Command
         Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
         Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
         
-        Robot.dt.setLeft(ControlMode.Position, -1 * 90 * 
+        
+        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * 90 * 
                 ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
-        Robot.dt.setRight(ControlMode.Position, 90 * 
+        Robot.dt.setRight(ControlMode.MotionMagic, 90 * 
                 ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
         
-        SmartDashboard.putNumber("PRIMARY ERROR RIGHT", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("PRIMARY ERROR LEFT", Robot.dt.getLeftTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
-
-        SmartDashboard.putNumber("POSITION RIGHT", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("POSITION LEFT", Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.printMotorOutputPercentage();
     }
     /**
     * @return

@@ -374,14 +374,25 @@ public class Drivetrain extends Subsystem
         zeroPigeon();
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
+        getRightTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KF, RobotMap.TIMEOUT);
         getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KP, RobotMap.TIMEOUT);
         getRightTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KI, RobotMap.TIMEOUT);
         getRightTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KD, RobotMap.TIMEOUT);
+        
+        getRightTalon().configMotionCruiseVelocity(PigeonConstants.TURN_VEL, RobotMap.TIMEOUT);
+        getRightTalon().configMotionAcceleration(PigeonConstants.TURN_ACCEL, RobotMap.TIMEOUT);
+        
         getRightTalon().config_IntegralZone(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_IZONE, RobotMap.TIMEOUT);
         
+        
+        getLeftTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KF, RobotMap.TIMEOUT);
         getLeftTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KP, RobotMap.TIMEOUT);
         getLeftTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KI, RobotMap.TIMEOUT);
         getLeftTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KD, RobotMap.TIMEOUT);
+        
+        getLeftTalon().configMotionCruiseVelocity(PigeonConstants.TURN_VEL, RobotMap.TIMEOUT);
+        getLeftTalon().configMotionAcceleration(PigeonConstants.TURN_ACCEL, RobotMap.TIMEOUT);
+        
         getLeftTalon().config_IntegralZone(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_IZONE, RobotMap.TIMEOUT);
     }
     
@@ -395,10 +406,12 @@ public class Drivetrain extends Subsystem
         zeroPigeon();
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
+        getRightTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KF, RobotMap.TIMEOUT);
         getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KP, RobotMap.TIMEOUT);
         getRightTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KI, RobotMap.TIMEOUT);
         getRightTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KD, RobotMap.TIMEOUT);
         
+        getLeftTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KF, RobotMap.TIMEOUT);
         getLeftTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KP, RobotMap.TIMEOUT);
         getLeftTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KI, RobotMap.TIMEOUT);
         getLeftTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KD, RobotMap.TIMEOUT);
@@ -582,6 +595,22 @@ public class Drivetrain extends Subsystem
                     pidLoop, RobotMap.TIMEOUT);
     }
     
+    public void printMotorOutputPercentage()
+    {
+        SmartDashboard.putNumber("Left Talon Output Percentage", Robot.dt.getLeftTalon().getMotorOutputPercent());
+        SmartDashboard.putNumber("Right Talon Output Percentage", Robot.dt.getLeftTalon().getMotorOutputPercent());
+    }
     
+    public void printClosedLoopError (int pidLoop)
+    {
+        SmartDashboard.putNumber("Left Talon Closed Loop Error", Robot.dt.getLeftTalon().getClosedLoopError(pidLoop));
+        SmartDashboard.putNumber("Right Talon Closed Loop Error", Robot.dt.getLeftTalon().getClosedLoopError(pidLoop));
+    }
+    
+    public void printSensorPositions (int pidLoop)
+    {
+        SmartDashboard.putNumber("Left Talon Position", Robot.dt.getLeftTalon().getSelectedSensorPosition(pidLoop));
+        SmartDashboard.putNumber("Right Talon Position", Robot.dt.getLeftTalon().getSelectedSensorPosition(pidLoop));
+    }
 
 }
