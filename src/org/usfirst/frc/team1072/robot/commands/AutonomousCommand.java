@@ -75,6 +75,7 @@ public class AutonomousCommand extends CommandGroup
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
          
         FollowPathCommand fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
+        //DriveToPositionCommand fpc3;
         
         fpc1 = setupPathFollowerArc(AutonomousPaths.CLH_P1_LEFT, AutonomousPaths.CLH_P1_RIGHT, false)
                 .zeroPigeonAtStart(true);
@@ -83,8 +84,8 @@ public class AutonomousCommand extends CommandGroup
             initSubsystems.addParallel(new InitializeDrivetrainCommand());
             initSubsystems.addParallel(new InitializeElevatorCommand());
             initSubsystems.addParallel(new InitializeIntakeCommand());
-        addSequential(initSubsystems);
-        /*CommandGroup firstCube = new CommandGroup();
+            
+        CommandGroup firstCube = new CommandGroup();
             firstCube.addParallel(initSubsystems);
             firstCube.addParallel(fpc1);
             CommandGroup raiseElevatorFirstCube = new CommandGroup();
@@ -96,14 +97,15 @@ public class AutonomousCommand extends CommandGroup
                 outtakeFirstCube.addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.DECOMPRESS));
                 outtakeFirstCube.addSequential(new IntakeOuttakeTimedCommand(0.15, RobotMap.IntakeConstants.OUTTAKE_BOOL));
-            firstCube.addParallel(outtakeFirstCube);*/
-        //addSequential(firstCube);
-
-        addSequential (new DriveToPositionCommand(new Position(PositionUnit.FEET, 3.85, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));
+            firstCube.addParallel(outtakeFirstCube);
+        addSequential(firstCube);
         
-        /*fpc2 = setupPathFollowerArc(AutonomousPaths.CLH_P2_LEFT_REV, AutonomousPaths.CLH_P2_RIGHT_REV, true)
+        fpc2 = setupPathFollowerArc(AutonomousPaths.CLH_P2_LEFT_REV, AutonomousPaths.CLH_P2_RIGHT_REV, true)
                 .zeroPigeonAtStart(false);
-        fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
+        fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false); /*new DriveToPositionCommand(
+                new Position(PositionUnit.FEET, 3.85, 
+                DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(), 50);*/
+        
         CommandGroup getSecondCube = new CommandGroup();
             CommandGroup pathGroupSecondCube = new CommandGroup();
                 pathGroupSecondCube.addSequential(fpc2);
@@ -118,8 +120,7 @@ public class AutonomousCommand extends CommandGroup
                         IntakeConstants.DOWN));
             getSecondCube.addParallel(elevatorLowerSecondCube);
             CommandGroup intakeSecondCube = new CommandGroup();
-                getSecondCube.addSequential(new PauseUntilPathBeginsCommand
-                        (fpc2, PauseType.END_OF_PATH, 0.2, fpc2.getTotalTime()));
+                getSecondCube.addSequential(new PauseUntilCommandBegins(fpc3, 1));
                 CommandGroup secondCubePneumatics = new CommandGroup();
                     secondCubePneumatics.addParallel(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY,
                             IntakeConstants.DOWN));
@@ -128,7 +129,8 @@ public class AutonomousCommand extends CommandGroup
                 getSecondCube.addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.COMPRESS));
             getSecondCube.addParallel(intakeSecondCube);
-        //addSequential(getSecondCube);
+        
+            addSequential(getSecondCube);
         
         fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
         fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
@@ -180,37 +182,20 @@ public class AutonomousCommand extends CommandGroup
             CommandGroup pathGroupScoreThirdCube = new CommandGroup();
                 pathGroupScoreThirdCube.addSequential(fpc8);
                 pathGroupScoreThirdCube.addSequential(fpc9);
-            pathGroupScoreThirdCube.addParallel(pathGroupScoreThirdCube);
+            scoreThirdCube.addParallel(pathGroupScoreThirdCube);
             CommandGroup raiseElevatorThirdCube = new CommandGroup();
                 raiseElevatorThirdCube.addSequential(new PauseUntilPathBeginsCommand(fpc9, PauseType.END_OF_PATH, 0.9, fpc9.getTotalTime()));
                 raiseElevatorThirdCube.addSequential(new MoveElevatorMotionMagicCommand(ElevatorConstants.SWITCH_HEIGHT_AUTON));
-            CommandGroup outtakeThirdCube = new CommandGroup();
+            scoreThirdCube.addParallel(raiseElevatorThirdCube);
+                CommandGroup outtakeThirdCube = new CommandGroup();
                 outtakeThirdCube.addSequential(new PauseUntilPathBeginsCommand(fpc1, PauseType.END_OF_PATH, 0.15, fpc1.getTotalTime()));
                 outtakeThirdCube.addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.DECOMPRESS));
                 outtakeThirdCube.addSequential(new IntakeOuttakeTimedCommand(0.15, RobotMap.IntakeConstants.OUTTAKE_BOOL));
         // addSequential(scoreThirdCube);
-      */
+      
        
-                               
-
-        System.out.println("TOTAL PATH TIME: " + fpc1.getTotalTime());
-        System.out.println("PATH FOLLOWER ARC SET UP " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
-
-        /*fpc1 = setupPathFollowerArc(CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT, CENTER_LEFT_HEAD_ON_ONE_CUBE_RIGHT_RIGHT, true);
-        addSequential(fpc1);*/
-        System.out.println("SEQUENTIAL COMMAND ADDED " + 1000 * (Timer.getFPGATimestamp() - Robot.startTime));
-        /*
-        
-
-        
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_UPDOWN_KEY, RobotMap.INTAKE_DOWN));
-        addSequential(new SetSolenoidCommand(RobotMap.INTAKE_COMPRESSDECOMPRESS_KEY, RobotMap.INTAKE_DECOMPRESS));
-        
-        addSequential(new IntakeOuttakeTimedCommand(2, RobotMap.OUTTAKE_BOOL));*/
-
-        //addSequential(new DriveToPositionCommand(Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX), Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)));
-        //addSequential(new TurnRobotToAngleCommand(90));
+                           
         
         
         

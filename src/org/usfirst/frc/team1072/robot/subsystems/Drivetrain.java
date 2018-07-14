@@ -98,7 +98,11 @@ public class Drivetrain extends Subsystem
      */
     public void arcadeDrivePosition (double target)
     {
-        leftTalon.set(ControlMode.Position, target);
+        SmartDashboard.putNumber("LEFT POSITION", leftTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("RIGHT POSITION", rightTalon.getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
+        
+        SmartDashboard.putNumber("LEFT ERROR", leftTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("RIGHT RIGHT", rightTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         rightTalon.set(ControlMode.Position, target);
     }
     
@@ -108,11 +112,11 @@ public class Drivetrain extends Subsystem
      * @param rightTarget the target position for the right side
      */
     public void arcadeDrivePosition (double leftTarget, double rightTarget)
-    {
+    {        
         leftTalon.set(ControlMode.Position, leftTarget);
         rightTalon.set(ControlMode.Position, rightTarget);
     }
-
+    
     /**
      * Performs autonomous-specific commands on the Talon.
      */

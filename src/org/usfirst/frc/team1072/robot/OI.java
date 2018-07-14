@@ -107,9 +107,7 @@ public class OI
         leftDPad.whenPressed(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
         rightDPad.whenPressed(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         
-        gw.getButtonA().whenPressed(
-                new DriveToPositionCommand
-                (new Position(PositionUnit.FEET, 3.85, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));//new MoveElevatorMotionMagicCommand(ElevatorConstants.INTAKE_HEIGHT));
+        gw.getButtonA().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.INTAKE_HEIGHT));
         gw.getButtonX().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.SWITCH_HEIGHT));
         gw.getButtonB().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.SCALE_LOW_HEIGHT));
         gw.getButtonY().whenPressed(new MoveElevatorMotionMagicCommand(ElevatorConstants.SCALE_HIGH_HEIGHT));

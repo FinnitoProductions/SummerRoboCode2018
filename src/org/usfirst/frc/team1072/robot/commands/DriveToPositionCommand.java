@@ -4,10 +4,14 @@ import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Position;
 import org.usfirst.frc.team1072.util.Position.PositionUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.SensorTerm;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,17 +29,19 @@ public class DriveToPositionCommand extends Command
     boolean isJoystick;
     private boolean checkIsFinished;
     private double numExecutes;
+    private double maxExecutes;
     /**
      * Initializes the command, requiring the drive train.
      */
     public DriveToPositionCommand() { requires(Robot.dt); isJoystick = true; leftPosition = 0; rightPosition =0;}
     
-    public DriveToPositionCommand (double destPosition)
+    public DriveToPositionCommand (double destPosition, int maxExecutes)
     {
         requires(Robot.dt);
         isJoystick = false;
         leftPosition = destPosition;
         rightPosition = destPosition;
+        this.maxExecutes = maxExecutes;
     }
     public DriveToPositionCommand(double currentLeftPosition, double currentRightPosition)
     {
@@ -51,15 +57,31 @@ public class DriveToPositionCommand extends Command
      */
     public void initialize()
     {
-        Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
+
+        Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
         
-        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
+                RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
+        
+        Robot.dt.getRightTalon().configSelectedFeedbackSensor(
+                FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
+        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
+        
+        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(
+                FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+
+
+        Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
+        Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
+                RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
         
         Robot.dt.getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        
-        Robot.dt.resetTalonCoefficients(DrivetrainConstants.POS_PID);
         
         System.out.println("INITIALIZING");
         numExecutes = 0;
@@ -72,23 +94,14 @@ public class DriveToPositionCommand extends Command
     
     public void execute() 
     { 
-        double position;
-        if (isJoystick)
+        if (numExecutes >= 0 && numExecutes < maxExecutes)
+            numExecutes++;
+        if (numExecutes >= maxExecutes)
         {
-            position = new Position(PositionUnit.FEET, OI.getInstance().getGamepad().getLeftY() * 5, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits();
-            Robot.dt.arcadeDrivePosition(position); 
+            checkIsFinished = true;
+            numExecutes = -1;
         }
-        else
-        {
-            if (numExecutes >= 0 && numExecutes < 20)
-                numExecutes++;
-            if (numExecutes >= 20)
-            {
-                checkIsFinished = true;
-                numExecutes = -1;
-            }
-            Robot.dt.arcadeDrivePosition(leftPosition, rightPosition);
-        }
+        Robot.dt.arcadeDrivePosition(rightPosition);
     }
     /**
      * Determines whether the command has finished.
