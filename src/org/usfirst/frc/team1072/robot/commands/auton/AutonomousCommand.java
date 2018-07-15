@@ -13,8 +13,9 @@ import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBeginsCommand
 import org.usfirst.frc.team1072.robot.commands.drivetrain.FollowPathArcCommand;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrainCommand;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidCommand;
+import org.usfirst.frc.team1072.util.Conversions;
+import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 import org.usfirst.frc.team1072.util.Position;
-import org.usfirst.frc.team1072.util.Position.PositionUnit;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -54,6 +55,7 @@ public class AutonomousCommand extends CommandGroup
                 90));*/
         //addSequential(new TurnRobotToAngleCommand(90));
         switchAuton(true);
+        double x = Conversions.convertPosition(PositionUnit.FEET, 10, PositionUnit.ENCODER_UNITS);
 
     }
 

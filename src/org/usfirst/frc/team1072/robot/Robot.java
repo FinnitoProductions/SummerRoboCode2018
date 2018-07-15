@@ -46,7 +46,7 @@ public class Robot extends TimedRobot
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
-    public void robotInit()
+    public void robotInit() 
     {
         intake = Intake.getInstance();
         dt = Drivetrain.getInstance();
@@ -80,6 +80,7 @@ public class Robot extends TimedRobot
     {
         startTime = Timer.getFPGATimestamp();
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
+
         m_autonomousCommand.start();
         System.out.println("AUTON COMMAND STARTED" + Robot.getCurrentTimeMs());
     }

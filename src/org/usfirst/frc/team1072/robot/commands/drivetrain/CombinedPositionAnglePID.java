@@ -5,7 +5,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Angle;
-import org.usfirst.frc.team1072.util.ConversionFactors;
+import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Angle.AngleUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -89,9 +89,9 @@ public class CombinedPositionAnglePID extends Command
         
         
         Robot.dt.setLeft(ControlMode.MotionMagic, -1 * 45 * 
-                ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
+                Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.DEGREES_PER_ROTATION);
         Robot.dt.setRight(ControlMode.MotionMagic, 45 * 
-                ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
+                Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.DEGREES_PER_ROTATION);
         
         Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);

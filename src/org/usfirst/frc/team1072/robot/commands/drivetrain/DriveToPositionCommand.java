@@ -5,7 +5,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Angle;
-import org.usfirst.frc.team1072.util.ConversionFactors;
+import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Angle.AngleUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;

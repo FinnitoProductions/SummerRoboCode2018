@@ -10,7 +10,7 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
-import org.usfirst.frc.team1072.util.ConversionFactors;
+import org.usfirst.frc.team1072.util.Conversions;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
@@ -311,9 +311,9 @@ public class FollowPathCommand extends Command
                 for (int i = 0; i < segs.length; i++)
                 {
                     TrajectoryPoint tp = new TrajectoryPoint();
-                    tp.position = segs[i].position * ConversionFactors.INCHES_PER_FOOT // convert to inches
+                    tp.position = segs[i].position * Conversions.INCHES_PER_FOOT // convert to inches
                             / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions
-                            * ConversionFactors.TICKS_PER_REV;; // convert revolutions to encoder units
+                            * Conversions.TICKS_PER_REV;; // convert revolutions to encoder units
                     //System.out.println()
                     tp.velocity = segs[i].velocity;// convert to ticks per 100ms
                             // convert fps to encoder units
@@ -326,11 +326,11 @@ public class FollowPathCommand extends Command
                     if (outerPort >= 0) 
                     {
                         tp.profileSlotSelect1 = outerPort;
-                        tp.auxiliaryPos = segs[i].heading * ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.RADIANS_PER_ROTATION;
+                        tp.auxiliaryPos = segs[i].heading * Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.RADIANS_PER_ROTATION;
                         tp.position = (tp.position + 
-                                (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].position * ConversionFactors.INCHES_PER_FOOT // convert to inches
+                                (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].position * Conversions.INCHES_PER_FOOT // convert to inches
                                 / (RobotMap.DrivetrainConstants.WHEELDIAMETER* Math.PI) // convert to revolutions
-                                * ConversionFactors.TICKS_PER_REV))/2;
+                                * Conversions.TICKS_PER_REV))/2;
                         tp.velocity = (tp.velocity + (getControllerTrajectory(Robot.dt.getLeftTalon()).segments[i].velocity)) / 2; // convert to ticks per 100ms)
     
     
@@ -350,9 +350,9 @@ public class FollowPathCommand extends Command
                     
                     //tp.headingDeg = new Angle(AngleUnit.RADIANS, segs[i].heading).getDegrees(); // convert radians to degrees
                     tp.velocity = tp.velocity / 10.0 // convert to feet per 100 ms
-                    * ConversionFactors.INCHES_PER_FOOT // convert to inches per 100 ms
+                    * Conversions.INCHES_PER_FOOT // convert to inches per 100 ms
                     / (DrivetrainConstants.WHEELDIAMETER * Math.PI) // convert to revolutions per 100ms
-                    * ConversionFactors.TICKS_PER_REV; 
+                    * Conversions.TICKS_PER_REV; 
                     tp.zeroPos = false;
     
                     //System.out.println("AUXILIARY POSITION " + tp.auxiliaryPos);
