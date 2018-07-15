@@ -612,5 +612,11 @@ public class Drivetrain extends Subsystem
         SmartDashboard.putNumber("Left Talon Position", Robot.dt.getLeftTalon().getSelectedSensorPosition(pidLoop));
         SmartDashboard.putNumber("Right Talon Position", Robot.dt.getRightTalon().getSelectedSensorPosition(pidLoop));
     }
+    
+    public boolean isClosedLoopErrorWithin (int loopIndex, double allowableError)
+    {
+        return Math.abs(getLeftTalon().getClosedLoopError(loopIndex)) < allowableError
+                && Math.abs(getRightTalon().getClosedLoopError(loopIndex)) < allowableError;
+    }
 
 }

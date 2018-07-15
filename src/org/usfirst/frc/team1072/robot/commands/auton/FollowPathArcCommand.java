@@ -1,7 +1,6 @@
-package org.usfirst.frc.team1072.robot.commands.drivetrain;
+package org.usfirst.frc.team1072.robot.commands.auton;
 
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.commands.auton.FollowPathCommand;
 
 /**
  * Follows a motion profile in an arc-like manner.

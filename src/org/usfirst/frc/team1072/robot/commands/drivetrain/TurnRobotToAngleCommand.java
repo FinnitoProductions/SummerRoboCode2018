@@ -89,19 +89,15 @@ public class TurnRobotToAngleCommand extends Command
     @Override
     protected boolean isFinished()
     {
-        /*if (numExecutes == -1)
+        if (numExecutes == -1)
         {
-            boolean isFinished = Math.abs(Robot.dt.getLeftTalon().
-                    getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR
-                && Math.abs(Robot.dt.getRightTalon().
-                    getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR;
+            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
             if (isFinished)
             {
-                Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
-                Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+                Robot.dt.setBoth(ControlMode.Disabled, 0);
             }
             return isFinished;
-        }*/
+        }
         return false;
     }
     

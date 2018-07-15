@@ -3,7 +3,6 @@ package org.usfirst.frc.team1072.robot.commands.auton;
 import java.util.HashMap;
 
 import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.FollowPathArcCommand;
 
 import com.ctre.phoenix.motorcontrol.IMotorController;
 

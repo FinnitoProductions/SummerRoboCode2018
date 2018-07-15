@@ -15,16 +15,14 @@ import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * Combines position and angle for a smoother PID autonomous.
+ * Combines position and angle for a smoother PID-based autonomous.
  * @author Finn Frankis
  * @version Jul 14, 2018
  */
 public class CombinedPositionAnglePID extends Command
 {
-    private double position;
-    private double angle;
-    private double numExecutes;
-    private double maxExecutes = 3;
+    private double position, angle, numExecutes, maxExecutes = 3;
+    private boolean isPosition, isAngle;
     
     /**
      * Constructs a new CombinedPositionAnglePID.
@@ -39,7 +37,9 @@ public class CombinedPositionAnglePID extends Command
     
     public void initialize()
     {
-        initAngle();
+        isPosition = true;
+        isAngle = false;
+        initPosition();
         Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
         
         numExecutes = 0;
@@ -67,6 +67,8 @@ public class CombinedPositionAnglePID extends Command
                 RobotMap.REMOTE_SLOT_0, 
                 RobotMap.TIMEOUT);
         
+        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
+        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
         
         Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
     }
@@ -81,40 +83,48 @@ public class CombinedPositionAnglePID extends Command
             numExecutes = -1;
         }
         
-        //Robot.dt.setBoth(ControlMode.Position, position);
-        
-        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
-        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
-        
-        
-        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * 45 * 
-                Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.DEGREES_PER_ROTATION);
-        Robot.dt.setRight(ControlMode.MotionMagic, 45 * 
-                Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.DEGREES_PER_ROTATION);
-        
+        if (isPosition)
+        {
+            Robot.dt.setBoth(ControlMode.Position, position);
+            if (Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR))
+            {
+                isPosition = false;
+                Robot.dt.setBoth(ControlMode.Disabled, position);
+            }
+        }
+        else
+        {
+            if (!isPosition && !isAngle)
+            {
+                isAngle = true;
+                initAngle();
+            }
+
+                       
+            Robot.dt.setLeft(ControlMode.MotionMagic, angle);
+            Robot.dt.setRight(ControlMode.MotionMagic, angle);
+        }
         Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.printMotorOutputPercentage();
     }
     /**
-    * @return
+    * Determines whether the command has finished.
+    * @return true if the pigeon is in the correct position and the position loop is complete;
+    * false otherwise
     */
     @Override
     protected boolean isFinished()
     {
-        /*if (numExecutes == -1)
+        if (numExecutes == -1 && isAngle)
         {
-            boolean isFinished = Math.abs(Robot.dt.getLeftTalon().
-                    getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR
-                && Math.abs(Robot.dt.getRightTalon().
-                    getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR;
+            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
             if (isFinished)
             {
-                Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
-                Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+                Robot.dt.setBoth(ControlMode.Disabled, 0);
             }
             return isFinished;
-        }*/
+        }
         return false;
     }
     
