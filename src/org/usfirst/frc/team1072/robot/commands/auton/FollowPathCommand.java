@@ -336,12 +336,7 @@ public class FollowPathCommand extends Command
     
                     }
                     System.out.println(this + " " + pathReversed);
-                    if (pathReversed)
-                    {
-                        tp.velocity += Math.max(0 ,velocityAddFactor * -1);
-                    }
-                    else
-                        tp.velocity += Math.max(0 ,velocityAddFactor);
+                    tp.velocity += Math.signum(tp.velocity) * velocityAddFactor;
     
                     //ramp down factor to add to velocity
                     velocityAddFactor -= 

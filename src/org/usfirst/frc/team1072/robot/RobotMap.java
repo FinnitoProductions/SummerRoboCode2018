@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
  */
 public class RobotMap {
     
+    public static boolean IS_COMP = false;
     public static int JOYSTICK = 0;
     
     public static int TIMEOUT = 10;
@@ -332,11 +333,4 @@ public class RobotMap {
     public static final int MAX_TALON_FRAME_PERIOD_MS = 160;
 
     public static final int MOTION_PROFILE_END_ERROR = 150;
-
-    public static final boolean IS_AUTON = true;
-
-
-    
-
-
 }
