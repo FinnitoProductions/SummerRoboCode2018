@@ -7,10 +7,12 @@
 
 package org.usfirst.frc.team1072.robot;
 
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
+import org.usfirst.frc.team1072.util.Conversions;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
@@ -52,6 +54,7 @@ public class Robot extends TimedRobot
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         oi = OI.getInstance();
+        Conversions.setWheelDiameter(DrivetrainConstants.WHEELDIAMETER);
     }
     
 

@@ -4,9 +4,8 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
-import org.usfirst.frc.team1072.util.Angle;
 import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Angle.AngleUnit;
+import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -28,11 +27,11 @@ public class DriveToPositionCommand extends Command
     
     /**
      * Constructs a new DriveToPositionCommand.
-     * @param position the final position for the robot
+     * @param position the final position for the robot in feet
      */
     public DriveToPositionCommand (double position)
     {
-        this.position = position;
+        this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
     }
     
     public void initialize()

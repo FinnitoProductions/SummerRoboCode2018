@@ -4,8 +4,8 @@ import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.util.Speed;
-import org.usfirst.frc.team1072.util.Speed.SpeedUnit;
+import org.usfirst.frc.team1072.util.Conversions;
+import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
@@ -74,8 +74,14 @@ public class DriveWithVelocityCommand extends Command
             leftY /= 1-deadband;
         }
         
-        driveSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, leftY * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits(); 
-        turnSpeed = new Speed(SpeedUnit.FEET_PER_SECOND, -1 * leftX * DrivetrainConstants.MAX_TURN_SPEED_FPS, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits();
+        driveSpeed = Conversions.convertSpeed
+                (SpeedUnit.FEET_PER_SECOND, 
+                        leftY * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
+                        SpeedUnit.ENCODER_UNITS);
+        turnSpeed = Conversions.convertSpeed
+                (SpeedUnit.FEET_PER_SECOND, 
+                        -1 * leftX * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
+                        SpeedUnit.ENCODER_UNITS);
         
         Robot.dt.arcadeDriveVelocity(
                 driveSpeed, 

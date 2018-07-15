@@ -4,16 +4,14 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
-import org.usfirst.frc.team1072.util.Angle;
 import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Angle.AngleUnit;
+import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Turns the robot to a given angle.
@@ -33,7 +31,8 @@ public class TurnRobotToAngleCommand extends Command
      */
     public TurnRobotToAngleCommand (double angle)
     {
-        this.angle = new Angle(AngleUnit.DEGREES, angle).getPigeonUnits();
+       
+        this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
     }
     
     public void initialize()

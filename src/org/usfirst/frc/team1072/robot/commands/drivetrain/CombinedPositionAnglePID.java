@@ -4,9 +4,8 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
-import org.usfirst.frc.team1072.util.Angle;
 import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Angle.AngleUnit;
+import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -35,7 +34,7 @@ public class CombinedPositionAnglePID extends Command
     public CombinedPositionAnglePID (double position, double angle)
     {
         this.position = position;
-        this.angle = new Angle(AngleUnit.DEGREES, angle).getPigeonUnits();
+        this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
     }
     
     public void initialize()
