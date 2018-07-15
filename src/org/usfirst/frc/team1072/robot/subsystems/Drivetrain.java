@@ -63,9 +63,9 @@ public class Drivetrain extends Subsystem
      */
     public void initDefaultCommand()
     {
-        //setDefaultCommand(new DriveWithVelocityCommand(OI.BLACK_XBOX_DEADBAND));
+        setDefaultCommand(new DriveWithVelocityCommand(OI.BLACK_XBOX_DEADBAND));
         //setDefaultCommand(new DriveToPositionCommand(new Position(PositionUnit.FEET, 3.85, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));
-        setDefaultCommand(new TurnRobotToAngleCommand());
+        //setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
     /**
