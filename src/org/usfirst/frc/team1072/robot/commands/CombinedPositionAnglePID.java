@@ -67,6 +67,7 @@ public class CombinedPositionAnglePID extends Command
                 RobotMap.REMOTE_SLOT_0, 
                 RobotMap.TIMEOUT);
         
+        
         Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
     }
 
@@ -86,9 +87,9 @@ public class CombinedPositionAnglePID extends Command
         Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
         
         
-        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * 90 * 
+        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * 45 * 
                 ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
-        Robot.dt.setRight(ControlMode.MotionMagic, 90 * 
+        Robot.dt.setRight(ControlMode.MotionMagic, 45 * 
                 ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
         
         Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
@@ -115,6 +116,11 @@ public class CombinedPositionAnglePID extends Command
             return isFinished;
         }*/
         return false;
+    }
+    
+    public void end()
+    {
+        Robot.dt.configureNominalPeakOutputs();
     }
     
 }
