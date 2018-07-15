@@ -52,6 +52,7 @@ public class CombinedPositionAnglePID extends Command
         
         Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
     }
+    
     private void initAngle()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);

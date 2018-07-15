@@ -141,10 +141,10 @@ public class Drivetrain extends Subsystem
         
         dtsetTalonFramePeriods();
         
-        //configureVelocityClosedLoop();
+        configureVelocityClosedLoop();
         configurePositionClosedLoop();
         configureMotionProfileAngleClosedLoop();
-        //configureMotionProfileClosedLoop();
+        configureMotionProfileDriveClosedLoop();
 
         dtSetCurrentLimit(DrivetrainConstants.PEAK_CURRENT_LIMIT, DrivetrainConstants.PEAK_TIME_MS,
                 DrivetrainConstants.CONTINUOUS_CURRENT_LIMIT);

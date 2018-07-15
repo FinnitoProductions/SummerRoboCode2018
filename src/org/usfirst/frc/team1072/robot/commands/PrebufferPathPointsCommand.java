@@ -26,6 +26,7 @@ public class PrebufferPathPointsCommand extends Command
      */
     public PrebufferPathPointsCommand(FollowPathCommand fpc)
     {
+        this.fpc = fpc;
         masterControllers = new HashMap<IMotorController, Trajectory>();
         masterControllers.put(Robot.dt.getRightTalon(), fpc.getControllerTrajectory(Robot.dt.getRightTalon()));
         if (!(fpc instanceof FollowPathArcCommand))
@@ -39,10 +40,12 @@ public class PrebufferPathPointsCommand extends Command
      */
     public void execute()
     {
+        System.out.println("BEGINNING PREBUFFERING");
         for (IMotorController imc : masterControllers.keySet())
         {
             fpc.loadTrajectoryToTalon(masterControllers.get(imc), imc);
         }
+        System.out.println("ENDING PREBUFFERING");
         isFinished = true;
     }
     /**

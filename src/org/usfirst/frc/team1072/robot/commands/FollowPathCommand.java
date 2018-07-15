@@ -68,6 +68,7 @@ public class FollowPathCommand extends Command
         outerPort = -1;
         requires(Robot.dt);
         totalTime = -1;
+        pathReversed = false;
     }
     
     /**
@@ -82,6 +83,7 @@ public class FollowPathCommand extends Command
         this.outerPort = outerPort;
         requires(Robot.dt);
         totalTime = -1;
+        pathReversed = false;
     }
     
     public FollowPathCommand zeroPigeonAtStart(boolean zeroPigeon)
@@ -212,7 +214,7 @@ public class FollowPathCommand extends Command
             {
                 // once enough points have been buffered, begin sequence
                 boolean allReady = getControllerStatus(Robot.dt.getRightTalon()).btmBufferCnt > minPointsInController;
-
+                //System.out.println("Buffer Count: " + getControllerStatus(Robot.dt.getRightTalon()).btmBufferCnt);
                 if (allReady)
                 {
                   
@@ -277,7 +279,7 @@ public class FollowPathCommand extends Command
         controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 2));
         if (reversePath)
             t = reverseTrajectory(t);
-        controllers.put(controller, new Object[] {t, null});
+        controllers.put(controller, new Object[] {t, null, false});
         pathReversed = reversePath;
     }
     
@@ -333,6 +335,7 @@ public class FollowPathCommand extends Command
     
     
                     }
+                    System.out.println(this + " " + pathReversed);
                     if (pathReversed)
                     {
                         tp.velocity += Math.max(0 ,velocityAddFactor * -1);
@@ -389,8 +392,11 @@ public class FollowPathCommand extends Command
      */
     protected boolean isFinished()
     {
-        return pathState == 3 && 
+        boolean isFinished = getControllerStatus(Robot.dt.getRightTalon()).isLast &&
                 Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_END_ERROR;
+        if (isFinished)
+            System.out.println(this + " finished");
+        return isFinished;
     }
     
     @Override
@@ -414,7 +420,7 @@ public class FollowPathCommand extends Command
      * To be called when the command is either cancelled, interrupted, or ended.
      */
     public void disable() {
-        //System.out.println("DISABLING");
+        System.out.println("DISABLING");
         notif.stop();
 
         Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
@@ -458,6 +464,7 @@ public class FollowPathCommand extends Command
      */
     private Trajectory reverseTrajectory(Trajectory t)
     {   
+        System.out.println("REVERSING TRAJ");
         for (Segment s : t.segments)
         {
             s.velocity *= -1;
@@ -467,7 +474,8 @@ public class FollowPathCommand extends Command
         Collections.reverse(list);
         
         t.segments = (Segment[]) list.toArray();
-
+        
+        System.out.println("TRAJ REVERSED");
         return t;
 
     }
