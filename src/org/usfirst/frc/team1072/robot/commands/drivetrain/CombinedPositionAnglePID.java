@@ -6,13 +6,13 @@ import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
+import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Combines position and angle for a smoother PID autonomous.
@@ -28,12 +28,12 @@ public class CombinedPositionAnglePID extends Command
     
     /**
      * Constructs a new CombinedPositionAnglePID.
-     * @param position the final position for the robot
+     * @param position the final position for the robot in feet
      * @param angle the final angle for the robot in degrees
      */
     public CombinedPositionAnglePID (double position, double angle)
     {
-        this.position = position;
+        this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
     }
     
