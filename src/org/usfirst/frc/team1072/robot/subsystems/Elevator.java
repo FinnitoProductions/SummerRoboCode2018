@@ -4,7 +4,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
-import org.usfirst.frc.team1072.robot.commands.MoveElevatorVelocityCommand;
+import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorVelocityCommand;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;

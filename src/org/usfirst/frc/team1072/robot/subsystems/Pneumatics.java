@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
-import org.usfirst.frc.team1072.robot.commands.SetCompressorCommand;
+import org.usfirst.frc.team1072.robot.commands.intake.SetCompressorCommand;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;

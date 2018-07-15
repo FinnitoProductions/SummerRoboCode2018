@@ -7,7 +7,7 @@
 
 package org.usfirst.frc.team1072.robot;
 
-import org.usfirst.frc.team1072.robot.commands.AutonomousCommand;
+import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;

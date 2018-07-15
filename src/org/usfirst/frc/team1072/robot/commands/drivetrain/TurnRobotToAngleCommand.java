@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1072.robot.commands;
+package org.usfirst.frc.team1072.robot.commands.drivetrain;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
@@ -16,41 +16,55 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Drives the robot to a given position using PID.
+ * Turns the robot to a given angle.
  * @author Finn Frankis
- * @version Jun 14, 2018
+ * @version Jul 14, 2018
  */
-public class DriveToPositionCommand extends Command
+public class TurnRobotToAngleCommand extends Command
 {
-    private double position;
+    private double angle;
     private double numExecutes;
     private double maxExecutes = 3;
     
     /**
-     * Constructs a new DriveToPositionCommand.
+     * Constructs a new TurnRobotToAngleCommand.
      * @param position the final position for the robot
+     * @param angle the final angle for the robot in degrees
      */
-    public DriveToPositionCommand (double position)
+    public TurnRobotToAngleCommand (double angle)
     {
-        this.position = position;
+        this.angle = new Angle(AngleUnit.DEGREES, angle).getPigeonUnits();
     }
     
     public void initialize()
     {
-        initPosition();
+        initAngle();
         Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
         
         numExecutes = 0;
     }
     
-    private void initPosition()
-    {
-        Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
-        
-        Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
-    }
     
+    private void initAngle()
+    {
+        Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
+        
+        Robot.dt.configureAngleClosedLoop();
+        
+        Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+                RemoteSensorSource.Pigeon_Yaw, 
+                RobotMap.REMOTE_SLOT_0, 
+                RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+                RemoteSensorSource.Pigeon_Yaw, 
+                RobotMap.REMOTE_SLOT_0, 
+                RobotMap.TIMEOUT);
+        
+        
+        Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
+    }
 
+    
     public void execute()
     {
         if (numExecutes >= 0 && numExecutes < maxExecutes)
@@ -59,8 +73,16 @@ public class DriveToPositionCommand extends Command
         {
             numExecutes = -1;
         }
-
-        Robot.dt.setBoth(ControlMode.Position, position);
+        
+        
+        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
+        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
+        
+        
+        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * 45 * 
+                ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
+        Robot.dt.setRight(ControlMode.MotionMagic, 45 * 
+                ConversionFactors.PIGEON_UNITS_PER_ROTATION/ConversionFactors.DEGREES_PER_ROTATION);
     }
     /**
     * @return
@@ -68,7 +90,7 @@ public class DriveToPositionCommand extends Command
     @Override
     protected boolean isFinished()
     {
-        if (numExecutes == -1)
+        /*if (numExecutes == -1)
         {
             boolean isFinished = Math.abs(Robot.dt.getLeftTalon().
                     getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR
@@ -80,8 +102,13 @@ public class DriveToPositionCommand extends Command
                 Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
             }
             return isFinished;
-        }
+        }*/
         return false;
     }
-
+    
+    public void end()
+    {
+        Robot.dt.configureNominalPeakOutputs();
+    }
+    
 }

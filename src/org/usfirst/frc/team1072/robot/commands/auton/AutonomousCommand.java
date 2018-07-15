@@ -1,4 +1,4 @@
-package org.usfirst.frc.team1072.robot.commands;
+package org.usfirst.frc.team1072.robot.commands.auton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +9,10 @@ import org.usfirst.frc.team1072.robot.RobotMap.AutonomousPaths;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
-import org.usfirst.frc.team1072.robot.commands.PauseUntilPathBeginsCommand.PauseType;
+import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBeginsCommand.PauseType;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.FollowPathArcCommand;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrainCommand;
+import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidCommand;
 import org.usfirst.frc.team1072.util.Position;
 import org.usfirst.frc.team1072.util.Position.PositionUnit;
 

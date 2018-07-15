@@ -4,8 +4,8 @@ import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
-import org.usfirst.frc.team1072.robot.commands.MoveElevatorMotionMagicCommand;
-import org.usfirst.frc.team1072.robot.commands.SetSolenoidCommand;
+import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagicCommand;
+import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidCommand;
 
 
 
