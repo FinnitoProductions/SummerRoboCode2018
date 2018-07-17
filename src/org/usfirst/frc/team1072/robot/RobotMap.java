@@ -292,8 +292,8 @@ public class RobotMap {
      */
     public static class AutonomousPaths
     {
-        public static final String CLH_P1_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1_left_detailed.csv";
-        public static final String CLH_P1_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1_right_detailed.csv";
+        public static final String CLH_P1_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1 _left_detailed.csv";
+        public static final String CLH_P1_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1 _right_detailed.csv";
         
         public static final String CLH_P2_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/part2_left_detailed.csv";
         public static final String CLH_P2_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/part2_right_detailed.csv";

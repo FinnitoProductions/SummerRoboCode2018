@@ -94,7 +94,7 @@ public class Robot extends TimedRobot
     public void autonomousPeriodic()
     { 
         Scheduler.getInstance().run();
-        Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.printMotorOutputPercentage();
     }
 
     /**

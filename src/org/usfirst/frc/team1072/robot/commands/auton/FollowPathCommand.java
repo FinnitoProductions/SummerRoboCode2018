@@ -38,7 +38,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private final int minPointsInController = 50;
+    private final int minPointsInController = 18;
     private ProcessBuffer p;
     private Notifier notif;
   
