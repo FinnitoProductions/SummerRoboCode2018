@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ToggleCompressor extends Command
 {
-
+    private boolean state;
     /**
      * Sets up the command, requiring the pneumatics subsystem.
      */
@@ -22,16 +22,15 @@ public class ToggleCompressor extends Command
     }
 
     /**
+     * Initializes the command.
+     */
+    public void initialize()
+    {
+        state = !Intake.pn.getCompressor().getClosedLoopControl();
+        Intake.pn.setCompressor(state); 
+    }
+    /**
      * Determines whether the commmand has finished.
      */
-    protected boolean isFinished() { return Intake.pn.getCompressor().getClosedLoopControl(); }
-
-    /**
-     * Executes the command to toggle the compressor.
-     */
-    public void execute() 
-    { 
-        Intake.pn.setCompressor(!Intake.pn.getCompressor().getClosedLoopControl()); 
-    }
-
+    protected boolean isFinished() { return Intake.pn.getCompressor().getClosedLoopControl() == state; }
 }
