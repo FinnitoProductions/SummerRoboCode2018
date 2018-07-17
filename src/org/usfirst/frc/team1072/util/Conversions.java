@@ -140,7 +140,7 @@ public final class Conversions
      */
     public static double convertSpeed (SpeedUnit startUnit, double startValue, SpeedUnit desiredUnit)
     {
-        if (WHEEL_DIAMETER < 0)
+        if (WHEEL_DIAMETER >= 0)
         {
             if (desiredUnit == SpeedUnit.FEET_PER_SECOND)
             {
@@ -231,13 +231,17 @@ public final class Conversions
         }
     }
     
+    public static double WHEEL_DIAMETER = -1;
+    
     /**
      * Sets the wheel diameter for use in position and velocity computations.
      * @param newDiameter the diameter with which the current one will be replaced
      */
     public static void setWheelDiameter(double newDiameter)
     {
+        System.out.println("SETTING DIAMETER");
         WHEEL_DIAMETER = newDiameter;
+
     }
     
     public static final double PIGEON_UNITS_PER_ROTATION = 8192;
@@ -253,5 +257,5 @@ public final class Conversions
     
     public static final int INCHES_PER_FOOT = 12;
     
-    public static double WHEEL_DIAMETER = -1;
+
 }

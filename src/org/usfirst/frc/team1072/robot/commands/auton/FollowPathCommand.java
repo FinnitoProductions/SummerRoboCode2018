@@ -11,6 +11,8 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Conversions;
+import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
+import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
@@ -45,7 +47,6 @@ public class FollowPathCommand extends Command
     private final int STAT_INDEX = 1;
     private static final int TRAJ_LOADED_INDEX = 2;
     private Map<IMotorController, Object[]> controllers;
-    boolean pathReversed;
     
     private int pathState;
     
@@ -68,7 +69,6 @@ public class FollowPathCommand extends Command
         outerPort = -1;
         requires(Robot.dt);
         totalTime = -1;
-        pathReversed = false;
     }
     
     /**
@@ -83,7 +83,6 @@ public class FollowPathCommand extends Command
         this.outerPort = outerPort;
         requires(Robot.dt);
         totalTime = -1;
-        pathReversed = false;
     }
     
     public FollowPathCommand zeroPigeonAtStart(boolean zeroPigeon)
@@ -112,11 +111,10 @@ public class FollowPathCommand extends Command
     public void initialize()
     {
         System.out.println("INITIALIZED" + Robot.getCurrentTimeMs());
-        pathReversed = false;
         System.out.println("INITIALIZED FIRST CALLED " + Robot.getCurrentTimeMs());
         pathState = 0;
         totalTime = 0;
-        double period = RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 1000 / 2;
+        double period = RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 1000 / 8;
 
         notif.startPeriodic(period);
         System.out.println("NOTIFIER STARTED " + Robot.getCurrentTimeMs());
@@ -280,7 +278,7 @@ public class FollowPathCommand extends Command
         if (reversePath)
             t = reverseTrajectory(t);
         controllers.put(controller, new Object[] {t, null, false});
-        pathReversed = reversePath;
+        System.out.println("DONE ADDING PROFILE");
     }
     
     /**
@@ -307,7 +305,8 @@ public class FollowPathCommand extends Command
     
                 System.out.println("STARTING LOAD TRAJECTORY " + Robot.getCurrentTimeMs());
                 double velocityAddFactor = DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT;
-    
+                System.out.println(velocityAddFactor);
+                System.out.println();
                 for (int i = 0; i < segs.length; i++)
                 {
                     TrajectoryPoint tp = new TrajectoryPoint();
@@ -335,14 +334,19 @@ public class FollowPathCommand extends Command
     
     
                     }
-                    System.out.println(this + " " + pathReversed);
-                    tp.velocity += Math.signum(tp.velocity) * velocityAddFactor;
-    
-                    //ramp down factor to add to velocity
+                    if (segs.length > 1 && i == 0 && tp.velocity == 0)
+                    {
+                        tp.velocity += Math.signum(segs[i+1].velocity) * velocityAddFactor;
+                    }
+                    else
+                    {
+                        tp.velocity += Math.signum(tp.velocity) * velocityAddFactor;
+                    }
+                    //ramp down factor to add to velocity after each point
                     velocityAddFactor -= 
                             DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT 
                             * (RobotMap.TIME_PER_TRAJECTORY_POINT_MS / DrivetrainConstants.TIME_TO_OVERCOME_S_FRICTION_MS);
-                    
+                    velocityAddFactor = Math.max(0, velocityAddFactor);
                     //tp.headingDeg = new Angle(AngleUnit.RADIANS, segs[i].heading).getDegrees(); // convert radians to degrees
                     tp.velocity = tp.velocity / 10.0 // convert to feet per 100 ms
                     * Conversions.INCHES_PER_FOOT // convert to inches per 100 ms
@@ -351,6 +355,12 @@ public class FollowPathCommand extends Command
                     tp.zeroPos = false;
     
                     //System.out.println("AUXILIARY POSITION " + tp.auxiliaryPos);
+                    /*System.out.print("v: " + 
+                    Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, tp.velocity, SpeedUnit.FEET_PER_SECOND)
+                    + ", pos: " + 
+                    Conversions.convertPosition(PositionUnit.ENCODER_UNITS, tp.position, PositionUnit.FEET) + " ");*/
+                    if (i % 5 == 0)
+                        System.out.println();
                     if (i == (segs.length-1))
                         tp.isLastPoint = true;
     

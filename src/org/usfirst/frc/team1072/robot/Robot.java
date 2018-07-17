@@ -50,11 +50,11 @@ public class Robot extends TimedRobot
      */
     public void robotInit() 
     {
+        Conversions.setWheelDiameter(DrivetrainConstants.WHEELDIAMETER);
         intake = Intake.getInstance();
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         oi = OI.getInstance();
-        Conversions.setWheelDiameter(DrivetrainConstants.WHEELDIAMETER);
     }
     
 

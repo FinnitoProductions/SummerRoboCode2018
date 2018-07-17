@@ -77,31 +77,32 @@ public class AutonomousCommand extends CommandGroup
                 .zeroPigeonAtStart(true);
         fpc2 = setupPathFollowerArc(AutonomousPaths.CLH_P2_LEFT_REV, AutonomousPaths.CLH_P2_RIGHT_REV, true)
                 .zeroPigeonAtStart(false);
-        fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
-        fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
-        fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
-        fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
-        fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
+        //fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
+        //fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
+        //fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
+        //fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
+        //fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
         //fpc8 = setupPathFollowerArc(AutonomousPaths.CLH_P8_LEFT_REV, AutonomousPaths.CLH_P8_RIGHT_REV, true);
         //fpc9 = setupPathFollowerArc(AutonomousPaths.CLH_P9_LEFT, AutonomousPaths.CLH_P9_RIGHT, false);
        
 
         
-        addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-        addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+        //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+        //addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
 
-        /*addSequential(new PrebufferPathPointsCommand(fpc1));
+        addSequential(new PrebufferPathPointsCommand(fpc1));
         CommandGroup path1 = new CommandGroup();
             path1.addParallel(fpc1);
-            path1.addParallel(new PrebufferPathPointsCommand(fpc3));
+            path1.addParallel(new PrebufferPathPointsCommand(fpc2));
         addSequential(path1);
+        addSequential(fpc2);
         /*addSequential(new PrebufferPathPointsCommand(fpc2));
         CommandGroup path2 = new CommandGroup();
         path2.addParallel(fpc2);
         path2.addParallel(new PrebufferPathPointsCommand(fpc3));
         addSequential(path2);*/
-        addSequential(new PrebufferPathPointsCommand(fpc4));
-        addSequential(fpc4);
+        //addSequential(new PrebufferPathPointsCommand(fpc2));
+        
         /*CommandGroup path3 = new CommandGroup();
         path3.addParallel(fpc3);
         path3.addParallel(new PrebufferPathPointsCommand(fpc4));
@@ -319,5 +320,10 @@ public class AutonomousCommand extends CommandGroup
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
         return fpc;
+    }
+    
+    private void switchHeadonOuttakeFirstCube()
+    {
+        
     }
 }
