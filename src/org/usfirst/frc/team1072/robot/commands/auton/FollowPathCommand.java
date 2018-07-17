@@ -415,12 +415,12 @@ public class FollowPathCommand extends Command
                                                                        getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading);
             System.out.println("CURRENT HEADING: " + Conversions.convertAngle(AngleUnit.PIGEON_UNITS, 
                     Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX), AngleUnit.RADIANS));
-            /*Robot.dt.getRightTalon().setSelectedSensorPosition(
+            Robot.dt.getRightTalon().setSelectedSensorPosition(
                     (int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
                     getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading, AngleUnit.PIGEON_UNITS)
                             - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX)),
                     RobotMap.AUXILIARY_PID_INDEX, 
-                    RobotMap.TIMEOUT);*/
+                    RobotMap.TIMEOUT);
             System.out.println("AUX ANGLE AFTER FINISHING: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
         }
         return isFinished;
