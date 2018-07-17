@@ -407,22 +407,6 @@ public class FollowPathCommand extends Command
     {
         boolean isFinished = getControllerStatus(Robot.dt.getRightTalon()).isLast &&
                 Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_END_ERROR;
-        if (isFinished)
-        {
-            System.out.println(this + " finished");
-            System.out.println("LAST HEADING: " + 
-            getControllerTrajectory(Robot.dt.getRightTalon()).segments[
-                                                                       getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading);
-            System.out.println("CURRENT HEADING: " + Conversions.convertAngle(AngleUnit.PIGEON_UNITS, 
-                    Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX), AngleUnit.RADIANS));
-            Robot.dt.getRightTalon().setSelectedSensorPosition(
-                    (int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
-                    getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading, AngleUnit.PIGEON_UNITS)
-                            - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX)),
-                    RobotMap.AUXILIARY_PID_INDEX, 
-                    RobotMap.TIMEOUT);
-            System.out.println("AUX ANGLE AFTER FINISHING: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-        }
         return isFinished;
     }
     
@@ -434,7 +418,37 @@ public class FollowPathCommand extends Command
     @Override
     protected void end()
     {
+        System.out.println(this + " finished");
+        try
+        {
+            Thread.sleep(3000l);
+        }
+        catch (InterruptedException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("LAST HEADING: " + 
+        getControllerTrajectory(Robot.dt.getRightTalon()).segments[
+                                                                   getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading);
+        System.out.println("CURRENT HEADING: " + Conversions.convertAngle(AngleUnit.PIGEON_UNITS, 
+                Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX), AngleUnit.RADIANS));
+        /*Robot.dt.getRightTalon().setSelectedSensorPosition(
+                -(int)(Conversions.convertPosition(PositionUnit.FEET, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
+                getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].position, PositionUnit.ENCODER_UNITS)
+                        - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)),
+                RobotMap.PRIMARY_PID_INDEX, 
+                RobotMap.TIMEOUT);*/
+        Robot.dt.getRightTalon().setSelectedSensorPosition(
+                (int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
+                getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading, AngleUnit.PIGEON_UNITS)
+                        - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX)),
+                RobotMap.AUXILIARY_PID_INDEX, 
+                RobotMap.TIMEOUT);
+        System.out.println("AUX ANGLE AFTER FINISHING: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        
         disable();
+        
     }
     
     @Override
@@ -450,7 +464,7 @@ public class FollowPathCommand extends Command
         System.out.println("DISABLING");
         notif.stop();
 
-        Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
+        //Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
         Robot.dt.getRightTalon().clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
     }
     
