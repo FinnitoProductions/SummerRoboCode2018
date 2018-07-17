@@ -118,7 +118,7 @@ public class Drivetrain extends Subsystem
     {
         talonInit();
         setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
-        zeroAllSensors();
+        
     }
     /**
      * Performs all commands to initialize the talons.
@@ -127,25 +127,37 @@ public class Drivetrain extends Subsystem
      */
     public void talonInit()
     {
-        clearTrajectoryPoints();
+        zeroAllSensors();
         initTalonOutput(0);
+        System.out.println("CLEARING POINTS " + Robot.getCurrentTimeMs());
+        clearTrajectoryPoints();
+        System.out.println("INIT TALON OUTPUT " + Robot.getCurrentTimeMs());
+
+        System.out.println("INIT VICTORS " + Robot.getCurrentTimeMs());
         victorInit();
         
+        System.out.println("INVERT CONTROLLERS " + Robot.getCurrentTimeMs());
         invertControllers();
         setNeutralMode(NeutralMode.Brake);
 
 
-
+        System.out.println("SCALING VOLTAGE " + Robot.getCurrentTimeMs());
         scaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
         configureNominalPeakOutputs();
         
+        System.out.println("SETTING FRAME PERIODS " + Robot.getCurrentTimeMs());
         dtsetTalonFramePeriods();
         
+        System.out.println("CONFIGURING VEL CLOSED LOOP " + Robot.getCurrentTimeMs());
         configureVelocityClosedLoop();
+        System.out.println("CONFIGURING POS CLOSED LOOP " + Robot.getCurrentTimeMs());
         configurePositionClosedLoop();
+        System.out.println("CONFIGURING MP CLOSED LOOP " + Robot.getCurrentTimeMs());
         configureMotionProfileAngleClosedLoop();
+        System.out.println("CONFIGURING MP ANGLE CLOSED LOOP " + Robot.getCurrentTimeMs());
         configureMotionProfileDriveClosedLoop();
 
+        System.out.println("SETTING CURRENT LIMIT " + Robot.getCurrentTimeMs());
         dtSetCurrentLimit(DrivetrainConstants.PEAK_CURRENT_LIMIT, DrivetrainConstants.PEAK_TIME_MS,
                 DrivetrainConstants.CONTINUOUS_CURRENT_LIMIT);
 

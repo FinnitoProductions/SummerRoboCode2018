@@ -10,7 +10,10 @@ import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBeginsCommand.PauseType;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPositionCommand;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrainCommand;
+import org.usfirst.frc.team1072.robot.commands.elevator.InitializeElevatorCommand;
+import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntakeCommand;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidCommand;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
@@ -60,8 +63,8 @@ public class AutonomousCommand extends CommandGroup
     {
         CommandGroup initSubsystems = new CommandGroup();
             initSubsystems.addParallel(new InitializeDrivetrainCommand());
-            //initSubsystems.addParallel(new InitializeElevatorCommand());
-            //initSubsystems.addParallel(new InitializeIntakeCommand());
+            initSubsystems.addParallel(new InitializeElevatorCommand());
+            initSubsystems.addParallel(new InitializeIntakeCommand());
         addSequential(initSubsystems);
     }
     /**
@@ -89,10 +92,9 @@ public class AutonomousCommand extends CommandGroup
         
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
         //addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
-
-        addSequential(new PrebufferPathPointsCommand(fpc1));
+        //addSequential(new DriveToPositionCommand(3));
         CommandGroup path1 = new CommandGroup();
-            path1.addParallel(fpc1);
+            path1.addSequential(fpc1);
             path1.addParallel(new PrebufferPathPointsCommand(fpc2));
         addSequential(path1);
         addSequential(fpc2);

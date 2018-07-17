@@ -23,7 +23,7 @@ public class DriveToPositionCommand extends Command
 {
     private double position;
     private double numExecutes;
-    private double maxExecutes = 3;
+    private double maxExecutes = 10;
     
     /**
      * Constructs a new DriveToPositionCommand.
@@ -38,7 +38,8 @@ public class DriveToPositionCommand extends Command
     {
         initPosition();
         Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
-        
+        Robot.dt.setBoth(ControlMode.Position, position);
+        Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
         numExecutes = 0;
     }
     
@@ -47,18 +48,23 @@ public class DriveToPositionCommand extends Command
         Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
+        
     }
     
 
     public void execute()
     {
         if (numExecutes >= 0 && numExecutes < maxExecutes)
+        {
+            System.out.println("INCREMENTING");
             numExecutes++;
+        }
         else
         {
+            System.out.println("DONE");
             numExecutes = -1;
         }
-
+        System.out.println("EXECUTING");
         Robot.dt.setBoth(ControlMode.Position, position);
     }
     /**
@@ -77,7 +83,10 @@ public class DriveToPositionCommand extends Command
             {
                 Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
                 Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+                System.out.println("FINISHING");
             }
+            else
+                System.out.println("NOT FINISHED");
             return isFinished;
         }
         return false;

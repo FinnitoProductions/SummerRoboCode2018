@@ -38,7 +38,7 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPathCommand extends Command
 {
-    private final int minPointsInController = 13;
+    private final int minPointsInController = 50;
     private ProcessBuffer p;
     private Notifier notif;
   
@@ -114,7 +114,7 @@ public class FollowPathCommand extends Command
         System.out.println("INITIALIZED FIRST CALLED " + Robot.getCurrentTimeMs());
         pathState = 0;
         totalTime = 0;
-        double period = RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 1000 / 8;
+        double period = RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 1000 / 2;
 
         notif.startPeriodic(period);
         System.out.println("NOTIFIER STARTED " + Robot.getCurrentTimeMs());
@@ -233,7 +233,7 @@ public class FollowPathCommand extends Command
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                         
                     pathState = 2;
-                    System.out.println("MOT PROF ENABLED");
+                    System.out.println("MOT PROF ENABLED " + Robot.getCurrentTimeMs());
                 }
                 break;
             }
@@ -305,8 +305,6 @@ public class FollowPathCommand extends Command
     
                 System.out.println("STARTING LOAD TRAJECTORY " + Robot.getCurrentTimeMs());
                 double velocityAddFactor = DrivetrainConstants.MOT_PROF_ADD_TO_VEL_INIT;
-                System.out.println(velocityAddFactor);
-                System.out.println();
                 for (int i = 0; i < segs.length; i++)
                 {
                     TrajectoryPoint tp = new TrajectoryPoint();
@@ -359,8 +357,6 @@ public class FollowPathCommand extends Command
                     Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, tp.velocity, SpeedUnit.FEET_PER_SECOND)
                     + ", pos: " + 
                     Conversions.convertPosition(PositionUnit.ENCODER_UNITS, tp.position, PositionUnit.FEET) + " ");*/
-                    if (i % 5 == 0)
-                        System.out.println();
                     if (i == (segs.length-1))
                         tp.isLastPoint = true;
     
