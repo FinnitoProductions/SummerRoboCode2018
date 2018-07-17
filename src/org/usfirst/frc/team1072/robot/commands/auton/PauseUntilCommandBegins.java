@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * 
+ * Pauses a sequence of command until a given command begins.
  * @author Finn Frankis
  * @version Jul 13, 2018
  */
@@ -42,8 +42,7 @@ public class PauseUntilCommandBegins extends Command
     protected boolean isFinished()
     {
         // TODO Auto-generated method stub
-        return hasInitializedStartTime && 
-                !c.isRunning() && 
+        return hasInitializedStartTime &&
                 Timer.getFPGATimestamp() - startTime >= delay;
     }
     
