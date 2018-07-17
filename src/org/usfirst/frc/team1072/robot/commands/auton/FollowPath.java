@@ -37,7 +37,7 @@ import jaci.pathfinder.Trajectory.Segment;
  * @author Finn Frankis
  * @version 6/20/18
  */
-public class FollowPathCommand extends Command
+public class FollowPath extends Command
 {
     private final int minPointsInController = 18;
     private ProcessBuffer p;
@@ -62,7 +62,7 @@ public class FollowPathCommand extends Command
     /**
      * Constructs a new command. 
      */
-    public FollowPathCommand()
+    public FollowPath()
     {
         p = new ProcessBuffer();
         notif = new Notifier(p);
@@ -76,7 +76,7 @@ public class FollowPathCommand extends Command
      * Constructs a new command.
      * @param outerPort the outer PID slot
      */
-    public FollowPathCommand(int outerPort)
+    public FollowPath(int outerPort)
     {
         p = new ProcessBuffer();
         notif = new Notifier(p);
@@ -86,7 +86,7 @@ public class FollowPathCommand extends Command
         totalTime = -1;
     }
     
-    public FollowPathCommand zeroPigeonAtStart(boolean zeroPigeon)
+    public FollowPath zeroPigeonAtStart(boolean zeroPigeon)
     {
         zeroAux = zeroPigeon;
         return this;

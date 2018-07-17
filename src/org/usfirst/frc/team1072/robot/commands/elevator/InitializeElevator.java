@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version Jul 13, 2018
  */
-public class InitializeElevatorCommand extends Command
+public class InitializeElevator extends Command
 {
     private boolean isFinished;
     public void initialize()

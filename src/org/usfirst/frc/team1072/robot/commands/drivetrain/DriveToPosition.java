@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Finn Frankis
  * @version Jun 14, 2018
  */
-public class DriveToPositionCommand extends Command
+public class DriveToPosition extends Command
 {
     private double position;
     private int numExecutes;
@@ -29,7 +29,7 @@ public class DriveToPositionCommand extends Command
      * Constructs a new DriveToPositionCommand.
      * @param position the final position for the robot in feet
      */
-    public DriveToPositionCommand (double position)
+    public DriveToPosition (double position)
     {
         this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
     }

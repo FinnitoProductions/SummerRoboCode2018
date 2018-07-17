@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  * @author Finn Frankis
  * @version Jul 10, 2018
  */
-public class DelayCommand extends CommandGroup
+public class Delay extends CommandGroup
 {
     private double delay;
     private double startTime;
     
-    public DelayCommand (double time)
+    public Delay (double time)
     {
         delay = time;
         startTime = Timer.getFPGATimestamp();

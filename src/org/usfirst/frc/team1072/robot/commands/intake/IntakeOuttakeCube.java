@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version 6/14/18
  */
-public class IntakeOuttakeCubeCommand extends Command
+public class IntakeOuttakeCube extends Command
 {
     /**
      * Constructs a new command requiring the intake.
      */
-    public IntakeOuttakeCubeCommand() 
+    public IntakeOuttakeCube() 
     { 
         requires(Robot.intake); 
     }

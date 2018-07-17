@@ -10,13 +10,13 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version 6/14/18
  */
-public class ToggleCompressorCommand extends Command
+public class ToggleCompressor extends Command
 {
 
     /**
      * Sets up the command, requiring the pneumatics subsystem.
      */
-    public ToggleCompressorCommand() 
+    public ToggleCompressor() 
     { 
         requires(Intake.pn); 
     }

@@ -9,14 +9,14 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  * @author Finn Frankis
  * @version 6/15/18
  */
-public class SetCompressorCommand extends InstantCommand
+public class SetCompressor extends InstantCommand
 {
     boolean state;
     
     /**
      * Initializes the command, requiring the pneumatics subsystem.
      */
-    public SetCompressorCommand(boolean state) 
+    public SetCompressor(boolean state) 
     { 
         this.state = state;
         requires(Intake.pn); 

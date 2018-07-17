@@ -15,14 +15,14 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version 6/15/18
  */
-public class MoveElevatorMotionMagicCommand extends Command
+public class MoveElevatorMotionMagic extends Command
 {
     private double position;
     
     /**
      * Creates a new command requiring the elevator.
      */
-    public MoveElevatorMotionMagicCommand(double position) 
+    public MoveElevatorMotionMagic(double position) 
     { 
         requires(Robot.el); 
         this.position = position;

@@ -14,9 +14,9 @@ import jaci.pathfinder.Trajectory;
  * @author Finn Frankis
  * @version Jul 13, 2018
  */
-public class PrebufferPathPointsCommand extends Command
+public class PrebufferPathPoints extends Command
 {
-    private FollowPathCommand fpc;
+    private FollowPath fpc;
     private HashMap<IMotorController, Trajectory> masterControllers;
     private boolean isFinished;
     
@@ -24,12 +24,12 @@ public class PrebufferPathPointsCommand extends Command
      * Constructs a new PrebufferPathPointsCommand.
      * @param fpc the path to be buffered
      */
-    public PrebufferPathPointsCommand(FollowPathCommand fpc)
+    public PrebufferPathPoints(FollowPath fpc)
     {
         this.fpc = fpc;
         masterControllers = new HashMap<IMotorController, Trajectory>();
         masterControllers.put(Robot.dt.getRightTalon(), fpc.getControllerTrajectory(Robot.dt.getRightTalon()));
-        if (!(fpc instanceof FollowPathArcCommand))
+        if (!(fpc instanceof FollowPathArc))
         {
             masterControllers.put(Robot.dt.getLeftTalon(), fpc.getControllerTrajectory(Robot.dt.getLeftTalon()));
         }

@@ -10,14 +10,14 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  * @author Finn Frankis
  * @version 6/14/18
  */
-public class SetSolenoidCommand extends InstantCommand
+public class SetSolenoid extends InstantCommand
 {
     private String solenoidKey;
     private DoubleSolenoid.Value solenoidState;
     /**
      * Sets up the solenoid command, requiring the intake.
      */
-    public SetSolenoidCommand(String key, DoubleSolenoid.Value state) 
+    public SetSolenoid(String key, DoubleSolenoid.Value state) 
     { 
         requires(Intake.pn); 
         solenoidKey = key;

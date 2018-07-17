@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version 6/11/18
  */
-public class DriveWithVelocityCommand extends Command
+public class DriveWithVelocity extends Command
 {
     private double driveSpeed;
     private double turnSpeed;
@@ -26,7 +26,7 @@ public class DriveWithVelocityCommand extends Command
     /**
      * Creates a new DriveWithVelocityCommand object requiring the Drivetrain.
      */
-    public DriveWithVelocityCommand(double deadband) 
+    public DriveWithVelocity(double deadband) 
     { 
         requires(Robot.dt); 
         this.deadband = deadband;

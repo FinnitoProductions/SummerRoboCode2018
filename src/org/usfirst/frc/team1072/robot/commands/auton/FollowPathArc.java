@@ -7,12 +7,12 @@ import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
  * @author Finn Frankis
  * @version 6/28/18
  */
-public class FollowPathArcCommand extends FollowPathCommand
+public class FollowPathArc extends FollowPath
 {
     /**
      * Constructs a new motion profile arc.
      */
-    public FollowPathArcCommand()
+    public FollowPathArc()
     {
         super(DrivetrainConstants.ANGLE_PID);
     }

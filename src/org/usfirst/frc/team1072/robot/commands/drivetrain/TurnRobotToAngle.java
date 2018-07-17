@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version Jul 14, 2018
  */
-public class TurnRobotToAngleCommand extends Command
+public class TurnRobotToAngle extends Command
 {
     private double angle;
     private double numExecutes;
@@ -29,7 +29,7 @@ public class TurnRobotToAngleCommand extends Command
      * @param position the final position for the robot
      * @param angle the final angle for the robot in degrees
      */
-    public TurnRobotToAngleCommand (double angle)
+    public TurnRobotToAngle (double angle)
     {
        
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);

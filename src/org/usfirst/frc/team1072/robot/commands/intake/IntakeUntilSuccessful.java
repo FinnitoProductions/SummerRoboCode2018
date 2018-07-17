@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version Jul 10, 2018
  */
-public class IntakeUntilSuccessfulCommand extends Command
+public class IntakeUntilSuccessful extends Command
 {
-    public IntakeUntilSuccessfulCommand()
+    public IntakeUntilSuccessful()
     {
         
     }

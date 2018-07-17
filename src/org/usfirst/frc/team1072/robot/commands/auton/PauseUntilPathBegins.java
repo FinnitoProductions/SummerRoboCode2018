@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version Jul 12, 2018
  */
-public class PauseUntilPathBeginsCommand extends Command
+public class PauseUntilPathBegins extends Command
 {
-    private FollowPathCommand fpc;
+    private FollowPath fpc;
     private double delay;
     private double modifiedDelay;
     private double startTime;
@@ -23,7 +23,7 @@ public class PauseUntilPathBeginsCommand extends Command
     {
         START_OF_PATH, END_OF_PATH, NO_PAUSE
     }
-    public PauseUntilPathBeginsCommand(FollowPathCommand fpc)
+    public PauseUntilPathBegins(FollowPath fpc)
     {
         this.fpc = fpc;
         startTime = Double.MAX_VALUE;
@@ -41,7 +41,7 @@ public class PauseUntilPathBeginsCommand extends Command
      * @param delay the time in seconds to wait either from the beginning or end of the path
      * @param totalTime the total time for the path to occur (in ms)
      */
-    public PauseUntilPathBeginsCommand(FollowPathCommand fpc, PauseType pauseType, double delay, double totalTime)
+    public PauseUntilPathBegins(FollowPath fpc, PauseType pauseType, double delay, double totalTime)
     {
         this.fpc = fpc;
         this.pauseType = pauseType;

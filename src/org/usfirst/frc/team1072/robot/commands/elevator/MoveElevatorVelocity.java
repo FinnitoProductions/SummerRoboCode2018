@@ -15,12 +15,12 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version 6/14/18
  */
-public class MoveElevatorVelocityCommand extends Command
+public class MoveElevatorVelocity extends Command
 {
     /**
      * Creates a new command requiring the elevator.
      */
-    public MoveElevatorVelocityCommand() { requires(Robot.el); }
+    public MoveElevatorVelocity() { requires(Robot.el); }
     
     /**
      * Initializes the command, including necessary sensors.

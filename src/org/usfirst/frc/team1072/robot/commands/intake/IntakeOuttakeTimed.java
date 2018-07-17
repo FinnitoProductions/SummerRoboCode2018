@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
  * @author Finn Frankis
  * @version 6/21/18
  */
-public class IntakeOuttakeTimedCommand extends TimedCommand
+public class IntakeOuttakeTimed extends TimedCommand
 {
     private boolean intake;
     
-    public IntakeOuttakeTimedCommand(double timeout, boolean intake)
+    public IntakeOuttakeTimed(double timeout, boolean intake)
     {
         super(timeout);
         requires(Robot.intake);

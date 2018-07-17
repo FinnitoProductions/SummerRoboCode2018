@@ -9,12 +9,12 @@ import org.usfirst.frc.team1072.robot.RobotMap.AutonomousPaths;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
-import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBeginsCommand.PauseType;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPositionCommand;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrainCommand;
-import org.usfirst.frc.team1072.robot.commands.elevator.InitializeElevatorCommand;
-import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntakeCommand;
-import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidCommand;
+import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBegins.PauseType;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrain;
+import org.usfirst.frc.team1072.robot.commands.elevator.InitializeElevator;
+import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntake;
+import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
@@ -62,9 +62,9 @@ public class AutonomousCommand extends CommandGroup
     private void initSubsystems()
     {
         CommandGroup initSubsystems = new CommandGroup();
-            initSubsystems.addParallel(new InitializeDrivetrainCommand());
-            initSubsystems.addParallel(new InitializeElevatorCommand());
-            initSubsystems.addParallel(new InitializeIntakeCommand());
+            initSubsystems.addParallel(new InitializeDrivetrain());
+            initSubsystems.addParallel(new InitializeElevator());
+            initSubsystems.addParallel(new InitializeIntake());
         addSequential(initSubsystems);
     }
     /**
@@ -73,7 +73,7 @@ public class AutonomousCommand extends CommandGroup
      */
     private void switchAuton (boolean onLeft)
     {
-        FollowPathCommand fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
+        FollowPath fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
         
         fpc1 = setupPathFollowerArc(AutonomousPaths.CLH_P1_LEFT, AutonomousPaths.CLH_P1_RIGHT, false)
@@ -93,15 +93,15 @@ public class AutonomousCommand extends CommandGroup
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
         //addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         //addSequential(new DriveToPositionCommand(3));
-        addSequential(new PrebufferPathPointsCommand(fpc1));
+        addSequential(new PrebufferPathPoints(fpc1));
         CommandGroup path1 = new CommandGroup();
             path1.addParallel(fpc1);
-            path1.addParallel(new PrebufferPathPointsCommand(fpc2));
-            path1.addParallel(new PrebufferPathPointsCommand(fpc5));
+            path1.addParallel(new PrebufferPathPoints(fpc2));
+            path1.addParallel(new PrebufferPathPoints(fpc5));
         addSequential(path1);
         addSequential(fpc2);
-        addSequential(new DriveToPositionCommand(4));
-        addSequential(new DriveToPositionCommand(-4));
+        addSequential(new DriveToPosition(4));
+        addSequential(new DriveToPosition(-4));
         addSequential(fpc5);
         /*addSequential(new PrebufferPathPointsCommand(fpc2));
         CommandGroup path2 = new CommandGroup();
@@ -273,9 +273,9 @@ public class AutonomousCommand extends CommandGroup
     }
 
     @SuppressWarnings("unused")
-    private FollowPathCommand setupPathFollower(String leftFileName, String rightFileName, boolean reverse)
+    private FollowPath setupPathFollower(String leftFileName, String rightFileName, boolean reverse)
     {
-        FollowPathCommand fpc = new FollowPathCommand();
+        FollowPath fpc = new FollowPath();
 
         Trajectory leftPath1 = null;
         Trajectory rightPath1 = null;
@@ -304,9 +304,9 @@ public class AutonomousCommand extends CommandGroup
      * @param reverse if true: perform the trajectory in reverse order; if false: perform it normally
      * @return the new follow path command
      */
-    private FollowPathCommand setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse)
+    private FollowPath setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse)
     {
-        FollowPathArcCommand fpc = new FollowPathArcCommand();
+        FollowPathArc fpc = new FollowPathArc();
 
         Trajectory leftPath1 = null;
         Trajectory rightPath1 = null;
