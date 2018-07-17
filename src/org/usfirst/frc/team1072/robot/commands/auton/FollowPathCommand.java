@@ -11,6 +11,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.util.Conversions;
+import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
@@ -229,7 +230,18 @@ public class FollowPathCommand extends Command
                     Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
                     Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
                     if (zeroAux)
+                    {
+                        System.out.println("ZEROING PIGEON");
+                        System.out.println("ZEROING PIGEON");
+                        System.out.println("ZEROING PIGEON");
+                        System.out.println("ZEROING PIGEON");
+                        System.out.println("ZEROING PIGEON");
+                        System.out.println("ZEROING PIGEON");
+                        System.out.println("ZEROING PIGEON");
+                        System.out.println("ZEROING PIGEON");
                         Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+                    }
+                    System.out.println("AUX ANGLE BEFORE ENABLE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                         
                     pathState = 2;
@@ -396,7 +408,21 @@ public class FollowPathCommand extends Command
         boolean isFinished = getControllerStatus(Robot.dt.getRightTalon()).isLast &&
                 Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_END_ERROR;
         if (isFinished)
+        {
             System.out.println(this + " finished");
+            System.out.println("LAST HEADING: " + 
+            getControllerTrajectory(Robot.dt.getRightTalon()).segments[
+                                                                       getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading);
+            System.out.println("CURRENT HEADING: " + Conversions.convertAngle(AngleUnit.PIGEON_UNITS, 
+                    Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX), AngleUnit.RADIANS));
+            /*Robot.dt.getRightTalon().setSelectedSensorPosition(
+                    (int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
+                    getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading, AngleUnit.PIGEON_UNITS)
+                            - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX)),
+                    RobotMap.AUXILIARY_PID_INDEX, 
+                    RobotMap.TIMEOUT);*/
+            System.out.println("AUX ANGLE AFTER FINISHING: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        }
         return isFinished;
     }
     
@@ -470,6 +496,7 @@ public class FollowPathCommand extends Command
         {
             s.velocity *= -1;
             s.position -= t.segments[t.segments.length - 1].position;
+            s.heading -= t.segments[t.segments.length - 1].heading;
         }
         List<Segment> list = Arrays.asList(t.segments);
         Collections.reverse(list);

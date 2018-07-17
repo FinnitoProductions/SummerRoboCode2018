@@ -79,9 +79,9 @@ public class AutonomousCommand extends CommandGroup
         fpc1 = setupPathFollowerArc(AutonomousPaths.CLH_P1_LEFT, AutonomousPaths.CLH_P1_RIGHT, false)
                 .zeroPigeonAtStart(true);
         fpc2 = setupPathFollowerArc(AutonomousPaths.CLH_P2_LEFT_REV, AutonomousPaths.CLH_P2_RIGHT_REV, true)
-                .zeroPigeonAtStart(false);
+                .zeroPigeonAtStart(true);
         //fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
-        //fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
+        fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
         //fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
         //fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
         //fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
@@ -95,7 +95,7 @@ public class AutonomousCommand extends CommandGroup
         //addSequential(new DriveToPositionCommand(3));
         addSequential(new PrebufferPathPointsCommand(fpc1));
         CommandGroup path1 = new CommandGroup();
-            path1.addSequential(fpc1);
+            path1.addParallel(fpc1);
             path1.addParallel(new PrebufferPathPointsCommand(fpc2));
         addSequential(path1);
         addSequential(fpc2);
