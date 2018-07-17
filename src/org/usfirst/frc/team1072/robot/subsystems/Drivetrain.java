@@ -215,6 +215,9 @@ public class Drivetrain extends Subsystem
         getRightVictor().follow(getRightTalon());
     }
     
+    /**
+     * Resets the coefficients in all four PID slots on the Talons.
+     */
     public void resetTalonCoefficients()
     {
         // for all PID slots
@@ -224,6 +227,10 @@ public class Drivetrain extends Subsystem
         }
     }
     
+    /**
+     * Resets the coefficients stored in a given PID slot.
+     * @param pid_slot the slot where the coefficients will be reset
+     */
     public void resetTalonCoefficients (int pid_slot)
     {
         getLeftTalon().configSelectedFeedbackCoefficient(1,
@@ -232,12 +239,15 @@ public class Drivetrain extends Subsystem
                 pid_slot, RobotMap.TIMEOUT); 
     }
     
+    /**
+     * Zeroes all sensors currently configured for the Talons.
+     */
     private void zeroAllSensors()
     {
-        for (int slot = 0; slot < 2; slot++)
+        for (int loop = 0; loop < 2; loop++)
         {
-            getLeftTalon().setSelectedSensorPosition(0, slot, RobotMap.TIMEOUT);
-            getRightTalon().setSelectedSensorPosition(0, slot, RobotMap.TIMEOUT);
+            getLeftTalon().setSelectedSensorPosition(0, loop, RobotMap.TIMEOUT);
+            getRightTalon().setSelectedSensorPosition(0, loop, RobotMap.TIMEOUT);
         }
     }
    
@@ -328,6 +338,10 @@ public class Drivetrain extends Subsystem
       
     }
 
+    /**
+     * Configures the nominal and peak outputs for the two Talons, where nominal output is the minimum percent which can be applied (without breaking static friction)
+     * and peak output is the maximum percent which can be applied.
+     */
     public void configureNominalPeakOutputs()
     {
         getLeftTalon().configNominalOutputForward(DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
@@ -381,6 +395,9 @@ public class Drivetrain extends Subsystem
         getRightTalon().selectProfileSlot(pidSlot, pidIndex);
     }
     
+    /**
+     * Configures the angle closed loop for turning in place.
+     */
     public void configureAngleClosedLoop()
     {
         zeroPigeon();
@@ -409,7 +426,7 @@ public class Drivetrain extends Subsystem
     }
     
     /**
-     * Configures the angle closed loop.
+     * Configures the angle closed loop for motion profiling.
      * 
      * @postcondition P, I, and D have been set for both sides; the pigeon zeroed; the frame period set
      */
@@ -455,7 +472,7 @@ public class Drivetrain extends Subsystem
     
     
     /**
-     * Resets the Talon frame periods.
+     * Resets the Talon frame periods (the frequency at which the Talons will broadcast certain status frames along the CAN bus).
      */
     private void dtsetTalonFramePeriods()
     {
@@ -599,6 +616,11 @@ public class Drivetrain extends Subsystem
         getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
     }
     
+    /**
+     * Configures both Talons to point to a given sensor.
+     * @param fd the type of sensor to which the Talon should use
+     * @param pidLoop the loop index where this sensor should be placed [0,1]
+     */
     public void setBothSensors(FeedbackDevice fd, int pidLoop)
     {
         getLeftTalon().configSelectedFeedbackSensor(fd, 
@@ -607,24 +629,41 @@ public class Drivetrain extends Subsystem
                     pidLoop, RobotMap.TIMEOUT);
     }
     
+    /**
+     * Prints the current output percentage to the motors to SmartDashboard.
+     */
     public void printMotorOutputPercentage()
     {
         SmartDashboard.putNumber("Left Talon Output Percentage", Robot.dt.getLeftTalon().getMotorOutputPercent());
         SmartDashboard.putNumber("Right Talon Output Percentage", Robot.dt.getRightTalon().getMotorOutputPercent());
     }
     
+    /**
+     * Prints the closed loop error of the Talons in a given loop.
+     * @param pidLoop the loop index [0,1]
+     */
     public void printClosedLoopError (int pidLoop)
     {
         SmartDashboard.putNumber("Left Talon Closed Loop Error", Robot.dt.getLeftTalon().getClosedLoopError(pidLoop));
         SmartDashboard.putNumber("Right Talon Closed Loop Error", Robot.dt.getRightTalon().getClosedLoopError(pidLoop));
     }
     
+    /**
+     * Prints the sensor positions of the Talons in a given loop.
+     * @param pidLoop the loop index [0,1]
+     */
     public void printSensorPositions (int pidLoop)
     {
         SmartDashboard.putNumber("Left Talon Position", Robot.dt.getLeftTalon().getSelectedSensorPosition(pidLoop));
         SmartDashboard.putNumber("Right Talon Position", Robot.dt.getRightTalon().getSelectedSensorPosition(pidLoop));
     }
     
+    /**
+     * Determines whether the closed loop error for both sides is within a given value.
+     * @param loopIndex the loop index, either primary or auxiliary [0,1]
+     * @param allowableError the error tolerance to be checked
+     * @return true if the absolute value of the error is within the value; false otherwise
+     */
     public boolean isClosedLoopErrorWithin (int loopIndex, double allowableError)
     {
         return Math.abs(getLeftTalon().getClosedLoopError(loopIndex)) < allowableError

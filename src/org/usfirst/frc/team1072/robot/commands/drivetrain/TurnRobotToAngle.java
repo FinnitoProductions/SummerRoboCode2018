@@ -35,6 +35,9 @@ public class TurnRobotToAngle extends Command
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
     }
     
+    /**
+     * Initializes this command.
+     */
     public void initialize()
     {
         initAngle();
@@ -43,7 +46,9 @@ public class TurnRobotToAngle extends Command
         numExecutes = 0;
     }
     
-    
+    /**
+     * Initializes the angle-specific part of this command.
+     */
     private void initAngle()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
@@ -63,7 +68,9 @@ public class TurnRobotToAngle extends Command
         Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
     }
 
-    
+    /**
+     * Executes this command periodically.
+     */
     public void execute()
     {
         if (numExecutes >= 0 && numExecutes < maxExecutes)
@@ -84,14 +91,15 @@ public class TurnRobotToAngle extends Command
                 Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.DEGREES_PER_ROTATION);
     }
     /**
-    * @return
+    * Determines whether the commmand has finished.
+    * @return true if the error is within ANGLE_ALLOWABLE_ERROR
     */
     @Override
     protected boolean isFinished()
     {
         if (numExecutes == -1)
         {
-            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
+            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, PigeonConstants.ANGLE_ALLOWABLE_ERROR);
             if (isFinished)
             {
                 Robot.dt.setBoth(ControlMode.Disabled, 0);
@@ -101,6 +109,9 @@ public class TurnRobotToAngle extends Command
         return false;
     }
     
+    /**
+     * To be called when the command ends peacefully (isFinished returns true).
+     */
     public void end()
     {
         Robot.dt.configureNominalPeakOutputs();

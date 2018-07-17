@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * 
+ * Pauses the thread (in a series of sequential commands) until the given path begins, waiting a set amount of time either after the command
+ * begins or before it ends.
  * @author Finn Frankis
  * @version Jul 12, 2018
  */
@@ -19,10 +20,20 @@ public class PauseUntilPathBegins extends Command
     private boolean hasInitializedModifiedDelay;
     private double totalTime;
     
+    /**
+     * The various types of pauses which this command can handle.
+     * @author Finn Frankis
+     * @version Jul 12, 2018
+     */
     public enum PauseType
     {
         START_OF_PATH, END_OF_PATH, NO_PAUSE
     }
+    
+    /**
+     * Constructs a new PauseUntilPathBegins.
+     * @param fpc the path to be checked
+     */
     public PauseUntilPathBegins(FollowPath fpc)
     {
         this.fpc = fpc;
@@ -60,6 +71,9 @@ public class PauseUntilPathBegins extends Command
         this.totalTime = totalTime / 1000;
     }
     
+    /**
+     * Executes this command periodically.
+     */
     public void execute()
     {
         if (fpc != null)
@@ -82,6 +96,10 @@ public class PauseUntilPathBegins extends Command
     }
     
     @Override
+    /**
+     * Determines whether the command has finished.
+     * @return true if the path has begun and modifiedDelay seconds have elapsed since the beginning of the path; false otherwise
+     */
     public boolean isFinished()
     {
         return fpc != null 

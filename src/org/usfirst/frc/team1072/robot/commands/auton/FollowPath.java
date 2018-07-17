@@ -86,19 +86,28 @@ public class FollowPath extends Command
         totalTime = -1;
     }
     
+    /**
+     * Determines whether the pigeon should be zeroed at the start of the path.
+     * @param zeroPigeon whether or not to zero the pigeon
+     * @return this command, to allow the command to be called at initialization (ex: FollowPath fp = new FollowPath().zeroPigeonAtStart(true);)
+     */
     public FollowPath zeroPigeonAtStart(boolean zeroPigeon)
     {
         zeroAux = zeroPigeon;
         return this;
     }
     
+    /**
+     * Sets the total time of the path (to be used if externally calculated).
+     * @param newTotalTime the value with which tita
+     */
     public void setTotalTime (double newTotalTime)
     {
         totalTime = newTotalTime;
     }
     
     /**
-     * 
+     * Gets the total time which the path is expected to take.
      * @return the total time of the path in seconds
      */
     public double getTotalTime()
@@ -411,11 +420,18 @@ public class FollowPath extends Command
     }
     
     @Override
+    /**
+     * To be called if the command is forcibly cancelled by the user.
+     */
     public void cancel()
     {
         disable();
     }
+    
     @Override
+    /**
+     * To be called when the command ends peacefully (isFinished returns true).
+     */
     protected void end()
     {
         System.out.println(this + " finished");
@@ -452,13 +468,16 @@ public class FollowPath extends Command
     }
     
     @Override
+    /**
+     * To be called when the command is interrupted by another one in the scheduler requiring similar subsystems.
+     */
     protected void interrupted()
     {
         disable();
     }
     
     /**
-     * To be called when the command is either cancelled, interrupted, or ended.
+     * To be called when the command is stopping (regardless of why it is forced to stop).
      */
     public void disable() {
         System.out.println("DISABLING");
@@ -522,11 +541,19 @@ public class FollowPath extends Command
 
     }
     
+    /**
+     * Determines whether the path has been enabled and all initialization has been completed.
+     * @return true if setup is complete; false otherwise
+     */
     public boolean isSetupComplete()
     {
         return pathState >= 2;
     }
          
+    /**
+     * Wrapper method for isFinished() to allow it to be publicly accessible.
+     * @return true if the command has finished; false otherwise
+     */
     public boolean getFinished()
     {
         return isFinished();
@@ -535,6 +562,7 @@ public class FollowPath extends Command
  
 
     /**
+     * Returns the current state of this path.
      * @return the current state of this path (0 if just initialized, 1 if still buffering points, 2 if 
      * in execution mode, and 3 if the path is complete)
      */

@@ -59,6 +59,9 @@ public class AutonomousCommand extends CommandGroup
 
     }
 
+    /**
+     * Initializes subsystems in parallel.
+     */
     private void initSubsystems()
     {
         CommandGroup initSubsystems = new CommandGroup();
@@ -327,10 +330,5 @@ public class AutonomousCommand extends CommandGroup
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
         return fpc;
-    }
-    
-    private void switchHeadonOuttakeFirstCube()
-    {
-        
     }
 }

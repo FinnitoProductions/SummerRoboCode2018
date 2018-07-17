@@ -35,6 +35,9 @@ public class CombinedPositionAnglePID extends Command
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
     }
     
+    /**
+     * Initializes the command.
+     */
     public void initialize()
     {
         isPosition = true;
@@ -45,6 +48,9 @@ public class CombinedPositionAnglePID extends Command
         numExecutes = 0;
     }
     
+    /**
+     * Initializes the position part of this command.
+     */
     private void initPosition()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
@@ -52,6 +58,9 @@ public class CombinedPositionAnglePID extends Command
         Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
     }
     
+    /**
+     * Initializes the angle part of this command.
+     */
     private void initAngle()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
@@ -73,7 +82,9 @@ public class CombinedPositionAnglePID extends Command
         Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
     }
 
-    
+    /**
+     * Executes the command periodically.
+     */
     public void execute()
     {
         if (numExecutes >= 0 && numExecutes < maxExecutes)
@@ -127,7 +138,10 @@ public class CombinedPositionAnglePID extends Command
         }
         return false;
     }
-    
+   
+    /**
+     * To be called when the command ends peacefully (isFinished returns true).
+     */
     public void end()
     {
         Robot.dt.configureNominalPeakOutputs();

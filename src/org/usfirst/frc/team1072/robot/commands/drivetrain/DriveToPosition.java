@@ -34,6 +34,9 @@ public class DriveToPosition extends Command
         this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
     }
     
+    /**
+     * Initializes this command.
+     */
     public void initialize()
     {
         initPosition();
@@ -43,6 +46,9 @@ public class DriveToPosition extends Command
         numExecutes = 0;
     }
     
+    /**
+     * Initializes the position part of this command (to be used if combined with a subsequent turn).
+     */
     private void initPosition()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
@@ -51,7 +57,9 @@ public class DriveToPosition extends Command
         
     }
     
-
+    /**
+     * Executes this command periodically.
+     */
     public void execute()
     {
         if (numExecutes >= 0 && numExecutes < maxExecutes)
@@ -68,7 +76,8 @@ public class DriveToPosition extends Command
         Robot.dt.setBoth(ControlMode.Position, position);
     }
     /**
-    * @return
+    * Determines whether this command has finished.
+    * @return true if the error is within POS_ALLOWABLE_ERROR; false otherwise
     */
     @Override
     protected boolean isFinished()

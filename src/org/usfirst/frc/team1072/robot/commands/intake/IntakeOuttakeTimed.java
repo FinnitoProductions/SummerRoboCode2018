@@ -13,6 +13,11 @@ public class IntakeOuttakeTimed extends TimedCommand
 {
     private boolean intake;
     
+    /**
+     * Constructs a new IntakeOuttakeTimed.
+     * @param timeout the time for which the intake should occur in seconds
+     * @param intake whether to intake forward or backward
+     */
     public IntakeOuttakeTimed(double timeout, boolean intake)
     {
         super(timeout);
@@ -20,6 +25,9 @@ public class IntakeOuttakeTimed extends TimedCommand
         this.intake = intake;
     }
     
+    /**
+     * Executes the command periodically.
+     */
     public void execute()
     {
         if (intake)
