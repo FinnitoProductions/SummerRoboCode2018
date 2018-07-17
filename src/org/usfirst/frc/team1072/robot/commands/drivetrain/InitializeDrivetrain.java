@@ -5,13 +5,17 @@ import org.usfirst.frc.team1072.robot.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * 
+ * Initializes the drivetrain.
  * @author Finn Frankis
  * @version Jul 13, 2018
  */
 public class InitializeDrivetrain extends Command
 {
     private boolean isFinished;
+    
+    /**
+     * Initializes the drivetrain.
+     */
     public void initialize()
     {
         System.out.println("INITIALIZING DT " + Robot.getCurrentTimeMs());
@@ -20,7 +24,8 @@ public class InitializeDrivetrain extends Command
     }
 
     /**
-    * @return
+    * Determines whether the command has finished.
+    * @return true if the initialization has finished; false otherwise
     */
     @Override
     protected boolean isFinished()

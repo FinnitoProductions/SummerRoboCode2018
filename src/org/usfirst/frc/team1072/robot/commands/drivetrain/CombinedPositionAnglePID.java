@@ -129,7 +129,7 @@ public class CombinedPositionAnglePID extends Command
     {
         if (numExecutes == -1 && isAngle)
         {
-            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
+            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, PigeonConstants.ANGLE_ALLOWABLE_ERROR);
             if (isFinished)
             {
                 Robot.dt.setBoth(ControlMode.Disabled, 0);

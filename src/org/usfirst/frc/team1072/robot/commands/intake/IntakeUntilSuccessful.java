@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1072.robot.commands.intake;
 
 import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -11,12 +12,13 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class IntakeUntilSuccessful extends Command
 {
-    public IntakeUntilSuccessful()
+    /**
+     * Executes the command periodically.
+     */
+    public void execute()
     {
-        
+        Robot.intake.intakeOuttakeCube(-1);
     }
-    
-    
     /**
     * Determines whether the command has finished.
     * @return true if the current limit has exceeded the specified value; false otherwise
@@ -24,7 +26,12 @@ public class IntakeUntilSuccessful extends Command
     @Override
     protected boolean isFinished()
     {
-        return Robot.intake.getLeftTalon().getOutputCurrent() > 10;
+        return Robot.intake.getLeftTalon().getOutputCurrent() > IntakeConstants.INTAKE_CURRENT_SPIKE;
+    }
+    
+    protected void end ()
+    {
+        Robot.intake.intakeOuttakeCube(0);
     }
     
 }
