@@ -291,7 +291,7 @@ public class RobotMap {
      * @author Finn Frankis
      * @version Jul 13, 2018
      */
-    public static class AutonomousPaths
+    public static class AutonomousConstants
     {
         public static final String CLH_P1_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1 _left_detailed.csv";
         public static final String CLH_P1_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1 _right_detailed.csv";
@@ -319,6 +319,9 @@ public class RobotMap {
         
         public static final String CLH_P9_LEFT = "/home/summer2018/paths/3_cube/center_left_headon(switch_3)/9f/part9_left_detailed.csv";
         public static final String CLH_P9_RIGHT = "/home/summer2018/paths/3_cube/center_left_headon(switch_3)/9f/part9_right_detailed.csv";
+        
+        public static final double DISTANCE_TO_SCALE = 26;
+        public static final double ANGLE_FROM_SCALE_TO_CUBES = 135;
     }
 
     public static int REMOTE_SLOT_0 = 0;

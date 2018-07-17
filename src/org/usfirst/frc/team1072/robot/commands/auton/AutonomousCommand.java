@@ -5,15 +5,18 @@ import java.io.FileNotFoundException;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.AutonomousPaths;
+import org.usfirst.frc.team1072.robot.RobotMap.AutonomousConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBegins.PauseType;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrain;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngle;
 import org.usfirst.frc.team1072.robot.commands.elevator.InitializeElevator;
+import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntake;
+import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeTimed;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
@@ -79,13 +82,13 @@ public class AutonomousCommand extends CommandGroup
         FollowPath fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
         
-        fpc1 = setupPathFollowerArc(AutonomousPaths.CLH_P1_LEFT, AutonomousPaths.CLH_P1_RIGHT, false)
+        fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, false)
                 .zeroPigeonAtStart(true);
-        fpc2 = setupPathFollowerArc(AutonomousPaths.CLH_P2_LEFT_REV, AutonomousPaths.CLH_P2_RIGHT_REV, true)
+        fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true)
                 .zeroPigeonAtStart(true);
         //fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
         //fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
-        fpc5 = setupPathFollowerArc(AutonomousPaths.CLH_P5_LEFT, AutonomousPaths.CLH_P5_RIGHT, false);
+        fpc5 = setupPathFollowerArc(AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false);
         //fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
         //fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
         //fpc8 = setupPathFollowerArc(AutonomousPaths.CLH_P8_LEFT_REV, AutonomousPaths.CLH_P8_RIGHT_REV, true);
@@ -249,6 +252,37 @@ public class AutonomousCommand extends CommandGroup
         
     }
     
+    private void scaleAuton (boolean onLeft)
+    {
+        DriveToPosition dtp1, dtp2;
+        TurnToAngle tta1;
+        CommandGroup scoreFirstCube = new CommandGroup();
+            scoreFirstCube.addParallel(dtp1 = new DriveToPosition(AutonomousConstants.DISTANCE_TO_SCALE));
+            CommandGroup raiseElevatorFirstCube = new CommandGroup();
+                raiseElevatorFirstCube.addSequential(new PauseUntilReachingPosition(dtp1, 0.4));
+                raiseElevatorFirstCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+                raiseElevatorFirstCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
+            scoreFirstCube.addParallel(raiseElevatorFirstCube);
+            CommandGroup outtakeFirstCube = new CommandGroup();
+                outtakeFirstCube.addSequential(new PauseUntilReachingPosition(dtp1, 0.9));
+                outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.6, IntakeConstants.OUTTAKE_BOOL));
+            scoreFirstCube.addParallel(outtakeFirstCube);
+        addSequential(scoreFirstCube);
+        
+        CommandGroup getSecondCube = new CommandGroup();
+            CommandGroup path2 = new CommandGroup();
+                path2.addSequential(tta1 = new TurnToAngle(AutonomousConstants.ANGLE_FROM_SCALE_TO_CUBES));
+                path2.addSequential(dtp2 = new DriveToPosition(AutonomousConstants.DISTANCE_TO_SCALE));
+            getSecondCube.addParallel(path2);
+            CommandGroup lowerElevatorSecondCube = new CommandGroup();
+                lowerElevatorSecondCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
+            getSecondCube.addParallel(lowerElevatorSecondCube);
+            CommandGroup intakeSecondCube = new CommandGroup();
+                intakeSecondCube.addSequential(new PauseUntilReachingPosition(dtp2, 0.7));
+                intakeSecondCube.addSequential(new IntakeOuttakeTimed(0.6, IntakeConstants.INTAKE_BOOL));
+            getSecondCube.addParallel(intakeSecondCube);
+        addSequential(getSecondCube);
+    }
     /**
      * Reads in a trajectory (from Jaci's pathfinder) given the filename as a CSV.
      * @param filename the file name

@@ -9,7 +9,7 @@ import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocity;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnRobotToAngle;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngle;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
