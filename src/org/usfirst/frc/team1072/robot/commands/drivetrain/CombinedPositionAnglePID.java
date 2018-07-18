@@ -45,7 +45,7 @@ public class CombinedPositionAnglePID extends Command
     {
         initPosition();
         Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
-        Robot.dt.setBoth(ControlMode.Position, position);
+        Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
         numExecutes = 0;
     }
     
@@ -55,8 +55,11 @@ public class CombinedPositionAnglePID extends Command
     private void initPosition()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
         Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
         
+        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+                RemoteSensorSource.Pigeon_Yaw, RobotMap.REMOTE_SLOT_0, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
                 RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
 
@@ -70,6 +73,8 @@ public class CombinedPositionAnglePID extends Command
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(
                 FeedbackDevice.SensorSum, 
                 RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, 
+                RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
         
         Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, DrivetrainConstants.RIGHT_TALON_PHASE);
@@ -92,7 +97,7 @@ public class CombinedPositionAnglePID extends Command
             numExecutes = -1;
         }
         System.out.println("EXECUTING");
-        Robot.dt.setBoth(ControlMode.Position, position);
+        Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
     }
     /**
     * Determines whether this command has finished.
@@ -103,7 +108,8 @@ public class CombinedPositionAnglePID extends Command
     {
         if (numExecutes == -1)
         {
-            return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
+            return Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX))
+                    < DrivetrainConstants.POS_ALLOWABLE_ERROR;
         }
         System.out.println("NOT FINISHED");
         return false;
