@@ -248,7 +248,8 @@ public class FollowPath extends Command
                         System.out.println("ZEROING PIGEON");
                         System.out.println("ZEROING PIGEON");
                         System.out.println("ZEROING PIGEON");
-                        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+                        Robot.dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
+                        //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
                     }
                     System.out.println("AUX ANGLE BEFORE ENABLE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
@@ -435,33 +436,18 @@ public class FollowPath extends Command
     protected void end()
     {
         System.out.println(this + " finished");
-        try
-        {
-            Thread.sleep(3000l);
-        }
-        catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("LAST HEADING: " + 
-        getControllerTrajectory(Robot.dt.getRightTalon()).segments[
-                                                                   getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading);
-        System.out.println("CURRENT HEADING: " + Conversions.convertAngle(AngleUnit.PIGEON_UNITS, 
-                Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX), AngleUnit.RADIANS));
         /*Robot.dt.getRightTalon().setSelectedSensorPosition(
                 -(int)(Conversions.convertPosition(PositionUnit.FEET, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
                 getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].position, PositionUnit.ENCODER_UNITS)
                         - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)),
                 RobotMap.PRIMARY_PID_INDEX, 
                 RobotMap.TIMEOUT);*/
-        Robot.dt.getRightTalon().setSelectedSensorPosition(
+        Robot.dt.getPigeon().setYaw(
                 (int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
                 getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading, AngleUnit.PIGEON_UNITS)
                         - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX)),
-                RobotMap.AUXILIARY_PID_INDEX, 
                 RobotMap.TIMEOUT);
-        System.out.println("AUX ANGLE AFTER FINISHING: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+ 
         
         disable();
         
@@ -483,7 +469,7 @@ public class FollowPath extends Command
         System.out.println("DISABLING");
         notif.stop();
 
-        //Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
+        Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
         Robot.dt.getRightTalon().clearMotionProfileHasUnderrun(RobotMap.TIMEOUT);
     }
     
