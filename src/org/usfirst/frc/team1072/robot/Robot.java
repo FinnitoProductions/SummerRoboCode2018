@@ -97,6 +97,7 @@ public class Robot extends TimedRobot
         Scheduler.getInstance().run();
         Robot.dt.printMotorOutputPercentage();
         Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
     }
 
     /**

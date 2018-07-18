@@ -10,6 +10,7 @@ import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBegins.PauseType;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.CombinedPositionAnglePID;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrain;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngle;
@@ -99,17 +100,17 @@ public class AutonomousCommand extends CommandGroup
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
         //addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         //addSequential(new DriveToPositionCommand(3));
-        addSequential(new PrebufferPathPoints(fpc1));
+        /*addSequential(new PrebufferPathPoints(fpc1));
         CommandGroup path1 = new CommandGroup();
             path1.addParallel(fpc1);
             path1.addParallel(new PrebufferPathPoints(fpc2));
             path1.addParallel(new PrebufferPathPoints(fpc5));
         addSequential(path1);
 
-        addSequential(fpc2);
-        addSequential(new DriveToPosition(4));
-        addSequential(new DriveToPosition(-4));
-        addSequential(fpc5);
+        addSequential(fpc2);*/
+        addSequential(new CombinedPositionAnglePID(4, 0));
+        //addSequential(new CombinedPositionAnglePID(-4, 0));
+        //addSequential(fpc5);
         /*addSequential(new PrebufferPathPointsCommand(fpc2));
         CommandGroup path2 = new CommandGroup();
         path2.addParallel(fpc2);

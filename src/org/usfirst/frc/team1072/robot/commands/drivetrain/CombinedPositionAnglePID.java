@@ -9,8 +9,12 @@ import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.SensorTerm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -21,13 +25,12 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class CombinedPositionAnglePID extends Command
 {
-    private double position, angle, numExecutes, maxExecutes = 3;
-    private boolean isPosition, isAngle;
-    
+    private double position, angle;
+    private int numExecutes, maxExecutes = 15;
     /**
      * Constructs a new CombinedPositionAnglePID.
      * @param position the final position for the robot in feet
-     * @param angle the final angle for the robot in degrees
+     * @param angle the final angle for the robot in feet
      */
     public CombinedPositionAnglePID (double position, double angle)
     {
@@ -36,115 +39,117 @@ public class CombinedPositionAnglePID extends Command
     }
     
     /**
-     * Initializes the command.
+     * Initializes this command.
      */
     public void initialize()
     {
-        isPosition = true;
-        isAngle = false;
         initPosition();
         Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
-        
+        Robot.dt.setBoth(ControlMode.Position, position);
         numExecutes = 0;
     }
     
     /**
-     * Initializes the position part of this command.
+     * Initializes the position part of this command (to be used if combined with a subsequent turn).
      */
     private void initPosition()
     {
         Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
         
-        Robot.dt.setBothSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
+                RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
+
+        
+        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(
+                FeedbackDevice.CTRE_MagEncoder_Relative, 
+                RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
+        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().configSelectedFeedbackSensor(
+                FeedbackDevice.SensorSum, 
+                RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
+        Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, DrivetrainConstants.RIGHT_TALON_PHASE);
+        
     }
     
     /**
-     * Initializes the angle part of this command.
-     */
-    private void initAngle()
-    {
-        Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
-        
-        Robot.dt.configureAngleClosedLoop();
-        
-        Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_SLOT_0, 
-                RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_SLOT_0, 
-                RobotMap.TIMEOUT);
-        
-        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
-        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
-        
-        Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
-    }
-
-    /**
-     * Executes the command periodically.
+     * Executes this command periodically.
      */
     public void execute()
     {
         if (numExecutes >= 0 && numExecutes < maxExecutes)
+        {
+            System.out.println("INCREMENTING");
             numExecutes++;
+        }
         else
         {
+            System.out.println("DONE");
             numExecutes = -1;
         }
-        
-        if (isPosition)
-        {
-            Robot.dt.setBoth(ControlMode.Position, position);
-            if (Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR))
-            {
-                isPosition = false;
-                Robot.dt.setBoth(ControlMode.Disabled, position);
-            }
-        }
-        else
-        {
-            if (!isPosition && !isAngle)
-            {
-                isAngle = true;
-                initAngle();
-            }
-
-                       
-            Robot.dt.setLeft(ControlMode.MotionMagic, angle);
-            Robot.dt.setRight(ControlMode.MotionMagic, angle);
-        }
-        Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
-        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
-        Robot.dt.printMotorOutputPercentage();
+        System.out.println("EXECUTING");
+        Robot.dt.setBoth(ControlMode.Position, position);
     }
     /**
-    * Determines whether the command has finished.
-    * @return true if the pigeon is in the correct position and the position loop is complete;
-    * false otherwise
+    * Determines whether this command has finished.
+    * @return true if the error is within POS_ALLOWABLE_ERROR; false otherwise
     */
     @Override
     protected boolean isFinished()
     {
-        if (numExecutes == -1 && isAngle)
+        if (numExecutes == -1)
         {
-            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, PigeonConstants.ANGLE_ALLOWABLE_ERROR);
-            if (isFinished)
-            {
-                Robot.dt.setBoth(ControlMode.Disabled, 0);
-            }
-            return isFinished;
+            return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
         }
+        System.out.println("NOT FINISHED");
         return false;
     }
-   
-    /**
-     * To be called when the command ends peacefully (isFinished returns true).
-     */
+    
     public void end()
     {
-        Robot.dt.configureNominalPeakOutputs();
+        Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
+        Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+        System.out.println("FINISHING");
+    }
+    /**
+     * Gets the total number of executes.
+     * @return the total number of times the command has executed
+     */
+    public int getNumExecutes()
+    {
+        return numExecutes;
+    }
+    
+    /**
+     * Gets the maximum number of executes required to end.
+     * @return the maximum number of executes required
+     */
+    public int getMaxExecutes()
+    {
+        return maxExecutes;
+    }
+    
+    /**
+     * Gets the current position of the Talons.
+     * @return
+     */
+    public double getCurrentPosition()
+    {
+        return (Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) 
+                + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)) / 2;
+    }
+    
+    /**
+     * Gets the position to where the robot is intended to travel.
+     * @return the desired position
+     */
+    public double getDesiredPosition()
+    {
+        return position;
     }
     
 }

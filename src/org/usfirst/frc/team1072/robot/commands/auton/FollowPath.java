@@ -142,6 +142,7 @@ public class FollowPath extends Command
             System.out.println("CONFIGURING TALONS " + Robot.getCurrentTimeMs());
             Robot.dt.configureMotionProfileAngleClosedLoop();
             Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
+            Robot.dt.getLeftTalon().configAuxPIDPolarity(false, RobotMap.TIMEOUT);
             
             Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
             Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
