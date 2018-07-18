@@ -44,7 +44,7 @@ public class CombinedPositionAnglePID extends Command
     public void initialize()
     {
         initPosition();
-        Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
         numExecutes = 0;
     }
@@ -54,7 +54,7 @@ public class CombinedPositionAnglePID extends Command
      */
     private void initPosition()
     {
-        Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
         Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
         
@@ -76,6 +76,7 @@ public class CombinedPositionAnglePID extends Command
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, 
                 RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
         
+        Robot.dt.getLeftTalon().configSelectedFeedbackCoefficient(1, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, DrivetrainConstants.RIGHT_TALON_PHASE);
         

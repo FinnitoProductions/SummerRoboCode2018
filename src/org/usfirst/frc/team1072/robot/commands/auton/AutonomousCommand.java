@@ -109,7 +109,8 @@ public class AutonomousCommand extends CommandGroup
 
         addSequential(fpc2);*/
         addSequential(new CombinedPositionAnglePID(4, 0));
-        //addSequential(new CombinedPositionAnglePID(-4, 0));
+        addSequential(new CombinedPositionAnglePID(-4, 0));
+        
         //addSequential(fpc5);
         /*addSequential(new PrebufferPathPointsCommand(fpc2));
         CommandGroup path2 = new CommandGroup();

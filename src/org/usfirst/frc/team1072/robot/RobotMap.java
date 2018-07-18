@@ -66,8 +66,8 @@ public class RobotMap {
         public static int VEL_PID = 1;
         public static int POS_PID = 2;
         public static int ANGLE_PID = 0;
-        
         public static int MOTION_PROFILE_PID = 3;
+        
         public static double MAX_RAMP_TIME = 0;
         public static double NOMINAL_OUTPUT_LEFT = 0.04; //0.084;
         public static double NOMINAL_OUTPUT_RIGHT = 0.04; //0.084;
@@ -116,13 +116,13 @@ public class RobotMap {
         public static double POS_KF_LEFT = 0;
         public static double POS_KP_LEFT = 0.19;//0.22; //0.2 
         public static double POS_KI_LEFT = 0.00001;//0.00001;//0.001;//.0008;//0.00001;//0.00001; //
-        public static double POS_KD_LEFT = 30;//40;//40;
-        public static int POS_IZONE_LEFT = 100;
+        public static double POS_KD_LEFT = 16;//40;//40;
+        public static int POS_IZONE_LEFT = 250;
         
         public static double POS_KF_RIGHT = 0;
         public static double POS_KP_RIGHT = 0.19;
         public static double POS_KI_RIGHT = 0.00001;//0.00001;//0.001;//0.00001;//0.00001; // 
-        public static double POS_KD_RIGHT = 30;//40;
+        public static double POS_KD_RIGHT = 16;//40;
         public static int POS_IZONE_RIGHT = 250;
         
         public static int POS_ALLOWABLE_ERROR = 150;
