@@ -96,7 +96,7 @@ public class Robot extends TimedRobot
     { 
         Scheduler.getInstance().run();
         Robot.dt.printMotorOutputPercentage();
-        SmartDashboard.putNumber("Right Talon Aux Position", Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
     }
 
     /**

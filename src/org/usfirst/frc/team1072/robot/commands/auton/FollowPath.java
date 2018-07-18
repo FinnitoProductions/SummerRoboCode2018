@@ -434,7 +434,7 @@ public class FollowPath extends Command
      */
     protected void end()
     {
-        System.out.println(this + " finished");
+        System.out.println(this + " finished " + Robot.getCurrentTimeMs());
         /*Robot.dt.getRightTalon().setSelectedSensorPosition(
                 -(int)(Conversions.convertPosition(PositionUnit.FEET, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
                 getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].position, PositionUnit.ENCODER_UNITS)
