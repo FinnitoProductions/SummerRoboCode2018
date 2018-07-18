@@ -442,7 +442,7 @@ public class FollowPath extends Command
                 RobotMap.PRIMARY_PID_INDEX, 
                 RobotMap.TIMEOUT);*/
         Robot.dt.getPigeon().setYaw(
-                (int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
+                -(int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
                 getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading, AngleUnit.PIGEON_UNITS)
                         - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX)),
                 RobotMap.TIMEOUT);

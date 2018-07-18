@@ -62,6 +62,7 @@ public class RobotMap {
     {
         public static final double MOT_PROF_ADD_TO_VEL_INIT = 7;
         public static final double TIME_TO_OVERCOME_S_FRICTION_MS = 45;
+        public static final double TALON_DEADBAND = 0.01;
         public static int VEL_PID = 1;
         public static int POS_PID = 2;
         public static int ANGLE_PID = 0;
@@ -114,15 +115,15 @@ public class RobotMap {
         // CARPET 
         public static double POS_KF_LEFT = 0;
         public static double POS_KP_LEFT = 0.19;//0.22; //0.2 
-        public static double POS_KI_LEFT = 0;//0.000001;//0.00001;//0.001;//.0008;//0.00001;//0.00001; //
+        public static double POS_KI_LEFT = 0.00001;//0.00001;//0.001;//.0008;//0.00001;//0.00001; //
         public static double POS_KD_LEFT = 30;//40;//40;
         public static int POS_IZONE_LEFT = 100;
         
         public static double POS_KF_RIGHT = 0;
         public static double POS_KP_RIGHT = 0.19;
-        public static double POS_KI_RIGHT = 0;//0.000001;//0.00001;//0.001;//0.00001;//0.00001; // 
+        public static double POS_KI_RIGHT = 0.00001;//0.00001;//0.001;//0.00001;//0.00001; // 
         public static double POS_KD_RIGHT = 30;//40;
-        public static int POS_IZONE_RIGHT = 100;
+        public static int POS_IZONE_RIGHT = 250;
         
         public static int POS_ALLOWABLE_ERROR = 150;
         public static int POS_TOLERANCE_BUFFER = 150;
