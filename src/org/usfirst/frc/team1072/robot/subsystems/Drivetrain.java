@@ -128,7 +128,9 @@ public class Drivetrain extends Subsystem
     public void talonInit()
     {
         zeroAllSensors();
+        setTalonDeadbands();
         initTalonOutput(0);
+        
         System.out.println("CLEARING POINTS " + Robot.getCurrentTimeMs());
         clearTrajectoryPoints();
         System.out.println("INIT TALON OUTPUT " + Robot.getCurrentTimeMs());
@@ -139,7 +141,7 @@ public class Drivetrain extends Subsystem
         System.out.println("INVERT CONTROLLERS " + Robot.getCurrentTimeMs());
         invertControllers();
         setNeutralMode(NeutralMode.Brake);
-
+        
 
         System.out.println("SCALING VOLTAGE " + Robot.getCurrentTimeMs());
         scaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
@@ -163,6 +165,15 @@ public class Drivetrain extends Subsystem
 
     }
     
+    /**
+     * Configures the deadbands for the Talons (the output at which there will be no output)
+     */
+    private void setTalonDeadbands()
+    {
+        getLeftTalon().configNeutralDeadband(DrivetrainConstants.TALON_DEADBAND, RobotMap.TIMEOUT);
+        getRightTalon().configNeutralDeadband(DrivetrainConstants.TALON_DEADBAND, RobotMap.TIMEOUT);
+    }
+
     /**
      * Sets both talons to a given value.
      * @param cm the ControlMode to which both talons will be set (like PercentOutput, Velocity, Position, or Disabled)
