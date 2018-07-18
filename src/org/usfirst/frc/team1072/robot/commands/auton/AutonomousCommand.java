@@ -103,13 +103,13 @@ public class AutonomousCommand extends CommandGroup
         CommandGroup path1 = new CommandGroup();
             path1.addParallel(fpc1);
             path1.addParallel(new PrebufferPathPoints(fpc2));
-            //path1.addParallel(new PrebufferPathPoints(fpc5));
+            path1.addParallel(new PrebufferPathPoints(fpc5));
         addSequential(path1);
 
         addSequential(fpc2);
-        //addSequential(new DriveToPosition(4));
-        //addSequential(new DriveToPosition(-4));
-        //addSequential(fpc5);
+        addSequential(new DriveToPosition(4));
+        addSequential(new DriveToPosition(-4));
+        addSequential(fpc5);
         /*addSequential(new PrebufferPathPointsCommand(fpc2));
         CommandGroup path2 = new CommandGroup();
         path2.addParallel(fpc2);

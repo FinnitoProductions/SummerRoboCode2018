@@ -124,7 +124,7 @@ public class RobotMap {
         public static double POS_KD_RIGHT = 30;//40;
         public static int POS_IZONE_RIGHT = 100;
         
-        public static int POS_ALLOWABLE_ERROR = 50;
+        public static int POS_ALLOWABLE_ERROR = 150;
         public static int POS_TOLERANCE_BUFFER = 150;
         
         public static double WHEELDIAMETER = 4.0;
@@ -305,8 +305,8 @@ public class RobotMap {
         public static final String CLH_P4_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_left_detailed.csv";
         public static final String CLH_P4_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_right_detailed.csv";
         
-        public static final String CLH_P5_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5_left_detailed.csv";
-        public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5_right_detailed.csv";
+        public static final String CLH_P5_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5 _left_detailed.csv";
+        public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5 _right_detailed.csv";
         
         public static final String CLH_P6_LEFT_REV = "/home/summer2018/paths/3_cube/center_left_headon(switch_3)/6b/part6_left_detailed.csv";
         public static final String CLH_P6_RIGHT_REV = "/home/summer2018/paths/3_cube/center_left_headon(switch_3)/6b/part6_right_detailed.csv";

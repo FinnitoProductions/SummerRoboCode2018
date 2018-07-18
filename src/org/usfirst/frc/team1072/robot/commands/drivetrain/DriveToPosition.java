@@ -84,23 +84,18 @@ public class DriveToPosition extends Command
     {
         if (numExecutes == -1)
         {
-            boolean isFinished = Math.abs(Robot.dt.getLeftTalon().
-                    getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR
-                && Math.abs(Robot.dt.getRightTalon().
-                    getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.POS_ALLOWABLE_ERROR;
-            if (isFinished)
-            {
-                Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
-                Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
-                System.out.println("FINISHING");
-            }
-            else
-                System.out.println("NOT FINISHED");
-            return isFinished;
+            return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
         }
+        System.out.println("NOT FINISHED");
         return false;
     }
     
+    public void end()
+    {
+        Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
+        Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+        System.out.println("FINISHING");
+    }
     /**
      * Gets the total number of executes.
      * @return the total number of times the command has executed

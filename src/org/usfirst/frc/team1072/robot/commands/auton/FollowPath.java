@@ -249,7 +249,6 @@ public class FollowPath extends Command
                         System.out.println("ZEROING PIGEON");
                         System.out.println("ZEROING PIGEON");
                         Robot.dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
-                        //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
                     }
                     System.out.println("AUX ANGLE BEFORE ENABLE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
