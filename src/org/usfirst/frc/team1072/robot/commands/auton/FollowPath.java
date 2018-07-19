@@ -94,6 +94,11 @@ public class FollowPath extends Command
     public FollowPath zeroPigeonAtStart(boolean zeroPigeon)
     {
         zeroAux = zeroPigeon;
+        if (zeroAux)
+        {
+            System.out.println("ZEROING PIGEON");
+            Robot.dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
+        }
         return this;
     }
     
@@ -140,6 +145,7 @@ public class FollowPath extends Command
         else
         {
             System.out.println("CONFIGURING TALONS " + Robot.getCurrentTimeMs());
+            
             Robot.dt.configureMotionProfileAngleClosedLoop();
             Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
             Robot.dt.getLeftTalon().configAuxPIDPolarity(false, RobotMap.TIMEOUT);
@@ -239,18 +245,7 @@ public class FollowPath extends Command
                     
                     Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
                     Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-                    if (zeroAux)
-                    {
-                        System.out.println("ZEROING PIGEON");
-                        System.out.println("ZEROING PIGEON");
-                        System.out.println("ZEROING PIGEON");
-                        System.out.println("ZEROING PIGEON");
-                        System.out.println("ZEROING PIGEON");
-                        System.out.println("ZEROING PIGEON");
-                        System.out.println("ZEROING PIGEON");
-                        System.out.println("ZEROING PIGEON");
-                        Robot.dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
-                    }
+
                     System.out.println("AUX ANGLE BEFORE ENABLE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);
                         
@@ -293,16 +288,33 @@ public class FollowPath extends Command
      * @param controller the controller which is being added
      * @param reversePath true if the path should be formed in reverse order; false otherwise
      */
-    public void addProfile (Trajectory t, IMotorController controller, boolean reversePath)
+    public void addProfile (Trajectory t, IMotorController controller, boolean reversePath, double endAngle)
     {
         System.out.println("ADDING PROFILE " + Robot.getCurrentTimeMs());
         controller.changeMotionControlFramePeriod(Math.max(1, RobotMap.TIME_PER_TRAJECTORY_POINT_MS / 2));
         if (reversePath)
             t = reverseTrajectory(t);
+        t = addAngleOffset(t, endAngle);
         controllers.put(controller, new Object[] {t, null, false});
         System.out.println("DONE ADDING PROFILE");
     }
     
+    /**
+     * @param t
+     * @param endAngle
+     * @return
+     */
+    private Trajectory addAngleOffset(Trajectory t, double endAngle)
+    {
+        Segment[] segs = t.segments;
+        double factorToAdd = endAngle - t.segments[0].heading;
+        for (int i = 0; i < segs.length; i++)
+        {
+            segs[i].heading += factorToAdd;
+        }
+        return t;
+    }
+
     /**
      * Loads a given set of trajectory points to a controller.
      * @param t the trajectory to be loaded
@@ -379,8 +391,13 @@ public class FollowPath extends Command
                     Conversions.convertSpeed(SpeedUnit.ENCODER_UNITS, tp.velocity, SpeedUnit.FEET_PER_SECOND)
                     + ", pos: " + 
                     Conversions.convertPosition(PositionUnit.ENCODER_UNITS, tp.position, PositionUnit.FEET) + " ");*/
+                    if (i == 0)
+                        System.out.println("START ANGLE: " + tp.auxiliaryPos);
                     if (i == (segs.length-1))
+                    {
                         tp.isLastPoint = true;
+                        System.out.println("END ANGLE: " + tp.auxiliaryPos);
+                    }
     
                     controller.pushMotionProfileTrajectory(tp); // push point to talon
                 }
@@ -442,12 +459,8 @@ public class FollowPath extends Command
                         - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)),
                 RobotMap.PRIMARY_PID_INDEX, 
                 RobotMap.TIMEOUT);*/
-        Robot.dt.getPigeon().setYaw(
-                -(int)(Conversions.convertAngle(AngleUnit.RADIANS, getControllerTrajectory(Robot.dt.getRightTalon()).segments[
-                getControllerTrajectory(Robot.dt.getRightTalon()).segments.length-1].heading, AngleUnit.PIGEON_UNITS)
-                        - Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX)),
-                RobotMap.TIMEOUT);
- 
+        System.out.println("END ANGLE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        
         
         disable();
         

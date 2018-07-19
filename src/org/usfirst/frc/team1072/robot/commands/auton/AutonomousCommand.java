@@ -82,13 +82,12 @@ public class AutonomousCommand extends CommandGroup
     {
         FollowPath fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
-        fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, false)
-                .zeroPigeonAtStart(true);
-        fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true)
-                .zeroPigeonAtStart(false);
+        fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, false, null);
+        fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true, 
+                fpc1);
         //fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
         //fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
-        fpc5 = setupPathFollowerArc(AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false);
+        fpc5 = setupPathFollowerArc(AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2);
         //fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
         //fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
         //fpc8 = setupPathFollowerArc(AutonomousPaths.CLH_P8_LEFT_REV, AutonomousPaths.CLH_P8_RIGHT_REV, true);
@@ -99,6 +98,7 @@ public class AutonomousCommand extends CommandGroup
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
         //addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         //addSequential(new DriveToPositionCommand(3));
+        addSequential(new Delay(1));
         addSequential(new PrebufferPathPoints(fpc1));
         CommandGroup path1 = new CommandGroup();
             path1.addParallel(fpc1);
@@ -107,6 +107,7 @@ public class AutonomousCommand extends CommandGroup
         addSequential(path1);
 
         addSequential(fpc2);
+        addSequential(new CombinedPositionAnglePID(4, 0));
         //addSequential(new CombinedPositionAnglePID(4, 0));
         //addSequential(new CombinedPositionAnglePID(-4, 0));
         
@@ -311,30 +312,30 @@ public class AutonomousCommand extends CommandGroup
         }
     }
 
-    @SuppressWarnings("unused")
-    private FollowPath setupPathFollower(String leftFileName, String rightFileName, boolean reverse)
-    {
-        FollowPath fpc = new FollowPath();
-
-        Trajectory leftPath1 = null;
-        Trajectory rightPath1 = null;
-
-        try
-        {
-            leftPath1 = readTrajectory(leftFileName);
-            rightPath1 = readTrajectory(rightFileName);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            System.out.println("FILE. NOT. FOUND.");
-        }
-        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
-        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
-        numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
-        fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
-        return fpc;
-    }
+//    @SuppressWarnings("unused")
+//    private FollowPath setupPathFollower(String leftFileName, String rightFileName, boolean reverse)
+//    {
+//        FollowPath fpc = new FollowPath();
+//
+//        Trajectory leftPath1 = null;
+//        Trajectory rightPath1 = null;
+//
+//        try
+//        {
+//            leftPath1 = readTrajectory(leftFileName);
+//            rightPath1 = readTrajectory(rightFileName);
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            System.out.println("FILE. NOT. FOUND.");
+//        }
+//        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
+//        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
+//        numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
+//        fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
+//        return fpc;
+//    }
     
     /**
      * Sets up a motion profile arc path.
@@ -343,8 +344,25 @@ public class AutonomousCommand extends CommandGroup
      * @param reverse if true: perform the trajectory in reverse order; if false: perform it normally
      * @return the new follow path command
      */
-    private FollowPath setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse)
+    private FollowPath setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse, FollowPath prevPath)
     {
+        double endAngleLeft;
+        double endAngleRight;
+        if (prevPath == null)
+        {
+            endAngleLeft = 0;
+            endAngleRight = 0;
+        }
+        else
+        {
+            endAngleLeft = prevPath.getControllerTrajectory
+                    (Robot.dt.getLeftTalon()).segments[prevPath.getControllerTrajectory
+                                                       (Robot.dt.getLeftTalon()).segments.length-1].heading;
+            endAngleRight = prevPath.getControllerTrajectory
+                    (Robot.dt.getRightTalon()).segments[prevPath.getControllerTrajectory
+                                                       (Robot.dt.getLeftTalon()).segments.length-1].heading;                                                      
+        }
+        
         FollowPathArc fpc = new FollowPathArc();
 
         Trajectory leftPath1 = null;
@@ -360,8 +378,8 @@ public class AutonomousCommand extends CommandGroup
             e.printStackTrace();
             System.out.println("FILE. NOT. FOUND.");
         }
-        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
-        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
+        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse, endAngleLeft);
+        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse, endAngleRight);
 
         numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);

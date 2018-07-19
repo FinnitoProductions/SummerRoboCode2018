@@ -15,6 +15,8 @@ import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.util.Conversions;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -82,6 +84,64 @@ public class Robot extends TimedRobot
      */
     public void autonomousInit()
     {
+        /*Robot.dt.configureAngleClosedLoop();
+        System.out.println("PIGEON POSITION BEFORE YAW: " + Robot.dt.getLeftTalon().
+                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        Robot.dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
+        try
+        {
+            Thread.sleep(100l);
+        }
+        catch (InterruptedException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("PIGEON POSITION AFTER YAW: " + Robot.dt.getLeftTalon().
+                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+        Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+                RemoteSensorSource.Pigeon_Yaw, RobotMap.REMOTE_SLOT_0, RobotMap.TIMEOUT);
+        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.AUXILIARY_PID_INDEX,
+                RobotMap.TIMEOUT);
+        try
+        {
+            Thread.sleep(100l);
+        }
+        catch (InterruptedException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("PIGEON POSITION AFTER CONFIG: " + Robot.dt.getLeftTalon().
+                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+       
+        
+        Robot.dt.getLeftTalon().setSelectedSensorPosition(12000, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+        
+        try
+        {
+            Thread.sleep(100l);
+        }
+        catch (InterruptedException e)
+        {
+            
+        }
+        System.out.println("PIGEON POSITION AFTER SET SELECTED SENSOR: " + Robot.dt.getLeftTalon().
+                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+
+        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.AUXILIARY_PID_INDEX,
+                RobotMap.TIMEOUT);
+        try
+        {
+            Thread.sleep(100l);
+        }
+        catch (InterruptedException e)
+        {
+            
+        }
+        System.out.println("PIGEON POSITION AFTER CONFIG: " + Robot.dt.getLeftTalon().
+                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));*/
+        
         startTime = Timer.getFPGATimestamp();
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
 
