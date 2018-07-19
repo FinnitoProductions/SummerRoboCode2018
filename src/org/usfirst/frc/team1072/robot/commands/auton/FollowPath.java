@@ -145,7 +145,7 @@ public class FollowPath extends Command
         else
         {
             System.out.println("CONFIGURING TALONS " + Robot.getCurrentTimeMs());
-            
+            System.out.println("VERY START AUX ANGLE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
             Robot.dt.configureMotionProfileAngleClosedLoop();
             Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
             Robot.dt.getLeftTalon().configAuxPIDPolarity(false, RobotMap.TIMEOUT);
@@ -161,7 +161,7 @@ public class FollowPath extends Command
             Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
                     RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
             
-           
+
             
             Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
             Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
@@ -312,7 +312,7 @@ public class FollowPath extends Command
         {
             segs[i].heading += factorToAdd;
         }
-        return t;
+        return t; 
     }
 
     /**
@@ -528,7 +528,6 @@ public class FollowPath extends Command
         {
             s.velocity *= -1;
             s.position -= t.segments[t.segments.length - 1].position;
-            s.heading -= t.segments[t.segments.length - 1].heading;
         }
         List<Segment> list = Arrays.asList(t.segments);
         Collections.reverse(list);

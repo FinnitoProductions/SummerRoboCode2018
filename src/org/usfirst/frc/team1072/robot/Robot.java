@@ -84,11 +84,11 @@ public class Robot extends TimedRobot
      */
     public void autonomousInit()
     {
-        /*Robot.dt.configureAngleClosedLoop();
-        System.out.println("PIGEON POSITION BEFORE YAW: " + Robot.dt.getLeftTalon().
-                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-        Robot.dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
-        try
+        startTime = Timer.getFPGATimestamp();
+        Robot.dt.talonInit();
+        Robot.dt.configureAngleClosedLoop();
+        System.out.println("PIGEON POSITION BEFORE YAW: " + Robot.dt.getPigeonYaw());
+        /*try
         {
             Thread.sleep(100l);
         }
@@ -102,8 +102,8 @@ public class Robot extends TimedRobot
         Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, RobotMap.REMOTE_SLOT_0, RobotMap.TIMEOUT);
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.AUXILIARY_PID_INDEX,
-                RobotMap.TIMEOUT);
-        try
+                RobotMap.TIMEOUT);*/
+        /*try
         {
             Thread.sleep(100l);
         }
@@ -142,11 +142,13 @@ public class Robot extends TimedRobot
         System.out.println("PIGEON POSITION AFTER CONFIG: " + Robot.dt.getLeftTalon().
                 getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));*/
         
-        startTime = Timer.getFPGATimestamp();
+        
+        
+        /*startTime = Timer.getFPGATimestamp();
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
 
         m_autonomousCommand.start();
-        System.out.println("AUTON COMMAND STARTED" + Robot.getCurrentTimeMs());
+        System.out.println("AUTON COMMAND STARTED" + Robot.getCurrentTimeMs());*/
     }
 
     /**
@@ -154,11 +156,18 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-        Scheduler.getInstance().run();
+        Robot.dt.getPigeon().setYaw(100.0, RobotMap.TIMEOUT + 100);
+        if (Robot.dt.getPigeonYaw() < 99.0 || Robot.dt.getPigeonYaw() > 101.0)
+        {
+            System.out.printf("Angle: %6.2f\n", Robot.dt.getPigeonYaw());
+        }
+        else
+            System.out.println("YAW SET " + Robot.getCurrentTimeMs());
+        /*Scheduler.getInstance().run();
         Robot.dt.printMotorOutputPercentage();
         Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.printClosedLoopError(RobotMap.AUXILIARY_PID_INDEX);
-        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);*/
     }
 
     /**
