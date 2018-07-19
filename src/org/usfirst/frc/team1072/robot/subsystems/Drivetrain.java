@@ -655,8 +655,8 @@ public class Drivetrain extends Subsystem
      */
     public void printClosedLoopError (int pidLoop)
     {
-        SmartDashboard.putNumber("Left Talon Closed Loop Error", Robot.dt.getLeftTalon().getClosedLoopError(pidLoop));
-        SmartDashboard.putNumber("Right Talon Closed Loop Error", Robot.dt.getRightTalon().getClosedLoopError(pidLoop));
+        SmartDashboard.putNumber("Left Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getLeftTalon().getClosedLoopError(pidLoop));
+        SmartDashboard.putNumber("Right Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getRightTalon().getClosedLoopError(pidLoop));
     }
     
     /**
