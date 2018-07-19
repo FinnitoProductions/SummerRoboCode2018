@@ -44,7 +44,12 @@ public class CombinedPositionAnglePID extends Command
     public void initialize()
     {
         initPosition();
-        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        ;
+        System.out.println("RIGHT POS AT BEGIN: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
+        System.out.println("LEFT POS AT BEGIN: " + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
+        System.out.println("LEFT QUAD AT BEGIN: " + Robot.dt.getLeftTalon().getSensorCollection().getQuadraturePosition());
+        System.out.println("RIGHT QUAD AT BEGIN: " + Robot.dt.getRightTalon().getSensorCollection().getQuadraturePosition());
+        //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
         numExecutes = 0;
     }
@@ -54,6 +59,9 @@ public class CombinedPositionAnglePID extends Command
      */
     private void initPosition()
     {
+        Robot.dt.getLeftTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
+        Robot.dt.getRightTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
+        
         Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
         Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
@@ -89,15 +97,12 @@ public class CombinedPositionAnglePID extends Command
     {
         if (numExecutes >= 0 && numExecutes < maxExecutes)
         {
-            System.out.println("INCREMENTING");
             numExecutes++;
         }
         else
         {
-            System.out.println("DONE");
             numExecutes = -1;
         }
-        System.out.println("EXECUTING");
         Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
     }
     /**
@@ -112,7 +117,7 @@ public class CombinedPositionAnglePID extends Command
             return Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX))
                     < DrivetrainConstants.POS_ALLOWABLE_ERROR;
         }
-        System.out.println("NOT FINISHED");
+        //System.out.println("NOT FINISHED");
         return false;
     }
     
@@ -120,6 +125,10 @@ public class CombinedPositionAnglePID extends Command
     {
         Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
         Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+        System.out.println("RIGHT POS AT END: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
+        System.out.println("LEFT POS AT END: " + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
+        System.out.println("LEFT QUAD AT END: " + Robot.dt.getLeftTalon().getSensorCollection().getQuadraturePosition());
+        System.out.println("RIGHT QUAD AT END: " + Robot.dt.getRightTalon().getSensorCollection().getQuadraturePosition());
         System.out.println("FINISHING");
     }
     /**

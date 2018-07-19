@@ -125,7 +125,7 @@ public class RobotMap {
         public static double POS_KD_RIGHT = 16;//40;
         public static int POS_IZONE_RIGHT = 250;
         
-        public static int POS_ALLOWABLE_ERROR = 150;
+        public static int POS_ALLOWABLE_ERROR = 200;
         public static int POS_TOLERANCE_BUFFER = 150;
         
         public static double WHEELDIAMETER = 4.0;
