@@ -59,6 +59,8 @@ public class FollowPath extends Command
     
     private boolean zeroAux;
     
+    private boolean resetSensors;
+    
     /**
      * Constructs a new command. 
      */
@@ -82,6 +84,7 @@ public class FollowPath extends Command
         notif = new Notifier(p);
         controllers = new HashMap<IMotorController, Object[]>();
         this.outerPort = outerPort;
+        resetSensors = true;
         requires(Robot.dt);
         totalTime = -1;
     }
@@ -94,6 +97,12 @@ public class FollowPath extends Command
     public FollowPath zeroPigeonAtStart(boolean zeroPigeon)
     {
         zeroAux = zeroPigeon;
+        return this;
+    }
+    
+    public FollowPath resetSensors (boolean zeroSensors)
+    {
+        resetSensors = zeroSensors;
         return this;
     }
     
@@ -143,46 +152,48 @@ public class FollowPath extends Command
             //System.out.println("INITIAL AUXILIARY ANGLE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
             
             Robot.dt.configureMotionProfileAngleClosedLoop();
-            Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
-            Robot.dt.getLeftTalon().configAuxPIDPolarity(false, RobotMap.TIMEOUT);
-            
-            Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
-            Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
-            
-            Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
-                    RemoteSensorSource.Pigeon_Yaw, 
-                    RobotMap.REMOTE_SLOT_0, 
-                    RobotMap.TIMEOUT);
-            
-            Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
-                    RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
-            
-
-            Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
-            Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
-            
-            Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-
-            Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            
-            Robot.dt.getRightTalon().configSelectedFeedbackSensor(PigeonConstants.REMOTE_SENSOR_SLOT, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
-            
-            System.out.println("AUXILIARY ANGLE POST-CONFIG: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-            if (zeroAux)
+            if (resetSensors)
             {
-                System.out.println("ADDING YAW");
-                Robot.dt.setPigeonYaw(0);
+                Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
+                Robot.dt.getLeftTalon().configAuxPIDPolarity(false, RobotMap.TIMEOUT);
+                
+                Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
+                Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
+                
+                Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+                        RemoteSensorSource.Pigeon_Yaw, 
+                        RobotMap.REMOTE_SLOT_0, 
+                        RobotMap.TIMEOUT);
+                
+                Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
+                        RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
+                
+    
+                Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+                Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
+                
+                Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+    
+                Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                
+                Robot.dt.getRightTalon().configSelectedFeedbackSensor(PigeonConstants.REMOTE_SENSOR_SLOT, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+                
+                System.out.println("AUXILIARY ANGLE POST-CONFIG: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
+                if (zeroAux)
+                {
+                    System.out.println("ADDING YAW");
+                    Robot.dt.setPigeonYaw(0);
+                }
+                //System.out.println("NEW PIGEON VALUE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
+                Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
+                        RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
+                
+    
+                Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.ANGLE_PID, PigeonConstants.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+                
+                Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+                Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
             }
-            //System.out.println("NEW PIGEON VALUE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
-            Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
-                    RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
-            
-
-            Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.ANGLE_PID, PigeonConstants.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-            
-            Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-            Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-        
             System.out.println("TALONS CONFIGURED " + Robot.getCurrentTimeMs());
         }
     }

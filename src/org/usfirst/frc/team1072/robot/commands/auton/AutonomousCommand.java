@@ -83,9 +83,9 @@ public class AutonomousCommand extends CommandGroup
         FollowPath fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
         fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
-                false, null).zeroPigeonAtStart(false);
+                false, null).zeroPigeonAtStart(false).resetSensors(true);
         fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true, 
-                fpc1).zeroPigeonAtStart(false);
+                fpc1).zeroPigeonAtStart(false).resetSensors(false);
         //fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
         //fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
         //fpc5 = setupPathFollowerArc(AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2);
