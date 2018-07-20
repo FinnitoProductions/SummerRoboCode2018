@@ -64,7 +64,7 @@ public class TurnToAngle extends Command
         System.out.println("Angle started: " + Robot.getCurrentTimeMs());
         Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
         
-        Robot.dt.resetTalonCoefficients();
+        Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.configureAngleClosedLoop();
         
         Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 

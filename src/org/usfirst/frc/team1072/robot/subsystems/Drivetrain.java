@@ -233,7 +233,7 @@ public class Drivetrain extends Subsystem
     public void resetTalonCoefficients()
     {
         // for all PID slots
-        for (int slot = 0; slot < RobotMap.NUM_PID_SLOTS; slot++)
+        for (int slot = 0; slot < 2; slot++)
         {
             resetTalonCoefficients(slot);
         }
