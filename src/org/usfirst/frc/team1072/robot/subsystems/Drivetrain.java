@@ -648,7 +648,7 @@ public class Drivetrain extends Subsystem
      * @param fd the type of sensor to which the Talon should use
      * @param pidLoop the loop index where this sensor should be placed [0,1]
      */
-    public void setBothSensors(FeedbackDevice fd, int pidLoop)
+    public void configBothFeedbackSensors(FeedbackDevice fd, int pidLoop)
     {
         getLeftTalon().configSelectedFeedbackSensor(fd, 
                     pidLoop, RobotMap.TIMEOUT);

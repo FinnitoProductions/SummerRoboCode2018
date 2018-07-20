@@ -280,7 +280,7 @@ public class RobotMap {
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset
         public static final RemoteFeedbackDevice REMOTE_SENSOR_SLOT = RemoteFeedbackDevice.RemoteSensor0;
-        public static final int ANGLE_ALLOWABLE_ERROR = 0;
+        public static final int ANGLE_ALLOWABLE_ERROR = 50;
         
         public static final boolean LEFT_SENSOR_PHASE = false;
         public static final boolean RIGHT_SENSOR_PHASE = false;

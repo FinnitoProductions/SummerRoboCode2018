@@ -98,8 +98,8 @@ public class Robot extends TimedRobot
     { 
         Scheduler.getInstance().run();
         Robot.dt.printMotorOutputPercentage();
-        Robot.dt.printClosedLoopError(RobotMap.AUXILIARY_PID_INDEX);
-        Robot.dt.printSensorPositions(RobotMap.AUXILIARY_PID_INDEX);
+        Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
         SmartDashboard.putNumber("Raw Pigeon Value", Robot.dt.getPigeonYaw());
     }
 

@@ -22,7 +22,7 @@ public class TurnToAngle extends Command
 {
     private double angle;
     private double numExecutes;
-    private double maxExecutes = 3;
+    private double maxExecutes = 25;
     
     /**
      * Constructs a new TurnRobotToAngleCommand.
@@ -51,6 +51,9 @@ public class TurnToAngle extends Command
      */
     private void initAngle()
     {
+        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
+        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
+        
         Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.configureAngleClosedLoop();
@@ -65,7 +68,7 @@ public class TurnToAngle extends Command
                 RobotMap.TIMEOUT);
         
         
-        Robot.dt.setBothSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.configBothFeedbackSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
     }
 
     /**
@@ -80,15 +83,11 @@ public class TurnToAngle extends Command
             numExecutes = -1;
         }
         
-        
-        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
-        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
+        System.out.println("EXECUTING " + numExecutes);
         
         
-        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * 45 * 
-                Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.DEGREES_PER_ROTATION);
-        Robot.dt.setRight(ControlMode.MotionMagic, 45 * 
-                Conversions.PIGEON_UNITS_PER_ROTATION/Conversions.DEGREES_PER_ROTATION);
+        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * angle);
+        Robot.dt.setRight(ControlMode.MotionMagic, angle);
     }
     /**
     * Determines whether the commmand has finished.
@@ -99,12 +98,9 @@ public class TurnToAngle extends Command
     {
         if (numExecutes == -1)
         {
-            boolean isFinished = Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, PigeonConstants.ANGLE_ALLOWABLE_ERROR);
-            if (isFinished)
-            {
-                Robot.dt.setBoth(ControlMode.Disabled, 0);
-            }
-            return isFinished;
+            return 
+                    Robot.dt.isClosedLoopErrorWithin
+                    (RobotMap.PRIMARY_PID_INDEX, PigeonConstants.ANGLE_ALLOWABLE_ERROR);
         }
         return false;
     }
@@ -115,6 +111,7 @@ public class TurnToAngle extends Command
     public void end()
     {
         Robot.dt.configureNominalPeakOutputs();
+        Robot.dt.setBoth(ControlMode.PercentOutput, 0);
     }
     
 }

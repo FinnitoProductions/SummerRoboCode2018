@@ -82,7 +82,7 @@ public class AutonomousCommand extends CommandGroup
     {
         FollowPath fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
-        fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
+        /*fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
                 false, null).zeroPigeonAtStart(false).resetSensors(true);
         fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true, 
                 fpc1).zeroPigeonAtStart(false).resetSensors(false);
@@ -112,7 +112,10 @@ public class AutonomousCommand extends CommandGroup
         addSequential(new CombinedPositionAnglePID(4, 0));
         addSequential(new CombinedPositionAnglePID(-4, 0));
         
-        addSequential(fpc5);
+        addSequential(fpc5);*/
+        
+        //addSequential(new CombinedPositionAnglePID(-2, 0));
+        addSequential(new TurnToAngle(-70));
         /*addSequential(new PrebufferPathPointsCommand(fpc2));
         CommandGroup path2 = new CommandGroup();
         path2.addParallel(fpc2);
