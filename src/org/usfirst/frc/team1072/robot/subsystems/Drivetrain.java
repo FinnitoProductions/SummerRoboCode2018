@@ -117,6 +117,7 @@ public class Drivetrain extends Subsystem
     public void talonInitTeleop()
     {
         talonInit();
+        configureVelocityClosedLoop();
         setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
         
     }
@@ -152,11 +153,8 @@ public class Drivetrain extends Subsystem
         dtsetTalonFramePeriods();
         
         System.out.println("CONFIGURING VEL CLOSED LOOP " + Robot.getCurrentTimeMs());
-        configureVelocityClosedLoop();
         System.out.println("CONFIGURING POS CLOSED LOOP " + Robot.getCurrentTimeMs());
         configurePositionClosedLoop();
-        System.out.println("CONFIGURING MP CLOSED LOOP " + Robot.getCurrentTimeMs());
-        configureMotionProfileAngleClosedLoop();
         System.out.println("CONFIGURING MP ANGLE CLOSED LOOP " + Robot.getCurrentTimeMs());
         configureMotionProfileDriveClosedLoop();
 
