@@ -128,6 +128,7 @@ public class Drivetrain extends Subsystem
     public void talonInit()
     {
         zeroAllSensors();
+        zeroPigeon();
         setTalonDeadbands();
         initTalonOutput(0);
         
@@ -255,11 +256,8 @@ public class Drivetrain extends Subsystem
      */
     private void zeroAllSensors()
     {
-        for (int loop = 0; loop < 2; loop++)
-        {
-            getLeftTalon().setSelectedSensorPosition(0, loop, RobotMap.TIMEOUT);
-            getRightTalon().setSelectedSensorPosition(0, loop, RobotMap.TIMEOUT);
-        }
+        getLeftTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     }
    
 
@@ -411,7 +409,6 @@ public class Drivetrain extends Subsystem
      */
     public void configureAngleClosedLoop()
     {
-        zeroPigeon();
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
         getRightTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KF, RobotMap.TIMEOUT);
@@ -443,7 +440,6 @@ public class Drivetrain extends Subsystem
      */
     public void configureMotionProfileAngleClosedLoop()
     {
-        zeroPigeon();
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
         
         getRightTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KF, RobotMap.TIMEOUT);
@@ -625,7 +621,7 @@ public class Drivetrain extends Subsystem
      */
     public void setPigeonYaw(double angle)
     {
-        getPigeon().setYaw(angle * PigeonConstants.SET_YAW_SCALE_FACTOR, RobotMap.TIMEOUT);
+        getPigeon().setYaw(angle * 64, RobotMap.TIMEOUT);
     }
     
     /**
@@ -635,7 +631,7 @@ public class Drivetrain extends Subsystem
      */
     public void addPigeonYaw (double angle)
     {
-        getPigeon().addYaw(angle * PigeonConstants.SET_YAW_SCALE_FACTOR, RobotMap.TIMEOUT);
+        getPigeon().addYaw(angle * 64, RobotMap.TIMEOUT);
     }
  
     /**
@@ -685,8 +681,8 @@ public class Drivetrain extends Subsystem
      */
     public void printSensorPositions (int pidLoop)
     {
-        SmartDashboard.putNumber("Left Talon Position", Robot.dt.getLeftTalon().getSelectedSensorPosition(pidLoop));
-        SmartDashboard.putNumber("Right Talon Position", Robot.dt.getRightTalon().getSelectedSensorPosition(pidLoop));
+        SmartDashboard.putNumber("Left Talon Position " + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getLeftTalon().getSelectedSensorPosition(pidLoop));
+        SmartDashboard.putNumber("Right Talon Position" + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getRightTalon().getSelectedSensorPosition(pidLoop));
     }
     
     /**

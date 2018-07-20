@@ -82,12 +82,13 @@ public class AutonomousCommand extends CommandGroup
     {
         FollowPath fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
-        fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, false, null);
+        fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
+                false, null).zeroPigeonAtStart(false);
         fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true, 
-                fpc1);
+                fpc1).zeroPigeonAtStart(false);
         //fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
         //fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
-        fpc5 = setupPathFollowerArc(AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2);
+        //fpc5 = setupPathFollowerArc(AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2);
         //fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
         //fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
         //fpc8 = setupPathFollowerArc(AutonomousPaths.CLH_P8_LEFT_REV, AutonomousPaths.CLH_P8_RIGHT_REV, true);
@@ -98,7 +99,6 @@ public class AutonomousCommand extends CommandGroup
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
         //addSequential(new SetSolenoidCommand(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         //addSequential(new DriveToPositionCommand(3));
-        addSequential(new Delay(1));
         addSequential(new PrebufferPathPoints(fpc1));
         CommandGroup path1 = new CommandGroup();
             path1.addParallel(fpc1);
@@ -107,7 +107,7 @@ public class AutonomousCommand extends CommandGroup
         addSequential(path1);
 
         addSequential(fpc2);
-        addSequential(new CombinedPositionAnglePID(4, 0));
+        //addSequential(new CombinedPositionAnglePID(4, 0));
         //addSequential(new CombinedPositionAnglePID(4, 0));
         //addSequential(new CombinedPositionAnglePID(-4, 0));
         

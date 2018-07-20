@@ -85,75 +85,10 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
-        Robot.dt.talonInit();
-        Robot.dt.configureAngleClosedLoop();
-        System.out.println("START TIME: " + Robot.getCurrentTimeMs());
-        System.out.println("START YAW: " + Robot.dt.getPigeonYaw());
-        double oldYaw = Robot.dt.getPigeonYaw();
-        Robot.dt.addPigeonYaw(1000);
-        while (Robot.dt.getPigeonYaw() < (oldYaw + 1000 - 1) || Robot.dt.getPigeonYaw() > (oldYaw + 1000 + 1));
-        System.out.println("YAW SET " + + Robot.dt.getPigeonYaw() + " " + Robot.getCurrentTimeMs());
-        /*try
-        {
-            Thread.sleep(100l);
-        }
-        catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("PIGEON POSITION AFTER YAW: " + Robot.dt.getLeftTalon().
-                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-        Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, RobotMap.REMOTE_SLOT_0, RobotMap.TIMEOUT);
-        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.AUXILIARY_PID_INDEX,
-                RobotMap.TIMEOUT);*/
-        /*try
-        {
-            Thread.sleep(100l);
-        }
-        catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        System.out.println("PIGEON POSITION AFTER CONFIG: " + Robot.dt.getLeftTalon().
-                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-       
-        
-        Robot.dt.getLeftTalon().setSelectedSensorPosition(12000, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
-        
-        try
-        {
-            Thread.sleep(100l);
-        }
-        catch (InterruptedException e)
-        {
-            
-        }
-        System.out.println("PIGEON POSITION AFTER SET SELECTED SENSOR: " + Robot.dt.getLeftTalon().
-                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
-
-        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, RobotMap.AUXILIARY_PID_INDEX,
-                RobotMap.TIMEOUT);
-        try
-        {
-            Thread.sleep(100l);
-        }
-        catch (InterruptedException e)
-        {
-            
-        }
-        System.out.println("PIGEON POSITION AFTER CONFIG: " + Robot.dt.getLeftTalon().
-                getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));*/
-        
-        
-        
-        /*startTime = Timer.getFPGATimestamp();
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
 
         m_autonomousCommand.start();
-        System.out.println("AUTON COMMAND STARTED" + Robot.getCurrentTimeMs());*/
+        System.out.println("AUTON COMMAND STARTED" + Robot.getCurrentTimeMs());
     }
 
     /**
@@ -161,12 +96,11 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-
-        /*Scheduler.getInstance().run();
+        Scheduler.getInstance().run();
         Robot.dt.printMotorOutputPercentage();
-        Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.printClosedLoopError(RobotMap.AUXILIARY_PID_INDEX);
-        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);*/
+        Robot.dt.printSensorPositions(RobotMap.AUXILIARY_PID_INDEX);
+        SmartDashboard.putNumber("Raw Pigeon Value", Robot.dt.getPigeonYaw());
     }
 
     /**
