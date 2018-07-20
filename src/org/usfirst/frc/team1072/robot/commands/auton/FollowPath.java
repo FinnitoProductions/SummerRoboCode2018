@@ -446,7 +446,7 @@ public class FollowPath extends Command
     protected boolean isFinished()
     {
         boolean isFinished = getControllerStatus(Robot.dt.getRightTalon()).isLast &&
-                Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_END_ERROR;
+                Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_ALLOWABLE_ERROR;
         return isFinished;
     }
     
