@@ -625,7 +625,17 @@ public class Drivetrain extends Subsystem
      */
     public void setPigeonYaw(double angle)
     {
-        getPigeon().setYaw(angle, RobotMap.TIMEOUT);
+        getPigeon().setYaw(angle * PigeonConstants.SET_YAW_SCALE_FACTOR, RobotMap.TIMEOUT);
+    }
+    
+    /**
+     * Adds a given value to the pigeon yaw.
+     * @param angle the angle value which should be added to the pigeon yaw value, in pigeon units 
+     * where 1 rotation is 8192 units
+     */
+    public void addPigeonYaw (double angle)
+    {
+        getPigeon().addYaw(angle * PigeonConstants.SET_YAW_SCALE_FACTOR, RobotMap.TIMEOUT);
     }
  
     /**

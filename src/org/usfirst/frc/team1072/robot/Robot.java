@@ -87,7 +87,12 @@ public class Robot extends TimedRobot
         startTime = Timer.getFPGATimestamp();
         Robot.dt.talonInit();
         Robot.dt.configureAngleClosedLoop();
-        System.out.println("PIGEON POSITION BEFORE YAW: " + Robot.dt.getPigeonYaw());
+        System.out.println("START TIME: " + Robot.getCurrentTimeMs());
+        System.out.println("START YAW: " + Robot.dt.getPigeonYaw());
+        double oldYaw = Robot.dt.getPigeonYaw();
+        Robot.dt.addPigeonYaw(1000);
+        while (Robot.dt.getPigeonYaw() < (oldYaw + 1000 - 1) || Robot.dt.getPigeonYaw() > (oldYaw + 1000 + 1));
+        System.out.println("YAW SET " + + Robot.dt.getPigeonYaw() + " " + Robot.getCurrentTimeMs());
         /*try
         {
             Thread.sleep(100l);
@@ -156,13 +161,7 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-        Robot.dt.setPigeonYaw(8192);
-        if (Robot.dt.getPigeonYaw() < 99.0 || Robot.dt.getPigeonYaw() > 101.0)
-        {
-            System.out.printf("Angle: %6.2f\n", Robot.dt.getPigeonYaw());
-        }
-        else
-            System.out.println("YAW SET " + Robot.getCurrentTimeMs());
+
         /*Scheduler.getInstance().run();
         Robot.dt.printMotorOutputPercentage();
         Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);

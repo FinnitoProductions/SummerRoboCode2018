@@ -284,6 +284,8 @@ public class RobotMap {
         
         public static final boolean LEFT_SENSOR_PHASE = false;
         public static final boolean RIGHT_SENSOR_PHASE = false;
+        
+        public static final double SET_YAW_SCALE_FACTOR =  64;//.01562881562882;
     }
     
     /**

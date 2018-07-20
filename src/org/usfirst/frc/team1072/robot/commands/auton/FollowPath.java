@@ -94,11 +94,6 @@ public class FollowPath extends Command
     public FollowPath zeroPigeonAtStart(boolean zeroPigeon)
     {
         zeroAux = zeroPigeon;
-        if (zeroAux)
-        {
-            System.out.println("ZEROING PIGEON");
-            Robot.dt.getPigeon().setYaw(0, RobotMap.TIMEOUT);
-        }
         return this;
     }
     
@@ -169,13 +164,16 @@ public class FollowPath extends Command
             Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
 
             Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-            Robot.dt.getRightTalon().configSelectedFeedbackSensor(PigeonConstants.REMOTE_SENSOR_SLOT, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
             
+            double prevPigeonValue = 
+                    Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX);
+            Robot.dt.getRightTalon().configSelectedFeedbackSensor(PigeonConstants.REMOTE_SENSOR_SLOT, RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+            if (!zeroAux)
+            {
+                Robot.dt.addPigeonYaw(prevPigeonValue);
+            }
             Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5,
                     RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
-            
-            
-
             
 
             Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.ANGLE_PID, PigeonConstants.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
