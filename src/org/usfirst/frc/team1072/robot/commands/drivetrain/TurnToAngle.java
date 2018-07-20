@@ -41,7 +41,6 @@ public class TurnToAngle extends Command
     public void initialize()
     {
         initAngle();
-        Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
         
         numExecutes = 0;
     }
@@ -51,24 +50,27 @@ public class TurnToAngle extends Command
      */
     private void initAngle()
     {
-        Robot.dt.getLeftTalon().setSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE);
-        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
-        
         Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
         
+        Robot.dt.resetTalonCoefficients();
         Robot.dt.configureAngleClosedLoop();
         
-        Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
-                RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_SLOT_0, 
-                RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_SLOT_0, 
                 RobotMap.TIMEOUT);
         
+        Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon());
+        Robot.dt.getLeftTalon().setInverted(!DrivetrainConstants.LEFT_TALON_INVERT);
+        Robot.dt.getLeftVictor().setInverted(!DrivetrainConstants.LEFT_VICTOR_INVERT);
         
         Robot.dt.configBothFeedbackSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
+        
+        Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        
+        Robot.dt.getRightTalon().setSensorPhase(PigeonConstants.RIGHT_SENSOR_PHASE);
+
+        Robot.dt.setRight(ControlMode.MotionMagic, angle);
     }
 
     /**
@@ -85,9 +87,9 @@ public class TurnToAngle extends Command
         
         System.out.println("EXECUTING " + numExecutes);
         
-        
-        Robot.dt.setLeft(ControlMode.MotionMagic, -1 * angle);
         Robot.dt.setRight(ControlMode.MotionMagic, angle);
+        //Robot.dt.setLeft(ControlMode.MotionMagic, -angle);
+        //Robot.dt.setRight(ControlMode.MotionMagic, angle);
     }
     /**
     * Determines whether the commmand has finished.
@@ -110,8 +112,10 @@ public class TurnToAngle extends Command
      */
     public void end()
     {
-        Robot.dt.configureNominalPeakOutputs();
-        Robot.dt.setBoth(ControlMode.PercentOutput, 0);
+        //Robot.dt.configureNominalPeakOutputs();
+        Robot.dt.setBoth(ControlMode.Disabled, 0);
+        Robot.dt.getLeftTalon().setInverted(DrivetrainConstants.LEFT_TALON_INVERT);
+        Robot.dt.getLeftVictor().setInverted(DrivetrainConstants.LEFT_VICTOR_INVERT);
     }
     
 }

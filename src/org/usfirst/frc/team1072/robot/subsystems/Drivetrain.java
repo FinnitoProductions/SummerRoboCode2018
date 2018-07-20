@@ -267,8 +267,8 @@ public class Drivetrain extends Subsystem
      */
     private void invertControllers()
     {
-        getLeftTalon().setInverted(true);
-        getLeftVictor().setInverted(true);
+        getLeftTalon().setInverted(DrivetrainConstants.LEFT_TALON_INVERT);
+        getLeftVictor().setInverted(DrivetrainConstants.LEFT_VICTOR_INVERT);
         
         // Invert the following direction (left Talons and Victors were wired
         // oppositely)

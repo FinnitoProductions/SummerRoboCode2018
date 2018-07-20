@@ -63,6 +63,8 @@ public class RobotMap {
         public static final double MOT_PROF_ADD_TO_VEL_INIT = 7;
         public static final double TIME_TO_OVERCOME_S_FRICTION_MS = 45;
         public static final double TALON_DEADBAND = 0.01;
+        public static final boolean LEFT_TALON_INVERT = true;
+        public static final boolean LEFT_VICTOR_INVERT = true;
         public static int VEL_PID = 1;
         public static int POS_PID = 2;
         public static int ANGLE_PID = 0;
@@ -268,9 +270,9 @@ public class RobotMap {
         public static double MOT_PROF_KD = 7;//75;
         
         public static double TURN_KF = 0.45;//0.6; // 1.28
-        public static double TURN_KP = 2;//0.5;//0.3;
-        public static double TURN_KI = 0;//0.007;//0.001;//0;//.001;
-        public static double TURN_KD = 10;//25;//100
+        public static double TURN_KP = 2;//0.2;//0.5;//0.3; 
+        public static double TURN_KI = 0;//0.0001;//0.007;//0.001;//0;//.001;
+        public static double TURN_KD = 10;//4;//25;//100
         public static int TURN_IZONE = 50;
         public static int TURN_VEL = 560;
         public static int TURN_ACCEL = 1000;
