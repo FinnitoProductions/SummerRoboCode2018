@@ -617,6 +617,16 @@ public class Drivetrain extends Subsystem
         pigeon.getYawPitchRoll(ypr);
         return ypr[2];
     }
+    
+    /**
+     * Sets the pigeon yaw to a given value.
+     * @param angle the angle value to which the pigeon should be set, in pigeon units 
+     * where 1 rotation is 8192 units
+     */
+    public void setPigeonYaw(double angle)
+    {
+        getPigeon().setYaw(angle, RobotMap.TIMEOUT);
+    }
  
     /**
      * Zeros the pigeon.

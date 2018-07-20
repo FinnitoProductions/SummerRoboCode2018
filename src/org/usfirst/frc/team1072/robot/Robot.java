@@ -156,7 +156,7 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-        Robot.dt.getPigeon().setYaw(100.0, RobotMap.TIMEOUT + 100);
+        Robot.dt.setPigeonYaw(8192);
         if (Robot.dt.getPigeonYaw() < 99.0 || Robot.dt.getPigeonYaw() > 101.0)
         {
             System.out.printf("Angle: %6.2f\n", Robot.dt.getPigeonYaw());
