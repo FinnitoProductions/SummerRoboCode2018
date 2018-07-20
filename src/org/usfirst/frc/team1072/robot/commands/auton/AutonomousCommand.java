@@ -82,20 +82,23 @@ public class AutonomousCommand extends CommandGroup
     {
         FollowPath fpc1, fpc2, fpc3, fpc4, fpc5, fpc6, fpc7, fpc8, fpc9;
         //DriveToPositionCommand fpc3;
-        /*fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
+        fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
                 false, null).zeroPigeonAtStart(false).resetSensors(true);
         fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true, 
                 fpc1).zeroPigeonAtStart(false).resetSensors(false);
-        //fpc3 = setupPathFollowerArc(AutonomousPaths.CLH_P3_LEFT, AutonomousPaths.CLH_P3_RIGHT, false);
-        //fpc4 = setupPathFollowerArc(AutonomousPaths.CLH_P4_LEFT_REV, AutonomousPaths.CLH_P4_RIGHT_REV, true);
+        //fpc3 = setupPathFollowerArc(AutonomousConstants.CLH_P3_LEFT, AutonomousConstants.CLH_P3_RIGHT, false);
+        //fpc4 = setupPathFollowerArc(AutonomousConstants.CLH_P4_LEFT_REV, AutonomousConstants.CLH_P4_RIGHT_REV, true);
         fpc5 = setupPathFollowerArc
                 (AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2)
                 .zeroPigeonAtStart(false).resetSensors(true);
-        //fpc6 = setupPathFollowerArc(AutonomousPaths.CLH_P6_LEFT_REV, AutonomousPaths.CLH_P6_RIGHT_REV, true);
-        //fpc7 = setupPathFollowerArc(AutonomousPaths.CLH_P7_LEFT, AutonomousPaths.CLH_P7_RIGHT, false);
-        //fpc8 = setupPathFollowerArc(AutonomousPaths.CLH_P8_LEFT_REV, AutonomousPaths.CLH_P8_RIGHT_REV, true);
-        //fpc9 = setupPathFollowerArc(AutonomousPaths.CLH_P9_LEFT, AutonomousPaths.CLH_P9_RIGHT, false);
-       
+        /*fpc6 = setupPathFollowerArc(AutonomousConstants.CLH_P6_LEFT_REV, AutonomousConstants.CLH_P6_RIGHT_REV, true, null);
+        fpc7 = setupPathFollowerArc(AutonomousConstants.CLH_P7_LEFT, AutonomousConstants.CLH_P7_RIGHT, false, fpc6);
+        fpc8 = setupPathFollowerArc(AutonomousConstants.CLH_P8_LEFT_REV, AutonomousConstants.CLH_P8_RIGHT_REV, true, fpc7);
+        fpc9 = setupPathFollowerArc(AutonomousConstants.CLH_P9_LEFT, AutonomousConstants.CLH_P9_RIGHT, false, fpc8);
+        *///addSequential(fpc6);
+        //addSequential(fpc7);
+        //addSequential(fpc8);
+        //addSequential(fpc9);
 
         
         //addSequential(new SetSolenoidCommand(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
@@ -112,18 +115,26 @@ public class AutonomousCommand extends CommandGroup
         addSequential(new CombinedPositionAnglePID(4, 0));
         addSequential(new CombinedPositionAnglePID(-4, 0));
         
-        addSequential(fpc5);*/
+        addSequential(fpc5);
         
-        addSequential(new TurnToAngle(-25, 0.75));
-        addSequential(new CombinedPositionAnglePID(-2, -25));
-        addSequential(new CombinedPositionAnglePID(-2, -25));
-        //addSequential(new TurnToAngle(-50, 0.75));
+        //addSequential(new TurnToAngle(-25, 0.75));
+        /*addSequential(new CombinedPositionAnglePID(-2, -25));
+        addSequential(new TurnToAngle(-50, 0.75));*/
 
-        //addSequential(new TurnToAngle(-70, 0.75));
-//        addSequential(new CombinedPositionAnglePID(1, -70));
-//        addSequential(new CombinedPositionAnglePID(-1, -70));
-//        addSequential(new TurnToAngle(0, 0.75));
-//        addSequential(new CombinedPositionAnglePID(2, 0));
+        //addSequential (new CombinedPositionAnglePID(7, -70));
+        /**addSequential (new DriveToPosition(1));
+        addSequential (new DriveToPosition(-1));
+        addSequential (new CombinedPositionAnglePID(4, 0));*/
+        //addSequential(new DriveToPosition(-2));
+        /*addSequential(new TurnToAngle(-70, 0.75));
+        addSequential(new DriveToPosition(1));
+        addSequential(new DriveToPosition(-1));
+        addSequential(new TurnToAngle(0, 0.75));*/
+        //addSequential(new DriveToPosition(2));
+        /*addSequential(new CombinedPositionAnglePID(1, -70));
+        addSequential(new CombinedPositionAnglePID(-1, -70));
+        addSequential(new TurnToAngle(0, 0.75));
+        addSequential(new CombinedPositionAnglePID(2, 0));*/
         
         /*addSequential(new PrebufferPathPointsCommand(fpc2));
         CommandGroup path2 = new CommandGroup();

@@ -181,7 +181,6 @@ public class FollowPath extends Command
                 System.out.println("AUXILIARY ANGLE POST-CONFIG: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.AUXILIARY_PID_INDEX));
                 if (zeroAux)
                 {
-                    System.out.println("ADDING YAW");
                     Robot.dt.setPigeonYaw(0);
                 }
                 //System.out.println("NEW PIGEON VALUE: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
@@ -191,8 +190,8 @@ public class FollowPath extends Command
     
                 Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.ANGLE_PID, PigeonConstants.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
                 
-                Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-                Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+                Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.MOTION_PROFILE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+                Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.MOTION_PROFILE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
             }
             System.out.println("TALONS CONFIGURED " + Robot.getCurrentTimeMs());
         }
@@ -203,15 +202,6 @@ public class FollowPath extends Command
      */
     public void execute()
     {
-        SmartDashboard.putNumber("Right Talon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("Right Talon Setpoint", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX) + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX));
-        if (getControllerStatus(Robot.dt.getRightTalon()) != null)
-                SmartDashboard.putNumber("Right Talon Points", getControllerStatus(Robot.dt.getRightTalon()).btmBufferCnt);
-        SmartDashboard.putNumber("Right Talon Position Status", Robot.dt.getRightTalon().getActiveTrajectoryPosition());
-        SmartDashboard.putNumber("Right Talon Output Percent", Robot.dt.getRightTalon().getMotorOutputPercent());
-        SmartDashboard.putNumber("Left Talon Output Percent", Robot.dt.getLeftTalon().getMotorOutputPercent());
-        SmartDashboard.putNumber("Right Talon Pigeon Error", Robot.dt.getRightTalon().getClosedLoopError(RobotMap.AUXILIARY_PID_INDEX));
-
         //System.out.println("STARTING EXECUTE " + Robot.getCurrentTimeMs());
         MotionProfileStatus motionStatus = new MotionProfileStatus();
         IMotorController imc = Robot.dt.getRightTalon();
@@ -288,6 +278,7 @@ public class FollowPath extends Command
             case 3:
             {
                 Robot.dt.getRightTalon().set(ControlMode.MotionProfileArc, SetValueMotionProfile.Hold.value);
+                System.out.println("HOLDING");
             }
             break;
         }
@@ -445,7 +436,7 @@ public class FollowPath extends Command
      */
     protected boolean isFinished()
     {
-        boolean isFinished = getControllerStatus(Robot.dt.getRightTalon()).isLast &&
+        boolean isFinished = pathState == 3 &&
                 Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_ALLOWABLE_ERROR;
         return isFinished;
     }

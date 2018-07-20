@@ -58,7 +58,7 @@ public class CombinedPositionAnglePID extends Command
      * Initializes the position part of this command (to be used if combined with a subsequent turn).
      */
     private void initPosition()
-    {
+    {   
         Robot.dt.getLeftTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
         
