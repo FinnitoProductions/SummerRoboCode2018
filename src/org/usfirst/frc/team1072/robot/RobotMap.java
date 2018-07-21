@@ -172,7 +172,7 @@ public class RobotMap {
      */
     public static class ElevatorConstants
     {
-        public static final double SWITCH_HEIGHT_AUTON = 6000;
+        public static final double SWITCH_HEIGHT_AUTON = 4200;
         public static int MANUAL_CURRENT_LIMIT_CONT = 10;
         public static int PEAK_CURRENT_LIMIT = 10; //25
         public static int PEAK_TIME_MS = 750;
@@ -203,7 +203,7 @@ public class RobotMap {
         public static double VEL_KD = 14;
         
         public static int VEL_ACCEL = 9000 / 4;
-        public static int VEL_VEL = 2600 / 2;
+        public static int VEL_VEL = 2600 / 4;
         public static int VEL_ALLOWABLE_ERROR = 100;
         
         public static int INTAKE_HEIGHT = 300;
@@ -301,8 +301,8 @@ public class RobotMap {
         public static final String CLH_P1_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1 _left_detailed.csv";
         public static final String CLH_P1_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/1f/part1 _right_detailed.csv";
         
-        public static final String CLH_P2_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/part2 _left_detailed.csv";
-        public static final String CLH_P2_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/part2 _right_detailed.csv";
+        public static final String CLH_P2_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/part2_left_detailed.csv";
+        public static final String CLH_P2_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/2b/part2_right_detailed.csv";
         
         public static final String CLH_P3_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/3f/part3_left_detailed.csv";
         public static final String CLH_P3_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/3f/part3_right_detailed.csv";
