@@ -56,11 +56,11 @@ public class AutonomousCommand extends CommandGroup
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
         initSubsystems();
-        testThirdCube();
+        //testThirdCube();
         /*addSequential(new CombinedPositionAnglePID(0, 
                 90));*/
         //addSequential(new TurnRobotToAngleCommand(90));
-        //switchAuton(true);
+        switchAuton(true);
 
     }
 
@@ -93,7 +93,7 @@ public class AutonomousCommand extends CommandGroup
         fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true, 
                 fpc1).zeroPigeonAtStart(false).resetSensors(false);
         fpc3 = new CombinedPositionAnglePID(4, 0);
-        fpc4 = new CombinedPositionAnglePID(-4.5, 0);
+        fpc4 = new CombinedPositionAnglePID(-3, 0);
         fpc5 = setupPathFollowerArc
                 (AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2)
                 .zeroPigeonAtStart(false).resetSensors(true);
