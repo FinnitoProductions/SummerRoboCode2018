@@ -92,7 +92,7 @@ public class AutonomousCommand extends CommandGroup
                 false, null).zeroPigeonAtStart(false).resetSensors(true);
         fpc2 = setupPathFollowerArc(AutonomousConstants.CLH_P2_LEFT_REV, AutonomousConstants.CLH_P2_RIGHT_REV, true, 
                 fpc1).zeroPigeonAtStart(false).resetSensors(false);
-        fpc3 = new CombinedPositionAnglePID(4, 0);
+        fpc3 = new CombinedPositionAnglePID(3, 0);
         fpc4 = new CombinedPositionAnglePID(-3, 0);
         fpc5 = setupPathFollowerArc
                 (AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2)
