@@ -68,10 +68,18 @@ public class Robot extends TimedRobot
      */
     public void disabledInit() 
     { 
-        Robot.dt.getLeftTalon().setNeutralMode(NeutralMode.Brake);
-        Robot.dt.getRightTalon().setNeutralMode(NeutralMode.Brake);
-        Robot.dt.getLeftVictor().setNeutralMode(NeutralMode.Brake);
-        Robot.dt.getRightVictor().setNeutralMode(NeutralMode.Brake);
+        NeutralMode nm;
+        if (Robot.dt.getLeftTalon().getMotorOutputPercent() > DrivetrainConstants.NOMINAL_OUTPUT_LEFT * 1.5
+                && Robot.dt.getRightTalon().getMotorOutputPercent() > DrivetrainConstants.NOMINAL_OUTPUT_RIGHT * 1.5)
+        {
+            nm = NeutralMode.Brake;
+        }
+        else
+            nm = NeutralMode.Coast;
+        Robot.dt.getLeftTalon().setNeutralMode(nm);
+        Robot.dt.getRightTalon().setNeutralMode(nm);
+        Robot.dt.getLeftVictor().setNeutralMode(nm);
+        Robot.dt.getRightVictor().setNeutralMode(nm);
     }
 
     /**
