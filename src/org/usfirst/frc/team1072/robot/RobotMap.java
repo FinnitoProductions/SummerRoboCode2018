@@ -269,13 +269,13 @@ public class RobotMap {
         public static double MOT_PROF_KI = 0;//.001;
         public static double MOT_PROF_KD = 7;//75;
         
-        public static double TURN_KF = 1.05;//0.6; // 1.28
-        public static double TURN_KP = 0.7;//0.2;//0.5;//0.3; 
-        public static double TURN_KI = 0.002;//0.0001;//0.007;//0.001;//0;//.001;
-        public static double TURN_KD = 3.5;//4;//25;//100
-        public static int TURN_IZONE = 150;
-        public static int TURN_VEL = 450;
-        public static int TURN_ACCEL = 1200;
+        public static double TURN_KF = 0.5;//1.45;//0.6; // 1.28
+        public static double TURN_KP = 3.6; //1.3;//0.2;//0.5;//0.3; 
+        public static double TURN_KI = 0.003; //0.002;//0.0001;//0.007;//0.001;//0;//.001;
+        public static double TURN_KD = 1; //4;//4;//25;//100
+        public static int TURN_IZONE = 150; //150;
+        public static int TURN_VEL = 500;
+        public static int TURN_ACCEL = 600;
         public static double NOMINAL_OUTPUT_LEFT = 0.11; //0.084;
         public static double NOMINAL_OUTPUT_RIGHT = 0.11;
         

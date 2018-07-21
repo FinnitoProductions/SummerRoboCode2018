@@ -1,5 +1,8 @@
 package org.usfirst.frc.team1072.robot.commands.drivetrain;
 
+import java.util.Arrays;
+import java.util.Queue;
+
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
@@ -25,6 +28,9 @@ public class TurnToAngle extends Command
     private double maxExecutes = 25;
     private double startTime;
     private double timeout;
+    private double[] previousErrors;
+    private int errorIndex;
+    private int errorSamples;
     
     /**
      * Constructs a new TurnRobotToAngleCommand.
@@ -33,25 +39,34 @@ public class TurnToAngle extends Command
      */
     public TurnToAngle (double angle)
     {
-       
+        errorIndex = 0;
+        errorSamples = 6;
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
         this.timeout = -1.0;
     }
     
     public TurnToAngle (double angle, double timeout)
     {
-       
+        errorIndex = 0;
+        errorSamples = 6;
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
         this.timeout = timeout*1000;
     }
     
+    public TurnToAngle setNumErrorsToCheck (int numErrors)
+    {
+        errorSamples = numErrors;
+        return this;
+    }
     /**
      * Initializes this command.
      */
     public void initialize()
     {
+        previousErrors = new double[errorSamples];
+        for (int i = 0; i < errorSamples; i++)
+            previousErrors[i] = angle;
         initAngle();
-        
         numExecutes = 0;
     }
     
@@ -112,14 +127,19 @@ public class TurnToAngle extends Command
         double timePassed = Robot.getCurrentTimeMs() - startTime;
         if (numExecutes == -1)
         {
-            return 
-                    Robot.dt.isClosedLoopErrorWithin
-                    (RobotMap.PRIMARY_PID_INDEX, PigeonConstants.ANGLE_ALLOWABLE_ERROR);
+            for (double d : previousErrors)
+            {
+                if (Math.abs(d) > PigeonConstants.ANGLE_ALLOWABLE_ERROR)
+                    return false;
+            }
+            return true;
         }
         if(timePassed > timeout && timeout > 0)
         {
             return true; //end early
         }
+        previousErrors[errorIndex] = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        errorIndex = (errorIndex + 1) % previousErrors.length;
         return false;
     }
     
