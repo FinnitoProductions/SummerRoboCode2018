@@ -33,9 +33,11 @@ public class MoveElevatorMotionMagic extends Command
      */
     public void initialize()
     {  
-        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor
+        (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
         Robot.el.moveElevatorMotionMagic(position);
+        System.out.println("INITIALIZING MOTION MAGIC");
     }
     /**
      * Executes the command, moving the robot to a given position using motion magic.

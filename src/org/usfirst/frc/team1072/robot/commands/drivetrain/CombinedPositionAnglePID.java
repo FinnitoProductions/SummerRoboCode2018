@@ -155,8 +155,7 @@ public class CombinedPositionAnglePID extends Command
      */
     public double getCurrentPosition()
     {
-        return (Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) 
-                + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)) / 2;
+        return Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX);
     }
     
     /**
