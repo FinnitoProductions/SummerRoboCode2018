@@ -172,7 +172,7 @@ public class RobotMap {
      */
     public static class ElevatorConstants
     {
-        public static final double SWITCH_HEIGHT_AUTON = 4200;
+        public static final double SWITCH_HEIGHT_AUTON = 4600;
         public static int MANUAL_CURRENT_LIMIT_CONT = 10;
         public static int PEAK_CURRENT_LIMIT = 10; //25
         public static int PEAK_TIME_MS = 750;
