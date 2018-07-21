@@ -45,6 +45,11 @@ public class TurnToAngle extends Command
         this.timeout = -1.0;
     }
     
+    /**
+     * Constructs a new TurnToAngle.
+     * @param angle the final angle for the robot in degrees
+     * @param timeout the time at which the command stops, regardless of how much progress the robot has made.
+     */
     public TurnToAngle (double angle, double timeout)
     {
         errorIndex = 0;
@@ -53,6 +58,12 @@ public class TurnToAngle extends Command
         this.timeout = timeout*1000;
     }
     
+    /**
+     * Sets the number of errors to keep track of when determining whether the robot is near the setpoint and staying there 
+     * (as opposed to passing by quickly).
+     * @param numErrors the number of errors to keep track of
+     * @return this command
+     */
     public TurnToAngle setNumErrorsToCheck (int numErrors)
     {
         errorSamples = numErrors;
