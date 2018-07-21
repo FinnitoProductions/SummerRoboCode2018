@@ -213,7 +213,7 @@ public class AutonomousCommand extends CommandGroup
                 pathGroupOuttakeSecondCube.addSequential(fpc5);
             scoreSecondCube.addParallel(pathGroupOuttakeSecondCube);
             CommandGroup intakeSecondCubeDuringPath = new CommandGroup();
-                intakeSecondCubeDuringPath.addSequential(new IntakeOuttakeTimed(0.3, IntakeConstants.INTAKE_BOOL));
+                intakeSecondCubeDuringPath.addSequential(new IntakeOuttakeTimed(0.5, IntakeConstants.INTAKE_BOOL));
                 intakeSecondCubeDuringPath.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
             scoreSecondCube.addParallel(intakeSecondCubeDuringPath);
             CommandGroup elevatorRaiseSecondCube = new CommandGroup();
