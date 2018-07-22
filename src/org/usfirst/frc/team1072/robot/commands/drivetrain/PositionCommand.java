@@ -6,7 +6,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- * 
+ * Represents a wrapper class for a general type of position-based command.
  * @author Finn Frankis
  * @version Jul 21, 2018
  */
@@ -16,6 +16,11 @@ public abstract class PositionCommand extends Command
     private int maxExecutes;
     private double position;
     
+    /**
+     * Constructs a new PositionCommand.
+     * @param maxExecutes
+     * @param desiredPos
+     */
     public PositionCommand (int maxExecutes, double desiredPos)
     {
         numExecutes = 0;
@@ -23,6 +28,9 @@ public abstract class PositionCommand extends Command
         position = desiredPos;
     }
     
+    /**
+     * Increments the total number of executes.
+     */
     public void incrementNumExecutes()
     {
         numExecutes++;
@@ -72,5 +80,11 @@ public abstract class PositionCommand extends Command
     public boolean passedMaxExecutes()
     {
         return numExecutes > maxExecutes;
+    }
+    
+    public boolean isWithinPercentOfDest(double percent)
+    {
+        return passedMaxExecutes() && 
+        getCurrentPosition()/getDesiredPosition() >= percent;
     }
 }
