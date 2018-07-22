@@ -124,6 +124,6 @@ public class CombinedPositionAnglePID extends PositionCommand
         System.out.println("RIGHT QUAD AT END: " + Robot.dt.getRightTalon().getSensorCollection().getQuadraturePosition());
         System.out.println("FINISHING");
     }
-   
+
     
 }

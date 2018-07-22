@@ -19,6 +19,7 @@ public abstract class PositionCommand extends Command
     public PositionCommand (int maxExecutes, double desiredPos)
     {
         numExecutes = 0;
+        this.maxExecutes = maxExecutes;
         position = desiredPos;
     }
     

@@ -127,7 +127,7 @@ public class RobotMap {
         public static double POS_KD_RIGHT = 16;//40;
         public static int POS_IZONE_RIGHT = 250;
         
-        public static int POS_ALLOWABLE_ERROR = 200;
+        public static int POS_ALLOWABLE_ERROR = 650;
         public static int POS_TOLERANCE_BUFFER = 150;
         
         public static double WHEELDIAMETER = 4.0;
@@ -193,7 +193,7 @@ public class RobotMap {
         
         public static int POS_ALLOWABLE_ERROR = 254;
         public static int FORWARD_SOFT = 34500;
-        public static int REVERSE_SOFT = 2000;
+        public static int REVERSE_SOFT = 2500;
         public static double RAMP_RATE = 0.75;
         
         // elevator max RPM: 500 RPM
@@ -216,7 +216,7 @@ public class RobotMap {
         public static int MANUAL_VEL_KI = 0;
         public static int MANUAL_VEL_KD = 0;
         
-        public static double SLOW_DOWN_POS = 1000;
+        public static double SLOW_DOWN_POS = REVERSE_SOFT + 2000;
         public static boolean BOTTOM_LEFT_VICTOR_INVERT = true;
         public static boolean TOP_LEFT_VICTOR_INVERT = false;
         public static boolean TALON_INVERT = false;
@@ -282,7 +282,7 @@ public class RobotMap {
         public static final int PERIOD_MS = 4;
         public static final int INTEGRAL_BAND = 150; // where the integral accumulator should be reset
         public static final RemoteFeedbackDevice REMOTE_SENSOR_SLOT = RemoteFeedbackDevice.RemoteSensor0;
-        public static final int ANGLE_ALLOWABLE_ERROR = 50;
+        public static final int ANGLE_ALLOWABLE_ERROR = 300;
         
         public static final boolean LEFT_SENSOR_PHASE = false;
         public static final boolean RIGHT_SENSOR_PHASE = false;

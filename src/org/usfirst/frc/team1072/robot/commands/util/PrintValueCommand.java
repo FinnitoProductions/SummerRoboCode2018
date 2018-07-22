@@ -15,7 +15,7 @@ public class PrintValueCommand extends InstantCommand
      * Constructs a new PrintValueCommand.java.
      * @param value the value to be printed
      */
-    public PrintValueCommand (String value)
+    public PrintValueCommand (Object value)
     {
         this.value = value;
     }

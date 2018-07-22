@@ -105,8 +105,6 @@ public class TurnToAngle extends Command
         
         Robot.dt.configBothFeedbackSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);
         
-        //Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
-        
         Robot.dt.setTalonSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE, 
                 PigeonConstants.RIGHT_SENSOR_PHASE);
 
@@ -126,7 +124,7 @@ public class TurnToAngle extends Command
             numExecutes = -1;
         }
         
-        System.out.println("EXECUTING " + numExecutes);
+        //System.out.println("EXECUTING " + numExecutes);
     }
     /**
     * Determines whether the commmand has finished.
@@ -135,7 +133,16 @@ public class TurnToAngle extends Command
     @Override
     protected boolean isFinished()
     {
+        System.out.println("CHECKING IF FINISHED " + numExecutes);
+        previousErrors[errorIndex] = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        errorIndex = (errorIndex + 1) % previousErrors.length;
+        System.out.println(Arrays.toString(previousErrors));
         double timePassed = Robot.getCurrentTimeMs() - startTime;
+        if(timePassed > timeout && timeout > 0)
+        {
+            System.out.println("FINISHED RETURNING TRUE");
+            return true; //end early
+        }
         if (numExecutes == -1)
         {
             for (double d : previousErrors)
@@ -143,14 +150,9 @@ public class TurnToAngle extends Command
                 if (Math.abs(d) > PigeonConstants.ANGLE_ALLOWABLE_ERROR)
                     return false;
             }
+            System.out.println("RETURNING TRUE");
             return true;
         }
-        if(timePassed > timeout && timeout > 0)
-        {
-            return true; //end early
-        }
-        previousErrors[errorIndex] = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
-        errorIndex = (errorIndex + 1) % previousErrors.length;
         return false;
     }
     
@@ -160,6 +162,7 @@ public class TurnToAngle extends Command
     public void end()
     {
         System.out.println("Angle ended: " + (Robot.getCurrentTimeMs()-startTime));
+        
     }
     
 }

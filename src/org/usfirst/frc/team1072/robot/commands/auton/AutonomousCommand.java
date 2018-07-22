@@ -19,6 +19,7 @@ import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntake;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeTimed;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
+import org.usfirst.frc.team1072.robot.commands.util.PrintValueCommand;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
@@ -56,17 +57,39 @@ public class AutonomousCommand extends CommandGroup
         /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
                 "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
         initSubsystems();
+        testThirdCube();
         //testThirdCube();
         /*addSequential(new CombinedPositionAnglePID(0, 
                 90));*/
         //addSequential(new TurnRobotToAngleCommand(90));
-        switchAuton(true);
-
+        //switchAuton(true);
     }
 
     private void testThirdCube()
     {
-        addSequential(new TurnToAngle(-70, 1).setNumErrorsToCheck(10));
+        double startTime = Robot.getCurrentTimeMs();
+        CombinedPositionAnglePID fpc6 = new CombinedPositionAnglePID(-3.1, 0), fpc7 = new CombinedPositionAnglePID(3.85, -43);
+        DriveToPosition fpc8 = new DriveToPosition(-0.5), fpc9 = new DriveToPosition(2);
+        TurnToAngle turn6 = new TurnToAngle(-52.25, 1), turn8 = new TurnToAngle(40, 1);
+        CommandGroup thirdCube = new CommandGroup();
+            CommandGroup thirdCubePaths = new CommandGroup();
+               thirdCubePaths.addSequential(fpc6);
+               thirdCubePaths.addSequential(turn6);
+               thirdCubePaths.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+               thirdCubePaths.addSequential(fpc7);
+               thirdCubePaths.addSequential(fpc8);
+               thirdCubePaths.addSequential(turn8);
+               thirdCubePaths.addSequential(fpc9);
+            thirdCube.addParallel(thirdCubePaths);
+            CommandGroup intakeCube = new CommandGroup();
+                intakeCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.5));
+                intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
+                intakeCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.5));
+                intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.OUTTAKE_BOOL));
+            thirdCube.addParallel(intakeCube);
+        addSequential(thirdCube);
+        addSequential (new PrintValueCommand(startTime));
+        addSequential (new PrintValueCommand(Robot.getCurrentTimeMs()));
     }
     /**
      * Initializes subsystems in parallel.
@@ -85,8 +108,9 @@ public class AutonomousCommand extends CommandGroup
      */
     private void switchAuton (boolean onLeft)
     {
-        FollowPath fpc1, fpc2, fpc5, fpc6, fpc7, fpc8, fpc9;
-        CombinedPositionAnglePID fpc3, fpc4;
+        FollowPath fpc1, fpc2, fpc5;
+        CombinedPositionAnglePID fpc3, fpc4, fpc6, fpc7, fpc8, fpc9;
+        TurnToAngle turn6, turn7;
         //DriveToPositionCommand fpc3;
         fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
                 false, null).zeroPigeonAtStart(false).resetSensors(true);
@@ -97,6 +121,10 @@ public class AutonomousCommand extends CommandGroup
         fpc5 = setupPathFollowerArc
                 (AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2)
                 .zeroPigeonAtStart(false).resetSensors(true);
+        fpc6 = new CombinedPositionAnglePID(-5, 0);
+        turn6 = new TurnToAngle(-52.4, 1);
+        //fpc7 = new CombinedPositionAnglePID(1, -70);
+        
         /*fpc6 = setupPathFollowerArc(AutonomousConstants.CLH_P6_LEFT_REV, AutonomousConstants.CLH_P6_RIGHT_REV, true, null);
         fpc7 = setupPathFollowerArc(AutonomousConstants.CLH_P7_LEFT, AutonomousConstants.CLH_P7_RIGHT, false, fpc6);
         fpc8 = setupPathFollowerArc(AutonomousConstants.CLH_P8_LEFT_REV, AutonomousConstants.CLH_P8_RIGHT_REV, true, fpc7);
@@ -229,17 +257,18 @@ public class AutonomousCommand extends CommandGroup
         
         CommandGroup getThirdCube = new CommandGroup();
                 CommandGroup outtakeSecondCube = new CommandGroup();
-                outtakeSecondCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY,
-                        IntakeConstants.DOWN));
+                /*outtakeSecondCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY,
+                        IntakeConstants.DOWN));*/
                 outtakeSecondCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.DECOMPRESS));
                 outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.15, RobotMap.IntakeConstants.OUTTAKE_BOOL));
             getThirdCube.addParallel(outtakeSecondCube);
-            /*CommandGroup pathGroupIntakeThirdCube = new CommandGroup();
+            CommandGroup pathGroupIntakeThirdCube = new CommandGroup();
                 pathGroupIntakeThirdCube.addSequential(fpc6);
-                pathGroupIntakeThirdCube.addSequential(fpc7);
-            getThirdCube.addParallel(pathGroupIntakeThirdCube);
-            CommandGroup lowerElevatorThirdCube = new CommandGroup();
+                pathGroupIntakeThirdCube.addSequential(turn6);
+                //pathGroupIntakeThirdCube.addSequential(fpc7);
+            //getThirdCube.addParallel(pathGroupIntakeThirdCube);
+            /*CommandGroup lowerElevatorThirdCube = new CommandGroup();
                 lowerElevatorThirdCube.addSequential(
                         new PauseUntilPathBeginsCommand(fpc6, PauseType.END_OF_PATH, 0.7, fpc7.getTotalTime()));
                 lowerElevatorThirdCube.addSequential(new MoveElevatorMotionMagicCommand(ElevatorConstants.INTAKE_HEIGHT));

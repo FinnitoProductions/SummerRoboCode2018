@@ -77,6 +77,9 @@ public class Elevator extends Subsystem
         talonInit();
     }
     
+    /**
+     * Initializes the elevator talons for teleop-only commands. This saves time at the beginning of autonomous.
+     */
     public void talonInitTeleop()
     {
         talonInit();
