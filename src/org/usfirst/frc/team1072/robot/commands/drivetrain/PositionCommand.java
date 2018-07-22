@@ -1,0 +1,75 @@
+package org.usfirst.frc.team1072.robot.commands.drivetrain;
+
+import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
+
+import edu.wpi.first.wpilibj.command.Command;
+
+/**
+ * 
+ * @author Finn Frankis
+ * @version Jul 21, 2018
+ */
+public abstract class PositionCommand extends Command
+{
+    private int numExecutes;
+    private int maxExecutes;
+    private double position;
+    
+    public PositionCommand (int maxExecutes, double desiredPos)
+    {
+        numExecutes = 0;
+        position = desiredPos;
+    }
+    
+    public void incrementNumExecutes()
+    {
+        numExecutes++;
+    }
+    /**
+     * Gets the total number of executes.
+     * @return the total number of times the command has executed
+     */
+    public int getNumExecutes()
+    {
+        return numExecutes;
+    }
+    
+    /**
+     * Gets the maximum number of executes required to end.
+     * @return the maximum number of executes required
+     */
+    public int getMaxExecutes()
+    {
+        return maxExecutes;
+    }
+    
+    public void setNumExecutes(int numExecutes)
+    {
+        this.numExecutes = numExecutes;
+    }
+    
+    /**
+     * Gets the current position of the Talons.
+     * @return
+     */
+    public double getCurrentPosition()
+    {
+        return (Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) 
+                + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)) / 2;
+    }
+    
+    /**
+     * Gets the position to where the robot is intended to travel.
+     * @return the desired position
+     */
+    public double getDesiredPosition()
+    {
+        return position;
+    }
+    
+    public boolean passedMaxExecutes()
+    {
+        return numExecutes > maxExecutes;
+    }
+}
