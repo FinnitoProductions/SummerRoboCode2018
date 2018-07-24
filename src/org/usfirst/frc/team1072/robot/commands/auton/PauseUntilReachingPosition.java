@@ -1,7 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands.auton;
 
-import org.usfirst.frc.team1072.robot.commands.drivetrain.CombinedPositionAnglePID;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.PositionCommand;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -12,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class PauseUntilReachingPosition extends Command
 {
-    private CombinedPositionAnglePID dtpc;
+    private PositionCommand dtpc;
     private double fraction;
     
     /**
@@ -20,7 +19,7 @@ public class PauseUntilReachingPosition extends Command
      * @param dtpc the path where distance will be tracked
      * @param fraction the fraction of distance traveled out of the total at which the path will cease execution
      */
-    public PauseUntilReachingPosition (CombinedPositionAnglePID dtpc, double fraction)
+    public PauseUntilReachingPosition (PositionCommand dtpc, double fraction)
     {
         this.dtpc = dtpc;
         this.fraction = fraction;

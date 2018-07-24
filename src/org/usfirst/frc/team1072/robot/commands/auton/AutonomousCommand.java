@@ -13,6 +13,7 @@ import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBegins.PauseT
 import org.usfirst.frc.team1072.robot.commands.drivetrain.CombinedPositionAnglePID;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrain;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.PositionCommand;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngle;
 import org.usfirst.frc.team1072.robot.commands.elevator.InitializeElevator;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
@@ -66,6 +67,29 @@ public class AutonomousCommand extends CommandGroup
 
     private void testThirdCube()
     {
+        double startTime = Robot.getCurrentTimeMs();
+        PositionCommand fpc6 = new CombinedPositionAnglePID(-3.1, 0).setAllowableError(650), 
+                fpc7 = new CombinedPositionAnglePID(3.85, -43).setAllowableError(650),
+                fpc8 = new DriveToPosition(-0.5).setAllowableError(650), 
+                fpc9 = new DriveToPosition(2).setAllowableError(650);
+        TurnToAngle turn6 = new TurnToAngle(-52.25, 1), turn8 = new TurnToAngle(40, 1);
+        CommandGroup thirdCube = new CommandGroup();
+            CommandGroup thirdCubePaths = new CommandGroup();
+               thirdCubePaths.addSequential(fpc6);
+               thirdCubePaths.addSequential(turn6);
+               thirdCubePaths.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+               thirdCubePaths.addSequential(fpc7);
+               thirdCubePaths.addSequential(fpc8);
+               thirdCubePaths.addSequential(turn8);
+               thirdCubePaths.addSequential(fpc9);
+            thirdCube.addParallel(thirdCubePaths);
+            CommandGroup intakeCube = new CommandGroup();
+                intakeCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.5));
+                intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
+                intakeCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.5));
+                intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.OUTTAKE_BOOL));
+            thirdCube.addParallel(intakeCube);
+        addSequential(thirdCube);
         addSequential(new TurnToAngle(-70, 1).setNumErrorsToCheck(10));
     }
     /**
@@ -229,8 +253,6 @@ public class AutonomousCommand extends CommandGroup
         
         CommandGroup getThirdCube = new CommandGroup();
                 CommandGroup outtakeSecondCube = new CommandGroup();
-                outtakeSecondCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY,
-                        IntakeConstants.DOWN));
                 outtakeSecondCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.DECOMPRESS));
                 outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.15, RobotMap.IntakeConstants.OUTTAKE_BOOL));

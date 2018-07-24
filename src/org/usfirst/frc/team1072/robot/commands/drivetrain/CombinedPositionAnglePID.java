@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.command.Command;
  * @author Finn Frankis
  * @version Jul 14, 2018
  */
-public class CombinedPositionAnglePID extends Command
+public class CombinedPositionAnglePID extends PositionCommand
 {
     private double position, angle;
     private int numExecutes, maxExecutes = 15;
@@ -34,6 +34,7 @@ public class CombinedPositionAnglePID extends Command
      */
     public CombinedPositionAnglePID (double position, double angle)
     {
+        super (15, Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS));
         this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);
     }

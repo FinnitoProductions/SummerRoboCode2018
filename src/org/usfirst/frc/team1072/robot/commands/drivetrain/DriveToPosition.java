@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * @author Finn Frankis
  * @version Jun 14, 2018
  */
-public class DriveToPosition extends Command
+public class DriveToPosition extends PositionCommand
 {
     private double position;
     private int numExecutes;
@@ -31,6 +31,7 @@ public class DriveToPosition extends Command
      */
     public DriveToPosition (double position)
     {
+        super (15, Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS));
         this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
     }
     
@@ -86,7 +87,7 @@ public class DriveToPosition extends Command
     {
         if (numExecutes == -1)
         {
-            return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
+            return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, getAllowableError());
         }
         System.out.println("NOT FINISHED");
         return false;
