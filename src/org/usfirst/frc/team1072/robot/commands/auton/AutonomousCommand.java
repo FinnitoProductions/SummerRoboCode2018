@@ -53,43 +53,48 @@ public class AutonomousCommand extends CommandGroup
             requires(s);
 
         initSubsystems();
-        testThirdCube();
+        //testThirdCube();
 
-        //switchAuton(true);
+        switchAuton(true);
 
     }
 
     private void testThirdCube()
     {
-        PositionCommand fpc6 = new CombinedPositionAnglePID(-3.6, 0).setAllowableError(650), 
-                fpc7 = new CombinedPositionAnglePID(4.3, -52.25).setAllowableError(650),
+        PositionCommand fpc6 = new CombinedPositionAnglePID(-3.4, 0).setAllowableError(650), 
+                fpc7 = new CombinedPositionAnglePID(4.0, -44).setAllowableError(650),
                 fpc8 = new DriveToPosition(-0.5).setAllowableError(650), 
                 fpc9 = new CombinedPositionAnglePID(3.2, 40).setAllowableError(1000);
         TurnToAngle turn6 = new TurnToAngle(-52.25, 0.8), turn8 = new TurnToAngle(0, 1.5);
         CommandGroup thirdCube = new CommandGroup();
-            CommandGroup thirdCubePaths = new CommandGroup();
-               thirdCubePaths.addSequential(fpc6);
-               thirdCubePaths.addSequential(turn6);
-               thirdCubePaths.addSequential(fpc7);
-               thirdCubePaths.addSequential(new Delay(0.19));
-               thirdCubePaths.addSequential(fpc8);
-               thirdCubePaths.addSequential(turn8);
-               thirdCubePaths.addSequential(fpc9);
-            thirdCube.addParallel(thirdCubePaths);
             CommandGroup intakeCube = new CommandGroup();
-                intakeCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.2));
-                intakeCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
-                intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
-                intakeCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
-                intakeCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-                intakeCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.35));
-                intakeCube.addSequential(new MoveElevatorMotionMagic
-                        (ElevatorConstants.SWITCH_HEIGHT_THIRD_CUBE));
-                intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.OUTTAKE_BOOL));
+                intakeCube.addSequential(new InstantCommand() {
+                    public void initialize()
+                    {
+                        System.out.println("REACHED COMMAND BODY");
+                    }
+                });
+                
             thirdCube.addParallel(intakeCube);
+            CommandGroup thirdCubePaths = new CommandGroup();
+                thirdCubePaths.addSequential(fpc6);
+                thirdCubePaths.addSequential(turn6);
+                thirdCubePaths.addSequential(fpc7);
+                thirdCubePaths.addSequential(fpc8);
+                thirdCubePaths.addSequential(turn8);
+                thirdCubePaths.addSequential(fpc9);
+            thirdCube.addParallel(thirdCubePaths);
             CommandGroup lowerIntakeThirdCube = new CommandGroup();
-                lowerIntakeThirdCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.1));
+                lowerIntakeThirdCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.01));
+                lowerIntakeThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
                 lowerIntakeThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+                lowerIntakeThirdCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
+                lowerIntakeThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+                lowerIntakeThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+                lowerIntakeThirdCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.35));
+                lowerIntakeThirdCube.addSequential(new MoveElevatorMotionMagic
+                        (ElevatorConstants.SWITCH_HEIGHT_THIRD_CUBE));
+                lowerIntakeThirdCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.OUTTAKE_BOOL));
             thirdCube.addParallel(lowerIntakeThirdCube);
         addSequential(thirdCube);
     }
