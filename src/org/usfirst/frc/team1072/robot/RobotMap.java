@@ -248,6 +248,7 @@ public class RobotMap {
         public static final String UPDOWN_KEY = "UPDOWN";
         public static final String COMPRESSDECOMPRESS_KEY = "COMPRESSDE";
         public static final double INTAKE_CURRENT_SPIKE = 10;
+        public static final double INTAKE_SIGN = 1; // the sign of any intake % output such that it is intaking
         
         public static int PEAK_CURRENT_LIMIT = 15;
         public static int PEAK_TIME_MS = 2000;
