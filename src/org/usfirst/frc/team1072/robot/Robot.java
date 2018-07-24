@@ -108,6 +108,7 @@ public class Robot extends TimedRobot
         Robot.dt.printMotorOutputPercentage();
         Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.printSensorPositions(RobotMap.AUXILIARY_PID_INDEX);
         SmartDashboard.putNumber("Raw Pigeon Value", Robot.dt.getPigeonYaw());
     }
 
@@ -121,11 +122,11 @@ public class Robot extends TimedRobot
         {
             m_autonomousCommand.cancel();
         }
-        
+
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
-        dt.zeroPigeon();        
+        dt.zeroPigeon();   
     }
 
     /**
@@ -134,6 +135,8 @@ public class Robot extends TimedRobot
     public void teleopPeriodic() 
     {
           Scheduler.getInstance().run();
+          SmartDashboard.putNumber("Pigeon Yaw", dt.getPigeonYaw());
+          Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
     }
 
     /**
