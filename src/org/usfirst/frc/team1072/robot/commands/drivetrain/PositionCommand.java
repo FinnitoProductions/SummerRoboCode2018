@@ -3,9 +3,11 @@ package org.usfirst.frc.team1072.robot.commands.drivetrain;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 
+import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
+/** 
  * Represents a wrapper class for a general type of position-based command.
  * @author Finn Frankis
  * @version Jul 21, 2018
@@ -15,6 +17,8 @@ public abstract class PositionCommand extends Command
     private int numExecutes;
     private int maxExecutes;
     private double position;
+
+    private double allowableError;
     
     /**
      * Constructs a new PositionCommand.
@@ -26,6 +30,7 @@ public abstract class PositionCommand extends Command
         numExecutes = 0;
         this.maxExecutes = maxExecutes;
         position = desiredPos;
+        allowableError = DrivetrainConstants.POS_ALLOWABLE_ERROR;
     }
     
     /**
@@ -86,5 +91,16 @@ public abstract class PositionCommand extends Command
     {
         return passedMaxExecutes() && 
         getCurrentPosition()/getDesiredPosition() >= percent;
+    }
+    
+    public PositionCommand setAllowableError (double allowableError)
+    {
+        this.allowableError = allowableError;
+        return this;
+    }
+    
+    public double getAllowableError()
+    {
+        return allowableError;
     }
 }

@@ -29,7 +29,7 @@ public class DriveToPosition extends PositionCommand
      */
     public DriveToPosition (double position)
     {
-        super(10, Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS));
+        super (15, Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS));
         this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
     }
     
@@ -79,7 +79,7 @@ public class DriveToPosition extends PositionCommand
     {
         if (passedMaxExecutes())
         {
-            return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, DrivetrainConstants.POS_ALLOWABLE_ERROR);
+            return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, getAllowableError());
         }
         System.out.println("NOT FINISHED");
         return false;

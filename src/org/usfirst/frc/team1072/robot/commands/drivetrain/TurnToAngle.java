@@ -140,9 +140,11 @@ public class TurnToAngle extends Command
         double timePassed = Robot.getCurrentTimeMs() - startTime;
         if(timePassed > timeout && timeout > 0)
         {
-            System.out.println("FINISHED RETURNING TRUE");
             return true; //end early
         }
+        
+        previousErrors[errorIndex] = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        errorIndex = (errorIndex + 1) % previousErrors.length;
         if (numExecutes == -1)
         {
             for (double d : previousErrors)

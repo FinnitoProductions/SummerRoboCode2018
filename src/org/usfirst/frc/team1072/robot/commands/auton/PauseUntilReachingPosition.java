@@ -1,7 +1,5 @@
 package org.usfirst.frc.team1072.robot.commands.auton;
 
-import org.usfirst.frc.team1072.robot.commands.drivetrain.CombinedPositionAnglePID;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.PositionCommand;
 
 import edu.wpi.first.wpilibj.command.Command;
