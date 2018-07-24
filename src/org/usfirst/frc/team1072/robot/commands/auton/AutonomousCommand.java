@@ -20,7 +20,6 @@ import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntake;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeTimed;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
-import org.usfirst.frc.team1072.robot.commands.util.PrintValueCommand;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
@@ -206,9 +205,6 @@ public class AutonomousCommand extends CommandGroup
                         IntakeConstants.DECOMPRESS));
                 outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.15, RobotMap.IntakeConstants.OUTTAKE_BOOL));
             getThirdCube.addParallel(outtakeSecondCube);
-            CommandGroup pathGroupIntakeThirdCube = new CommandGroup();
-                pathGroupIntakeThirdCube.addSequential(fpc6);
-                pathGroupIntakeThirdCube.addSequential(turn6);
                 //pathGroupIntakeThirdCube.addSequential(fpc7);
             //getThirdCube.addParallel(pathGroupIntakeThirdCube);
             /*CommandGroup lowerElevatorThirdCube = new CommandGroup();
