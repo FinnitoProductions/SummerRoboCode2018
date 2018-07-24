@@ -51,47 +51,45 @@ public class AutonomousCommand extends CommandGroup
     {
         for (Subsystem s : subsystems)
             requires(s);
-        System.out.println("ALL SUBSYSTEMS INITIALIZED " + Robot.getCurrentTimeMs());
-        /*addSequential(setupPathFollower("/home/summer2018/paths/test_5ft/test_5ft_left_detailed.csv", 
-                "/home/summer2018/paths/test_5ft/test_5ft_right_detailed.csv"));*/
-        /*addSequential(setupPathFollower("/home/summer2018/paths/curved_path/curved_path_left_detailed.csv", 
-                "/home/summer2018/paths/curved_path/curved_path_right_detailed.csv"));*/
+
         initSubsystems();
-        //testThirdCube();
-        /*addSequential(new CombinedPositionAnglePID(0, 
-                90));*/
-        //addSequential(new TurnRobotToAngleCommand(90));
-        switchAuton(true);
+        testThirdCube();
+
+        //switchAuton(true);
 
     }
 
     private void testThirdCube()
     {
-        double startTime = Robot.getCurrentTimeMs();
         PositionCommand fpc6 = new CombinedPositionAnglePID(-3.1, 0).setAllowableError(650), 
-                fpc7 = new CombinedPositionAnglePID(3.85, -43).setAllowableError(650),
-                fpc8 = new DriveToPosition(-0.5).setAllowableError(650), 
-                fpc9 = new DriveToPosition(2).setAllowableError(650);
-        TurnToAngle turn6 = new TurnToAngle(-52.25, 1), turn8 = new TurnToAngle(40, 1);
+                fpc7 = new CombinedPositionAnglePID(4.15, -43).setAllowableError(650),
+                fpc8 = new DriveToPosition(-1).setAllowableError(650), 
+                fpc9 = new CombinedPositionAnglePID(2, 40).setAllowableError(650);
+        TurnToAngle turn6 = new TurnToAngle(-52.25, 0.8), turn8 = new TurnToAngle(0, 1.5);
         CommandGroup thirdCube = new CommandGroup();
             CommandGroup thirdCubePaths = new CommandGroup();
                thirdCubePaths.addSequential(fpc6);
                thirdCubePaths.addSequential(turn6);
                thirdCubePaths.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
                thirdCubePaths.addSequential(fpc7);
+               addSequential(new Delay(0.1));
                thirdCubePaths.addSequential(fpc8);
                thirdCubePaths.addSequential(turn8);
+               thirdCubePaths.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+               thirdCubePaths.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
                thirdCubePaths.addSequential(fpc9);
             thirdCube.addParallel(thirdCubePaths);
             CommandGroup intakeCube = new CommandGroup();
                 intakeCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.5));
                 intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
-                intakeCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.5));
+                intakeCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.35));
+                intakeCube.addSequential(new MoveElevatorMotionMagic
+                        (ElevatorConstants.SWITCH_HEIGHT_THIRD_CUBE));
                 intakeCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.OUTTAKE_BOOL));
             thirdCube.addParallel(intakeCube);
         addSequential(thirdCube);
-        addSequential(new TurnToAngle(-70, 1).setNumErrorsToCheck(10));
     }
+    
     /**
      * Initializes subsystems in parallel.
      */
@@ -121,66 +119,6 @@ public class AutonomousCommand extends CommandGroup
         fpc5 = setupPathFollowerArc
                 (AutonomousConstants.CLH_P5_LEFT, AutonomousConstants.CLH_P5_RIGHT, false, fpc2)
                 .zeroPigeonAtStart(false).resetSensors(true);
-        /*fpc6 = setupPathFollowerArc(AutonomousConstants.CLH_P6_LEFT_REV, AutonomousConstants.CLH_P6_RIGHT_REV, true, null);
-        fpc7 = setupPathFollowerArc(AutonomousConstants.CLH_P7_LEFT, AutonomousConstants.CLH_P7_RIGHT, false, fpc6);
-        fpc8 = setupPathFollowerArc(AutonomousConstants.CLH_P8_LEFT_REV, AutonomousConstants.CLH_P8_RIGHT_REV, true, fpc7);
-        fpc9 = setupPathFollowerArc(AutonomousConstants.CLH_P9_LEFT, AutonomousConstants.CLH_P9_RIGHT, false, fpc8);
-        *///addSequential(fpc6);
-        //addSequential(fpc7);
-        //addSequential(fpc8);
-        //addSequential(fpc9);
-
-        
-
-        //addSequential(new DriveToPositionCommand(3));
-        /*addSequential(new PrebufferPathPoints(fpc1));
-        CommandGroup path1 = new CommandGroup();
-            path1.addParallel(fpc1);
-            path1.addParallel(new PrebufferPathPoints(fpc2));
-            path1.addParallel(new PrebufferPathPoints(fpc5));
-        addSequential(path1);
-
-        addSequential(fpc2);
-        addSequential(new CombinedPositionAnglePID(4, 0));
-        addSequential(new CombinedPositionAnglePID(-4, 0));
-        
-        addSequential(fpc5);*/
-        
-        //addSequential(new TurnToAngle(-25, 0.75));
-        /*addSequential(new CombinedPositionAnglePID(-2, -25));
-        addSequential(new TurnToAngle(-50, 0.75));*/
-
-        //addSequential (new CombinedPositionAnglePID(7, -70));
-        /**addSequential (new DriveToPosition(1));
-        addSequential (new DriveToPosition(-1));
-        addSequential (new CombinedPositionAnglePID(4, 0));*/
-        //addSequential(new DriveToPosition(-2));
-        /*addSequential(new TurnToAngle(-70, 0.75));
-        addSequential(new DriveToPosition(1));
-        addSequential(new DriveToPosition(-1));
-        addSequential(new TurnToAngle(0, 0.75));*/
-        //addSequential(new DriveToPosition(2));
-        /*addSequential(new CombinedPositionAnglePID(1, -70));
-        addSequential(new CombinedPositionAnglePID(-1, -70));
-        addSequential(new TurnToAngle(0, 0.75));
-        addSequential(new CombinedPositionAnglePID(2, 0));*/
-        
-        /*addSequential(new PrebufferPathPointsCommand(fpc2));
-        CommandGroup path2 = new CommandGroup();
-        path2.addParallel(fpc2);
-        path2.addParallel(new PrebufferPathPointsCommand(fpc3));
-        addSequential(path2);*/
-        //addSequential(new PrebufferPathPointsCommand(fpc2));
-        
-        /*CommandGroup path3 = new CommandGroup();
-        path3.addParallel(fpc3);
-        path3.addParallel(new PrebufferPathPointsCommand(fpc4));
-        addSequential(path3);
-        CommandGroup path4 = new CommandGroup();
-        path4.addParallel(fpc4);
-        path4.addParallel(new PrebufferPathPointsCommand(fpc5));
-        addSequential(path4);
-        addSequential(fpc5);*/
         
         
         addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));

@@ -136,6 +136,13 @@ public class TurnToAngle extends Command
     protected boolean isFinished()
     {
         double timePassed = Robot.getCurrentTimeMs() - startTime;
+        if(timePassed > timeout && timeout > 0)
+        {
+            return true; //end early
+        }
+        
+        previousErrors[errorIndex] = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        errorIndex = (errorIndex + 1) % previousErrors.length;
         if (numExecutes == -1)
         {
             for (double d : previousErrors)
@@ -145,12 +152,6 @@ public class TurnToAngle extends Command
             }
             return true;
         }
-        if(timePassed > timeout && timeout > 0)
-        {
-            return true; //end early
-        }
-        previousErrors[errorIndex] = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
-        errorIndex = (errorIndex + 1) % previousErrors.length;
         return false;
     }
     
