@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveToPosition extends PositionCommand
 {
     private double position;
+    private int numExecutes;
+    private int maxExecutes = 10;
     
     /**
      * Constructs a new DriveToPositionCommand.
@@ -40,8 +42,9 @@ public class DriveToPosition extends PositionCommand
     {
         initPosition();
         Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
-        Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.setBoth(ControlMode.Position, position);
+        Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
+        numExecutes = 0;
     }
     
     /**
@@ -62,10 +65,15 @@ public class DriveToPosition extends PositionCommand
      */
     public void execute()
     {
-        if (!passedMaxExecutes())
+        if (numExecutes >= 0 && numExecutes < maxExecutes)
         {
             System.out.println("INCREMENTING");
-            incrementNumExecutes();
+            numExecutes++;
+        }
+        else
+        {
+            System.out.println("DONE");
+            numExecutes = -1;
         }
         System.out.println("EXECUTING");
         Robot.dt.setBoth(ControlMode.Position, position);
@@ -77,7 +85,7 @@ public class DriveToPosition extends PositionCommand
     @Override
     protected boolean isFinished()
     {
-        if (passedMaxExecutes())
+        if (numExecutes == -1)
         {
             return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, getAllowableError());
         }
@@ -91,7 +99,41 @@ public class DriveToPosition extends PositionCommand
         Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
         System.out.println("FINISHING");
     }
+    /**
+     * Gets the total number of executes.
+     * @return the total number of times the command has executed
+     */
+    public int getNumExecutes()
+    {
+        return numExecutes;
+    }
     
+    /**
+     * Gets the maximum number of executes required to end.
+     * @return the maximum number of executes required
+     */
+    public int getMaxExecutes()
+    {
+        return maxExecutes;
+    }
     
+    /**
+     * Gets the current position of the Talons.
+     * @return
+     */
+    public double getCurrentPosition()
+    {
+        return (Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) 
+                + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)) / 2;
+    }
+    
+    /**
+     * Gets the position to where the robot is intended to travel.
+     * @return the desired position
+     */
+    public double getDesiredPosition()
+    {
+        return position;
+    }
 
 }

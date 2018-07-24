@@ -32,7 +32,8 @@ public class PauseUntilReachingPosition extends Command
     @Override
     protected boolean isFinished()
     {
-        return dtpc.isWithinPercentOfDest(fraction);
+        return dtpc.getNumExecutes() == -1 && 
+                dtpc.getCurrentPosition()/dtpc.getDesiredPosition() >= fraction;
     }
 
 }

@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class CombinedPositionAnglePID extends PositionCommand
 {
     private double position, angle;
+    private int numExecutes, maxExecutes = 15;
     /**
      * Constructs a new CombinedPositionAnglePID.
      * @param position the final position for the robot in feet
@@ -51,6 +52,7 @@ public class CombinedPositionAnglePID extends PositionCommand
         System.out.println("RIGHT QUAD AT BEGIN: " + Robot.dt.getRightTalon().getSensorCollection().getQuadraturePosition());
         //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
+        numExecutes = 0;
     }
     
     /**
@@ -94,8 +96,14 @@ public class CombinedPositionAnglePID extends PositionCommand
      */
     public void execute()
     {
-        if (!passedMaxExecutes())
-            incrementNumExecutes();
+        if (numExecutes >= 0 && numExecutes < maxExecutes)
+        {
+            numExecutes++;
+        }
+        else
+        {
+            numExecutes = -1;
+        }
         Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
     }
     /**
@@ -105,7 +113,7 @@ public class CombinedPositionAnglePID extends PositionCommand
     @Override
     protected boolean isFinished()
     {
-        if (passedMaxExecutes())
+        if (numExecutes == -1)
         {
             return Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX))
                     < DrivetrainConstants.POS_ALLOWABLE_ERROR;
@@ -124,6 +132,40 @@ public class CombinedPositionAnglePID extends PositionCommand
         System.out.println("RIGHT QUAD AT END: " + Robot.dt.getRightTalon().getSensorCollection().getQuadraturePosition());
         System.out.println("FINISHING");
     }
-
+    /**
+     * Gets the total number of executes.
+     * @return the total number of times the command has executed
+     */
+    public int getNumExecutes()
+    {
+        return numExecutes;
+    }
+    
+    /**
+     * Gets the maximum number of executes required to end.
+     * @return the maximum number of executes required
+     */
+    public int getMaxExecutes()
+    {
+        return maxExecutes;
+    }
+    
+    /**
+     * Gets the current position of the Talons.
+     * @return
+     */
+    public double getCurrentPosition()
+    {
+        return Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX);
+    }
+    
+    /**
+     * Gets the position to where the robot is intended to travel.
+     * @return the desired position
+     */
+    public double getDesiredPosition()
+    {
+        return position;
+    }
     
 }
