@@ -11,14 +11,23 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
  */
 public class IntakeOuttakeTimed extends TimedCommand
 {
-    private boolean intake;
+    private IntakeType intake;
     
+    /**
+     * Represents the various possible functions performable by the intake.
+     * @author Finn Frankis
+     * @version Jul 24, 2018
+     */
+    public enum IntakeType
+    {
+        INTAKE, OUTTAKE, NONE
+    }
     /**
      * Constructs a new IntakeOuttakeTimed.
      * @param timeout the time for which the intake should occur in seconds
      * @param intake whether to intake forward or backward
      */
-    public IntakeOuttakeTimed(double timeout, boolean intake)
+    public IntakeOuttakeTimed(double timeout, IntakeType intake)
     {
         super(timeout);
         requires(Robot.intake);
@@ -30,11 +39,13 @@ public class IntakeOuttakeTimed extends TimedCommand
      */
     public void execute()
     {
-        if (intake)
+        if (intake.equals(IntakeType.INTAKE))
         {
             Robot.intake.intakeOuttakeCube(1);
         }
-        else
+        else if (intake.equals(IntakeType.OUTTAKE))
             Robot.intake.intakeOuttakeCube(-1);
+        else
+            Robot.intake.intakeOuttakeCube(0);
     }
 }
