@@ -55,10 +55,10 @@ public class CombinedPositionAnglePID extends PositionCommand
     {
         initPosition();
         ;
-        System.out.println("RIGHT POS AT BEGIN: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
-        System.out.println("LEFT POS AT BEGIN: " + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
-        System.out.println("LEFT QUAD AT BEGIN: " + Robot.dt.getLeftTalon().getSensorCollection().getQuadraturePosition());
-        System.out.println("RIGHT QUAD AT BEGIN: " + Robot.dt.getRightTalon().getSensorCollection().getQuadraturePosition());
+        ;
+        ;
+        ;
+        ;
         //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
     }
@@ -123,7 +123,7 @@ public class CombinedPositionAnglePID extends PositionCommand
             return Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX))
                     < DrivetrainConstants.POS_ALLOWABLE_ERROR;
         }
-        //System.out.println("NOT FINISHED");
+        //;
         return false;
     }
     
@@ -131,11 +131,11 @@ public class CombinedPositionAnglePID extends PositionCommand
     {
         Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
         Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
-        System.out.println("RIGHT POS AT END: " + Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
-        System.out.println("LEFT POS AT END: " + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.TIMEOUT));
-        System.out.println("LEFT QUAD AT END: " + Robot.dt.getLeftTalon().getSensorCollection().getQuadraturePosition());
-        System.out.println("RIGHT QUAD AT END: " + Robot.dt.getRightTalon().getSensorCollection().getQuadraturePosition());
-        System.out.println("FINISHING");
+        ;
+        ;
+        ;
+        ;
+        ;
     }
     
 }

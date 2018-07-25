@@ -21,7 +21,7 @@ public class InitializeDrivetrain extends Command
      */
     public void initialize()
     {
-        System.out.println("INITIALIZING DT " + Robot.getCurrentTimeMs());
+        ;
         Robot.dt.talonInit();
         isFinished = true;
     }
@@ -35,7 +35,7 @@ public class InitializeDrivetrain extends Command
     {
         // TODO Auto-generated method stub
         if (isFinished)
-            System.out.println("DT INIT FINISHED " + Robot.getCurrentTimeMs());
+            ;
         return isFinished;
     }
 }

@@ -118,7 +118,7 @@ public class TurnToAngle extends Command
     private void initAngle()
     {
         startTime = Robot.getCurrentTimeMs();
-        System.out.println("Angle started: " + Robot.getCurrentTimeMs());
+        ;
         Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
@@ -157,7 +157,7 @@ public class TurnToAngle extends Command
             numExecutes = -1;
         }
         
-        System.out.println("EXECUTING " + numExecutes);
+        ;
     }
     /**
     * Determines whether the commmand has finished.
@@ -191,7 +191,7 @@ public class TurnToAngle extends Command
      */
     public void end()
     {
-        System.out.println("Angle ended: " + (Robot.getCurrentTimeMs()-startTime));
+        ;
     }
     
 }

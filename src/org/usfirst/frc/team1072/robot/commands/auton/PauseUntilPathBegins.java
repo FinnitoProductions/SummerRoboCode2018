@@ -129,14 +129,14 @@ public class PauseUntilPathBegins extends Command
                 hasInitializedModifiedDelay = true;
                 if (pauseType == PauseType.END_OF_PATH)
                     modifiedDelay = totalTime - delay;
-                System.out.println(modifiedDelay);
+                ;
             }
 
             if (!hasInitializedStartTime && fpc.isSetupComplete())
             {
                 hasInitializedStartTime = true;
                 startTime = Timer.getFPGATimestamp();
-                System.out.println("INIT START TIME");
+                ;
             }
         }
     }

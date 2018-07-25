@@ -28,6 +28,6 @@ public class PrintValueToConsole extends InstantCommand
      */
     public void initialize()
     {
-        System.out.println(value);
+        ;
     }
 }

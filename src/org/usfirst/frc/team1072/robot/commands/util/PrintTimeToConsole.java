@@ -13,6 +13,6 @@ public class PrintTimeToConsole extends InstantCommand
 {
     public void initialize()
     {
-        System.out.println(Robot.getCurrentTimeMs());
+        ;
     }
 }

@@ -21,7 +21,7 @@ public class InitializeElevator extends Command
      */
     public void initialize()
     {
-        System.out.println("INITIALIZING ELEVATOR " + Robot.getCurrentTimeMs());
+        ;
         Robot.el.talonInitAutonomous();
         isFinished = true;
     }
@@ -35,7 +35,7 @@ public class InitializeElevator extends Command
     {
         // TODO Auto-generated method stub
         if (isFinished)
-            System.out.println("ELEVATOR INIT FINISHED " + Robot.getCurrentTimeMs());
+            ;
         return isFinished;
     }
 }

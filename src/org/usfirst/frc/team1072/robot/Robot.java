@@ -118,7 +118,6 @@ public class Robot extends TimedRobot
         m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
 
         m_autonomousCommand.start();
-        System.out.println("AUTON COMMAND STARTED" + Robot.getCurrentTimeMs());
     }
 
     /**
@@ -127,10 +126,6 @@ public class Robot extends TimedRobot
     public void autonomousPeriodic()
     { 
         Scheduler.getInstance().run();
-        Robot.dt.printMotorOutputPercentage();
-        Robot.dt.printClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
-        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
-        SmartDashboard.putNumber("Raw Pigeon Value", Robot.dt.getPigeonYaw());
     }
 
     /**

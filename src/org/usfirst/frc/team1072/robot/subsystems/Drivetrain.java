@@ -112,8 +112,6 @@ public class Drivetrain extends Subsystem
      */
     public void arcadeDrivePosition (double leftTarget, double rightTarget)
     {        
-        SmartDashboard.putNumber("LEFT ERROR", leftTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
-        SmartDashboard.putNumber("RIGHT ERROR", rightTalon.getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
         leftTalon.set(ControlMode.Position, leftTarget);
         rightTalon.set(ControlMode.Position, rightTarget);
     }
@@ -155,11 +153,11 @@ public class Drivetrain extends Subsystem
         invertControllers();
         setNeutralMode(NeutralMode.Brake);
         
-        System.out.println("SCALING VOLTAGE " + Robot.getCurrentTimeMs());
+        ;
         scaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
         configureNominalPeakOutputs();
         
-        System.out.println("SETTING FRAME PERIODS " + Robot.getCurrentTimeMs());
+        ;
         dtsetTalonFramePeriods();
         
         configurePositionClosedLoop();

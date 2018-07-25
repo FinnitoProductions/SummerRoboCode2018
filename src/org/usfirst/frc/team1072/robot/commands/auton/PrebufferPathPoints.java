@@ -52,12 +52,12 @@ public class PrebufferPathPoints extends Command
      */
     public void execute()
     {
-        System.out.println("BEGINNING PREBUFFERING");
+        ;
         for (IMotorController imc : masterControllers.keySet())
         {
             fpc.loadTrajectoryToTalon(masterControllers.get(imc), imc);
         }
-        System.out.println("ENDING PREBUFFERING");
+        ;
         isFinished = true;
     }
     /**

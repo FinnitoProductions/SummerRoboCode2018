@@ -255,7 +255,7 @@ public class AutonomousCommand extends CommandGroup
         catch (Exception e)
         {
             e.printStackTrace();
-            System.out.println("FILE. NOT. FOUND.");
+            ;
         }
         fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse, endAngleLeft);
         fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse, endAngleRight);

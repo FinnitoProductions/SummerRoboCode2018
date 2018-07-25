@@ -21,7 +21,7 @@ public class InitializeIntake extends Command
      */
     public void initialize()
     {
-        System.out.println("INITIALIZING INTAKE " + Robot.getCurrentTimeMs());
+        ;
         Robot.intake.talonInit();
         isFinished = true;
     }
@@ -35,7 +35,7 @@ public class InitializeIntake extends Command
     {
         // TODO Auto-generated method stub
         if (isFinished)
-            System.out.println("INTAKE INIT FINISHED " + Robot.getCurrentTimeMs());
+            ;
         return isFinished;
     }
 }
