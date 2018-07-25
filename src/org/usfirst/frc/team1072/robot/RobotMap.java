@@ -172,8 +172,8 @@ public class RobotMap {
      */
     public static class ElevatorConstants
     {
-        public static final double SWITCH_HEIGHT_AUTON = 5400;
-        public static final double SWITCH_HEIGHT_THIRD_CUBE = 800;
+        public static final double SWITCH_HEIGHT_AUTON = 8000;
+        public static final double SWITCH_HEIGHT_THIRD_CUBE = 1500;
         public static int MANUAL_CURRENT_LIMIT_CONT = 10;
         public static int PEAK_CURRENT_LIMIT = 10; //25
         public static int PEAK_TIME_MS = 750;
@@ -251,7 +251,7 @@ public class RobotMap {
         
         public static int PEAK_CURRENT_LIMIT = 15;
         public static int PEAK_TIME_MS = 2000;
-        public static int CONTINUOUS_CURRENT_LIMIT = 5;
+        public static int CONTINUOUS_CURRENT_LIMIT = 15;
         
         public static boolean NO_MANUAL_INTAKE = false;
         public static boolean INTAKE_BOOL = true;
