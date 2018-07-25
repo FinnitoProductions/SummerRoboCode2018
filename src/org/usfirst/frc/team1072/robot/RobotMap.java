@@ -173,7 +173,7 @@ public class RobotMap {
     public static class ElevatorConstants
     {
         public static final double SWITCH_HEIGHT_AUTON = 8000;
-        public static final double SWITCH_HEIGHT_THIRD_CUBE = 1500;
+        public static final double SWITCH_HEIGHT_THIRD_CUBE = 5000;
         public static int MANUAL_CURRENT_LIMIT_CONT = 10;
         public static int PEAK_CURRENT_LIMIT = 10; //25
         public static int PEAK_TIME_MS = 750;
@@ -192,7 +192,7 @@ public class RobotMap {
         public static double POS_KI = 0.0001;
         public static double POS_KD = 18;
         
-        public static int POS_ALLOWABLE_ERROR = 254;
+        public static int POS_ALLOWABLE_ERROR = 1000;
         public static int FORWARD_SOFT = 34500;
         public static int REVERSE_SOFT = 2000;
         public static double RAMP_RATE = 0.75;
@@ -205,7 +205,7 @@ public class RobotMap {
         
         public static int VEL_ACCEL = 9000 / 4;
         public static int VEL_VEL = 2600 / 4;
-        public static int VEL_ALLOWABLE_ERROR = 100;
+        public static int VEL_ALLOWABLE_ERROR = 1000;
         
         public static int INTAKE_HEIGHT = 300;
         public static int SWITCH_HEIGHT = 10000;
@@ -311,8 +311,8 @@ public class RobotMap {
         public static final String CLH_P4_LEFT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_left_detailed.csv";
         public static final String CLH_P4_RIGHT_REV = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/4b/part4_right_detailed.csv";
         
-        public static final String CLH_P5_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5 _left_detailed.csv";
-        public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/part5 _right_detailed.csv";
+        public static final String CLH_P5_LEFT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/path15 _left_detailed.csv";
+        public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/path15 _right_detailed.csv";
         
         public static final String CLH_P6_LEFT_REV = "/home/summer2018/paths/3_cube/center_left_headon(switch_3)/6b/part6_left_detailed.csv";
         public static final String CLH_P6_RIGHT_REV = "/home/summer2018/paths/3_cube/center_left_headon(switch_3)/6b/part6_right_detailed.csv";
