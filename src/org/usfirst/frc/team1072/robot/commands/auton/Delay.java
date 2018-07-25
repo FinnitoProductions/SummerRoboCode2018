@@ -10,7 +10,13 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class Delay extends CommandGroup
 {
+    /**
+     * The time for which this command should delay.
+     */
     private double delay;
+    /**
+     * The time at which the command began.
+     */
     private double startTime;
     
     /**

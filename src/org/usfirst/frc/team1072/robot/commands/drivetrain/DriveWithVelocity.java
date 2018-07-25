@@ -19,12 +19,14 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveWithVelocity extends Command
 {
-    private double driveSpeed;
-    private double turnSpeed;
+    /**
+     * The controller deadband.
+     */
     private double deadband;
     
     /**
      * Creates a new DriveWithVelocityCommand object requiring the Drivetrain.
+     * @param deadband the controller deadband, or the range for which any input is ignored
      */
     public DriveWithVelocity(double deadband) 
     { 
@@ -47,8 +49,6 @@ public class DriveWithVelocity extends Command
     }
     /**
      * Executes the command to drive with a given velocity.
-     * @param speed the speed at which the robot will drive
-     * @param turn the amount by which the robot should turn
      */
     @Override
     public void execute() 
@@ -74,11 +74,11 @@ public class DriveWithVelocity extends Command
             leftY /= 1-deadband;
         }
         
-        driveSpeed = Conversions.convertSpeed
+        double driveSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
                         leftY * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                         SpeedUnit.ENCODER_UNITS);
-        turnSpeed = Conversions.convertSpeed
+        double turnSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
                         -1 * leftX * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                         SpeedUnit.ENCODER_UNITS);
@@ -88,15 +88,6 @@ public class DriveWithVelocity extends Command
                 turnSpeed); 
     }
     
-    public double getDriveSpeed()
-    {
-        return driveSpeed;
-    }
-    
-    public double getTurnSpeed()
-    {
-        return turnSpeed;
-    }
     /**
      * Determines whether the command has finished.
      */

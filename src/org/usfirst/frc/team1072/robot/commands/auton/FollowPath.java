@@ -39,26 +39,65 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class FollowPath extends Command
 {
+    /**
+     * The minimum required points to be buffered on the Talon level before the path can begin.
+     */
     private final int minPointsInController = 18;
+    
+    /**
+     * The runnable command which sends points from the RoboRio buffer to the Talon buffer.
+     */
     private ProcessBuffer p;
+    
+    /**
+     * The notifier calling the ProcessBuffer periodically.
+     */
     private Notifier notif;
   
-    // store trajectory at index 0, status at index 1, and whether the trajectory has been loaded at index 2
+    /**
+     * The index of the trajectory in the controllers array.
+     */
     private final int TRAJ_INDEX = 0;
+    
+    /**
+     * The index of the motion profile status in the controllers array.
+     */
     private final int STAT_INDEX = 1;
+    
+    /**
+     * The index of the boolean determing whether the trajectory has been loaded in the controllers array.
+     */
     private static final int TRAJ_LOADED_INDEX = 2;
+    
+    /**
+     * The map containing all controllers used in this path and pointing to the relevant objects
+     * mentioned above.
+     */
     private Map<IMotorController, Object[]> controllers;
     
+    /**
+     * The current state of this path.
+     */
     private int pathState;
     
-
+    /**
+     * The outer PID slot for this profile, if it is an arc.
+     */
     private int outerPort;
     
-    
+    /**
+     * The total time which this path would be expected to take, in an ideal case.
+     */
     private double totalTime;
     
+    /**
+     * Whether or not the auxiliary sensor should be zeroed at initialization.
+     */
     private boolean zeroAux;
     
+    /**
+     * Whether or not the sensors should be reconfigured at initializtion.
+     */
     private boolean resetSensors;
     
     /**
@@ -92,7 +131,8 @@ public class FollowPath extends Command
     /**
      * Determines whether the pigeon should be zeroed at the start of the path.
      * @param zeroPigeon whether or not to zero the pigeon
-     * @return this command, to allow the command to be called at initialization (ex: FollowPath fp = new FollowPath().zeroPigeonAtStart(true);)
+     * @return this command, to allow the command to be called at initialization 
+     * (ex: FollowPath fp = new FollowPath().zeroPigeonAtStart(true);)
      */
     public FollowPath zeroPigeonAtStart(boolean zeroPigeon)
     {
@@ -100,6 +140,12 @@ public class FollowPath extends Command
         return this;
     }
     
+    /**
+     * Determines whether the sensors should be reset when the path begins.
+     * @param zeroSensors whether or not to reset the sensors
+     * @return this command, to allow the command to be called at initialization 
+     * (ex: FollowPath fp = new FollowPath().zeroPigeonAtStart(true);)
+     */
     public FollowPath resetSensors (boolean zeroSensors)
     {
         resetSensors = zeroSensors;
@@ -190,8 +236,8 @@ public class FollowPath extends Command
     
                 Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.ANGLE_PID, PigeonConstants.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
                 
-                Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.MOTION_PROFILE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-                Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, RobotMap.MOTION_PROFILE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+                Robot.dt.getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROFILE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+                Robot.dt.getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROFILE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
             }
             System.out.println("TALONS CONFIGURED " + Robot.getCurrentTimeMs());
         }
@@ -289,6 +335,7 @@ public class FollowPath extends Command
      * @param t the trajectory which this controller should follow
      * @param controller the controller which is being added
      * @param reversePath true if the path should be formed in reverse order; false otherwise
+     * @param endAngle the angle at which this trajectory ends
      */
     public void addProfile (Trajectory t, IMotorController controller, boolean reversePath, double endAngle)
     {
@@ -302,9 +349,10 @@ public class FollowPath extends Command
     }
     
     /**
-     * @param t
-     * @param endAngle
-     * @return
+     * Adds an offset angle to a given trajectory based on a previous path.
+     * @param t the trajectory which the offset will be added to
+     * @param endAngle the final angle of the previous path (to offset this one)
+     * @return the trajectory, after the offset has been added
      */
     private Trajectory addAngleOffset(Trajectory t, double endAngle)
     {
@@ -323,7 +371,6 @@ public class FollowPath extends Command
      * Loads a given set of trajectory points to a controller.
      * @param t the trajectory to be loaded
      * @param controller the controller onto which the points should be loaded
-     * @throws InterruptedException 
      */
     public void loadTrajectoryToTalon(Trajectory t, IMotorController controller)
     {
@@ -437,7 +484,7 @@ public class FollowPath extends Command
     protected boolean isFinished()
     {
         boolean isFinished = pathState == 3 &&
-                Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < RobotMap.MOTION_PROFILE_ALLOWABLE_ERROR;
+                Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX)) < DrivetrainConstants.MOTION_PROFILE_ALLOWABLE_ERROR;
         return isFinished;
     }
     
@@ -510,11 +557,22 @@ public class FollowPath extends Command
         return (Trajectory) controllers.get(controller)[TRAJ_INDEX];
     }
     
+    /**
+     * Determines whether a given controller's trajectory has been successfully loaded. For use 
+     * when prebuffering may or may not occur on time.
+     * @param controller the controller to be checked
+     * @return true if the controller trajectory has been loaded, false otherwise
+     */
     public boolean getControllerTrajectoryLoaded (IMotorController controller)
     {
         return (boolean) controllers.get(controller)[TRAJ_LOADED_INDEX];
     }
     
+    /**
+     * Sets whether a given controller's trajectory has been successfully loaded.
+     * @param controller the controller for which the trajectory has or hasn't been loaded
+     * @param value the value to set the trajectory 
+     */
     public void setControllerTrajectoryLoaded (IMotorController controller, boolean value)
     {
         controllers.get(controller)[TRAJ_LOADED_INDEX] = value;

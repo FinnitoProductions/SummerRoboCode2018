@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class ToggleCompressor extends Command
 {
+    /**
+     * The desired state for the compressor.
+     */
     private boolean state;
     /**
      * Sets up the command, requiring the pneumatics subsystem.

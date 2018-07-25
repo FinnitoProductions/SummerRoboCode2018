@@ -11,10 +11,14 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class SetCompressor extends InstantCommand
 {
-    boolean state;
+    /**
+     * The intended state for the compressor.
+     */
+    private boolean state;
     
     /**
      * Initializes the command, requiring the pneumatics subsystem.
+     * @param state the compressor state: true if running; false if not running
      */
     public SetCompressor(boolean state) 
     { 
@@ -24,7 +28,6 @@ public class SetCompressor extends InstantCommand
     
     /**
      * Executes the command given the compressor's state.
-     * @param state the state: true if running; false if not running
      */
     public void execute() 
     { 

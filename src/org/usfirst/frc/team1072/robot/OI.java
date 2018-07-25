@@ -16,76 +16,31 @@ import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
  */
 public class OI
 {
-    private static OI oi = null;
-    public static int AXIS_MULTIPLIER = -1;
-    public static int XBOX_360_PORT = 0;
-    public static int AXES_MULTIPLIER = -1;
-    
-    /*
-     * XBox Controller
-     * Axis 0 - Left X
-     * Axis 1 - Left Y
-     * Axis 2 - Trigger (LT)
-     * Axis 3 - Trigger (RT)
-     * Axis 4 - Right X
-     * Axis 5 - Right Y
+    /**
+     * The port for the black XBOX controller.
      */
-    
-    public static int BLACK_XBOX_LEFT_X = 0;
-    public static int BLACK_XBOX_LEFT_Y = 1;
-    public static int BLACK_XBOX_RIGHT_X = 4;
-    public static int BLACK_XBOX_RIGHT_Y = 5;
-    public static int BLACK_XBOX_LEFT_TRIGGER = 2;
-    public static int BLACK_XBOX_RIGHT_TRIGGER = 3;
-    public static int BLACK_XBOX_LEFT_BUMPER = 5;
-    public static int BLACK_XBOX_RIGHT_BUMPER = 6;
-    public static double BLACK_XBOX_DEADBAND = 0.15;
-    public static boolean BLACK_XBOX_INVERT_Y = true;
-    public static int BLACK_XBOX_PORT = 0;
-    public static boolean BLACK_XBOX_IS_ANALOG_TRIGGER = true;
-    /*
-     * White USB Controller
-     * Axis 0 - Left X
-     * Axis 1 - Left Y 
-     * Axis 2/3 - Right X
-     * Axis 4 - Right Y
-     * 
-     * Button 5 - Left Bumper
-     * Button 6 - Right Bumper
-     */
-    
-    public static int CHEAP_WHITE_LEFTX = 0;
-    public static int CHEAP_WHITE_LEFTY = 1;
-    public static int CHEAP_WHITE_RIGHTX = 2;
-    public static int CHEAP_WHITE_RIGHTY = 4;
-  
+    public static final int BLACK_XBOX_PORT = 0;
 
+    /**
+     * The deadband (range for which no input is received) of the black XBOX controller.
+     */
+    public static final double BLACK_XBOX_DEADBAND = 0.15;
     
-    public static String LEFT_X = "leftX";
-    public static String LEFT_Y = "leftY";
-    public static String RIGHT_X = "rightX";
-    public static String RIGHT_Y = "rightY";
-    public static String LEFT_TRIGGER = "leftTrigger";
-    public static String RIGHT_TRIGGER = "rightTrigger";
-    public static String LEFT_BUMPER = "leftBumper";
-    public static String RIGHT_BUMPER = "rightBumper";
-    
-    //private Gamepad gw;
+    /**
+     * The current instance of the singleton OI.
+     */
+    private static OI oi = null;
+  
+    /**
+     * The gamepad currently in use.
+     */
     private GamepadWrapper gw = new GamepadWrapper(BLACK_XBOX_PORT);
+    
+    /**
+     * Constructs a new OI.
+     */
     public OI ()
     {
-        /*Map<String, Integer> ports = new HashMap<String, Integer>();
-        ports.put(LEFT_X, BLACK_XBOX_LEFT_X);
-        ports.put(LEFT_Y, BLACK_XBOX_LEFT_Y);
-        ports.put(RIGHT_X, BLACK_XBOX_RIGHT_X);
-        ports.put(RIGHT_Y, BLACK_XBOX_RIGHT_Y);
-        ports.put(LEFT_BUMPER, BLACK_XBOX_LEFT_BUMPER);
-        ports.put(RIGHT_BUMPER, BLACK_XBOX_RIGHT_BUMPER);
-        ports.put(LEFT_TRIGGER, BLACK_XBOX_LEFT_TRIGGER);
-        ports.put(RIGHT_TRIGGER, BLACK_XBOX_RIGHT_TRIGGER);
-        
-        gw = new Gamepad(BLACK_XBOX_DEADBAND, BLACK_XBOX_INVERT_Y, ports, BLACK_XBOX_PORT, BLACK_XBOX_IS_ANALOG_TRIGGER);*/
-        
         DPadButtonWrapper upDPad = new DPadButtonWrapper(gw, 0);
         DPadButtonWrapper leftDPad = new DPadButtonWrapper (gw, 270);
         DPadButtonWrapper downDPad = new DPadButtonWrapper (gw, 180);
@@ -99,40 +54,26 @@ public class OI
         gw.getButtonA().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
         gw.getButtonX().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT));
         gw.getButtonB().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_LOW_HEIGHT));
-        gw.getButtonY().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
-        
-        /*gw.getButtonA().whenPressed(new TurnRobotToAngleCommand(90));
-        gw.getButtonX().whenPressed(new TurnRobotToAngleCommand(0));
-        gw.getButtonB().whenPressed(new TurnRobotToAngleCommand(-90));
-        gw.getButtonY().whenPressed(new TurnRobotToAngleCommand(-180));*/
-        
+        gw.getButtonY().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));     
     }
 
-    
+    /**
+     * Gets the current instance of the gamepad.
+     * @return the gamepad instance
+     */
     public GamepadWrapper getGamepad() 
     {
         return gw;
     }
     
+    /**
+     * Gets the current instance of the singleton OI.
+     * @return the current instance
+     */
     public static OI getInstance()
     {
         if (oi == null)
             oi = new OI();
         return oi;
     }
-    
-    
-    
-    
-    
-    /*GamepadWrapper gw = new GamepadWrapper (XBOX_360_PORT);
-    
-    /**
-     * Gets the gamepad.
-     * @return the gamepad
-     */
-   /* public GamepadWrapper getGamePad()
-    {
-        return gw;
-    }*/
 }

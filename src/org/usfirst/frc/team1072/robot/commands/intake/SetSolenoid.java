@@ -12,10 +12,20 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class SetSolenoid extends InstantCommand
 {
+    /**
+     * The key for the solenoid to be actuated in the solenoid map.
+     */
     private String solenoidKey;
+    
+    /**
+     * The intended state for the solenoid.
+     */
     private DoubleSolenoid.Value solenoidState;
+    
     /**
      * Sets up the solenoid command, requiring the intake.
+     * @param key the key in the solenoid map containing the solenoid to be modified
+     * @param state the state of the solenoid (forward, off, or reverse)
      */
     public SetSolenoid(String key, DoubleSolenoid.Value state) 
     { 
@@ -26,8 +36,6 @@ public class SetSolenoid extends InstantCommand
     
     /**
      * Sets a given solenoid to a given state.
-     * @param key the key in the solenoid map containing the solenoid to be modified
-     * @param state the state of the solenoid (forward, off, or reverse)
      */
     public void initialize()
     {

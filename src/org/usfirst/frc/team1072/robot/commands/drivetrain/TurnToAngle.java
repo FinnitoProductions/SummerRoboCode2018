@@ -23,18 +23,49 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TurnToAngle extends Command
 {
+    /**
+     * The angle to which this command should closed loop.
+     */
     private double angle;
+    
+    /**
+     * The number of times which this command has executed.
+     */
     private double numExecutes;
+    
+    /**
+     * The minimum number of times for which this command must executed to be marked as complete. This ensures
+     * that isFinished() does not immediately return true due to a delayed spike in error.
+     */
     private double maxExecutes = 25;
+    
+    /**
+     * The time at which the command began.
+     */
     private double startTime;
+    
+    /**
+     * The amount of time after which this command should stop.
+     */
     private double timeout;
+    
+    /**
+     * The previous closed loop errors for this command a given number back.
+     */
     private double[] previousErrors;
+    
+    /**
+     * The index at which the most recent error resides.
+     */
     private int errorIndex;
+    
+    /**
+     * The total number of error samples to be taken.
+     */
     private int errorSamples;
     
     /**
      * Constructs a new TurnRobotToAngleCommand.
-     * @param position the final position for the robot
      * @param angle the final angle for the robot in degrees
      */
     public TurnToAngle (double angle)

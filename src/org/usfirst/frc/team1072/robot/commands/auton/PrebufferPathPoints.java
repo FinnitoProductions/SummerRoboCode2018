@@ -16,8 +16,20 @@ import jaci.pathfinder.Trajectory;
  */
 public class PrebufferPathPoints extends Command
 {
+    /**
+     * The path which this command will prebuffer.
+     */
     private FollowPath fpc;
+    
+    /**
+     * The map containing all master (aka: not follower) controllers which should be 
+     * prebuffered.
+     */
     private HashMap<IMotorController, Trajectory> masterControllers;
+   
+    /**
+     * Whether or not the prebuffering has completed.
+     */
     private boolean isFinished;
     
     /**

@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.AutonomousConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBegins.PauseType;
@@ -20,13 +19,7 @@ import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntake;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeTimed;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
-import org.usfirst.frc.team1072.robot.commands.util.PrintTimeToConsole;
-import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
-
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
@@ -37,13 +30,7 @@ import jaci.pathfinder.Trajectory;
  * @version 6/20/18
  */
 public class AutonomousCommand extends CommandGroup
-{
-    /**
-     * 
-     */
-    private int numPoints = 0;
-    
-    
+{    
     /**
      * Constructs a new command
      * @param subsystems the list of subsystems
@@ -71,8 +58,9 @@ public class AutonomousCommand extends CommandGroup
             initSubsystems.addParallel(new InitializeIntake());
         addSequential(initSubsystems);
     }
+    
     /**
-     * The command to be performed for a one-cube switch autonomous.
+     * The command to be performed for a switch autonomous.
      * @param onLeft true if the switch is on the left; false otherwise
      */
     private void switchAuton (boolean onLeft)
@@ -160,6 +148,9 @@ public class AutonomousCommand extends CommandGroup
         getThirdCube();
     }
     
+    /**
+     * Method to intake and score the third cube for a center switch autonomous.
+     */
     private void getThirdCube()
     {
         PositionCommand fpc6 = new CombinedPositionAnglePID(-3.9, 0).setAllowableError(300), 
@@ -198,37 +189,6 @@ public class AutonomousCommand extends CommandGroup
            addSequential(thirdCube);
     }
     
-    private void scaleAuton (boolean onLeft)
-    {
-        DriveToPosition dtp1, dtp2;
-        TurnToAngle tta1;
-        CommandGroup scoreFirstCube = new CommandGroup();
-            scoreFirstCube.addParallel(dtp1 = new DriveToPosition(AutonomousConstants.DISTANCE_TO_SCALE));
-            CommandGroup raiseElevatorFirstCube = new CommandGroup();
-                raiseElevatorFirstCube.addSequential(new PauseUntilReachingPosition(dtp1, 0.4));
-                raiseElevatorFirstCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
-                raiseElevatorFirstCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
-            scoreFirstCube.addParallel(raiseElevatorFirstCube);
-            CommandGroup outtakeFirstCube = new CommandGroup();
-                outtakeFirstCube.addSequential(new PauseUntilReachingPosition(dtp1, 0.9));
-                outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.6, IntakeConstants.OUTTAKE_BOOL));
-            scoreFirstCube.addParallel(outtakeFirstCube);
-        addSequential(scoreFirstCube);
-        
-        CommandGroup getSecondCube = new CommandGroup();
-            CommandGroup path2 = new CommandGroup();
-                path2.addSequential(tta1 = new TurnToAngle(AutonomousConstants.ANGLE_FROM_SCALE_TO_CUBES));
-                path2.addSequential(dtp2 = new DriveToPosition(AutonomousConstants.DISTANCE_TO_SCALE));
-            getSecondCube.addParallel(path2);
-            CommandGroup lowerElevatorSecondCube = new CommandGroup();
-                lowerElevatorSecondCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
-            getSecondCube.addParallel(lowerElevatorSecondCube);
-            CommandGroup intakeSecondCube = new CommandGroup();
-                intakeSecondCube.addSequential(new PauseUntilReachingPosition(dtp2, 0.7));
-                intakeSecondCube.addSequential(new IntakeOuttakeTimed(0.6, IntakeConstants.INTAKE_BOOL));
-            getSecondCube.addParallel(intakeSecondCube);
-        addSequential(getSecondCube);
-    }
     /**
      * Reads in a trajectory (from Jaci's pathfinder) given the filename as a CSV.
      * @param filename the file name
@@ -260,6 +220,7 @@ public class AutonomousCommand extends CommandGroup
      * @param leftFileName the file name of the left path 
      * @param rightFileName the file name of the right path
      * @param reverse if true: perform the trajectory in reverse order; if false: perform it normally
+     * @param prevPath the path which comes before this one (in a series of multiple paths)
      * @return the new follow path command
      */
     private FollowPath setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse, FollowPath prevPath)
@@ -299,7 +260,7 @@ public class AutonomousCommand extends CommandGroup
         fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse, endAngleLeft);
         fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse, endAngleRight);
 
-        numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
+        int numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
         return fpc;
     }

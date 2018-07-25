@@ -21,11 +21,29 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Elevator extends Subsystem
 {
+    /**
+     * The instance of this singleton Elevator.
+     */
     private static Elevator el;
     
+    /**
+     * The top right Victor on the elevator.
+     */
     private VictorSPX topRightVictor;
+    
+    /**
+     * The bottom left Victor on the elevator.
+     */
     private VictorSPX bottomLeftVictor;
+    
+    /**
+     * The top left Victor on the elevator.
+     */
     private VictorSPX topLeftVictor;
+    
+    /**
+     * The bottom right (and only) Talon on the elevator.
+     */
     private TalonSRX bottomRightTalon; 
     
     /**
@@ -72,11 +90,17 @@ public class Elevator extends Subsystem
         bottomRightTalon.set(ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
     }
     
+    /**
+     * Initializes the elevator talon for autonomous.
+     */
     public void talonInitAutonomous()
     {
         talonInit();
     }
     
+    /**
+     * Initializes the elevator talon for teleoperated.
+     */
     public void talonInitTeleop()
     {
         talonInit();
@@ -156,8 +180,8 @@ public class Elevator extends Subsystem
     /**
      * Sets the elevator soft limit given it as a parameter.
      * 
-     * @param softLimit
-     *            the soft limit to be set
+     * @param forwardSoftLimit the forward soft limit
+     * @param reverseSoftLimit the reverse soft limit
      */
     private void elSetSoftLimit(int forwardSoftLimit, int reverseSoftLimit)
     {

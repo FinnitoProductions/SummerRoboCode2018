@@ -32,18 +32,35 @@ import jaci.pathfinder.Trajectory.Segment;
  */
 public class Drivetrain extends Subsystem
 {
+    /**
+     * The current instance of this singleton Drivetrain.
+     */
     private static Drivetrain instance = null;
+    
+    /**
+     * The left Talon on the drivetrain.
+     */
     private TalonSRX leftTalon;
+    
+    /**
+     * The right Talon on the drivetrain.
+     */
     private TalonSRX rightTalon;
+    
+    /**
+     * The left Victor on the drivetrain.
+     */
     private VictorSPX leftVictor;
+    
+    /**
+     * The right Victor on the drivetrain.
+     */
     private VictorSPX rightVictor;
+    
+    /**
+     * The Pigeon IMU for use on the drivetrain.
+     */
     private PigeonIMU pigeon;
-    
-    private Map<IMotorController, Object[]> controllers; // for PID
-    private double startTime;
-    
-    private Segment[] leftPoints;
-    private Segment[] rightPoints;
     
     /**
      * Initializes this subsystem.
@@ -55,7 +72,7 @@ public class Drivetrain extends Subsystem
         rightTalon = new TalonSRX (CAN_IDs.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR);
         rightVictor = new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR);
-        pigeon = new PigeonIMU(RobotMap.PIGEON_ID);
+        pigeon = new PigeonIMU(CAN_IDs.PIGEON);
     }
   
     /**
@@ -64,8 +81,6 @@ public class Drivetrain extends Subsystem
     public void initDefaultCommand()
     {
         setDefaultCommand(new DriveWithVelocity(OI.BLACK_XBOX_DEADBAND));
-        //setDefaultCommand(new DriveToPositionCommand(new Position(PositionUnit.FEET, 3.85, DrivetrainConstants.WHEELDIAMETER).getEncoderUnits()));
-        //setDefaultCommand(new TurnRobotToAngleCommand());
     }
     
     /**
@@ -175,38 +190,57 @@ public class Drivetrain extends Subsystem
         setRight(cm, value);
     }
     
+    /**
+     * Sets the left talon to a given value.
+     * @param cm the ControlMode to which the left talon will be set 
+     * (like PercentOutput, Velocity, Position, or Disabled)
+     * @param value the value to which the left talon will be set
+     */
     public void setLeft (ControlMode cm, double value)
     {
         Robot.dt.getLeftTalon().set(cm, value);
     }
     
+    /**
+     * Sets the right talon to a given value.
+     * @param cm the ControlMode to which the right talon will be set 
+     * (like PercentOutput, Velocity, Position, or Disabled)
+     * @param value the value to which the right talon will be set
+     */
     public void setRight (ControlMode cm, double value)
     {
         Robot.dt.getRightTalon().set(cm, value);
     }
     
+    /**
+     * Sets both talon sensor positions to a given value in a given PID loop.
+     * @param value the value to which both will be set
+     * @param pidLoop the loop index (primary/auxiliary) [0,1]
+     */
     public void setBothSensorPositions (int value, int pidLoop)
     {
         getLeftTalon().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
         getRightTalon().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
     }
     
+    /**
+     * Clears trajectory points from both talons.
+     */
     public void clearTrajectoryPoints()
     {
         Robot.dt.getLeftTalon().clearMotionProfileTrajectories();
         Robot.dt.getRightTalon().clearMotionProfileTrajectories();
     }
     
+    /**
+     * Initializes the talon output to a given value.
+     * @param output the output to which both talons will be initialized
+     */
     public void initTalonOutput(double output)
     {
-        getLeftTalon().set(ControlMode.PercentOutput, output);
-        getRightTalon().set(ControlMode.PercentOutput, output);
+        setBoth(ControlMode.PercentOutput, output);
     }
-    
-    public void configRemoteFeedbackFilters()
-    {
-        
-    }
+
     /**
      * Slaves the Victors to directly follow the behavior of their parent talons.
      */
@@ -308,6 +342,8 @@ public class Drivetrain extends Subsystem
 
     /**
      * Aligns the sensor phase of the encoders to match the motions of the motors.
+     * @param leftPhase the left sensor phase 
+     * @param rightPhase the right sensor phase
      */
     public void setTalonSensorPhase(boolean leftPhase, boolean rightPhase)
     {
@@ -475,28 +511,16 @@ public class Drivetrain extends Subsystem
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20, RobotMap.TIMEOUT);
-        //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        //getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, RobotMap.TIMEOUT);
         getLeftTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, RobotMap.TIMEOUT);
         
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-       // getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_8_PulseWidth, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 20, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, 10, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 10, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.TIME_PER_TRAJECTORY_POINT_MS, RobotMap.TIMEOUT);
-        //getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_12_Feedback1, RobotMap.MAX_TALON_FRAME_PERIOD_MS/*5*/, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, RobotMap.TIMEOUT);
         getRightTalon().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, RobotMap.TIMEOUT);
 

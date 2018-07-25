@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class MoveElevatorVelocity extends Command
 {
     /**
-     * Creates a new command requiring the elevator.
+     * Creates a new MoveElevatorVelocity.
      */
     public MoveElevatorVelocity() { requires(Robot.el); }
     
@@ -30,8 +30,7 @@ public class MoveElevatorVelocity extends Command
         Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     }
     /**
-     * Executes the command given a speed.
-     * @param speed the speed by which the elevator will be moved
+     * Executes the command using the speed from joystick input.
      */
     public void execute() 
     { 

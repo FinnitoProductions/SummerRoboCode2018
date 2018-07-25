@@ -17,7 +17,20 @@ public final class Conversions
      */
     public enum AngleUnit
     {
-        RADIANS, DEGREES, PIGEON_UNITS;
+        /**
+         * The angle unit of radians.
+         */
+        RADIANS, 
+        
+        /**
+         * The angle unit of degrees.
+         */
+        DEGREES, 
+        
+        /**
+         * The angle unit of pigeon units (for use with CTRE's Pigeon IMU).
+         */
+        PIGEON_UNITS;
     }
     
     /**
@@ -27,7 +40,15 @@ public final class Conversions
      */
     public enum PositionUnit
     {
-        FEET, ENCODER_UNITS;
+        /**
+         * The position unit of feet.
+         */
+        FEET, 
+        
+        /**
+         * The position unit of encoder ticks.
+         */
+        ENCODER_UNITS;
     }
     
     /**
@@ -37,7 +58,15 @@ public final class Conversions
      */
     public enum SpeedUnit
     {
-        FEET_PER_SECOND, ENCODER_UNITS;
+        /**
+         * The speed unit of feet per second.
+         */
+        FEET_PER_SECOND, 
+        
+        /**
+         * The speed unit of encoder ticks per 100 ms.
+         */
+        ENCODER_UNITS;
     }
     
     /**
@@ -47,7 +76,25 @@ public final class Conversions
      */
     public enum TimeUnit
     {
-        SECONDS, MILLISECONDS, MICROSECONDS, NANOSECONDS;
+        /**
+         * The time unit of seconds.
+         */
+        SECONDS, 
+        
+        /**
+         * The time unit of milliseconds.
+         */
+        MILLISECONDS, 
+        
+        /**
+         * The time unit of microseconds.
+         */
+        MICROSECONDS, 
+        
+        /**
+         * The time unit of nanoseconds.
+         */
+        NANOSECONDS;
     }
     
     
@@ -231,6 +278,9 @@ public final class Conversions
         }
     }
     
+    /**
+     * The diameter of the wheel to be used.
+     */
     public static double WHEEL_DIAMETER = -1;
     
     /**
@@ -239,22 +289,47 @@ public final class Conversions
      */
     public static void setWheelDiameter(double newDiameter)
     {
-        System.out.println("SETTING DIAMETER");
         WHEEL_DIAMETER = newDiameter;
-
     }
     
+    /**
+     * The number of pigeon units in a single rotation.
+     */
     public static final double PIGEON_UNITS_PER_ROTATION = 8192;
+    
+    /**
+     * The number of degrees in a single rotation.
+     */
     public static final double DEGREES_PER_ROTATION = 360;
+    
+    /**
+     * The number of radians in a single rotation.
+     */
     public static final double RADIANS_PER_ROTATION = 2 * Math.PI;
 
-    
+    /**
+     * The number of milliseconds in a second.
+     */
     public static final double MS_PER_SEC = 1000;
+    
+    /**
+     * The number of microseconds in a second.
+     */
     public static final double MICROSECS_PER_SEC = Math.pow(10, 6);
+    
+    /**
+     * The number of nanoseconds in a second.
+     */
     public static final double NANOSECS_PER_SEC = Math.pow(10, 9);
     
+    /**
+     * The number of ticks per revolution for a CTRE magnetic encoder.
+     */
     public static final int TICKS_PER_REV = 4096;
     
+    /**
+     * The number of inches in a foot.
+     */
     public static final int INCHES_PER_FOOT = 12;
     
 

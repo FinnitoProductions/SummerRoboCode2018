@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class InitializeIntake extends Command
 {
+    /**
+     * Whether or not the intake has been successfully initialized.
+     */
     private boolean isFinished;
     
     /**

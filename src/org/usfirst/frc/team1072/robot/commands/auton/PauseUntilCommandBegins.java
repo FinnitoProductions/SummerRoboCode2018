@@ -10,9 +10,25 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class PauseUntilCommandBegins extends Command
 {
+    /**
+     * The command for which this command pauses.
+     */
     private Command c;
+    
+    /**
+     * The amount of time (in seconds) to pause after the command begins running.
+     */
     private double delay;
+    
+    /**
+     * The time at which the command in question began.
+     */
     private double startTime;
+    
+    /**
+     * Whether or not startTime has been initialized. This is used to ensure that
+     * it is not periodically reset.
+     */
     private boolean hasInitializedStartTime;
     
     /**

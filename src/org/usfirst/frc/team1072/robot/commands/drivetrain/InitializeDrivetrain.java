@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class InitializeDrivetrain extends Command
 {
+    /**
+     * Whether the initialization has finished.
+     */
     private boolean isFinished;
     
     /**

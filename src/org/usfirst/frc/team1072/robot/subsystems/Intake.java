@@ -18,12 +18,29 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Intake extends Subsystem
 {
+    /**
+     * The current instance of this subsystem.
+     */
     public static Intake intake = null;
+    
+    /**
+     * The instance of the pneumatics subsystem.
+     */
     public static Pneumatics pn = Pneumatics.getInstance();
     
+    /**
+     * The left Talon on the intake.
+     */
     private TalonSRX leftTalon;
+    
+    /**
+     * The right Talon on the intake.
+     */
     private TalonSRX rightTalon;
     
+    /**
+     * Constructs a new Intake.
+     */
     public Intake()
     {
         leftTalon = new TalonSRX(CAN_IDs.INTAKE_TALON_LEFT);

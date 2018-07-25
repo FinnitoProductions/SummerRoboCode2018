@@ -13,11 +13,32 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public abstract class PositionCommand extends Command
 {
+    /**
+     * The number of times which this command has currently been executed.
+     */
     private int numExecutes;
+    
+    /**
+     * The minimum number of times this command must execute to be marked as completed. This prevents
+     * isFinished() from returning true immediately due to a delay in error increase.
+     */
     private int maxExecutes;
+    
+    /**
+     * The desired position for the robot.
+     */
     private double position;
+    
+    /**
+     * The allowable error for this command (the range for which it can be considered completed)
+     */
     private double allowableError;
     
+    /**
+     * Constructs a new PositionCommand.java
+     * @param maxExecutes the minimum number of times this command must execute to be marked as completed
+     * @param desiredPos the desired position for this command
+     */
     public PositionCommand (int maxExecutes, double desiredPos)
     {
         numExecutes = 0;
@@ -26,6 +47,9 @@ public abstract class PositionCommand extends Command
         allowableError = DrivetrainConstants.POS_ALLOWABLE_ERROR;
     }
     
+    /**
+     * Increments the total number of executes, increasing it by 1.
+     */
     public void incrementNumExecutes()
     {
         numExecutes++;
@@ -48,6 +72,10 @@ public abstract class PositionCommand extends Command
         return maxExecutes;
     }
     
+    /**
+     * Sets the total number of executes.
+     * @param numExecutes the total number of executes
+     */
     public void setNumExecutes(int numExecutes)
     {
         this.numExecutes = numExecutes;
@@ -55,7 +83,7 @@ public abstract class PositionCommand extends Command
     
     /**
      * Gets the current position of the Talons.
-     * @return
+     * @return the current Talon position
      */
     public double getCurrentPosition()
     {
@@ -72,23 +100,41 @@ public abstract class PositionCommand extends Command
         return position;
     }
     
+    /**
+     * Determines whether this command has executed beyond maxExecutes.
+     * @return true if it has executed beyond the minimum required amount; false otherwise
+     */
     public boolean passedMaxExecutes()
     {
         return numExecutes > maxExecutes;
     }
     
+    /**
+     * Determines whether the current position is within a given percentage of the destination.
+     * @param percent the percentage to be checked [0, 1]
+     * @return true if the current position is within the percentage; false otherwise
+     */
     public boolean isWithinPercentOfDest(double percent)
     {
         return passedMaxExecutes() && 
         getCurrentPosition()/getDesiredPosition() >= percent;
     }
     
+    /**
+     * Sets the allowable error of this command.
+     * @param allowableError the allowable error to be set to
+     * @return this command
+     */
     public PositionCommand setAllowableError (double allowableError)
     {
         this.allowableError = allowableError;
         return this;
     }
     
+    /**
+     * Gets the allowable error of this command.
+     * @return the allowable error
+     */
     public double getAllowableError()
     {
         return allowableError;

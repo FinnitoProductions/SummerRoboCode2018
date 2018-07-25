@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
  */
 public class IntakeOuttakeTimed extends TimedCommand
 {
+    /**
+     * Whether to intake or outtake (true for intake, false for outtake).
+     */
     private boolean intake;
     
     /**

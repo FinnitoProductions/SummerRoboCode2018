@@ -21,9 +21,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveToPosition extends PositionCommand
 {
+    /**
+     * The desired position for this closed loop.
+     */
     private double position;
-    private int numExecutes;
-    private int maxExecutes = 10;
     
     /**
      * Constructs a new DriveToPositionCommand.
@@ -31,7 +32,7 @@ public class DriveToPosition extends PositionCommand
      */
     public DriveToPosition (double position)
     {
-        super (15, Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS));
+        super (10, Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS));
         this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
     }
     
@@ -44,7 +45,6 @@ public class DriveToPosition extends PositionCommand
         Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.setBoth(ControlMode.Position, position);
         Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
-        numExecutes = 0;
     }
     
     /**
@@ -65,17 +65,10 @@ public class DriveToPosition extends PositionCommand
      */
     public void execute()
     {
-        if (numExecutes >= 0 && numExecutes < maxExecutes)
+        if (!passedMaxExecutes())
         {
-            System.out.println("INCREMENTING");
-            numExecutes++;
+            incrementNumExecutes();
         }
-        else
-        {
-            System.out.println("DONE");
-            numExecutes = -1;
-        }
-        System.out.println("EXECUTING");
         Robot.dt.setBoth(ControlMode.Position, position);
     }
     /**
@@ -85,11 +78,10 @@ public class DriveToPosition extends PositionCommand
     @Override
     protected boolean isFinished()
     {
-        if (numExecutes == -1)
+        if (passedMaxExecutes())
         {
             return Robot.dt.isClosedLoopErrorWithin(RobotMap.PRIMARY_PID_INDEX, getAllowableError());
         }
-        System.out.println("NOT FINISHED");
         return false;
     }
     
@@ -97,43 +89,5 @@ public class DriveToPosition extends PositionCommand
     {
         Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
         Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
-        System.out.println("FINISHING");
     }
-    /**
-     * Gets the total number of executes.
-     * @return the total number of times the command has executed
-     */
-    public int getNumExecutes()
-    {
-        return numExecutes;
-    }
-    
-    /**
-     * Gets the maximum number of executes required to end.
-     * @return the maximum number of executes required
-     */
-    public int getMaxExecutes()
-    {
-        return maxExecutes;
-    }
-    
-    /**
-     * Gets the current position of the Talons.
-     * @return
-     */
-    public double getCurrentPosition()
-    {
-        return (Robot.dt.getRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) 
-                + Robot.dt.getLeftTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)) / 2;
-    }
-    
-    /**
-     * Gets the position to where the robot is intended to travel.
-     * @return the desired position
-     */
-    public double getDesiredPosition()
-    {
-        return position;
-    }
-
 }

@@ -17,10 +17,14 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class MoveElevatorMotionMagic extends Command
 {
+    /**
+     * The intended position for the motion magic closed loop.
+     */
     private double position;
     
     /**
-     * Creates a new command requiring the elevator.
+     * Creates a new MoveElevatorMotionMagic.
+     * @param position the position to which the robot should be moved
      */
     public MoveElevatorMotionMagic(double position) 
     { 
@@ -41,7 +45,6 @@ public class MoveElevatorMotionMagic extends Command
     }
     /**
      * Executes the command, moving the robot to a given position using motion magic.
-     * @param targetPos the position to which the robot should be moved
      */
     public void execute()
     {

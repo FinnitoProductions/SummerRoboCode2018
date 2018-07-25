@@ -34,17 +34,39 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot
 {
+    /**
+     * The drivetrain on the robot.
+     */
     public static Drivetrain dt;
+    
+    /**
+     * The intake on the robot.
+     */
     public static Intake intake;
+    
+    /**
+     * The elevator on the robot.
+     */
     public static Elevator el;
 
-    public static Joystick jt = new Joystick (OI.XBOX_360_PORT);
-
+    /**
+     * The time at which the program begnan.
+     */
     public static double startTime;
     
+    /**
+     * The class to hold all constants and methods to deal with input and output.
+     */
     public static OI oi;
 
+    /**
+     * The command to be utilized during autonomous.
+     */
     public static AutonomousCommand m_autonomousCommand;
+    
+    /**
+     * The autonomous chooser.
+     */
     SendableChooser<Command> m_chooser = new SendableChooser<>();
 
     /**
@@ -136,6 +158,10 @@ public class Robot extends TimedRobot
           Scheduler.getInstance().run();
     }
     
+    /**
+     * Gets the current time elapsed since the program started.
+     * @return the total time elapsed
+     */
     public static double getCurrentTimeMs()
     {
         return 1000 * (Timer.getFPGATimestamp() - startTime);

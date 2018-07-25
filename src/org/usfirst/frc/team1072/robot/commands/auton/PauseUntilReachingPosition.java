@@ -11,7 +11,15 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class PauseUntilReachingPosition extends Command
 {
+    /**
+     * The position command for which this will pause.
+     */
     private PositionCommand dtpc;
+    
+    /**
+     * The fraction of distance into the position command at which this command will 
+     * end.
+     */
     private double fraction;
     
     /**

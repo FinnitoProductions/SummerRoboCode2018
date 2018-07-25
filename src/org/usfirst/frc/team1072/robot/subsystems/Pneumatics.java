@@ -17,12 +17,34 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Pneumatics extends Subsystem
 {
+    /**
+     * The compressor for use in the pneumatic subsystem.
+     */
     private Compressor c;
+    
+    /**
+     * The current instance of this singleton subsystem.
+     */
     private static Pneumatics pn;
+    
+    /**
+     * The map of solenoids.
+     */
     private Map<String, DoubleSolenoid> solMap;
+    
+    /**
+     * The solenoid to raise and lower the intake.
+     */
     private DoubleSolenoid intake_updown;
+    
+    /**
+     * The solenoid to compress and decompress the intake.
+     */
     private DoubleSolenoid intake_compressdecompress;
     
+    /**
+     * Constructs a new Pneumatics.
+     */
     public Pneumatics ()
     {
         c = new Compressor(IntakeConstants.COMPRESSOR_PORT);

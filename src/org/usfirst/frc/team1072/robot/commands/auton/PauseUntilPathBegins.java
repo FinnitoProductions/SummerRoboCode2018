@@ -11,13 +11,46 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class PauseUntilPathBegins extends Command
 {
+    /**
+     * The path for which this command will wait.
+     */
     private FollowPath fpc;
+    
+    /**
+     * The amount of time for which this command will pause, as passed in by the user.
+     */
     private double delay;
+    
+    /**
+     * The delay after having been recalculated to reflect the given pause type.
+     */
     private double modifiedDelay;
+    
+    /**
+     * The time at which the path began.
+     */
     private double startTime;
+    
+    /**
+     * The type of pause which the user chooses to perform.
+     */
     private PauseType pauseType;
+    
+    /**
+     * Whether or not startTime has been initialized. This is used to ensure that
+     * it is not periodically reset.
+     */
     private boolean hasInitializedStartTime;
+    
+    /**
+     * Whether or not modifiedDelay has been initialized. This is used to ensure that
+     * it is not periodically reset.
+     */
     private boolean hasInitializedModifiedDelay;
+    
+    /**
+     * The total time expected for the path.
+     */
     private double totalTime;
     
     /**
@@ -27,7 +60,20 @@ public class PauseUntilPathBegins extends Command
      */
     public enum PauseType
     {
-        START_OF_PATH, END_OF_PATH, NO_PAUSE
+        /**
+         * Signifies a pause a given amount of time after the path begins.
+         */
+        START_OF_PATH, 
+        
+        /**
+         * Signifies a pause a given amount of time before the path ends.
+         */
+        END_OF_PATH, 
+        
+        /**
+         * Signifies no pause at all.
+         */
+        NO_PAUSE
     }
     
     /**
@@ -48,7 +94,7 @@ public class PauseUntilPathBegins extends Command
     /**
      * Constructs a new PauseUntilPathBeginsCommand.
      * @param fpc the path to be followed
-     * 
+     * @param pauseType the type of pause to be performed
      * @param delay the time in seconds to wait either from the beginning or end of the path
      * @param totalTime the total time for the path to occur (in ms)
      */

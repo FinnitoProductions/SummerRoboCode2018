@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class InitializeElevator extends Command
 {
+    /**
+     * Whether or not the elevator has successfully initialized.
+     */
+    
     private boolean isFinished;
     /**
      * Initializes this command.

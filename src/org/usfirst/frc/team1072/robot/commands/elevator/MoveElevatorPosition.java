@@ -14,9 +14,15 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class MoveElevatorPosition extends Command
 {
-    double position;
     /**
-     * Creates a new command requiring the elevator subsystem.
+     * The intended final position for the elevator.
+     * 
+     */
+    private double position;
+    
+    /**
+     * Creates a new MoveElevatorPosition.
+     * @param position the position to move to
      */
     public MoveElevatorPosition(double position) 
     { 
@@ -30,9 +36,10 @@ public class MoveElevatorPosition extends Command
     {
         Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     }
+    
     /**
      * Executes the command given the position to which the elevator should move. 
-     * @param position the position to move to
+     * 
      */
     @Override
     public void execute() { Robot.el.moveElevatorPosition(position); }
