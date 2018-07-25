@@ -135,13 +135,6 @@ public class Robot extends TimedRobot
     {
           Scheduler.getInstance().run();
     }
-
-    /**
-     * This function is called periodically during test mode.
-     */
-    public void testPeriodic()
-    {
-    }
     
     public static double getCurrentTimeMs()
     {

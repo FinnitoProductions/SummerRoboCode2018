@@ -38,11 +38,11 @@ import jaci.pathfinder.Trajectory;
  */
 public class AutonomousCommand extends CommandGroup
 {
+    /**
+     * 
+     */
     private int numPoints = 0;
     
-    
-    
-    //private final String CENTER_LEFT_HEAD_ON_ONE_CUBE_SLOW_LEFT_PART2 = "/home/summer2018/paths/center_left_headonTest(switch_1)/center_left_headonTest(switch_1)_left_detailed.csv";
     
     /**
      * Constructs a new command
@@ -54,49 +54,11 @@ public class AutonomousCommand extends CommandGroup
             requires(s);
 
         initSubsystems();
-        testThirdCube();
-
-        //switchAuton(true);
+        switchAuton(true);
 
     }
 
-    private void testThirdCube()
-    {
-        PositionCommand fpc6 = new CombinedPositionAnglePID(-3.9, 0).setAllowableError(300), 
-                fpc7 = new CombinedPositionAnglePID(5, -45).setAllowableError(300),
-                fpc8 = new DriveToPosition(-1.5).setAllowableError(650), 
-                fpc9 = new DriveToPosition(2.3).setAllowableError(1000);
-        TurnToAngle turn6 = new TurnToAngle(-45, 0.8), turn8 = new TurnToAngle(20, 1.25);
-        CommandGroup thirdCube = new CommandGroup();
-            CommandGroup thirdCubePaths = new CommandGroup();
-                thirdCubePaths.addSequential(fpc6);
-                thirdCubePaths.addSequential(turn6);
-                thirdCubePaths.addSequential(fpc7);
-                thirdCubePaths.addSequential(new Delay(.5));
-                thirdCubePaths.addSequential(fpc8);
-                thirdCubePaths.addSequential(turn8);
-                thirdCubePaths.addSequential(fpc9);
-            thirdCube.addParallel(thirdCubePaths);
-            CommandGroup raiseElevatorThirdCube = new CommandGroup();
-                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
-                raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.2));
-                raiseElevatorThirdCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
-                
-                raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc8, .7));
-                
-                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
-                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-                raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.1));
-                //raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
-                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
-                CommandGroup raiseElevatorOuttake = new CommandGroup();
-                    raiseElevatorOuttake.addParallel(new MoveElevatorMotionMagic
-                            (ElevatorConstants.SWITCH_HEIGHT_THIRD_CUBE));
-                    raiseElevatorOuttake.addParallel(new IntakeOuttakeTimed(.7, IntakeConstants.OUTTAKE_BOOL));
-                raiseElevatorThirdCube.addSequential(raiseElevatorOuttake);
-            thirdCube.addParallel(raiseElevatorThirdCube);
-           addSequential(thirdCube);
-    }
+    
     
     /**
      * Initializes subsystems in parallel.
@@ -194,17 +156,51 @@ public class AutonomousCommand extends CommandGroup
                         IntakeConstants.DECOMPRESS));
                 outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.34, RobotMap.IntakeConstants.OUTTAKE_BOOL));
             scoreSecondCube.addParallel(outtakeSecondCube);
-            
-        addSequential(scoreSecondCube);
-        
-        
-        
-        
+        addSequential(scoreSecondCube); 
+        getThirdCube();
+    }
+    
+    private void getThirdCube()
+    {
+        PositionCommand fpc6 = new CombinedPositionAnglePID(-3.9, 0).setAllowableError(300), 
+                fpc7 = new CombinedPositionAnglePID(5, -45).setAllowableError(300),
+                fpc8 = new DriveToPosition(-1.5).setAllowableError(650), 
+                fpc9 = new DriveToPosition(2.3).setAllowableError(1000);
+        TurnToAngle turn6 = new TurnToAngle(-45, 0.8), turn8 = new TurnToAngle(20, 1.25);
+        CommandGroup thirdCube = new CommandGroup();
+            CommandGroup thirdCubePaths = new CommandGroup();
+                thirdCubePaths.addSequential(fpc6);
+                thirdCubePaths.addSequential(turn6);
+                thirdCubePaths.addSequential(fpc7);
+                thirdCubePaths.addSequential(new Delay(.5));
+                thirdCubePaths.addSequential(fpc8);
+                thirdCubePaths.addSequential(turn8);
+                thirdCubePaths.addSequential(fpc9);
+            thirdCube.addParallel(thirdCubePaths);
+            CommandGroup raiseElevatorThirdCube = new CommandGroup();
+                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+                raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.2));
+                raiseElevatorThirdCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
+                
+                raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc8, .7));
+                
+                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+                raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.1));
+                //raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+                raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
+                CommandGroup raiseElevatorOuttake = new CommandGroup();
+                    raiseElevatorOuttake.addParallel(new MoveElevatorMotionMagic
+                            (ElevatorConstants.SWITCH_HEIGHT_THIRD_CUBE));
+                    raiseElevatorOuttake.addParallel(new IntakeOuttakeTimed(.7, IntakeConstants.OUTTAKE_BOOL));
+                raiseElevatorThirdCube.addSequential(raiseElevatorOuttake);
+            thirdCube.addParallel(raiseElevatorThirdCube);
+           addSequential(thirdCube);
     }
     
     private void scaleAuton (boolean onLeft)
     {
-        /*DriveToPosition dtp1, dtp2;
+        DriveToPosition dtp1, dtp2;
         TurnToAngle tta1;
         CommandGroup scoreFirstCube = new CommandGroup();
             scoreFirstCube.addParallel(dtp1 = new DriveToPosition(AutonomousConstants.DISTANCE_TO_SCALE));
@@ -231,13 +227,13 @@ public class AutonomousCommand extends CommandGroup
                 intakeSecondCube.addSequential(new PauseUntilReachingPosition(dtp2, 0.7));
                 intakeSecondCube.addSequential(new IntakeOuttakeTimed(0.6, IntakeConstants.INTAKE_BOOL));
             getSecondCube.addParallel(intakeSecondCube);
-        addSequential(getSecondCube);*/
+        addSequential(getSecondCube);
     }
     /**
      * Reads in a trajectory (from Jaci's pathfinder) given the filename as a CSV.
      * @param filename the file name
      * @return the Trajectory
-     * @throws FileNotFoundException
+     * @throws FileNotFoundException if the file is not successfully found
      */
     public static Trajectory readTrajectory(String filename) throws FileNotFoundException
     {
@@ -258,31 +254,6 @@ public class AutonomousCommand extends CommandGroup
             throw new FileNotFoundException("Trajectory: " + filename + ", does not exist or is not a csv file");
         }
     }
-
-//    @SuppressWarnings("unused")
-//    private FollowPath setupPathFollower(String leftFileName, String rightFileName, boolean reverse)
-//    {
-//        FollowPath fpc = new FollowPath();
-//
-//        Trajectory leftPath1 = null;
-//        Trajectory rightPath1 = null;
-//
-//        try
-//        {
-//            leftPath1 = readTrajectory(leftFileName);
-//            rightPath1 = readTrajectory(rightFileName);
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-//            System.out.println("FILE. NOT. FOUND.");
-//        }
-//        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse);
-//        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse);
-//        numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
-//        fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
-//        return fpc;
-//    }
     
     /**
      * Sets up a motion profile arc path.
