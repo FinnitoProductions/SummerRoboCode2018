@@ -19,6 +19,8 @@ import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntake;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeTimed;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
+import org.usfirst.frc.team1072.robot.subsystems.Intake.IntakeType;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import jaci.pathfinder.Pathfinder;
@@ -97,7 +99,7 @@ public class AutonomousCommand extends CommandGroup
                 outtakeFirstCube.addSequential(new PauseUntilPathBegins(fpc1, PauseType.END_OF_PATH, 0.15, fpc1.getTotalTime()));
                 outtakeFirstCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.DECOMPRESS));
-                outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.17, RobotMap.IntakeConstants.OUTTAKE_BOOL));
+                outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.17, IntakeType.OUTTAKE));
             firstCube.addParallel(outtakeFirstCube);
         addSequential(firstCube);
         
@@ -119,7 +121,7 @@ public class AutonomousCommand extends CommandGroup
             CommandGroup intakeSecondCube = new CommandGroup();
                 intakeSecondCube.addSequential(
                         new PauseUntilReachingPosition(fpc3, 0.45));
-                intakeSecondCube.addSequential(new IntakeOuttakeTimed(0.4, IntakeConstants.INTAKE_BOOL));
+                intakeSecondCube.addSequential(new IntakeOuttakeTimed(0.4, IntakeType.INTAKE));
            getSecondCube.addParallel(intakeSecondCube);
          addSequential(getSecondCube);
 
@@ -129,7 +131,7 @@ public class AutonomousCommand extends CommandGroup
                 pathGroupOuttakeSecondCube.addSequential(fpc5);
             scoreSecondCube.addParallel(pathGroupOuttakeSecondCube);
             CommandGroup intakeSecondCubeDuringPath = new CommandGroup();
-                intakeSecondCubeDuringPath.addSequential(new IntakeOuttakeTimed(0.4, IntakeConstants.INTAKE_BOOL));
+                intakeSecondCubeDuringPath.addSequential(new IntakeOuttakeTimed(0.4, IntakeType.INTAKE));
                 intakeSecondCubeDuringPath.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
             scoreSecondCube.addParallel(intakeSecondCubeDuringPath);
             CommandGroup outtakeSecondCube = new CommandGroup();
@@ -142,7 +144,7 @@ public class AutonomousCommand extends CommandGroup
                         (ElevatorConstants.SWITCH_HEIGHT_AUTON));
                 outtakeSecondCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                         IntakeConstants.DECOMPRESS));
-                outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.34, RobotMap.IntakeConstants.OUTTAKE_BOOL));
+                outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.34, IntakeType.OUTTAKE));
             scoreSecondCube.addParallel(outtakeSecondCube);
         addSequential(scoreSecondCube); 
         getThirdCube();
@@ -171,7 +173,7 @@ public class AutonomousCommand extends CommandGroup
             CommandGroup raiseElevatorThirdCube = new CommandGroup();
                 raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
                 raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.2));
-                raiseElevatorThirdCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeConstants.INTAKE_BOOL));
+                raiseElevatorThirdCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeType.INTAKE));
                 
                 raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc8, .7));
                 
@@ -183,7 +185,7 @@ public class AutonomousCommand extends CommandGroup
                 CommandGroup raiseElevatorOuttake = new CommandGroup();
                     raiseElevatorOuttake.addParallel(new MoveElevatorMotionMagic
                             (ElevatorConstants.SWITCH_HEIGHT_THIRD_CUBE));
-                    raiseElevatorOuttake.addParallel(new IntakeOuttakeTimed(.7, IntakeConstants.OUTTAKE_BOOL));
+                    raiseElevatorOuttake.addParallel(new IntakeOuttakeTimed(.7, IntakeType.OUTTAKE));
                 raiseElevatorThirdCube.addSequential(raiseElevatorOuttake);
             thirdCube.addParallel(raiseElevatorThirdCube);
            addSequential(thirdCube);
