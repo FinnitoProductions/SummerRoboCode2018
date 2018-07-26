@@ -2,6 +2,7 @@ package org.usfirst.frc.team1072.robot.commands.intake;
 
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -28,9 +29,9 @@ public class IntakeOuttakeCube extends Command
     {
         OI oi = OI.getInstance();
         if (oi.getGamepad().getLeftTriggerPressed())
-            Robot.intake.intakeOuttakeCube(oi.getGamepad().getLeftTrigger());
+            Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR * oi.getGamepad().getLeftTrigger());
         else if (oi.getGamepad().getRightTriggerPressed())
-            Robot.intake.intakeOuttakeCube(-1 * oi.getGamepad().getRightTrigger());
+            Robot.intake.intakeOuttakeCube(-IntakeConstants.INTAKE_DIR * oi.getGamepad().getRightTrigger());
         else
             Robot.intake.intakeOuttakeCube(0);
     }

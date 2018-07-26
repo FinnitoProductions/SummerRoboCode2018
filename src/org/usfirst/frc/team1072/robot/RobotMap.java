@@ -670,16 +670,6 @@ public class RobotMap {
          * The constant to signify that the intake will be controlled without manual control.
          */
         public static boolean NO_MANUAL_INTAKE = false;
-        
-        /**
-         * The constant to signify intaking.
-         */
-        public static boolean INTAKE_BOOL = true;
-        
-        /**
-         * The constant to signify outtaking.
-         */
-        public static boolean OUTTAKE_BOOL = false;
     }
     
     /**
