@@ -2,6 +2,7 @@ package org.usfirst.frc.team1072.robot.commands.intake;
 
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -28,12 +29,28 @@ public class IntakeOuttakeCube extends Command
     public void execute() 
     {
         OI oi = OI.getInstance();
-        if (oi.getGamepad().getLeftTriggerPressed())
-            Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR * oi.getGamepad().getLeftTrigger());
-        else if (oi.getGamepad().getRightTriggerPressed())
-            Robot.intake.intakeOuttakeCube(-IntakeConstants.INTAKE_DIR * oi.getGamepad().getRightTrigger());
-        else
-            Robot.intake.intakeOuttakeCube(0);
+        boolean intakeEnabled = false;
+        if (RobotMap.TWO_CONTROLLERS)
+        {
+            double leftInput = oi.getOperatorGamepad().getLeftX();
+            double rightInput = oi.getOperatorGamepad().getRightY();
+            if (leftInput > OI.LOGITECH_DEADBAND || rightInput > OI.LOGITECH_DEADBAND)
+            {
+                Robot.intake.setLeft(leftInput > OI.LOGITECH_DEADBAND ? -leftInput : 0);
+                Robot.intake.setRight(rightInput > OI.LOGITECH_DEADBAND ? -rightInput : 0);
+                intakeEnabled = true;
+            }
+        }
+        if (!intakeEnabled)
+        {
+            if (oi.getDriverGamepad().getLeftTriggerPressed())
+                Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getLeftTrigger());
+            else if (oi.getDriverGamepad().getRightTriggerPressed())
+                Robot.intake.intakeOuttakeCube(-IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getRightTrigger());
+            else
+                Robot.intake.intakeOuttakeCube(0);
+        }
+        
     }
     
     /**

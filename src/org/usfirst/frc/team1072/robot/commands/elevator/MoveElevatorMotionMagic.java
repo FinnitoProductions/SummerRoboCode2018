@@ -50,7 +50,7 @@ public class MoveElevatorMotionMagic extends Command
     {
         OI oi = OI.getInstance();
         //double targetPos = Math.abs(oi.getGamepad().getRightY()) * 33500 + 1000;
-        if (oi.getGamepad().getRightY() >= OI.BLACK_XBOX_DEADBAND)
+        if (oi.getDriverGamepad().getRightY() >= OI.BLACK_XBOX_DEADBAND)
             this.cancel();
     }
 

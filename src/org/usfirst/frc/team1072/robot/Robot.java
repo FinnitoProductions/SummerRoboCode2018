@@ -50,7 +50,7 @@ public class Robot extends TimedRobot
     public static Elevator el;
 
     /**
-     * The time at which the program begnan.
+     * The time at which the program began.
      */
     public static double startTime;
     

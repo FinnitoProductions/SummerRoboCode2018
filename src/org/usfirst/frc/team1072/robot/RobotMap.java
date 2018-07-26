@@ -23,6 +23,11 @@ public class RobotMap {
     public static boolean IS_COMP = false;
     
     /**
+     * Whether or not two controllers are being used to control the robot.
+     */
+    public static boolean TWO_CONTROLLERS = false;
+    
+    /**
      * The joystick port.
      */
     public static int JOYSTICK = 0;

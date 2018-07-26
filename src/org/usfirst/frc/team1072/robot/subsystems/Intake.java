@@ -164,6 +164,24 @@ public class Intake extends Subsystem
         if (intake == null) intake = new Intake();
         return intake;
     }
+    
+    /**
+     * Sets the left intake talon to run at a given % output.
+     * @param speed the % output at which the talon should run, positive for intaking
+     */
+    public void setLeft (double speed)
+    {
+        getLeftTalon().set(ControlMode.PercentOutput, speed);
+    }
+    
+    /**
+     * Sets the right intake talon to run at a given % output.
+     * @param speed the % output at which the talon should run, positive for intaking
+     */
+    public void setRight (double speed)
+    {
+        getRightTalon().set(ControlMode.PercentOutput, speed);
+    }
 
 
 }

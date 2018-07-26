@@ -55,8 +55,8 @@ public class DriveWithVelocity extends Command
     { 
         OI oi = OI.getInstance();
         
-        double leftX = oi.getGamepad().getLeftX();
-        double leftY = oi.getGamepad().getLeftY();
+        double leftX = oi.getDriverGamepad().getLeftX();
+        double leftY = oi.getDriverGamepad().getLeftY();
         if (Math.abs(leftX) < deadband)
             leftX = 0;
         else

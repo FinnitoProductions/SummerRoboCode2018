@@ -39,7 +39,6 @@ public class SetSolenoid extends InstantCommand
      */
     public void initialize()
     {
-        ;
         Intake.pn.getSolenoid(solenoidKey).set(solenoidState); 
     }
 }
