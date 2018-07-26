@@ -208,47 +208,128 @@ public class RobotMap {
         public static double VEL_KD_RIGHT = 0;//10;*/
         // CARPET CONSTANTS
         
+        
+       
+        /**
+         * The practice bot F constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KF_LEFT_PRACTICE = 0.197;
+        
+        /**
+         * The practice bot P constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KP_LEFT_PRACTICE = 0.5;
+        
+        /**
+         * The practice bot I constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KI_LEFT_PRACTICE = 0;
+        
+        /**
+         * The practice bot D constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KD_LEFT_PRACTICE = 0; 
+        
+        /**
+         * The practice bot F constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KF_RIGHT_PRACTICE = 0.197; 
+        
+        /**
+         * The practice bot P constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KP_RIGHT_PRACTICE = 0.5;//0.3;
+        
+        /**
+         * The practice bot I constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KI_RIGHT_PRACTICE = 0;//0;
+        
+        /**
+         * The practice bot D constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KD_RIGHT_PRACTICE = 0;//10;
+        
+        /**
+         * The competition bot F constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KF_LEFT_COMP = 0.197;
+        
+        /**
+         * The competition bot P constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KP_LEFT_COMP = 0.5;
+        
+        /**
+         * The competition bot I constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KI_LEFT_COMP = 0;
+        
+        /**
+         * The competition bot D constant for the velocity closed loop on the left.
+         */
+        public static double VEL_KD_LEFT_COMP = 0; 
+        
+        /**
+         * The competition bot F constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KF_RIGHT_COMP = 0.197; 
+        
+        /**
+         * The competition bot P constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KP_RIGHT_COMP = 0.5;//0.3;
+        
+        /**
+         * The competition bot I constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KI_RIGHT_COMP = 0;//0;
+        
+        /**
+         * The competition bot D constant for the velocity closed loop on the right.
+         */
+        public static double VEL_KD_RIGHT_COMP = 0;//10;
+        
         /**
          * The F constant for the velocity closed loop on the left.
          */
-        public static double VEL_KF_LEFT = 0.197;
+        public static double VEL_KF_LEFT = IS_COMP ? VEL_KF_LEFT_COMP : VEL_KF_LEFT_PRACTICE;
         
         /**
          * The P constant for the velocity closed loop on the left.
          */
-        public static double VEL_KP_LEFT = 0.5;
+        public static double VEL_KP_LEFT = IS_COMP ? VEL_KP_LEFT_COMP : VEL_KP_LEFT_PRACTICE;
         
         /**
          * The I constant for the velocity closed loop on the left.
          */
-        public static double VEL_KI_LEFT = 0;
+        public static double VEL_KI_LEFT = IS_COMP ? VEL_KI_LEFT_COMP : VEL_KI_LEFT_PRACTICE;
         
         /**
          * The D constant for the velocity closed loop on the left.
          */
-        public static double VEL_KD_LEFT = 0; 
+        public static double VEL_KD_LEFT = IS_COMP ? VEL_KD_LEFT_COMP : VEL_KD_LEFT_PRACTICE;
         
         /**
          * The F constant for the velocity closed loop on the right.
          */
-        public static double VEL_KF_RIGHT = 0.197; 
+        public static double VEL_KF_RIGHT = IS_COMP ? VEL_KF_RIGHT_COMP : VEL_KF_RIGHT_PRACTICE;
         
         /**
          * The P constant for the velocity closed loop on the right.
          */
-        public static double VEL_KP_RIGHT = 0.5;//0.3;
+        public static double VEL_KP_RIGHT = IS_COMP ? VEL_KP_RIGHT_COMP : VEL_KP_RIGHT_PRACTICE;
         
         /**
          * The I constant for the velocity closed loop on the right.
          */
-        public static double VEL_KI_RIGHT = 0;//0;
+        public static double VEL_KI_RIGHT = IS_COMP ? VEL_KI_RIGHT_COMP : VEL_KI_RIGHT_PRACTICE;
         
         /**
          * The D constant for the velocity closed loop on the right.
          */
-        public static double VEL_KD_RIGHT = 0;//10;
-        
-        // tune (double) until oscillating, then tune KD
+        public static double VEL_KD_RIGHT = IS_COMP ? VEL_KD_RIGHT_COMP : VEL_KD_RIGHT_PRACTICE;
+
         // CONCRETE
 //        public static double POS_KF_LEFT = 0;
 //        public static double POS_KP_LEFT = 0.1; //0.2 
