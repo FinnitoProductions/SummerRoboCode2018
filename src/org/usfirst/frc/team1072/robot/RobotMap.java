@@ -645,6 +645,11 @@ public class RobotMap {
          * The key in the solenoid map of the compress/decompress double solenoid.
          */
         public static final String COMPRESSDECOMPRESS_KEY = "COMPRESSDE";
+
+        /**
+         * The direction of Talon input such that the intake will intake.
+         */
+        public static final double INTAKE_DIR = 1;
         
         /**
          * The peak current limit for the intake.

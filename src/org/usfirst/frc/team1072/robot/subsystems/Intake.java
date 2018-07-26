@@ -39,6 +39,28 @@ public class Intake extends Subsystem
     private TalonSRX rightTalon;
     
     /**
+     * Represents the possible directions for the intake.
+     * @author Finn Frankis
+     * @version Jul 25, 2018
+     */
+    public enum IntakeType
+    {
+        /**
+         * Used to signify the intaking of a cube.
+         */
+        INTAKE, 
+        
+        /**
+         * Used to signify the outtaking of a cube.
+         */
+        OUTTAKE,
+        
+        /**
+         * Used to signify no motion whatsoever.
+         */
+        NONE;
+    }
+    /**
      * Constructs a new Intake.
      */
     public Intake()
