@@ -528,7 +528,7 @@ public class RobotMap {
         /**
          * The PID slot to house motion magic constants.
          */
-        public static int VEL_PID = 0;
+        public static int MOTION_MAGIC_PID = 0;
         
         /**
          * The PID slot to house position constants.
@@ -596,37 +596,37 @@ public class RobotMap {
         /**
          * The F constant for the motion magic closed loop.
          */
-        public static double VEL_KF = 0.37;
+        public static double MOTION_MAGIC_KF = 0.37;
         
         /**
          * The P constant for the motion magic closed loop.
          */
-        public static double VEL_KP = 0.1;
+        public static double MOTION_MAGIC_KP = 0.1;
         
         /**
          * The I constant for the motion magic closed loop.
          */
-        public static double VEL_KI = 0.0001;
+        public static double MOTION_MAGIC_KI = 0.0001;
         
         /**
          * The D constant for the motion magic closed loop.
          */
-        public static double VEL_KD = 14;
+        public static double MOTION_MAGIC_KD = 14;
         
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int VEL_ACCEL = 9000 / 4;
+        public static int MOTION_MAGIC_ACCEL = 9000 / 4;
         
         /**
          * The velocity constant for the motion magic closed loop.
          */
-        public static int VEL_VEL = 2600 / 4;
+        public static int MOTION_MAGIC_VEL = 2600 / 4;
         
         /**
          * The allowable error for the motion magic closed loop.
          */
-        public static int VEL_ALLOWABLE_ERROR = 1000;
+        public static int MOTION_MAGIC_ALLOWABLE_ERROR = 1000;
         
         /**
          * The height (in encoder units) for optimal intaking.

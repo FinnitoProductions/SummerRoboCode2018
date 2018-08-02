@@ -227,16 +227,16 @@ public class Elevator extends Subsystem
     private void elConfigureMotionMagic()
     {
         // set motion magic port to be the velocity PID port 
-        getBottomRightTalon().selectProfileSlot(ElevatorConstants.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
-        getBottomRightTalon().config_kF(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KF, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kP(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KP, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kI(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KI, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kD(ElevatorConstants.VEL_PID, ElevatorConstants.VEL_KD, RobotMap.TIMEOUT);
+        getBottomRightTalon().selectProfileSlot(ElevatorConstants.MOTION_MAGIC_PID, RobotMap.PRIMARY_PID_INDEX);
+        getBottomRightTalon().config_kF(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KF, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kP(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KP, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kI(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KI, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kD(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KD, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configMotionCruiseVelocity(ElevatorConstants.VEL_VEL, RobotMap.TIMEOUT);
-        getBottomRightTalon().configMotionAcceleration(ElevatorConstants.VEL_ACCEL, RobotMap.TIMEOUT);
+        getBottomRightTalon().configMotionCruiseVelocity(ElevatorConstants.MOTION_MAGIC_VEL, RobotMap.TIMEOUT);
+        getBottomRightTalon().configMotionAcceleration(ElevatorConstants.MOTION_MAGIC_ACCEL, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configAllowableClosedloopError(DrivetrainConstants.VEL_PID, ElevatorConstants.VEL_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(DrivetrainConstants.VEL_PID, ElevatorConstants.MOTION_MAGIC_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         
     }
 
