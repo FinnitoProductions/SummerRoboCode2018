@@ -26,6 +26,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import jaci.pathfinder.Pathfinder;
 import jaci.pathfinder.Trajectory;
 
+import edu.wpi.first.wpilibj.command.InstantCommand;
+
 /**
  * A set of commands to be called during the autonomous period.
  * @author Finn Frankis
@@ -44,7 +46,6 @@ public class AutonomousCommand extends CommandGroup
 
         initSubsystems();
         switchAuton(true);
-
     }
 
     
