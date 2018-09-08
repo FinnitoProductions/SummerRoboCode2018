@@ -631,7 +631,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal intaking.
          */
-        public static int INTAKE_HEIGHT = 300;
+        public static int INTAKE_HEIGHT = 2000;
         
         /**
          * The height (in encoder units) for optimal switch scoring.

@@ -1,9 +1,12 @@
 package org.usfirst.frc.team1072.robot.commands.intake;
 
+import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import org.usfirst.frc.team1072.robot.RobotMap;
 
 /**
  * Represents a command to set the solenoid to a given state.
@@ -39,6 +42,7 @@ public class SetSolenoid extends InstantCommand
      */
     public void initialize()
     {
+        if (solenoidKey.equals(IntakeConstants.UPDOWN_KEY) && solenoidState.equals(IntakeConstants.DOWN) && Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX))
         Intake.pn.getSolenoid(solenoidKey).set(solenoidState); 
     }
 }
