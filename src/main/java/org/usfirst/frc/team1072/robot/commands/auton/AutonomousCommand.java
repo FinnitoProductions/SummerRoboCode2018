@@ -173,6 +173,7 @@ public class AutonomousCommand extends CommandGroup
             thirdCube.addParallel(thirdCubePaths);
             CommandGroup raiseElevatorThirdCube = new CommandGroup();
                 raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+                raiseElevatorThirdCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
                 raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc7, 0.2));
                 raiseElevatorThirdCube.addSequential(new IntakeOuttakeTimed(1.1, IntakeType.INTAKE));
                 
@@ -180,7 +181,6 @@ public class AutonomousCommand extends CommandGroup
                 
                 raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
                 raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-                raiseElevatorThirdCube.addSequential(new PauseUntilReachingPosition(fpc9, 0.1));
                 //raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
                 raiseElevatorThirdCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
                 CommandGroup raiseElevatorOuttake = new CommandGroup();
