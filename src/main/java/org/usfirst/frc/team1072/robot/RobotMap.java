@@ -905,6 +905,8 @@ public class RobotMap {
          * The right file name for the fifth autonomous path.
          */
         public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/path15 _right_detailed.csv";     
+    
+        public static final double BASELINE_DISTANCE = 15;
     }
 
     /**
