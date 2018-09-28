@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Represents the central code for the robot.
@@ -85,8 +86,10 @@ public class Robot extends TimedRobot
         oi = OI.getInstance();
 
         subsystems = new Subsystem[] {dt, el, intake, Intake.pn};
+    
         center_chooser.addObject("Center", AutonType.CENTER_SWITCH);
         center_chooser.addObject("Not Center", AutonType.BASELINE);
+        center_chooser.addObject("Center One Cube", AutonType.ONE_CUBE_CENTER);
     }
     
 

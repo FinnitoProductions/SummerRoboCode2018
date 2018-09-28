@@ -36,7 +36,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 public class AutonomousCommand extends CommandGroup
 {    
     public enum AutonType {
-        BASELINE, CENTER_SWITCH;
+        BASELINE, CENTER_SWITCH, ONE_CUBE_CENTER;
     }
     
 
@@ -52,6 +52,9 @@ public class AutonomousCommand extends CommandGroup
         initSubsystems();
         if (type == AutonType.CENTER_SWITCH) {
             switchAuton(fieldData.substring(0, 1).equals("L") ? true : false);
+        }
+        else if (type == AutonType.ONE_CUBE_CENTER) {
+            oneCubeCenter(fieldData.substring(0, 1).equals("L") ? true : false);
         }
         else
             baseline();
@@ -73,6 +76,24 @@ public class AutonomousCommand extends CommandGroup
     
     private void baseline () {
         addSequential (new CombinedPositionAnglePID(AutonomousConstants.BASELINE_DISTANCE, 0));
+    }
+
+    private void oneCubeCenter (boolean onLeft) {
+        FollowPath fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
+        false, null).zeroPigeonAtStart(false).resetSensors(true);
+        CommandGroup firstCube = new CommandGroup();
+            firstCube.addParallel(fpc1);
+            CommandGroup raiseElevatorFirstCube = new CommandGroup();
+                raiseElevatorFirstCube.addSequential(new PauseUntilPathBegins(fpc1, PauseType.END_OF_PATH, 1.9, fpc1.getTotalTime()));
+                raiseElevatorFirstCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT_AUTON));
+            firstCube.addParallel(raiseElevatorFirstCube);
+            CommandGroup outtakeFirstCube = new CommandGroup();
+                outtakeFirstCube.addSequential(new PauseUntilPathBegins(fpc1, PauseType.END_OF_PATH, 0.15, fpc1.getTotalTime()));
+                outtakeFirstCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+                        IntakeConstants.DECOMPRESS));
+                outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.17, IntakeType.OUTTAKE));
+            firstCube.addParallel(outtakeFirstCube);
+        addSequential(firstCube);
     }
     /**
      * The command to be performed for a switch autonomous.
