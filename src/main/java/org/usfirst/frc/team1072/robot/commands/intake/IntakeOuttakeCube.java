@@ -43,10 +43,10 @@ public class IntakeOuttakeCube extends Command
         }
         if (!intakeEnabled)
         {
-            if (oi.getDriverGamepad().getLeftTriggerPressed())
-                Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getLeftTrigger());
-            else if (oi.getDriverGamepad().getRightTriggerPressed())
-                Robot.intake.intakeOuttakeCube(-IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getRightTrigger());
+            if (oi.getDriverGamepad().getRightTriggerPressed())
+                Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getRightTrigger());
+            else if (oi.getDriverGamepad().getLeftTriggerPressed())
+                Robot.intake.intakeOuttakeCube(-IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getLeftTrigger());
             else
                 Robot.intake.intakeOuttakeCube(0);
         }
