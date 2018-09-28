@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+ /* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -616,12 +616,12 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 9000 / 4;
+        public static int MOTION_MAGIC_ACCEL = 9000;
         
         /**
          * The velocity constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_VEL = 2600 / 4;
+        public static int MOTION_MAGIC_VEL = 2600;
         
         /**
          * The allowable error for the motion magic closed loop.
@@ -631,7 +631,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal intaking.
          */
-        public static int INTAKE_HEIGHT = 300;
+        public static int INTAKE_HEIGHT = 2000;
         
         /**
          * The height (in encoder units) for optimal switch scoring.
@@ -905,6 +905,8 @@ public class RobotMap {
          * The right file name for the fifth autonomous path.
          */
         public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/path15 _right_detailed.csv";     
+    
+        public static final double BASELINE_DISTANCE = 15;
     }
 
     /**

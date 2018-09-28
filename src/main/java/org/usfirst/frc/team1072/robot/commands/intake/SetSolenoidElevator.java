@@ -8,6 +8,7 @@ import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import org.usfirst.frc.team1072.robot.RobotMap;
 
@@ -17,17 +18,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
  * @author Finn Frankis
  * @version 6/14/18
  */
-public class SetSolenoid extends InstantCommand {
-	/**
-	 * The key for the solenoid to be actuated in the solenoid map.
-	 */
-	private String solenoidKey;
-
-	/**
-	 * The intended state for the solenoid.
-	 */
-	private DoubleSolenoid.Value solenoidState;
-
+public class SetSolenoidElevator extends CommandGroup {
 	/**
 	 * Sets up the solenoid command, requiring the intake.
 	 * 
@@ -35,19 +26,16 @@ public class SetSolenoid extends InstantCommand {
 	 *              modified
 	 * @param state the state of the solenoid (forward, off, or reverse)
 	 */
-	public SetSolenoid(String key, DoubleSolenoid.Value state) {
+	public SetSolenoidElevator (String key, DoubleSolenoid.Value state) {
 		requires(Intake.pn);
-		solenoidKey = key;
-		solenoidState = state;
-	}
-
-	/**
-	 * Sets a given solenoid to a given state.
-	 */
-	public void initialize() {
-		if (solenoidKey.equals(IntakeConstants.UPDOWN_KEY) && solenoidState.equals(IntakeConstants.DOWN)
-				&& Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) <= ElevatorConstants.INTAKE_HEIGHT)
-				new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT).start();
-			Intake.pn.getSolenoid(solenoidKey).set(solenoidState);
+		
+		if (Intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).get() == IntakeConstants.DOWN && 
+				key.equals(IntakeConstants.COMPRESSDECOMPRESS_KEY)&&
+				state == IntakeConstants.COMPRESS) {
+			requires(Robot.el);
+			addSequential (new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
+		}
+		
+		addSequential (new SetSolenoid(key, state));
 	}
 }

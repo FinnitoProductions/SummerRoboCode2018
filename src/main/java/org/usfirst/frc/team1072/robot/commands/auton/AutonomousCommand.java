@@ -35,17 +35,26 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class AutonomousCommand extends CommandGroup
 {    
+    public enum AutonType {
+        BASELINE, CENTER_SWITCH;
+    }
+    
+
     /**
      * Constructs a new command
      * @param subsystems the list of subsystems
      */
-    public AutonomousCommand(Subsystem[] subsystems)
+    public AutonomousCommand(AutonType type, Subsystem[] subsystems, String fieldData)
     {
         for (Subsystem s : subsystems)
             requires(s);
 
         initSubsystems();
-        switchAuton(true);
+        if (type == AutonType.CENTER_SWITCH) {
+            switchAuton(fieldData.substring(0, 1).equals("L") ? true : false);
+        }
+        else
+            baseline();
     }
 
     
@@ -62,6 +71,9 @@ public class AutonomousCommand extends CommandGroup
         addSequential(initSubsystems);
     }
     
+    private void baseline () {
+        addSequential (new CombinedPositionAnglePID(AutonomousConstants.BASELINE_DISTANCE, 0));
+    }
     /**
      * The command to be performed for a switch autonomous.
      * @param onLeft true if the switch is on the left; false otherwise

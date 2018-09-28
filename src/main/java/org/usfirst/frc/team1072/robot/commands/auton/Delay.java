@@ -1,14 +1,14 @@
 package org.usfirst.frc.team1072.robot.commands.auton;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  * Accurately delays (when in a series of sequential commands) for a given amount of time.
  * @author Finn Frankis
  * @version Jul 10, 2018
  */
-public class Delay extends CommandGroup
+public class Delay extends Command
 {
     /**
      * The time for which this command should delay.

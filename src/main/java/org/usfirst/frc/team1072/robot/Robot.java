@@ -11,11 +11,13 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
+import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.AutonType;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.util.Conversions;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
@@ -63,7 +65,12 @@ public class Robot extends TimedRobot
     /**
      * The autonomous chooser.
      */
-    SendableChooser<Command> m_chooser = new SendableChooser<>();
+    SendableChooser<AutonType> center_chooser = new SendableChooser<AutonType>();
+    
+    private String gameData = "";
+    
+    private Subsystem[] subsystems;
+    
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -76,6 +83,10 @@ public class Robot extends TimedRobot
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         oi = OI.getInstance();
+
+        subsystems = new Subsystem[] {dt, el, intake, Intake.pn};
+        center_chooser.addObject("Center", AutonType.CENTER_SWITCH);
+        center_chooser.addObject("Not Center", AutonType.BASELINE);
     }
     
 
@@ -111,7 +122,6 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
-        m_autonomousCommand = new AutonomousCommand(new Subsystem[] {dt, el, intake, Intake.pn});
 
         m_autonomousCommand.start();
     }
@@ -121,6 +131,13 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
+        String newData = DriverStation.getInstance().getGameSpecificMessage();
+        if (gameData.length() != 3 || !newData.equals(gameData)) {
+        	gameData = newData;
+        	if (m_autonomousCommand != null)
+        		m_autonomousCommand.cancel();
+        	(m_autonomousCommand = new AutonomousCommand (center_chooser.getSelected(), subsystems, newData)).start();
+        }
         Scheduler.getInstance().run();
     }
 
