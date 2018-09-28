@@ -49,7 +49,7 @@ public class OI
     /**
      * The gamepad for use by the operator.
      */
-    private GamepadWrapper operatorGamepad = new GamepadWrapper(OPERATOR_PORT);
+    private GamepadWrapper operatorGamepad = new GamepadWrapper(OPERATOR_PORT, GamepadWrapper.SETTING_LOGITECH);
     
     /**
      * Constructs a new OI.

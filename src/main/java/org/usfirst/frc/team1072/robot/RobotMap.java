@@ -25,7 +25,7 @@ public class RobotMap {
     /**
      * Whether or not two controllers are being used to control the robot.
      */
-    public static boolean TWO_CONTROLLERS = false;
+    public static boolean TWO_CONTROLLERS = true;
     
     /**
      * The joystick port.
