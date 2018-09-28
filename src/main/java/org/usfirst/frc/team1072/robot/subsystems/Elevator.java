@@ -150,7 +150,7 @@ public class Elevator extends Subsystem
      */
     private void elInvertControllers()
     {
-        getBottomLeftVictor().setInverted(ElevatorConstants.BOTTOM_LEFT_VICTOR_INVERT);
+        //getBottomLeftVictor().setInverted(ElevatorConstants.BOTTOM_LEFT_VICTOR_INVERT);
     }
 
     /**
