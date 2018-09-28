@@ -81,7 +81,7 @@ public class DriveWithVelocity extends Command
             double map_max = (ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (1 - ElevatorConstants.THROTTLE_PERCENT) * elevatorPercent + ElevatorConstants.MIN_THROTTLE_SPEED +-(ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (1 - ElevatorConstants.THROTTLE_PERCENT); 
             leftX = map(leftX, -1, 1, -map_max, map_max);
         }
-        double x = Math.pow(Math.abs(leftX), 4) * Math.signum(leftX);
+        double x = Math.pow(Math.abs(leftX), 8) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
         double left = (y + x * Math.abs(x)) / k;
