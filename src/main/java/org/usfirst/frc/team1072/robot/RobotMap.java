@@ -663,6 +663,9 @@ public class RobotMap {
          */
         public static boolean TALON_PHASE = true;
         
+        public static double THROTTLE_PERCENT = 0.5;
+
+        public static double MIN_THROTTLE_SPEED = 0.25;
     }
     
     /**

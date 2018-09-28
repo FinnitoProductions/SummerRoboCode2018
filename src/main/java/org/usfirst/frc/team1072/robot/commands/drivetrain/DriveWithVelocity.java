@@ -4,6 +4,8 @@ import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
@@ -74,12 +76,16 @@ public class DriveWithVelocity extends Command
             leftY -= Math.signum(leftY) * deadband;
             leftY /= 1-deadband;
         }
-        
+        double elevatorPercent = Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) / ElevatorConstants.SCALE_HIGH_HEIGHT;
+        if (elevatorPercent > ElevatorConstants.THROTTLE_PERCENT) {
+            double map_max = (ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (1 - ElevatorConstants.THROTTLE_PERCENT) * elevatorPercent + (-ElevatorConstants.MIN_THROTTLE_SPEED + (ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (ElevatorConstants.THROTTLE_PERCENT)); 
+            leftX = map(leftX, -1, 1, -map_max, map_max);
+        }
         double x = Math.pow(Math.abs(leftX), 4) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
-        double left = (y + x) / k;
-        double right = (y - x) / k;
+        double left = (y + x * Math.abs(x)) / k;
+        double right = (y - x * Math.abs(x)) / k;
 
         double leftSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
@@ -97,6 +103,10 @@ public class DriveWithVelocity extends Command
     /**
      * Determines whether the command has finished.
      */
-    protected boolean isFinished() { return false; }
+    protected boolean isFinished() { return true; }
 
+    double map (double x, double in_min, double in_max, double out_min, double out_max) {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+    
 }
