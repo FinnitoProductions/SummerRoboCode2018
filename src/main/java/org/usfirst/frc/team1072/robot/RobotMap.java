@@ -616,12 +616,12 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 9000 / 4;
+        public static int MOTION_MAGIC_ACCEL = 9000;
         
         /**
          * The velocity constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_VEL = 2600 / 4;
+        public static int MOTION_MAGIC_VEL = 2600;
         
         /**
          * The allowable error for the motion magic closed loop.

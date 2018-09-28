@@ -7,6 +7,7 @@ import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -74,18 +75,23 @@ public class DriveWithVelocity extends Command
             leftY /= 1-deadband;
         }
         
-        double driveSpeed = Conversions.convertSpeed
+        double x = leftX;
+        double y = leftY;
+        double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
+        double left = (y + x * Math.abs(x)) / k;
+        double right = (y - x * Math.abs(x)) / k;
+
+        double leftSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
-                        leftY * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
+                        left * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                         SpeedUnit.ENCODER_UNITS);
-        double turnSpeed = Conversions.convertSpeed
-                (SpeedUnit.FEET_PER_SECOND, 
-                        -1 * leftX * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
-                        SpeedUnit.ENCODER_UNITS);
+        double rightSpeed = Conversions.convertSpeed
+        (SpeedUnit.FEET_PER_SECOND, 
+                right * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
+                SpeedUnit.ENCODER_UNITS);
         
-        Robot.dt.arcadeDriveVelocity(
-                driveSpeed, 
-                turnSpeed); 
+        Robot.dt.getLeftTalon().set(ControlMode.Velocity, leftSpeed);
+        Robot.dt.getRightTalon().set(ControlMode.Velocity, rightSpeed);
     }
     
     /**
