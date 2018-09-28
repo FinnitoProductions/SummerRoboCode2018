@@ -616,7 +616,7 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 9000;
+        public static int MOTION_MAGIC_ACCEL = 4500;
         
         /**
          * The velocity constant for the motion magic closed loop.
@@ -631,7 +631,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal intaking.
          */
-        public static int INTAKE_HEIGHT = 500;
+        public static int INTAKE_HEIGHT = 250;
         
         /**
          * The height (in encoder units) for optimal switch scoring.
