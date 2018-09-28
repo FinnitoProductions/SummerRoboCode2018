@@ -29,7 +29,7 @@ public class OI
     /**
      * The deadband (range for which no input is received) of the black XBOX controller.
      */
-    public static final double BLACK_XBOX_DEADBAND = 0.15;
+    public static final double BLACK_XBOX_DEADBAND = 0.05;
     
     /**
      * The deadband (range for which no input is received) of the Logitech controller.

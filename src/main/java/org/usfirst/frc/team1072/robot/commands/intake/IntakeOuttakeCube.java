@@ -32,12 +32,12 @@ public class IntakeOuttakeCube extends Command
         boolean intakeEnabled = false;
         if (RobotMap.TWO_CONTROLLERS)
         {
-            double leftInput = oi.getOperatorGamepad().getLeftX();
+            double leftInput = oi.getOperatorGamepad().getLeftY();
             double rightInput = oi.getOperatorGamepad().getRightY();
-            if (leftInput > OI.LOGITECH_DEADBAND || rightInput > OI.LOGITECH_DEADBAND)
+            if (Math.abs(leftInput) > OI.LOGITECH_DEADBAND || Math.abs(rightInput) > OI.LOGITECH_DEADBAND)
             {
-                Robot.intake.setLeft(leftInput > OI.LOGITECH_DEADBAND ? -leftInput : 0);
-                Robot.intake.setRight(rightInput > OI.LOGITECH_DEADBAND ? -rightInput : 0);
+                Robot.intake.setLeft(Math.abs(leftInput) > OI.LOGITECH_DEADBAND ? -leftInput * 0.8 : 0);
+                Robot.intake.setRight(Math.abs(rightInput) > OI.LOGITECH_DEADBAND ? -rightInput * 0.8 : 0);
                 intakeEnabled = true;
             }
         }

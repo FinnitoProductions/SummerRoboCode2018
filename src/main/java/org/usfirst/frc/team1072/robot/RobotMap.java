@@ -616,12 +616,12 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 9000/5;
+        public static int MOTION_MAGIC_ACCEL = 9000/2;
         
         /**
          * The velocity constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_VEL = 2600/5;
+        public static int MOTION_MAGIC_VEL = 2600/2;
         
         /**
          * The allowable error for the motion magic closed loop.
@@ -631,7 +631,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal intaking.
          */
-        public static int INTAKE_HEIGHT = 2000;
+        public static int INTAKE_HEIGHT = 500;
         
         /**
          * The height (in encoder units) for optimal switch scoring.
@@ -646,7 +646,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal high scale scoring.
          */
-        public static int SCALE_HIGH_HEIGHT = 34000;
+        public static int SCALE_HIGH_HEIGHT = 35000;
         
         /**
          * The position at which the elevator should begin to slow.
@@ -756,6 +756,8 @@ public class RobotMap {
          * The constant to signify that the intake will be controlled without manual control.
          */
         public static boolean NO_MANUAL_INTAKE = false;
+
+        public static boolean RIGHT_TALON_INVERTED = true;
     }
     
     /**

@@ -68,6 +68,10 @@ public class Intake extends Subsystem
         leftTalon = new TalonSRX(CAN_IDs.INTAKE_TALON_LEFT);
         rightTalon = new TalonSRX(CAN_IDs.INTAKE_TALON_RIGHT);
     }
+
+    protected void invertTalons () {
+        rightTalon.setInverted(IntakeConstants.RIGHT_TALON_INVERTED);
+    }
     /**
      * Initializes the command using the ports for the left and right Talons.
      */
@@ -102,6 +106,7 @@ public class Intake extends Subsystem
      */
     public void talonInit()
     {
+        invertTalons();
         intakeSetNeutralMode(NeutralMode.Brake);
         intakeSetCurrentLimit(IntakeConstants.PEAK_CURRENT_LIMIT, IntakeConstants.PEAK_TIME_MS,
                 IntakeConstants.CONTINUOUS_CURRENT_LIMIT);

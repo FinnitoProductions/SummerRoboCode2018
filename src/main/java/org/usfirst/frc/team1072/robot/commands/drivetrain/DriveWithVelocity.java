@@ -75,11 +75,11 @@ public class DriveWithVelocity extends Command
             leftY /= 1-deadband;
         }
         
-        double x = leftX;
+        double x = Math.pow(Math.abs(leftX), 4) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
-        double left = (y + x * Math.abs(x)) / k;
-        double right = (y - x * Math.abs(x)) / k;
+        double left = (y + x) / k;
+        double right = (y - x) / k;
 
         double leftSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
@@ -97,6 +97,6 @@ public class DriveWithVelocity extends Command
     /**
      * Determines whether the command has finished.
      */
-    protected boolean isFinished() { return true; }
+    protected boolean isFinished() { return false; }
 
 }
