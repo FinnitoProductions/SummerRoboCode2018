@@ -35,7 +35,7 @@ public class MoveElevatorVelocity extends Command
     public void execute() 
     { 
         OI oi = OI.getInstance();
-        if (Math.abs(oi.getDriverGamepad().getRightY()) > OI.BLACK_XBOX_DEADBAND)
+        if (Math.abs(oi.getDriverGamepad().getRightY()) > OI.BLACK_XBOX_ELEVATOR_DEADBAND)
         {
             boolean isDown = oi.getDriverGamepad().getRightY() < 0;
             boolean reverseBeyondLimit = Robot.el.getBottomRightTalon()
