@@ -6,6 +6,7 @@ import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
+import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidStealth;
 import org.usfirst.frc.team1072.robot.commands.intake.ToggleSolenoid;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 
@@ -104,13 +105,13 @@ public class OI
         }
         
         CommandGroup lowerAndOpen = new CommandGroup();
-            lowerAndOpen.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
+            lowerAndOpen.addSequential(new SetSolenoidStealth(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
             lowerAndOpen.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
-            lowerAndOpen.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+            lowerAndOpen.addSequential(new SetSolenoidStealth(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
         driverGamepad.getButtonA().whenPressed(lowerAndOpen);
         
         CommandGroup raiseElevatorIntake = new CommandGroup();
-        	raiseElevatorIntake.addParallel(new SetSolenoid (IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+        	raiseElevatorIntake.addParallel(new SetSolenoidStealth (IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
         	raiseElevatorIntake.addParallel(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
         driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT));
         driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_LOW_HEIGHT));

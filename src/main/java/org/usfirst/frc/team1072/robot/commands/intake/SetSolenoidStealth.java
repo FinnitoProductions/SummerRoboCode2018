@@ -17,11 +17,16 @@ import org.usfirst.frc.team1072.robot.RobotMap;
  * @author Finn Frankis
  * @version 6/14/18
  */
-public class ToggleSolenoid extends InstantCommand {
+public class SetSolenoidStealth extends InstantCommand {
 	/**
 	 * The key for the solenoid to be actuated in the solenoid map.
 	 */
 	private String solenoidKey;
+
+	/**
+	 * The intended state for the solenoid.
+	 */
+	private DoubleSolenoid.Value solenoidState;
 
 	/**
 	 * Sets up the solenoid command, requiring the intake.
@@ -30,12 +35,18 @@ public class ToggleSolenoid extends InstantCommand {
 	 *              modified
 	 * @param state the state of the solenoid (forward, off, or reverse)
 	 */
-	public ToggleSolenoid(String key) {
-        solenoidKey = key;
-    }
-    
-    public void initialize () {
-        Intake.pn.getSolenoid(solenoidKey).set(Intake.pn.getSolenoid(solenoidKey).get().equals(DoubleSolenoid.Value.kForward) ? 
-        DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
-    }
+	public SetSolenoidStealth (String key, DoubleSolenoid.Value state) {
+		solenoidKey = key;
+		solenoidState = state;
+	}
+
+	/**
+	 * Sets a given solenoid to a given state.
+	 */
+	public void initialize() {
+		if (solenoidKey.equals(IntakeConstants.UPDOWN_KEY) && solenoidState.equals(IntakeConstants.DOWN)
+				&& Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) <= ElevatorConstants.INTAKE_HEIGHT)
+				new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT).start();
+			Intake.pn.getSolenoid(solenoidKey).set(solenoidState);
+	}
 }

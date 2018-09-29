@@ -923,7 +923,7 @@ public class RobotMap {
 
         public static final int SCALE_DISTANCE_FEET = 27;
 
-        public static final double BASELINE_DISTANCE = 15;
+        public static final double BASELINE_DISTANCE = 13;
 
         public static final double SCALE_OUTTAKE_TIME = 10;
     }

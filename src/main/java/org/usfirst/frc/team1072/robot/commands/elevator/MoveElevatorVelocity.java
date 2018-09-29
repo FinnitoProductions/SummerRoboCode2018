@@ -63,5 +63,5 @@ public class MoveElevatorVelocity extends Command
      * 
      * @return true if the command has finished; false otherwise
      */
-    protected boolean isFinished() { return true; }
+    protected boolean isFinished() { return false; }
 }
