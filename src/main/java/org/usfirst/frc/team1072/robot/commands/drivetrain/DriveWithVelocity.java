@@ -81,13 +81,14 @@ public class DriveWithVelocity extends Command
         }
         double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition
         (RobotMap.PRIMARY_PID_INDEX)) / ElevatorConstants.SCALE_HIGH_HEIGHT;
-        System.out.println(elevatorPercent);
+        
         
         double elevatorScale = 1;
         if (elevatorPercent > ElevatorConstants.THROTTLE_PERCENT) {
             elevatorScale = 1-elevatorPercent*(1-ElevatorConstants.MIN_THROTTLE_SPEED);
         }
 
+        System.out.println(elevatorScale);
         double x = Math.pow(Math.abs(leftX), 8) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
