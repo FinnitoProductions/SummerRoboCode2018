@@ -32,6 +32,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
  */
 public class Robot extends TimedRobot
 {
+    public static final RobotLocation location = RobotLocation.LEFT;
+
     /**
      * The drivetrain on the robot.
      */
@@ -124,8 +126,6 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
-
-        m_autonomousCommand.start();
     }
 
     /**
@@ -138,7 +138,7 @@ public class Robot extends TimedRobot
         	gameData = newData;
         	if (m_autonomousCommand != null)
         		m_autonomousCommand.cancel();
-        	(m_autonomousCommand = new AutonomousCommand (loc_chooser.getSelected(), subsystems, newData)).start();
+        	(m_autonomousCommand = new AutonomousCommand (location, subsystems, newData)).start();
         }
         Scheduler.getInstance().run();
     }

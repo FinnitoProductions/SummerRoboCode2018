@@ -167,13 +167,13 @@ public class RobotMap {
          * The nominal output (or the constant output percemt such that static friction is more easily broken)
          * for the left.
          */
-        public static double NOMINAL_OUTPUT_LEFT = 0.04; //0.084;
+        public static double NOMINAL_OUTPUT_LEFT = 0.1; //0.084;
         
         /**
          * The nominal output (or the constant output percent such that static friction is more easily broken)
          * for the right.
          */
-        public static double NOMINAL_OUTPUT_RIGHT = 0.04; //0.084;
+        public static double NOMINAL_OUTPUT_RIGHT = 0.1; //0.084;
         
         /**
          * The peak output (or the maximum possible output percent) for the left.
@@ -513,7 +513,7 @@ public class RobotMap {
         /**
          * The peak current limit for any control.
          */
-        public static int PEAK_CURRENT_LIMIT = 10; // 25
+        public static int PEAK_CURRENT_LIMIT = 25; // 25
         
         /**
          * The time (in ms) at which the peak current limit is valid.
@@ -523,7 +523,7 @@ public class RobotMap {
         /**
          * The continuous current limit for non-manual control.
          */
-        public static int CONTINOUS_CURRENT_LIMIT = 5; //15
+        public static int CONTINOUS_CURRENT_LIMIT = 15; //15
         
         /**
          * The PID slot to house motion magic constants.
@@ -621,7 +621,7 @@ public class RobotMap {
         /**
          * The velocity constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_VEL = 2600;
+        public static int MOTION_MAGIC_VEL = 5000;
         
         /**
          * The allowable error for the motion magic closed loop.

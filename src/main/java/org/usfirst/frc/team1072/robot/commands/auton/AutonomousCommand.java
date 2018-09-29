@@ -56,8 +56,8 @@ public class AutonomousCommand extends CommandGroup
             requires(s);
 
         initSubsystems();
-
-        if (location == RobotLocation.LEFT) {
+        
+        /*if (location == RobotLocation.LEFT) {
             if (fieldData.equals("LLL"))
                 sideScale(ON_LEFT);
             else if (fieldData.equals("RLR")) 
@@ -86,7 +86,9 @@ public class AutonomousCommand extends CommandGroup
                 sideScale(ON_RIGHT);
             else if (fieldData.equals("LRL"))
                 sideScale(ON_RIGHT);
-        }
+        }*/
+
+        baseline();
     }
 
     

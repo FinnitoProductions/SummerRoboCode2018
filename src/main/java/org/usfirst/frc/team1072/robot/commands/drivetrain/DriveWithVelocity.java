@@ -89,23 +89,23 @@ public class DriveWithVelocity extends Command
         }
 
         System.out.println(elevatorScale);
-        double x = Math.pow(Math.abs(leftX), 8) * Math.signum(leftX);
+        double x = 0.8 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
         double left = (y + x * Math.abs(x)) / k;
         double right = (y - x * Math.abs(x)) / k;
 
-        double leftSpeed = Conversions.convertSpeed
+        /*double leftSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
                         elevatorScale * left * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                         SpeedUnit.ENCODER_UNITS);
         double rightSpeed = Conversions.convertSpeed
         (SpeedUnit.FEET_PER_SECOND, 
                 elevatorScale * right * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
-                SpeedUnit.ENCODER_UNITS);
+                SpeedUnit.ENCODER_UNITS);*/
         
-        Robot.dt.getLeftTalon().set(ControlMode.Velocity, leftSpeed);
-        Robot.dt.getRightTalon().set(ControlMode.Velocity, rightSpeed);
+        Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, left);
+        Robot.dt.getRightTalon().set(ControlMode.PercentOutput, right);
     }
     
     /**
