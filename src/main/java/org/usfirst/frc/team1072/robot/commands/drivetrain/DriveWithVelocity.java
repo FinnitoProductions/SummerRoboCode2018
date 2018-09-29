@@ -79,12 +79,15 @@ public class DriveWithVelocity extends Command
             leftY -= Math.signum(leftY) * deadband;
             leftY /= 1-deadband;
         }
-        double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)) / ElevatorConstants.SCALE_HIGH_HEIGHT;
+        double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition
+        (RobotMap.PRIMARY_PID_INDEX)) / ElevatorConstants.SCALE_HIGH_HEIGHT;
         System.out.println(elevatorPercent);
+        
+        double elevatorScale = 1;
         if (elevatorPercent > ElevatorConstants.THROTTLE_PERCENT) {
-            double map_max = (ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (1 - ElevatorConstants.THROTTLE_PERCENT) * elevatorPercent + ElevatorConstants.MIN_THROTTLE_SPEED +-(ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (1 - ElevatorConstants.THROTTLE_PERCENT); 
-            leftX = map(leftX, -1, 1, -map_max, map_max);
+            elevatorScale = 1-elevatorPercent*(1-ElevatorConstants.MIN_THROTTLE_SPEED);
         }
+
         double x = Math.pow(Math.abs(leftX), 8) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
@@ -93,11 +96,11 @@ public class DriveWithVelocity extends Command
 
         double leftSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
-                        left * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
+                        elevatorScale * left * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                         SpeedUnit.ENCODER_UNITS);
         double rightSpeed = Conversions.convertSpeed
         (SpeedUnit.FEET_PER_SECOND, 
-                right * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
+                elevatorScale * right * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                 SpeedUnit.ENCODER_UNITS);
         
         Robot.dt.getLeftTalon().set(ControlMode.Velocity, leftSpeed);
