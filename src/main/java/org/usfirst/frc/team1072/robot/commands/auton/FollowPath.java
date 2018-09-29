@@ -25,6 +25,7 @@ import org.usfirst.frc.team1072.util.Conversions;
 
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Trajectory;
 import jaci.pathfinder.Trajectory.Segment;
 
@@ -250,6 +251,7 @@ public class FollowPath extends Command
         imc.getMotionProfileStatus(motionStatus);
         controllers.get(imc)[STAT_INDEX] = motionStatus;
         //;
+        SmartDashboard.putNumber("Left Encoder - Right Encoder", Robot.dt.getLeftTalon().getSelectedSensorPosition(0) - Robot.dt.getRightTalon().getSelectedSensorPosition(0));
         switch(pathState)
         {
             // ready to begin loading trajectories
