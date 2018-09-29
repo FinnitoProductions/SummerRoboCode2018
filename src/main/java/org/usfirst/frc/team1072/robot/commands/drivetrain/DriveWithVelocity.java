@@ -92,8 +92,8 @@ public class DriveWithVelocity extends Command
         double x = 0.8 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
-        double left = (y + x * Math.abs(x)) / k;
-        double right = (y - x * Math.abs(x)) / k;
+        double left = elevatorScale * (y + x * Math.abs(x)) / k;
+        double right = elevatorScale * (y - x * Math.abs(x)) / k;
 
         /*double leftSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
@@ -111,7 +111,7 @@ public class DriveWithVelocity extends Command
     /**
      * Determines whether the command has finished.
      */
-    protected boolean isFinished() { return true; }
+    protected boolean isFinished() { return false; }
 
     double map (double x, double in_min, double in_max, double out_min, double out_max) {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;

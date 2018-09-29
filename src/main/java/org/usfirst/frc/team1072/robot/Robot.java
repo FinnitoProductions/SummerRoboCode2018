@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Represents the central code for the robot.
@@ -160,7 +161,7 @@ public class Robot extends TimedRobot
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
-        dt.zeroPigeon(); 
+        dt.zeroPigeon();
     }
 
     /**
@@ -169,6 +170,12 @@ public class Robot extends TimedRobot
     public void teleopPeriodic() 
     {
           Scheduler.getInstance().run();
+          SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
+    }
+
+    @Override
+    public void robotPeriodic() {
+        SmartDashboard.putData("Robot Location", loc_chooser);
     }
     
     /**
