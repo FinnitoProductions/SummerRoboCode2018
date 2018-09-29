@@ -10,6 +10,7 @@ package org.usfirst.frc.team1072.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.AutonType;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
@@ -157,7 +158,7 @@ public class Robot extends TimedRobot
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
-        dt.zeroPigeon(); 
+        dt.zeroPigeon();
     }
 
     /**

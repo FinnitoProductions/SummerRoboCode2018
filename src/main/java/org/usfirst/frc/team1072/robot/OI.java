@@ -85,7 +85,7 @@ public class OI
         
         CommandGroup lowerAndOpen = new CommandGroup();
             lowerAndOpen.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
-            lowerAndOpen.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+            lowerAndOpen.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
             lowerAndOpen.addParallel(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
         driverGamepad.getButtonA().whenPressed(lowerAndOpen);
         
