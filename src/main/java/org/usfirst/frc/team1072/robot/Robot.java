@@ -93,6 +93,8 @@ public class Robot extends TimedRobot
         loc_chooser.addObject ("Left", RobotLocation.LEFT);
         loc_chooser.addObject ("Center", RobotLocation.CENTER);
         loc_chooser.addObject ("Right", RobotLocation.RIGHT);
+
+        SmartDashboard.putData("Robot Location", loc_chooser);
     }
     
 
@@ -173,7 +175,7 @@ public class Robot extends TimedRobot
 
     @Override
     public void robotPeriodic() {
-        SmartDashboard.putData("Robot Location", loc_chooser);
+        
     }
     
     /**
