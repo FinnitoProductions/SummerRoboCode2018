@@ -170,6 +170,11 @@ public class Robot extends TimedRobot
           Scheduler.getInstance().run();
           SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
     }
+
+    @Override
+    public void robotPeriodic() {
+        SmartDashboard.putData("Robot Location", loc_chooser);
+    }
     
     /**
      * Gets the current time elapsed since the program started.
