@@ -10,6 +10,7 @@ package org.usfirst.frc.team1072.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.AutonType;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
@@ -126,6 +127,8 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
+        intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).set(IntakeConstants.UP);
+        intake.pn.getSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY).set(IntakeConstants.COMPRESS);
     }
 
     /**
