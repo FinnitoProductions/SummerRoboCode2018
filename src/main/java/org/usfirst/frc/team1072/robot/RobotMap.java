@@ -360,7 +360,7 @@ public class RobotMap {
         /**
          * The D constant for the position closed loop on the left.
          */
-        public static double POS_KD_LEFT = 16;//40;//40;
+        public static double POS_KD_LEFT = 30;//40;//40;
         
         /**
          * The integral zone constant for the position closed loop on the left.
@@ -385,7 +385,7 @@ public class RobotMap {
         /**
          * The D constant for the position closed loop on the right.
          */
-        public static double POS_KD_RIGHT = 16;//40;
+        public static double POS_KD_RIGHT = 30;//40;
         
         /**
          * The integral zone constant for the position closed loop on the right.
@@ -469,7 +469,7 @@ public class RobotMap {
         /**
          * The P constant for the motion profile closed loop on the right.
          */
-        public static double MOTION_PROF_KP_RIGHT = 0.8;
+        public static double MOTION_PROF_KP_RIGHT = 0.5;//0.8;
         
         /**
          * The I constant for the motion profile closed loop on the right.
@@ -632,6 +632,8 @@ public class RobotMap {
          * The height (in encoder units) for optimal intaking.
          */
         public static int INTAKE_HEIGHT = 250;
+
+        public static int RAISE_HEIGHT = 1000;
         
         /**
          * The height (in encoder units) for optimal switch scoring.

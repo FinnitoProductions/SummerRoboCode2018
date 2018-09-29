@@ -88,7 +88,6 @@ public class DriveWithVelocity extends Command
             elevatorScale = 1-elevatorPercent*(1-ElevatorConstants.MIN_THROTTLE_SPEED);
         }
 
-        System.out.println(elevatorScale);
         double x = 0.8 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);
         double y = leftY;
         double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));

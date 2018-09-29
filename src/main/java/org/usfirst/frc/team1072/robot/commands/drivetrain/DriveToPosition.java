@@ -9,6 +9,8 @@ import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Drives the robot to a given position using PID.
  * @author Finn Frankis
@@ -82,6 +84,7 @@ public class DriveToPosition extends PositionCommand
     
     public void end()
     {
+        System.out.println("Command finished");
         Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
         Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
     }

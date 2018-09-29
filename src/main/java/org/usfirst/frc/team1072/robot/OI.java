@@ -6,6 +6,7 @@ import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
+import org.usfirst.frc.team1072.robot.commands.intake.ToggleSolenoid;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -80,13 +81,16 @@ public class OI
             DPadButtonWrapper downDPadOperator = new DPadButtonWrapper (operatorGamepad, 180);
             DPadButtonWrapper rightDPadOperator = new DPadButtonWrapper (operatorGamepad, 90);
 
+            operatorGamepad.getButtonBumperLeft().whenPressed(new ToggleSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY));
+            operatorGamepad.getButtonBumperRight().whenPressed(new ToggleSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY));
+            
             CommandGroup compressRaise = new CommandGroup();
-            	compressRaise.addSequential(new ConditionalCommand(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT)) {
+            	compressRaise.addSequential(new ConditionalCommand(new MoveElevatorMotionMagic(ElevatorConstants.RAISE_HEIGHT)) {
 
 					@Override
 					protected boolean condition() {
 						return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 
-								ElevatorConstants.INTAKE_HEIGHT;
+								ElevatorConstants.RAISE_HEIGHT;
 					}
             		
             	});
@@ -95,12 +99,14 @@ public class OI
             downDPadOperator.whenPressed( new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
             leftDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
             rightDPadOperator.whenPressed(compressRaise);
+
+
         }
         
         CommandGroup lowerAndOpen = new CommandGroup();
+            lowerAndOpen.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
             lowerAndOpen.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
             lowerAndOpen.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
-            lowerAndOpen.addParallel(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
         driverGamepad.getButtonA().whenPressed(lowerAndOpen);
         
         CommandGroup raiseElevatorIntake = new CommandGroup();

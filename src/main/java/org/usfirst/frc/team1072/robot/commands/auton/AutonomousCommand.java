@@ -68,13 +68,13 @@ public class AutonomousCommand extends CommandGroup
         }
         else if (location == RobotLocation.CENTER) {
             if (fieldData.equals("LLL"))
-                oneCubeCenter(ON_LEFT);
+                switchAuton(ON_LEFT);
             else if (fieldData.equals("RLR")) 
                 oneCubeCenter(ON_RIGHT);
             else if (fieldData.equals("RRR"))
                 oneCubeCenter(ON_RIGHT);
             else if (fieldData.equals("LRL"))
-                oneCubeSide(ON_LEFT);
+                switchAuton(ON_LEFT);
         }
         else if (location == RobotLocation.RIGHT) {
             if (fieldData.equals("LLL"))
@@ -86,7 +86,6 @@ public class AutonomousCommand extends CommandGroup
             else if (fieldData.equals("LRL"))
                 sideScale(ON_RIGHT);
         }*/
-
         baseline();
     }
 
@@ -113,7 +112,7 @@ public class AutonomousCommand extends CommandGroup
     }
 
     private void baseline () {
-        addSequential (new CombinedPositionAnglePID(AutonomousConstants.BASELINE_DISTANCE, 0));
+        addSequential (new DriveToPosition(AutonomousConstants.BASELINE_DISTANCE));
     }
 
     private void oneCubeSide (boolean onLeft) {
@@ -238,7 +237,7 @@ public class AutonomousCommand extends CommandGroup
                 outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.34, IntakeType.OUTTAKE));
             scoreSecondCube.addParallel(outtakeSecondCube);
         addSequential(scoreSecondCube); 
-        getThirdCube();
+        //getThirdCube();
     }
     
     /**

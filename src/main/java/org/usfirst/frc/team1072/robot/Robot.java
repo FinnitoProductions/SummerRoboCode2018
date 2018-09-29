@@ -34,7 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot
 {
-    public static final RobotLocation location = RobotLocation.LEFT;
+    public static final RobotLocation location = RobotLocation.CENTER;
 
     /**
      * The drivetrain on the robot.
@@ -140,8 +140,8 @@ public class Robot extends TimedRobot
      */
     public void autonomousPeriodic()
     { 
-        String newData = DriverStation.getInstance().getGameSpecificMessage();
-        /*if (newData.length() == 3 && (gameData.length() != 3 || !newData.equals(gameData))) {
+        /*String newData = DriverStation.getInstance().getGameSpecificMessage();
+        if (newData.length() == 3 && (gameData.length() != 3 || !newData.equals(gameData))) {
         	gameData = newData;
         	if (m_autonomousCommand != null)
         		m_autonomousCommand.cancel();
@@ -172,6 +172,7 @@ public class Robot extends TimedRobot
      */
     public void teleopPeriodic() 
     {
+        SmartDashboard.putNumber("Pigeon Yaw", Robot.dt.getPigeonYaw());
           Scheduler.getInstance().run();
           SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
     }
