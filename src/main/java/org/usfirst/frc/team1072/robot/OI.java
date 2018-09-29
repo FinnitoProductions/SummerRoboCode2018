@@ -7,6 +7,8 @@ import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 
+import edu.wpi.first.wpilibj.command.CommandGroup;
+
 
 
 /**
@@ -81,7 +83,12 @@ public class OI
             rightDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
         }
         
-        driverGamepad.getButtonA().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
+        CommandGroup lowerAndOpen = new CommandGroup();
+            lowerAndOpen.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
+            lowerAndOpen.addSequential(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
+            lowerAndOpen.addParallel(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
+        driverGamepad.getButtonA().whenPressed(lowerAndOpen);
+        
         driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT));
         driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_LOW_HEIGHT));
         driverGamepad.getButtonY().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));     
