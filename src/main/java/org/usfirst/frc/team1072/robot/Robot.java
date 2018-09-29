@@ -130,6 +130,8 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
+        intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).set(IntakeConstants.UP);
+        intake.pn.getSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY).set(IntakeConstants.COMPRESS);
     }
 
     /**
