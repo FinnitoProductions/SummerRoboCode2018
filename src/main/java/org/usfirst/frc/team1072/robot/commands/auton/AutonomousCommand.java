@@ -3,6 +3,7 @@ package org.usfirst.frc.team1072.robot.commands.auton;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import org.omg.CORBA.TRANSACTION_UNAVAILABLE;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.AutonomousConstants;
@@ -35,29 +36,57 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class AutonomousCommand extends CommandGroup
 {    
+    public static final boolean ON_LEFT = true;
+    public static final boolean ON_RIGHT = false;
     public enum AutonType {
-        BASELINE, CENTER_SWITCH, ONE_CUBE_CENTER;
+        BASELINE, CENTER_SWITCH, ONE_CUBE_CENTER, ONE_CUBE_SIDE, LEFT_SWITCH, RIGHT_SWITCH;
     }
     
+    public enum RobotLocation {
+        LEFT, CENTER, RIGHT;
+    }
 
     /**
      * Constructs a new command
      * @param subsystems the list of subsystems
      */
-    public AutonomousCommand(AutonType type, Subsystem[] subsystems, String fieldData)
+    public AutonomousCommand(RobotLocation location, Subsystem[] subsystems, String fieldData)
     {
         for (Subsystem s : subsystems)
             requires(s);
 
         initSubsystems();
-        if (type == AutonType.CENTER_SWITCH) {
-            switchAuton(fieldData.substring(0, 1).equals("L") ? true : false);
+
+        if (location == RobotLocation.LEFT) {
+            if (fieldData.equals("LLL"))
+                sideScale(ON_LEFT);
+            else if (fieldData.equals("RLR")) 
+                sideScale(ON_LEFT);
+            else if (fieldData.equals("RRR"))
+                baseline();
+            else if (fieldData.equals("LRL"))
+                oneCubeSide(ON_LEFT);
         }
-        else if (type == AutonType.ONE_CUBE_CENTER) {
-            oneCubeCenter(fieldData.substring(0, 1).equals("L") ? true : false);
+        else if (location == RobotLocation.CENTER) {
+            if (fieldData.equals("LLL"))
+                oneCubeCenter(ON_LEFT);
+            else if (fieldData.equals("RLR")) 
+                oneCubeCenter(ON_RIGHT);
+            else if (fieldData.equals("RRR"))
+                oneCubeCenter(ON_RIGHT);
+            else if (fieldData.equals("LRL"))
+                oneCubeSide(ON_LEFT);
         }
-        else
-            baseline();
+        else if (location == RobotLocation.RIGHT) {
+            if (fieldData.equals("LLL"))
+                baseline();
+            else if (fieldData.equals("RLR")) 
+                oneCubeSide(ON_RIGHT);
+            else if (fieldData.equals("RRR"))
+                sideScale(ON_RIGHT);
+            else if (fieldData.equals("LRL"))
+                sideScale(ON_RIGHT);
+        }
     }
 
     
@@ -74,10 +103,37 @@ public class AutonomousCommand extends CommandGroup
         addSequential(initSubsystems);
     }
     
+    private void sideScale (boolean onLeft) {
+        addSequential (new CombinedPositionAnglePID(AutonomousConstants.SCALE_DISTANCE_FEET, 0));
+        addSequential(new TurnToAngle((onLeft ? 1 : -1) * 90));
+        addSequential (new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
+        addSequential(new SetSolenoid (IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
+        addSequential (new IntakeOuttakeTimed(AutonomousConstants.SCALE_OUTTAKE_TIME, IntakeType.OUTTAKE));
+    }
+
     private void baseline () {
         addSequential (new CombinedPositionAnglePID(AutonomousConstants.BASELINE_DISTANCE, 0));
     }
 
+    private void oneCubeSide (boolean onLeft) {
+        FollowPath path = setupPathFollowerArc (AutonomousConstants.LLS_P1_SWITCH_LEFT, AutonomousConstants.LLS_P1_SWITCH_RIGHT, false, null).zeroPigeonAtStart(false).resetSensors(true);
+        CommandGroup driveFirstCube = new CommandGroup();
+            if (onLeft)
+                driveFirstCube.addSequential (path);
+            else
+                driveFirstCube.addSequential (setupPathFollowerArc (AutonomousConstants.RRS_P1_SWITCH_LEFT, AutonomousConstants.RRS_P1_SWITCH_RIGHT, false, null).zeroPigeonAtStart(false).resetSensors(true));
+        addParallel(driveFirstCube);
+        CommandGroup raiseElevatorFirstCube = new CommandGroup();
+                raiseElevatorFirstCube.addSequential(new PauseUntilPathBegins(path, PauseType.END_OF_PATH, 1.9, path.getTotalTime()));
+                raiseElevatorFirstCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT_AUTON));
+        addParallel(raiseElevatorFirstCube);
+        CommandGroup outtakeFirstCube = new CommandGroup();
+            outtakeFirstCube.addSequential(new PauseUntilPathBegins(path, PauseType.END_OF_PATH, 0.15, path.getTotalTime()));
+            outtakeFirstCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+                    IntakeConstants.DECOMPRESS));
+            outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.17, IntakeType.OUTTAKE));
+        addParallel(outtakeFirstCube);
+    }
     private void oneCubeCenter (boolean onLeft) {
         FollowPath fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 
         false, null).zeroPigeonAtStart(false).resetSensors(true);
