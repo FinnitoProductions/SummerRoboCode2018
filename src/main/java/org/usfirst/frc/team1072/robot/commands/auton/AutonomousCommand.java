@@ -113,7 +113,7 @@ public class AutonomousCommand extends CommandGroup
     }
 
     private void baseline () {
-        addSequential (new DriveToPosition(AutonomousConstants.BASELINE_DISTANCE));
+        addSequential (new CombinedPositionAnglePID(AutonomousConstants.BASELINE_DISTANCE, 0));
     }
 
     private void oneCubeSide (boolean onLeft) {

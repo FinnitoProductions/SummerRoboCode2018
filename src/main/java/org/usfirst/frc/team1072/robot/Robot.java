@@ -130,8 +130,9 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
-        intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).set(IntakeConstants.UP);
-        intake.pn.getSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY).set(IntakeConstants.COMPRESS);
+        (m_autonomousCommand = new AutonomousCommand (location, subsystems, "")).start();
+        /*intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).set(IntakeConstants.UP);
+        intake.pn.getSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY).set(IntakeConstants.COMPRESS);*/
     }
 
     /**
@@ -140,12 +141,12 @@ public class Robot extends TimedRobot
     public void autonomousPeriodic()
     { 
         String newData = DriverStation.getInstance().getGameSpecificMessage();
-        if (newData.length() == 3 && (gameData.length() != 3 || !newData.equals(gameData))) {
+        /*if (newData.length() == 3 && (gameData.length() != 3 || !newData.equals(gameData))) {
         	gameData = newData;
         	if (m_autonomousCommand != null)
         		m_autonomousCommand.cancel();
         	(m_autonomousCommand = new AutonomousCommand (location, subsystems, newData)).start();
-        }
+        }*/
         Scheduler.getInstance().run();
     }
 
