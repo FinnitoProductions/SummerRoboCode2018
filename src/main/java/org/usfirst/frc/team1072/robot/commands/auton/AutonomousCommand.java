@@ -3,7 +3,6 @@ package org.usfirst.frc.team1072.robot.commands.auton;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.omg.CORBA.TRANSACTION_UNAVAILABLE;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.AutonomousConstants;
@@ -114,7 +113,7 @@ public class AutonomousCommand extends CommandGroup
     }
 
     private void baseline () {
-        addSequential (new CombinedPositionAnglePID(AutonomousConstants.BASELINE_DISTANCE, 0));
+        addSequential (new DriveToPosition(AutonomousConstants.BASELINE_DISTANCE));
     }
 
     private void oneCubeSide (boolean onLeft) {
