@@ -39,6 +39,9 @@ public class DriveWithVelocity extends Command
     
     public void initialize()
     {
+        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor
+        (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+
         Robot.dt.selectProfileSlots(DrivetrainConstants.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         
         
@@ -76,7 +79,8 @@ public class DriveWithVelocity extends Command
             leftY -= Math.signum(leftY) * deadband;
             leftY /= 1-deadband;
         }
-        double elevatorPercent = Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) / ElevatorConstants.SCALE_HIGH_HEIGHT;
+        double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX)) / ElevatorConstants.SCALE_HIGH_HEIGHT;
+        System.out.println(elevatorPercent);
         if (elevatorPercent > ElevatorConstants.THROTTLE_PERCENT) {
             double map_max = (ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (1 - ElevatorConstants.THROTTLE_PERCENT) * elevatorPercent + (-ElevatorConstants.MIN_THROTTLE_SPEED + (ElevatorConstants.MIN_THROTTLE_SPEED - 1) / (ElevatorConstants.THROTTLE_PERCENT)); 
             leftX = map(leftX, -1, 1, -map_max, map_max);
