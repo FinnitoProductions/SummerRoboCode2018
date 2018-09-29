@@ -574,7 +574,7 @@ public class RobotMap {
         /**
          * The allowable error for the position closed loop.
          */
-        public static int POS_ALLOWABLE_ERROR = 1000;
+        public static int POS_ALLOWABLE_ERROR = 500;
         
         /**
          * The soft limit in the forward (upward) direction.
