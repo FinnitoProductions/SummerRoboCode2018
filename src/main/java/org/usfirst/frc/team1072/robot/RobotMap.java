@@ -616,7 +616,7 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 9000;
+        public static int MOTION_MAGIC_ACCEL = 4500;
         
         /**
          * The velocity constant for the motion magic closed loop.
@@ -631,7 +631,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal intaking.
          */
-        public static int INTAKE_HEIGHT = 500;
+        public static int INTAKE_HEIGHT = 250;
         
         /**
          * The height (in encoder units) for optimal switch scoring.
@@ -911,7 +911,19 @@ public class RobotMap {
          */
         public static final String CLH_P5_RIGHT = "/home/summer2018/paths/2_cube/center_left_headon(switch_2)/5f/path15 _right_detailed.csv";     
     
+        public static final String LLS_P1_SWITCH_LEFT = "/home/summer2018/paths/1_cube/left_left_side(switch_1)/left_left_side(switch_1)_left_detailed.csv";
+
+        public static final String LLS_P1_SWITCH_RIGHT = "/home/summer2018/paths/1_cube/left_left_side(switch_1)/left_left_side(switch_1)_right_detailed.csv";
+
+        public static final String RRS_P1_SWITCH_LEFT = "/home/summer2018/paths/1_cube/right_right_side(switch_1)/right_right_side(switch_1)_left_detailed.csv";
+
+        public static final String RRS_P1_SWITCH_RIGHT = "/home/summer2018/paths/1_cube/right_right_side(switch_1)/right_right_side(switch_1)_right_detailed.csv";
+
+        public static final int SCALE_DISTANCE_FEET = 27;
+
         public static final double BASELINE_DISTANCE = 15;
+
+        public static final double SCALE_OUTTAKE_TIME = 10;
     }
 
     /**

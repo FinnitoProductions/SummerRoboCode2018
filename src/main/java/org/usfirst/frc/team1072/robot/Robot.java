@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.AutonType;
+import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
@@ -20,11 +21,9 @@ import org.usfirst.frc.team1072.util.Conversions;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Represents the central code for the robot.
@@ -66,7 +65,7 @@ public class Robot extends TimedRobot
     /**
      * The autonomous chooser.
      */
-    SendableChooser<AutonType> center_chooser = new SendableChooser<AutonType>();
+    SendableChooser<RobotLocation> loc_chooser = new SendableChooser<RobotLocation>();
     
     private String gameData = "";
     
@@ -87,9 +86,9 @@ public class Robot extends TimedRobot
 
         subsystems = new Subsystem[] {dt, el, intake, Intake.pn};
     
-        center_chooser.addObject("Center", AutonType.CENTER_SWITCH);
-        center_chooser.addObject("Not Center", AutonType.BASELINE);
-        center_chooser.addObject("Center One Cube", AutonType.ONE_CUBE_CENTER);
+        loc_chooser.addObject ("Left", RobotLocation.LEFT);
+        loc_chooser.addObject ("Center", RobotLocation.CENTER);
+        loc_chooser.addObject ("Right", RobotLocation.RIGHT);
     }
     
 
@@ -135,11 +134,11 @@ public class Robot extends TimedRobot
     public void autonomousPeriodic()
     { 
         String newData = DriverStation.getInstance().getGameSpecificMessage();
-        if (gameData.length() != 3 || !newData.equals(gameData)) {
+        if (newData.length() == 3 && (gameData.length() != 3 || !newData.equals(gameData))) {
         	gameData = newData;
         	if (m_autonomousCommand != null)
         		m_autonomousCommand.cancel();
-        	(m_autonomousCommand = new AutonomousCommand (center_chooser.getSelected(), subsystems, newData)).start();
+        	(m_autonomousCommand = new AutonomousCommand (loc_chooser.getSelected(), subsystems, newData)).start();
         }
         Scheduler.getInstance().run();
     }
