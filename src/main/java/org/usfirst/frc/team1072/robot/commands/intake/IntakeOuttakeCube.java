@@ -36,8 +36,8 @@ public class IntakeOuttakeCube extends Command
             double rightInput = oi.getOperatorGamepad().getRightY();
             if (Math.abs(leftInput) > OI.LOGITECH_DEADBAND || Math.abs(rightInput) > OI.LOGITECH_DEADBAND)
             {
-                Robot.intake.setLeft(Math.abs(leftInput) > OI.LOGITECH_DEADBAND ? -leftInput * 0.8 : 0);
-                Robot.intake.setRight(Math.abs(rightInput) > OI.LOGITECH_DEADBAND ? -rightInput * 0.8 : 0);
+                Robot.intake.setLeft(Math.abs(leftInput) > OI.LOGITECH_DEADBAND ? -leftInput * Math.abs(leftInput) * 0.8 : 0);
+                Robot.intake.setRight(Math.abs(rightInput) > OI.LOGITECH_DEADBAND ? -rightInput * Math.abs(rightInput) * 0.8 : 0);
                 intakeEnabled = true;
             }
         }

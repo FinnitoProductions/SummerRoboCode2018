@@ -648,7 +648,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal high scale scoring.
          */
-        public static int SCALE_HIGH_HEIGHT = 35000;
+        public static int SCALE_HIGH_HEIGHT = 34000;
         
         /**
          * The position at which the elevator should begin to slow.
