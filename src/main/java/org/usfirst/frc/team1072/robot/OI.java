@@ -2,11 +2,13 @@ package org.usfirst.frc.team1072.robot;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
+import org.usfirst.frc.team1072.harkerrobolib.commands.CancelCommand;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
+import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeIndefinite;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidStealth;
 import org.usfirst.frc.team1072.robot.commands.intake.ToggleSolenoid;
@@ -15,6 +17,7 @@ import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
+import edu.wpi.first.wpilibj.command.InstantCommand;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -108,6 +111,23 @@ public class OI
             leftDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
             rightDPadOperator.whenPressed(compressRaise);
 
+            Command halfSpeed = new IntakeOuttakeIndefinite (0.5);
+            operatorGamepad.getButtonA().whenPressed(halfSpeed);
+            operatorGamepad.getButtonA().whenReleased(new CancelCommand(halfSpeed));
+            Command threeQuarterSpeed = new IntakeOuttakeIndefinite(0.75);
+            operatorGamepad.getButtonY().whenPressed(threeQuarterSpeed);
+            operatorGamepad.getButtonY().whenReleased(new CancelCommand(threeQuarterSpeed));
+            
+            operatorGamepad.getButtonX().whenPressed(new InstantCommand() {
+                public void initialize() {
+                    System.out.println("A PRESSED");
+                }
+            });
+            operatorGamepad.getButtonB().whenPressed(new InstantCommand() {
+                public void initialize() {
+                    System.out.println("A PRESSED");
+                }
+            });
 
         }
         
@@ -119,7 +139,12 @@ public class OI
         
         CommandGroup raiseElevatorIntake = new CommandGroup();
         	raiseElevatorIntake.addParallel(new SetSolenoidStealth (IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-        	raiseElevatorIntake.addParallel(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
+            raiseElevatorIntake.addParallel(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
+            raiseElevatorIntake.addParallel(new InstantCommand() {
+                public void initialize() {
+                    System.out.println("Y PRESSED");
+                }
+            });
         driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT));
         driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_LOW_HEIGHT));
         driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);     

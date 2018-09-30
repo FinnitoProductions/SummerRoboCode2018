@@ -616,12 +616,12 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 4500;
+        public static int MOTION_MAGIC_ACCEL = 3000;
         
         /**
          * The velocity constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_VEL = 7500;
+        public static int MOTION_MAGIC_VEL = 9000;
         
         /**
          * The allowable error for the motion magic closed loop.
@@ -648,7 +648,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal high scale scoring.
          */
-        public static int SCALE_HIGH_HEIGHT = 34000;
+        public static int SCALE_HIGH_HEIGHT = 34700;
         
         /**
          * The position at which the elevator should begin to slow.

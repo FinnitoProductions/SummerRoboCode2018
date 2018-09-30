@@ -148,6 +148,7 @@ public class Robot extends TimedRobot
         	(m_autonomousCommand = new AutonomousCommand (location, subsystems, newData)).start();
         }*/
         Scheduler.getInstance().run();
+        
         /*SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightTalon().getClosedLoopError(0));
         SmartDashboard.putNumber ("Auxiliary Error", Robot.dt.getRightTalon().getClosedLoopError(1));*/
     }
@@ -174,9 +175,10 @@ public class Robot extends TimedRobot
      */
     public void teleopPeriodic() 
     {
-        SmartDashboard.putNumber("Pigeon Yaw", Robot.dt.getPigeonYaw());
+          
           Scheduler.getInstance().run();
-          SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
+          SmartDashboard.putNumber("Elevator Height", Robot.el.getBottomRightTalon().getSelectedSensorPosition(0));
+          //SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
     }
 
     @Override
