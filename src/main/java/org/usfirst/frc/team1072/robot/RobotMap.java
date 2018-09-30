@@ -606,7 +606,7 @@ public class RobotMap {
         /**
          * The I constant for the motion magic closed loop.
          */
-        public static double MOTION_MAGIC_KI = 0.0001;
+        public static double MOTION_MAGIC_KI = 0.001;
         
         /**
          * The D constant for the motion magic closed loop.
@@ -616,24 +616,24 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 6000;
+        public static int MOTION_MAGIC_ACCEL = 4500;
         
         /**
          * The velocity constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_VEL = 5000;
+        public static int MOTION_MAGIC_VEL = 7500;
         
         /**
          * The allowable error for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ALLOWABLE_ERROR = 150;
+        public static int MOTION_MAGIC_ALLOWABLE_ERROR = 500;
         
         /**
          * The height (in encoder units) for optimal intaking.
          */
-        public static int INTAKE_HEIGHT = 450;
+        public static int INTAKE_HEIGHT = 0;
 
-        public static int RAISE_HEIGHT = 10000;
+        public static int RAISE_HEIGHT = 1000;
         
         /**
          * The height (in encoder units) for optimal switch scoring.
@@ -643,7 +643,7 @@ public class RobotMap {
         /**
          * The height (in encoder units) for optimal low scale scoring.
          */
-        public static int SCALE_LOW_HEIGHT = 20000;
+        public static int SCALE_LOW_HEIGHT = 22500;
         
         /**
          * The height (in encoder units) for optimal high scale scoring.

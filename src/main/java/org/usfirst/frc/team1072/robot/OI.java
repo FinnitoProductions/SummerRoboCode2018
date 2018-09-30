@@ -95,8 +95,9 @@ public class OI
 					protected boolean condition() {
                         Elevator.getInstance().getBottomRightTalon().configSelectedFeedbackSensor
                         (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-                        SmartDashboard.putNumber("Elevator Position", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
-						return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 
+                        System.out.println(Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
+                        
+                        return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 
 								ElevatorConstants.RAISE_HEIGHT;
 					}
             		
