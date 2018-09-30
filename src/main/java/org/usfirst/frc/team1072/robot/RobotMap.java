@@ -464,17 +464,17 @@ public class RobotMap {
         /**
          * The F constant for the motion profile closed loop on the right.
          */
-        public static double MOTION_PROF_KF_RIGHT = 0.235;
+        public static double MOTION_PROF_KF_RIGHT = 0.25;//0.22;//0.235;
         
         /**
          * The P constant for the motion profile closed loop on the right.
          */
-        public static double MOTION_PROF_KP_RIGHT = 0.5;//0.8;
+        public static double MOTION_PROF_KP_RIGHT = 1.2;//0.8;
         
         /**
          * The I constant for the motion profile closed loop on the right.
          */
-        public static double MOTION_PROF_KI_RIGHT = 0.0001;
+        public static double MOTION_PROF_KI_RIGHT = 0;//0.0001;
         
         /**
          * The D constant for the motion profile closed loop on the right.
@@ -616,7 +616,7 @@ public class RobotMap {
         /**
          * The acceleration constant for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ACCEL = 4500;
+        public static int MOTION_MAGIC_ACCEL = 6000;
         
         /**
          * The velocity constant for the motion magic closed loop.
@@ -626,14 +626,14 @@ public class RobotMap {
         /**
          * The allowable error for the motion magic closed loop.
          */
-        public static int MOTION_MAGIC_ALLOWABLE_ERROR = 1000;
+        public static int MOTION_MAGIC_ALLOWABLE_ERROR = 150;
         
         /**
          * The height (in encoder units) for optimal intaking.
          */
-        public static int INTAKE_HEIGHT = 250;
+        public static int INTAKE_HEIGHT = 450;
 
-        public static int RAISE_HEIGHT = 1000;
+        public static int RAISE_HEIGHT = 10000;
         
         /**
          * The height (in encoder units) for optimal switch scoring.
@@ -780,7 +780,7 @@ public class RobotMap {
         /**
          * The P constant for pigeon motion profiling.
          */
-        public static double MOT_PROF_KP = 1.1;
+        public static double MOT_PROF_KP = 2.6;//1.3;//1.1;
         
         /**
          * The I constant for pigeon motion profiling.
@@ -790,7 +790,7 @@ public class RobotMap {
         /**
          * The D constant for pigeon motion profiling.
          */
-        public static double MOT_PROF_KD = 7;
+        public static double MOT_PROF_KD = 15;
         
         /**
          * The F constant for pigeon turning in place.

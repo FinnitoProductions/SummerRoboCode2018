@@ -86,7 +86,10 @@ public class AutonomousCommand extends CommandGroup
             else if (fieldData.equals("LRL"))
                 sideScale(ON_RIGHT);
         }*/
+        //sideScale(ON_LEFT);
         baseline();
+        //switchAuton(ON_LEFT);
+        //oneCubeSide(ON_LEFT);
     }
 
     
@@ -104,7 +107,7 @@ public class AutonomousCommand extends CommandGroup
     }
     
     private void sideScale (boolean onLeft) {
-        addSequential (new CombinedPositionAnglePID(AutonomousConstants.SCALE_DISTANCE_FEET, 0));
+        addSequential (new DriveToPosition(AutonomousConstants.SCALE_DISTANCE_FEET));
         addSequential(new TurnToAngle((onLeft ? 1 : -1) * 90));
         addSequential (new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
         addSequential(new SetSolenoid (IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
@@ -116,23 +119,13 @@ public class AutonomousCommand extends CommandGroup
     }
 
     private void oneCubeSide (boolean onLeft) {
-        FollowPath path = setupPathFollowerArc (AutonomousConstants.LLS_P1_SWITCH_LEFT, AutonomousConstants.LLS_P1_SWITCH_RIGHT, false, null).zeroPigeonAtStart(false).resetSensors(true);
-        CommandGroup driveFirstCube = new CommandGroup();
-            if (onLeft)
-                driveFirstCube.addSequential (path);
-            else
-                driveFirstCube.addSequential (setupPathFollowerArc (AutonomousConstants.RRS_P1_SWITCH_LEFT, AutonomousConstants.RRS_P1_SWITCH_RIGHT, false, null).zeroPigeonAtStart(false).resetSensors(true));
-        addParallel(driveFirstCube);
-        CommandGroup raiseElevatorFirstCube = new CommandGroup();
-                raiseElevatorFirstCube.addSequential(new PauseUntilPathBegins(path, PauseType.END_OF_PATH, 1.9, path.getTotalTime()));
-                raiseElevatorFirstCube.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT_AUTON));
-        addParallel(raiseElevatorFirstCube);
-        CommandGroup outtakeFirstCube = new CommandGroup();
-            outtakeFirstCube.addSequential(new PauseUntilPathBegins(path, PauseType.END_OF_PATH, 0.15, path.getTotalTime()));
-            outtakeFirstCube.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
+        PositionCommand driveToPosition = new DriveToPosition (AutonomousConstants.BASELINE_DISTANCE * 0.75);
+            addSequential(driveToPosition);
+            addSequential (new TurnToAngle ((onLeft ? -1 : 1) * 90));
+            addSequential(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT_AUTON));
+            addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY,
                     IntakeConstants.DECOMPRESS));
-            outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.17, IntakeType.OUTTAKE));
-        addParallel(outtakeFirstCube);
+            addSequential(new IntakeOuttakeTimed(0.17, IntakeType.OUTTAKE));
     }
     private void oneCubeCenter (boolean onLeft) {
         FollowPath fpc1 = setupPathFollowerArc(AutonomousConstants.CLH_P1_LEFT, AutonomousConstants.CLH_P1_RIGHT, 

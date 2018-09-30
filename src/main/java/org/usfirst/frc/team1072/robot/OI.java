@@ -1,5 +1,7 @@
 package org.usfirst.frc.team1072.robot;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
 import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
@@ -13,6 +15,7 @@ import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -90,12 +93,15 @@ public class OI
 
 					@Override
 					protected boolean condition() {
+                        Elevator.getInstance().getBottomRightTalon().configSelectedFeedbackSensor
+                        (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                        SmartDashboard.putNumber("Elevator Position", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
 						return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 
 								ElevatorConstants.RAISE_HEIGHT;
 					}
             		
             	});
-            	compressRaise.addSequential(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+            	compressRaise.addSequential(new SetSolenoidStealth(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
             upDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
             downDPadOperator.whenPressed( new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
             leftDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
