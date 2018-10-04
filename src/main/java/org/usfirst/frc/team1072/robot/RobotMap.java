@@ -355,7 +355,7 @@ public class RobotMap {
         /**
          * The I constant for the position closed loop on the left.
          */
-        public static double POS_KI_LEFT = 0.00001;//0.00001;//0.001;//.0008;//0.00001;//0.00001; 
+        public static double POS_KI_LEFT = 0.0001;//0.00001;//0.001;//.0008;//0.00001;//0.00001; 
         
         /**
          * The D constant for the position closed loop on the left.
@@ -380,12 +380,12 @@ public class RobotMap {
         /**
          * The I constant for the position closed loop on the right.
          */
-        public static double POS_KI_RIGHT = 0.00001;//0.00001;//0.001;//0.00001;//0.00001;
+        public static double POS_KI_RIGHT = 0.0001;//0.00001;//0.001;//0.00001;//0.00001;
         
         /**
          * The D constant for the position closed loop on the right.
          */
-        public static double POS_KD_RIGHT = 30;//40;
+        public static double POS_KD_RIGHT = 15;//30;//40;
         
         /**
          * The integral zone constant for the position closed loop on the right.
@@ -395,7 +395,7 @@ public class RobotMap {
         /**
          * The allowable error for the position closed loop.
          */
-        public static int POS_ALLOWABLE_ERROR = 200;
+        public static int POS_ALLOWABLE_ERROR = 500;
 
         /**
          * The wheel diameter on this drivetrain.
@@ -780,7 +780,7 @@ public class RobotMap {
         /**
          * The P constant for pigeon motion profiling.
          */
-        public static double MOT_PROF_KP = 2.6;//1.3;//1.1;
+        public static double MOT_PROF_KP = 0.8;//1.2;//2.6;//1.3;//1.1;
         
         /**
          * The I constant for pigeon motion profiling.
@@ -790,7 +790,7 @@ public class RobotMap {
         /**
          * The D constant for pigeon motion profiling.
          */
-        public static double MOT_PROF_KD = 15;
+        public static double MOT_PROF_KD = 5;//6;//15;
         
         /**
          * The F constant for pigeon turning in place.
@@ -840,7 +840,7 @@ public class RobotMap {
         /**
          * The allowable error for an angle closed loop.
          */
-        public static final int ANGLE_ALLOWABLE_ERROR = 50;
+        public static final int ANGLE_ALLOWABLE_ERROR = 35;
         
         /**
          * The left sensor phase for a turn in place.
@@ -921,11 +921,14 @@ public class RobotMap {
 
         public static final String RRS_P1_SWITCH_RIGHT = "/home/summer2018/paths/1_cube/right_right_side(switch_1)/right_right_side(switch_1)_right_detailed.csv";
 
+        public static final String LEFT_SCALE_SNEAKY_LEFT = "/home/summer2018/paths/Test/Lscale/Lscale_left_Jaci.csv";
+        public static final String LEFT_SCALE_SNEAKY_RIGHT = "/home/summer2018/paths/Test/Lscale/Lscale_right_Jaci.csv";
+
         public static final int SCALE_DISTANCE_FEET = 27;
 
         public static final double BASELINE_DISTANCE = 13;
 
-        public static final double SCALE_OUTTAKE_TIME = 10;
+        public static final double SCALE_OUTTAKE_TIME = 15;
     }
 
     /**

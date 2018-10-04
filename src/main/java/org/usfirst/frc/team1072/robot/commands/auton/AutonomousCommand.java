@@ -87,7 +87,8 @@ public class AutonomousCommand extends CommandGroup
                 sideScale(ON_RIGHT);
         }*/
         //sideScale(ON_LEFT);
-        baseline();
+        //baseline();
+        sideScaleSneaky(ON_LEFT);
         //switchAuton(ON_LEFT);
         //oneCubeSide(ON_LEFT);
     }
@@ -106,6 +107,18 @@ public class AutonomousCommand extends CommandGroup
         addSequential(initSubsystems);
     }
     
+    private void sideScaleSneaky (boolean onLeft) {
+        if (onLeft) {
+            addSequential (setupPathFollowerArc(AutonomousConstants.LEFT_SCALE_SNEAKY_LEFT, AutonomousConstants.LEFT_SCALE_SNEAKY_RIGHT, 
+            false, null).zeroPigeonAtStart(true).resetSensors(true));
+            addSequential (new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
+            addSequential (new DriveToPosition(2.75));
+            addSequential(new SetSolenoid (IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
+            addSequential (new IntakeOuttakeTimed(AutonomousConstants.SCALE_OUTTAKE_TIME, IntakeType.OUTTAKE));
+            addSequential(new Delay(1));
+            addSequential (new DriveToPosition(-1.5));
+        }
+    }
     private void sideScale (boolean onLeft) {
         addSequential (new DriveToPosition(AutonomousConstants.SCALE_DISTANCE_FEET));
         addSequential(new TurnToAngle((onLeft ? 1 : -1) * 90));

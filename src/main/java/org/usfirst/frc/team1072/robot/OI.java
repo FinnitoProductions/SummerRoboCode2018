@@ -111,21 +111,20 @@ public class OI
             leftDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
             rightDPadOperator.whenPressed(compressRaise);
 
-            Command halfSpeed = new IntakeOuttakeIndefinite (0.5);
+            Command halfSpeed = new IntakeOuttakeIndefinite (0.4);
             operatorGamepad.getButtonA().whenPressed(halfSpeed);
             operatorGamepad.getButtonA().whenReleased(new CancelCommand(halfSpeed));
+
             Command threeQuarterSpeed = new IntakeOuttakeIndefinite(0.75);
             operatorGamepad.getButtonY().whenPressed(threeQuarterSpeed);
             operatorGamepad.getButtonY().whenReleased(new CancelCommand(threeQuarterSpeed));
-            
-            operatorGamepad.getButtonX().whenPressed(new InstantCommand() {
-                public void initialize() {
-                    System.out.println("A PRESSED");
-                }
-            });
+
+            operatorGamepad.getButtonX().whenPressed(threeQuarterSpeed);
+            operatorGamepad.getButtonX().whenReleased(new CancelCommand(threeQuarterSpeed));
+
             operatorGamepad.getButtonB().whenPressed(new InstantCommand() {
                 public void initialize() {
-                    System.out.println("A PRESSED");
+                    System.out.println("B PRESSED");
                 }
             });
 

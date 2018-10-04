@@ -149,8 +149,8 @@ public class Robot extends TimedRobot
         }*/
         Scheduler.getInstance().run();
         
-        /*SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightTalon().getClosedLoopError(0));
-        SmartDashboard.putNumber ("Auxiliary Error", Robot.dt.getRightTalon().getClosedLoopError(1));*/
+        SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightTalon().getClosedLoopError(0));
+        SmartDashboard.putNumber ("Auxiliary Error", Robot.dt.getRightTalon().getClosedLoopError(1));
     }
 
     /**
