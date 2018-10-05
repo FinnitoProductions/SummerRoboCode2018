@@ -2,6 +2,7 @@ package org.usfirst.frc.team1072.robot.commands.util;
 
 import org.usfirst.frc.team1072.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.InstantCommand;
 
 /**
@@ -13,6 +14,6 @@ public class PrintTimeToConsole extends InstantCommand
 {
     public void initialize()
     {
-        ;
+        System.out.println(Timer.getFPGATimestamp());
     }
 }
