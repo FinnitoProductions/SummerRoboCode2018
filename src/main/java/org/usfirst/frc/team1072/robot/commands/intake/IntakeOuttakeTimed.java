@@ -41,7 +41,6 @@ public class IntakeOuttakeTimed extends Command
      */
     public void execute()
     {
-        System.out.println("INTAKING");
         if (intake == IntakeType.OUTTAKE)
         {
             Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR);
@@ -54,9 +53,5 @@ public class IntakeOuttakeTimed extends Command
 
     protected boolean isFinished () {
         return Math.abs(Robot.getCurrentTimeMs() - startTime) >= timeout * Conversions.MS_PER_SEC;
-    }
-
-    protected void end () {
-        System.out.println("INTAKE COMMAND ENDED");
     }
 }
