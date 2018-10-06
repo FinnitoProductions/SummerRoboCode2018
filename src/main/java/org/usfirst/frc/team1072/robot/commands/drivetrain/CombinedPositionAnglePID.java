@@ -1,5 +1,12 @@
 package org.usfirst.frc.team1072.robot.commands.drivetrain;
 
+import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team1072.util.Conversions;
+import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
+import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -7,13 +14,6 @@ import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.SensorTerm;
-
-import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
-import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
 /**
  * Combines position and angle for a smoother PID-based autonomous.
@@ -68,8 +68,8 @@ public class CombinedPositionAnglePID extends PositionCommand
         Robot.dt.getLeftTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
         
-        Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
-        Robot.dt.getRightTalon().selectProfileSlot(DrivetrainConstants.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
+        Robot.dt.getRightTalon().selectProfileSlot(Drivetrain.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getRightTalon().selectProfileSlot(Drivetrain.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
         Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
         
         Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
@@ -92,7 +92,7 @@ public class CombinedPositionAnglePID extends PositionCommand
         
         Robot.dt.getLeftTalon().configSelectedFeedbackCoefficient(1, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, DrivetrainConstants.RIGHT_TALON_PHASE);
+        Robot.dt.setTalonSensorPhase(Drivetrain.LEFT_TALON_PHASE, Drivetrain.RIGHT_TALON_PHASE);
         
     }
     
@@ -118,7 +118,7 @@ public class CombinedPositionAnglePID extends PositionCommand
         if (passedMaxExecutes())
         {
             return Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX))
-                    < DrivetrainConstants.POS_ALLOWABLE_ERROR;
+                    < Drivetrain.POS_ALLOWABLE_ERROR;
         }
         //;
         return false;

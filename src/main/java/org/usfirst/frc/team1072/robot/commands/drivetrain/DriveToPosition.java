@@ -1,15 +1,13 @@
 package org.usfirst.frc.team1072.robot.commands.drivetrain;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.util.Conversions;
 import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 /**
  * Drives the robot to a given position using PID.
@@ -49,11 +47,11 @@ public class DriveToPosition extends PositionCommand
      */
     private void initPosition()
     {
-        Robot.dt.selectProfileSlots(DrivetrainConstants.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.selectProfileSlots(Drivetrain.POS_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.configBothFeedbackSensors(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
         
-        Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, DrivetrainConstants.RIGHT_TALON_PHASE);
+        Robot.dt.setTalonSensorPhase(Drivetrain.LEFT_TALON_PHASE, Drivetrain.RIGHT_TALON_PHASE);
         
     }
     

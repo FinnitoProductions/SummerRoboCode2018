@@ -3,7 +3,6 @@ package org.usfirst.frc.team1072.robot.subsystems;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.intake.SetCompressor;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -47,15 +46,15 @@ public class Pneumatics extends Subsystem
      */
     public Pneumatics ()
     {
-        c = new Compressor(IntakeConstants.COMPRESSOR_PORT);
+        c = new Compressor(Intake.COMPRESSOR_PORT);
         // stores all the solenoids by a String key representing their purpose (in RobotMap)
         solMap = new HashMap<String, DoubleSolenoid>();
         intake_updown = new DoubleSolenoid(/*RobotMap.FIRST_PCM_ID, */
-                IntakeConstants.INTAKE_UP_SOL, IntakeConstants.INTAKE_DOWN_SOL);
+                Intake.INTAKE_UP_SOL, Intake.INTAKE_DOWN_SOL);
         intake_compressdecompress = new DoubleSolenoid (/*RobotMap.FIRST_PCM_ID,*/
-                IntakeConstants.INTAKE_COMPRESS_SOL, IntakeConstants.INTAKE_DECOMPRESS_SOL); 
-        solMap.put(IntakeConstants.UPDOWN_KEY, intake_updown);
-        solMap.put(IntakeConstants.COMPRESSDECOMPRESS_KEY, intake_compressdecompress);
+                Intake.INTAKE_COMPRESS_SOL, Intake.INTAKE_DECOMPRESS_SOL); 
+        solMap.put(Intake.UPDOWN_KEY, intake_updown);
+        solMap.put(Intake.COMPRESSDECOMPRESS_KEY, intake_compressdecompress);
     }
     /**
      * Initializes the command, setting up all the objects and the map of solenoids.

@@ -7,19 +7,15 @@
 
 package org.usfirst.frc.team1072.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
-import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.AutonType;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.util.Conversions;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -82,7 +78,7 @@ public class Robot extends TimedRobot
      */
     public void robotInit() 
     {
-        Conversions.setWheelDiameter(DrivetrainConstants.WHEELDIAMETER);
+        Conversions.setWheelDiameter(Drivetrain.WHEELDIAMETER);
         intake = Intake.getInstance();
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
@@ -106,8 +102,8 @@ public class Robot extends TimedRobot
     public void disabledInit() 
     { 
         NeutralMode nm;
-        if (Robot.dt.getLeftTalon().getMotorOutputPercent() > DrivetrainConstants.NOMINAL_OUTPUT_LEFT * 1.5
-                && Robot.dt.getRightTalon().getMotorOutputPercent() > DrivetrainConstants.NOMINAL_OUTPUT_RIGHT * 1.5)
+        if (Robot.dt.getLeftTalon().getMotorOutputPercent() > Drivetrain.NOMINAL_OUTPUT_LEFT * 1.5
+                && Robot.dt.getRightTalon().getMotorOutputPercent() > Drivetrain.NOMINAL_OUTPUT_RIGHT * 1.5)
         {
             nm = NeutralMode.Brake;
         }

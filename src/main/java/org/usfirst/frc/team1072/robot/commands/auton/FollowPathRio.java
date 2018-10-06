@@ -1,10 +1,7 @@
 package org.usfirst.frc.team1072.robot.commands.auton;
 
-import java.util.Map;
-
-import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -73,14 +70,14 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 		
 		double angleErrorCurrent = leftPath[currentPointIdx].heading - leftTalon.getSelectedSensorPosition(PID_AUXILIARY);
 		angleErrorAccum += angleErrorCurrent * dt;
-		double gyroFactor = angleErrorCurrent * PigeonConstants.MOT_PROF_KP + angleErrorAccum * PigeonConstants.MOT_PROF_KI + 
-				(!hasRunOnce ? 0 : angleErrorCurrent - angleErrorPrev) / dt * PigeonConstants.MOT_PROF_KD;
+		double gyroFactor = angleErrorCurrent * Drivetrain.Pigeon.MOT_PROF_KP + angleErrorAccum * Drivetrain.Pigeon.MOT_PROF_KI + 
+				(!hasRunOnce ? 0 : angleErrorCurrent - angleErrorPrev) / dt * Drivetrain.Pigeon.MOT_PROF_KD;
 		angleErrorPrev = angleErrorCurrent;
 
-		double velocityDifference = (leftPoint.velocity - rightPoint.velocity) * PigeonConstants.MOT_PROF_KF;
+		double velocityDifference = (leftPoint.velocity - rightPoint.velocity) * Drivetrain.Pigeon.MOT_PROF_KF;
 		
-		double leftFeedForward = leftPoint.velocity * DrivetrainConstants.MOTION_PROF_KF_LEFT + velocityDifference;
-		double rightFeedForward = rightPoint.velocity * DrivetrainConstants.MOTION_PROF_KF_RIGHT - velocityDifference;
+		double leftFeedForward = leftPoint.velocity * Drivetrain.MOTION_PROF_KF_LEFT + velocityDifference;
+		double rightFeedForward = rightPoint.velocity * Drivetrain.MOTION_PROF_KF_RIGHT - velocityDifference;
 		
 		leftTalon.set(ControlMode.Position, leftPoint.position + gyroFactor, DemandType.ArbitraryFeedForward, leftFeedForward);
 		rightTalon.set(ControlMode.Position, rightPoint.position - gyroFactor, DemandType.ArbitraryFeedForward, rightFeedForward);

@@ -1,6 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands.auton;
 
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 
 /**
  * Follows a motion profile in an arc-like manner.
@@ -14,6 +14,6 @@ public class FollowPathArc extends FollowPath
      */
     public FollowPathArc()
     {
-        super(DrivetrainConstants.ANGLE_PID);
+        super(Drivetrain.ANGLE_PID);
     }
 }

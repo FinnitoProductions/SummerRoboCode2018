@@ -2,13 +2,13 @@ package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeCube;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -70,7 +70,7 @@ public class Intake extends Subsystem
     }
 
     protected void invertTalons () {
-        rightTalon.setInverted(IntakeConstants.RIGHT_TALON_INVERTED);
+        rightTalon.setInverted(Intake.RIGHT_TALON_INVERTED);
     }
     /**
      * Initializes the command using the ports for the left and right Talons.
@@ -108,8 +108,8 @@ public class Intake extends Subsystem
     {
         invertTalons();
         intakeSetNeutralMode(NeutralMode.Brake);
-        intakeSetCurrentLimit(IntakeConstants.PEAK_CURRENT_LIMIT, IntakeConstants.PEAK_TIME_MS,
-                IntakeConstants.CONTINUOUS_CURRENT_LIMIT);
+        intakeSetCurrentLimit(Intake.PEAK_CURRENT_LIMIT, Intake.PEAK_TIME_MS,
+                Intake.CONTINUOUS_CURRENT_LIMIT);
     }
 
     /**
@@ -188,5 +188,93 @@ public class Intake extends Subsystem
         getRightTalon().set(ControlMode.PercentOutput, speed);
     }
 
+    /**
+     * The CAN ID of the compressor.
+     */
+    public static final int COMPRESSOR_PORT = 0;
+    
+    /**
+     * The CAN ID of the PCM.
+     */
+    public static final int FIRST_PCM_ID = 0;
+    
+    /**
+     * The port of the solenoid to lower the intake.
+     */
+    public static final int INTAKE_DOWN_SOL = 1;
+    
+    /**
+     * The solenoid value for lowering the intake.
+     */
+    public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kReverse;
+    
+    /**
+     * The port of the solenoid to raise the intake.
+     */
+    public static final int INTAKE_UP_SOL = 3;
+    
+    /**
+     * The solenoid value for raising the intake.
+     */
+    public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kForward;
+    
+    /**
+     * The port of the solenoid to compress the intake.
+     */
+    public static final int INTAKE_COMPRESS_SOL = 0;
+    
+    /**
+     * The solenoid value for compressing the intake.
+     */
+    public static final DoubleSolenoid.Value COMPRESS = DoubleSolenoid.Value.kReverse;
+    
+    /**
+     * The port of the solenoid to decompress the intake.
+     */
+    public static final int INTAKE_DECOMPRESS_SOL = 2;
+    
+    /**
+     * The solenoid value for decompressing the intake.
+     */
+    public static final DoubleSolenoid.Value DECOMPRESS = DoubleSolenoid.Value.kForward;
+    
+    /**
+     * The key in the solenoid map of the up/down double solenoid.
+     */
+    public static final String UPDOWN_KEY = "UPDOWN";
+    
+    /**
+     * The key in the solenoid map of the compress/decompress double solenoid.
+     */
+    public static final String COMPRESSDECOMPRESS_KEY = "COMPRESSDE";
 
+    /**
+     * The direction of Talon input such that the intake will intake.
+     */
+    public static final double INTAKE_DIR = 1;
+    
+    /**
+     * The peak current limit for the intake.
+     */
+    public static int PEAK_CURRENT_LIMIT = 15;
+    
+    /**
+     * The time (in ms) for which the peak current limit remains in use.
+     */
+    public static int PEAK_TIME_MS = 2000;
+    
+    /**
+     * The continuous current limit for the intake.
+     */
+    public static int CONTINUOUS_CURRENT_LIMIT = 15;
+    
+    /**
+     * The constant to signify that the intake will be controlled without manual control.
+     */
+    public static boolean NO_MANUAL_INTAKE = false;
+
+    public static boolean RIGHT_TALON_INVERTED = true;
 }
+
+
+

@@ -2,8 +2,6 @@ package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorVelocity;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -69,7 +67,7 @@ public class Elevator extends Subsystem
     public void moveElevatorVelocity(double speed)
     {
         // feed forward counterracts gravity
-        bottomRightTalon.set(ControlMode.PercentOutput, speed, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
+        bottomRightTalon.set(ControlMode.PercentOutput, speed, DemandType.ArbitraryFeedForward, Elevator.POS_FGRAV);
     }
     
     /**
@@ -78,7 +76,7 @@ public class Elevator extends Subsystem
      */
     public void moveElevatorPosition(double position)
     {
-        bottomRightTalon.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
+        bottomRightTalon.set(ControlMode.Position, position, DemandType.ArbitraryFeedForward, Elevator.POS_FGRAV);
     }
     
     /**
@@ -87,7 +85,7 @@ public class Elevator extends Subsystem
      */
     public void moveElevatorMotionMagic(double targetPos)
     {
-        bottomRightTalon.set(ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward, ElevatorConstants.POS_FGRAV);
+        bottomRightTalon.set(ControlMode.MotionMagic, targetPos, DemandType.ArbitraryFeedForward, Elevator.POS_FGRAV);
     }
     
     /**
@@ -104,10 +102,10 @@ public class Elevator extends Subsystem
     public void talonInitTeleop()
     {
         talonInit();
-        elSetSoftLimit(ElevatorConstants.FORWARD_SOFT, ElevatorConstants.REVERSE_SOFT);
-        elSetCurrentLimit(ElevatorConstants.PEAK_CURRENT_LIMIT, ElevatorConstants.PEAK_TIME_MS,
-                ElevatorConstants.CONTINOUS_CURRENT_LIMIT);
-        elSetRampRate (ElevatorConstants.RAMP_RATE);
+        elSetSoftLimit(Elevator.FORWARD_SOFT, Elevator.REVERSE_SOFT);
+        elSetCurrentLimit(Elevator.PEAK_CURRENT_LIMIT, Elevator.PEAK_TIME_MS,
+                Elevator.CONTINOUS_CURRENT_LIMIT);
+        elSetRampRate (Elevator.RAMP_RATE);
         elConfigurePositionClosedLoop();
     }
     /**
@@ -202,23 +200,23 @@ public class Elevator extends Subsystem
      */
     private void elConfigurePositionClosedLoop()
     {
-        getBottomRightTalon().configNominalOutputForward(ElevatorConstants.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configNominalOutputForward(Elevator.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configNominalOutputReverse(-1 * ElevatorConstants.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configNominalOutputReverse(-1 * Elevator.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configPeakOutputForward(ElevatorConstants.PEAK_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configPeakOutputForward(Elevator.PEAK_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configPeakOutputReverse(-1 * ElevatorConstants.PEAK_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configPeakOutputReverse(-1 * Elevator.PEAK_OUTPUT, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kF(ElevatorConstants.POS_PID, ElevatorConstants.POS_KF, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kF(Elevator.POS_PID, Elevator.POS_KF, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kP(ElevatorConstants.POS_PID, ElevatorConstants.POS_KP, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kP(Elevator.POS_PID, Elevator.POS_KP, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kI(ElevatorConstants.POS_PID, ElevatorConstants.POS_KI, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kI(Elevator.POS_PID, Elevator.POS_KI, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().config_kD(ElevatorConstants.POS_PID, ElevatorConstants.POS_KD, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kD(Elevator.POS_PID, Elevator.POS_KD, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configAllowableClosedloopError(DrivetrainConstants.POS_PID, ElevatorConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(Drivetrain.POS_PID, Elevator.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
     }
     
     /**
@@ -227,16 +225,16 @@ public class Elevator extends Subsystem
     private void elConfigureMotionMagic()
     {
         // set motion magic port to be the velocity PID port 
-        getBottomRightTalon().selectProfileSlot(ElevatorConstants.MOTION_MAGIC_PID, RobotMap.PRIMARY_PID_INDEX);
-        getBottomRightTalon().config_kF(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KF, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kP(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KP, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kI(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KI, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kD(ElevatorConstants.MOTION_MAGIC_PID, ElevatorConstants.MOTION_MAGIC_KD, RobotMap.TIMEOUT);
+        getBottomRightTalon().selectProfileSlot(Elevator.MOTION_MAGIC_PID, RobotMap.PRIMARY_PID_INDEX);
+        getBottomRightTalon().config_kF(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KF, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kP(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KP, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kI(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KI, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kD(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KD, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configMotionCruiseVelocity(ElevatorConstants.MOTION_MAGIC_VEL, RobotMap.TIMEOUT);
-        getBottomRightTalon().configMotionAcceleration(ElevatorConstants.MOTION_MAGIC_ACCEL, RobotMap.TIMEOUT);
+        getBottomRightTalon().configMotionCruiseVelocity(Elevator.MOTION_MAGIC_VEL, RobotMap.TIMEOUT);
+        getBottomRightTalon().configMotionAcceleration(Elevator.MOTION_MAGIC_ACCEL, RobotMap.TIMEOUT);
         
-        getBottomRightTalon().configAllowableClosedloopError(DrivetrainConstants.VEL_PID, ElevatorConstants.MOTION_MAGIC_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(Drivetrain.VEL_PID, Elevator.MOTION_MAGIC_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
         
     }
 
@@ -298,5 +296,180 @@ public class Elevator extends Subsystem
         if (el == null) el = new Elevator();
         return el;
     }
+    
+    /**
+     * The height to which the elevator should raise for a switch autonomous (in encoder units).
+     */ 
+    public static final double SWITCH_HEIGHT_AUTON = 8000;
+    
+    /**
+     * The height to which the elevator should raise for the third cube in a
+     *  switch autonomous (in encoder units).
+     */
+    public static final double SWITCH_HEIGHT_THIRD_CUBE = 5000;
+    
+    /**
+     * The continuous current limit when in manual control.
+     */
+    public static int MANUAL_CURRENT_LIMIT_CONT = 10;
+    
+    /**
+     * The peak current limit for any control.
+     */
+    public static int PEAK_CURRENT_LIMIT = 25; // 25
+    
+    /**
+     * The time (in ms) at which the peak current limit is valid.
+     */
+    public static int PEAK_TIME_MS = 750;
+    
+    /**
+     * The continuous current limit for non-manual control.
+     */
+    public static int CONTINOUS_CURRENT_LIMIT = 15; //15
+    
+    /**
+     * The PID slot to house motion magic constants.
+     */
+    public static int MOTION_MAGIC_PID = 0;
+    
+    /**
+     * The PID slot to house position constants.
+     */
+    public static int POS_PID = 1;
+    
+    /**
+     * The elevator nominal output.
+     */
+    public static double NOMINAL_OUTPUT = 0;
+    
+    /**
+     * The feed forward to constantly add to the elevator to resist the effect
+     * of gravity.
+     */
+    public static double POS_FGRAV = 0.06;
+    
+    /**
+     * The peak output for the elevator motor controllers.
+     */
+    public static double PEAK_OUTPUT = 1.0;
+    
+    /**
+     * The F constant for the position closed loop.
+     */
+    public static double POS_KF = 0;
+    
+    /**
+     * The P constant for the position closed loop.
+     */
+    public static double POS_KP = 0.1;
+    
+    /**
+     * The I constant for the position closed loop.
+     */
+    public static double POS_KI = 0.0001;
+    
+    /**
+     * The D constant for the position closed loop.
+     */
+    public static double POS_KD = 18;
+    
+    /**
+     * The allowable error for the position closed loop.
+     */
+    public static int POS_ALLOWABLE_ERROR = 500;
+    
+    /**
+     * The soft limit in the forward (upward) direction.
+     */
+    public static int FORWARD_SOFT = 34500;
+    
+    /**
+     * The soft limit in the reverse (downward) direction.
+     */
+    public static int REVERSE_SOFT = 2000;
+    
+    /**
+     * The time (in seconds) for which the elevator should ramp up to full speed in 
+     * manual control.
+     */
+    public static double RAMP_RATE = 0.75;
+    
+    // elevator max RPM: 500 RPM
+    /**
+     * The F constant for the motion magic closed loop.
+     */
+    public static double MOTION_MAGIC_KF = 0.37;
+    
+    /**
+     * The P constant for the motion magic closed loop.
+     */
+    public static double MOTION_MAGIC_KP = 0.1;
+    
+    /**
+     * The I constant for the motion magic closed loop.
+     */
+    public static double MOTION_MAGIC_KI = 0.001;
+    
+    /**
+     * The D constant for the motion magic closed loop.
+     */
+    public static double MOTION_MAGIC_KD = 14;
+    
+    /**
+     * The acceleration constant for the motion magic closed loop.
+     */
+    public static int MOTION_MAGIC_ACCEL = 3000;
+    
+    /**
+     * The velocity constant for the motion magic closed loop.
+     */
+    public static int MOTION_MAGIC_VEL = 9000;
+    
+    /**
+     * The allowable error for the motion magic closed loop.
+     */
+    public static int MOTION_MAGIC_ALLOWABLE_ERROR = 500;
+    
+    /**
+     * The height (in encoder units) for optimal intaking.
+     */
+    public static int INTAKE_HEIGHT = 0;
+
+    public static int RAISE_HEIGHT = 1000;
+    
+    /**
+     * The height (in encoder units) for optimal switch scoring.
+     */
+    public static int SWITCH_HEIGHT = 10000;
+    
+    /**
+     * The height (in encoder units) for optimal low scale scoring.
+     */
+    public static int SCALE_LOW_HEIGHT = 22500;
+    
+    /**
+     * The height (in encoder units) for optimal high scale scoring.
+     */
+    public static int SCALE_HIGH_HEIGHT = 34700;
+    
+    /**
+     * The position at which the elevator should begin to slow.
+     */
+    public static double SLOW_DOWN_POS = 1000;
+    
+    /**
+     * Whether to invert the bottom left victor (those not shown can be assumed false).
+     */
+    public static boolean BOTTOM_LEFT_VICTOR_INVERT = true;
+    
+    /**
+     * The sensor phase for the elevator Talon.
+     */
+    public static boolean TALON_PHASE = true;
+    
+    public static double THROTTLE_PERCENT = 0.5;
+
+    public static double MIN_THROTTLE_SPEED = 0.25;
     
 }

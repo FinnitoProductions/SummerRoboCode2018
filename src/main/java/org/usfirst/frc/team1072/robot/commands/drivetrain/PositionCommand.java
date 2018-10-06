@@ -2,7 +2,7 @@ package org.usfirst.frc.team1072.robot.commands.drivetrain;
 
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -44,7 +44,7 @@ public abstract class PositionCommand extends Command
         numExecutes = 0;
         this.maxExecutes = maxExecutes;
         position = desiredPos;
-        allowableError = DrivetrainConstants.POS_ALLOWABLE_ERROR;
+        allowableError = Drivetrain.POS_ALLOWABLE_ERROR;
     }
     
     /**

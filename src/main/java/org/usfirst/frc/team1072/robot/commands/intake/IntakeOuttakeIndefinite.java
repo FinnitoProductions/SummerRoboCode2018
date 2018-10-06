@@ -1,9 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands.intake;
 
-import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 
 import edu.wpi.first.wpilibj.command.Command;
 

@@ -3,8 +3,7 @@ package org.usfirst.frc.team1072.robot.commands.elevator;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
@@ -61,7 +60,7 @@ public class MoveElevatorMotionMagic extends Command
     */
     protected boolean isFinished() {
         return Math.abs(Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) - position) <= 
-                ElevatorConstants.POS_ALLOWABLE_ERROR;
+                Elevator.POS_ALLOWABLE_ERROR;
     }
     
 }

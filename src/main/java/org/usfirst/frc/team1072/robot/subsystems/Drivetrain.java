@@ -1,22 +1,21 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
+import org.usfirst.frc.team1072.robot.OI;
+import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocity;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
-
-import org.usfirst.frc.team1072.robot.OI;
-import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocity;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngle;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -28,7 +27,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Drivetrain extends Subsystem
 {
-    /**
+
+	/**
      * The current instance of this singleton Drivetrain.
      */
     private static Drivetrain instance = null;
@@ -37,7 +37,7 @@ public class Drivetrain extends Subsystem
      * The left Talon on the drivetrain.
      */
     private TalonSRX leftTalon;
-    
+     
     /**
      * The right Talon on the drivetrain.
      */
@@ -128,7 +128,7 @@ public class Drivetrain extends Subsystem
     {
         talonInit();
         configureVelocityClosedLoop();
-        setRampTime(DrivetrainConstants.MAX_RAMP_TIME);
+        setRampTime(Drivetrain.MAX_RAMP_TIME);
         
     }
     /**
@@ -160,8 +160,8 @@ public class Drivetrain extends Subsystem
         configurePositionClosedLoop();
         configureMotionProfileDriveClosedLoop();
 
-        dtSetCurrentLimit(DrivetrainConstants.PEAK_CURRENT_LIMIT, DrivetrainConstants.PEAK_TIME_MS,
-                DrivetrainConstants.CONTINUOUS_CURRENT_LIMIT);
+        dtSetCurrentLimit(Drivetrain.PEAK_CURRENT_LIMIT, Drivetrain.PEAK_TIME_MS,
+                Drivetrain.CONTINUOUS_CURRENT_LIMIT);
 
     }
     
@@ -170,8 +170,8 @@ public class Drivetrain extends Subsystem
      */
     private void setTalonDeadbands()
     {
-        getLeftTalon().configNeutralDeadband(DrivetrainConstants.TALON_DEADBAND, RobotMap.TIMEOUT);
-        getRightTalon().configNeutralDeadband(DrivetrainConstants.TALON_DEADBAND, RobotMap.TIMEOUT);
+        getLeftTalon().configNeutralDeadband(Drivetrain.TALON_DEADBAND, RobotMap.TIMEOUT);
+        getRightTalon().configNeutralDeadband(Drivetrain.TALON_DEADBAND, RobotMap.TIMEOUT);
     }
 
     /**
@@ -285,8 +285,8 @@ public class Drivetrain extends Subsystem
      */
     private void invertControllers()
     {
-        getLeftTalon().setInverted(DrivetrainConstants.LEFT_TALON_INVERT);
-        getLeftVictor().setInverted(DrivetrainConstants.LEFT_VICTOR_INVERT);
+        getLeftTalon().setInverted(Drivetrain.LEFT_TALON_INVERT);
+        getLeftVictor().setInverted(Drivetrain.LEFT_VICTOR_INVERT);
         
         // Invert the following direction (left Talons and Victors were wired
         // oppositely)
@@ -353,17 +353,17 @@ public class Drivetrain extends Subsystem
      */
     private void configureVelocityClosedLoop()
     {
-        getLeftTalon().config_kF(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KF_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kF(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KF_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kP(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KP_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kP(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KP_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kP(Drivetrain.VEL_PID, Drivetrain.VEL_KP_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(Drivetrain.VEL_PID, Drivetrain.VEL_KP_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kI(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KI_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KI_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(Drivetrain.VEL_PID, Drivetrain.VEL_KI_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(Drivetrain.VEL_PID, Drivetrain.VEL_KI_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kD(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KD_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(DrivetrainConstants.VEL_PID, DrivetrainConstants.VEL_KD_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(Drivetrain.VEL_PID, Drivetrain.VEL_KD_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(Drivetrain.VEL_PID, Drivetrain.VEL_KD_RIGHT, RobotMap.TIMEOUT);
       
     }
 
@@ -373,17 +373,17 @@ public class Drivetrain extends Subsystem
      */
     public void configureNominalPeakOutputs()
     {
-        getLeftTalon().configNominalOutputForward(DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configNominalOutputForward(DrivetrainConstants.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().configNominalOutputForward(Drivetrain.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configNominalOutputForward(Drivetrain.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configNominalOutputReverse(-1 * DrivetrainConstants.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().configNominalOutputReverse(-1 * Drivetrain.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configNominalOutputReverse(-1 * Drivetrain.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configPeakOutputForward(DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().configPeakOutputForward(Drivetrain.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configPeakOutputForward(Drivetrain.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().configPeakOutputReverse(-1 * DrivetrainConstants.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().configPeakOutputReverse(-1 * Drivetrain.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().configPeakOutputReverse(-1 * Drivetrain.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
     }
     /**
      * Configures the drivetrain position closed loop.
@@ -394,23 +394,23 @@ public class Drivetrain extends Subsystem
      */
     private void configurePositionClosedLoop()
     {
-        getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-        getRightTalon().configAllowableClosedloopError(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getLeftTalon().configAllowableClosedloopError(Drivetrain.POS_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getRightTalon().configAllowableClosedloopError(Drivetrain.POS_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kF(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KF_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kF(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KF_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kF(Drivetrain.POS_PID, Drivetrain.POS_KF_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kF(Drivetrain.POS_PID, Drivetrain.POS_KF_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kP(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KP_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kP(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KP_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kP(Drivetrain.POS_PID, Drivetrain.POS_KP_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(Drivetrain.POS_PID, Drivetrain.POS_KP_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kI(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KI_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KI_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(Drivetrain.POS_PID, Drivetrain.POS_KI_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(Drivetrain.POS_PID, Drivetrain.POS_KI_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kD(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KD_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_KD_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(Drivetrain.POS_PID, Drivetrain.POS_KD_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(Drivetrain.POS_PID, Drivetrain.POS_KD_RIGHT, RobotMap.TIMEOUT);
         
-        getLeftTalon().config_IntegralZone(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_IZONE_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_IntegralZone(DrivetrainConstants.POS_PID, DrivetrainConstants.POS_IZONE_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_IntegralZone(Drivetrain.POS_PID, Drivetrain.POS_IZONE_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_IntegralZone(Drivetrain.POS_PID, Drivetrain.POS_IZONE_RIGHT, RobotMap.TIMEOUT);
     }
     
     /**
@@ -429,28 +429,28 @@ public class Drivetrain extends Subsystem
      */
     public void configureAngleClosedLoop()
     {
-        getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
+        getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, Drivetrain.Pigeon.PERIOD_MS, RobotMap.TIMEOUT);
         
-        getRightTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KF, RobotMap.TIMEOUT);
-        getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KP, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KI, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KD, RobotMap.TIMEOUT);
+        getRightTalon().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KF, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KP, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KI, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KD, RobotMap.TIMEOUT);
         
-        getRightTalon().configMotionCruiseVelocity(PigeonConstants.TURN_VEL, RobotMap.TIMEOUT);
-        getRightTalon().configMotionAcceleration(PigeonConstants.TURN_ACCEL, RobotMap.TIMEOUT);
+        getRightTalon().configMotionCruiseVelocity(Drivetrain.Pigeon.TURN_VEL, RobotMap.TIMEOUT);
+        getRightTalon().configMotionAcceleration(Drivetrain.Pigeon.TURN_ACCEL, RobotMap.TIMEOUT);
         
-        getRightTalon().config_IntegralZone(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_IZONE, RobotMap.TIMEOUT);
+        getRightTalon().config_IntegralZone(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_IZONE, RobotMap.TIMEOUT);
         
         
-        getLeftTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KF, RobotMap.TIMEOUT);
-        getLeftTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KP, RobotMap.TIMEOUT);
-        getLeftTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KI, RobotMap.TIMEOUT);
-        getLeftTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_KD, RobotMap.TIMEOUT);
+        getLeftTalon().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KF, RobotMap.TIMEOUT);
+        getLeftTalon().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KP, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KI, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KD, RobotMap.TIMEOUT);
         
-        getLeftTalon().configMotionCruiseVelocity(PigeonConstants.TURN_VEL, RobotMap.TIMEOUT);
-        getLeftTalon().configMotionAcceleration(PigeonConstants.TURN_ACCEL, RobotMap.TIMEOUT);
+        getLeftTalon().configMotionCruiseVelocity(Drivetrain.Pigeon.TURN_VEL, RobotMap.TIMEOUT);
+        getLeftTalon().configMotionAcceleration(Drivetrain.Pigeon.TURN_ACCEL, RobotMap.TIMEOUT);
         
-        getLeftTalon().config_IntegralZone(DrivetrainConstants.ANGLE_PID, PigeonConstants.TURN_IZONE, RobotMap.TIMEOUT);
+        getLeftTalon().config_IntegralZone(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_IZONE, RobotMap.TIMEOUT);
     }
     
     /**
@@ -460,17 +460,17 @@ public class Drivetrain extends Subsystem
      */
     public void configureMotionProfileAngleClosedLoop()
     {
-        getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, PigeonConstants.PERIOD_MS, RobotMap.TIMEOUT);
+        getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, Drivetrain.Pigeon.PERIOD_MS, RobotMap.TIMEOUT);
         
-        getRightTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KF, RobotMap.TIMEOUT);
-        getRightTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KP, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KI, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KD, RobotMap.TIMEOUT);
+        getRightTalon().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KF, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KP, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KI, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KD, RobotMap.TIMEOUT);
         
-        getLeftTalon().config_kF(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KF, RobotMap.TIMEOUT);
-        getLeftTalon().config_kP(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KP, RobotMap.TIMEOUT);
-        getLeftTalon().config_kI(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KI, RobotMap.TIMEOUT);
-        getLeftTalon().config_kD(DrivetrainConstants.ANGLE_PID, PigeonConstants.MOT_PROF_KD, RobotMap.TIMEOUT);
+        getLeftTalon().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KF, RobotMap.TIMEOUT);
+        getLeftTalon().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KP, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KI, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KD, RobotMap.TIMEOUT);
 
     }
 
@@ -481,20 +481,20 @@ public class Drivetrain extends Subsystem
      */
     public void configureMotionProfileDriveClosedLoop()
     {
-        getLeftTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-        getRightTalon().configAllowableClosedloopError(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getLeftTalon().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getRightTalon().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kF(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KF_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kF(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KF_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kP(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KP_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kP(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KP_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kI(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KI_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kI(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KI_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kI(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KI_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kI(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KI_RIGHT, RobotMap.TIMEOUT);
 
-        getLeftTalon().config_kD(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KD_LEFT, RobotMap.TIMEOUT);
-        getRightTalon().config_kD(DrivetrainConstants.MOTION_PROFILE_PID, DrivetrainConstants.MOTION_PROF_KD_RIGHT, RobotMap.TIMEOUT);
+        getLeftTalon().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_LEFT, RobotMap.TIMEOUT);
+        getRightTalon().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_RIGHT, RobotMap.TIMEOUT);
     }
     
     
@@ -704,5 +704,468 @@ public class Drivetrain extends Subsystem
         return Math.abs(getLeftTalon().getClosedLoopError(loopIndex)) < allowableError
                 && Math.abs(getRightTalon().getClosedLoopError(loopIndex)) < allowableError;
     }
+    
+    
+    /**
+     * The velocity amount to which all motion profile trajectories will be added to more easily
+     * break static friction at the beginning of the profile.
+     */
+    public static final double MOT_PROF_ADD_TO_VEL_INIT = 7;
+    
+    /**
+     * The time required to overcome static friction to allow for easier ramping.
+     */
+    public static final double TIME_TO_OVERCOME_S_FRICTION_MS = 45;
+    
+    /**
+     * The Talon deadband (the output at which the Talon assumes zero output).
+     */
+    public static final double TALON_DEADBAND = 0.01;
+    
+    /**
+     * Whether the invert the left Talon.
+     */
+    public static final boolean LEFT_TALON_INVERT = true;
+    
+    /**
+     * Whether to invert the left Victor.
+     */
+    public static final boolean LEFT_VICTOR_INVERT = true;
+    
+    /**
+     * The PID slot for velocity PID constants.
+     */
+    public static int VEL_PID = 1;
+    
+    /**
+     * The PID slot for position PID constants.
+     */
+    public static int POS_PID = 2;
+    
+    /**
+     * The PID slot for angle PID constants.
+     */
+    public static int ANGLE_PID = 0;
+    
+    /**
+     * The PID slot for motion profile PID constants.
+     */
+    public static int MOTION_PROFILE_PID = 3;
+    
+    /**
+     * The time for which the drivetrain should ramp up when beginning.
+     */
+    public static double MAX_RAMP_TIME = 0;
+    
+    /**
+     * The nominal output (or the constant output percemt such that static friction is more easily broken)
+     * for the left.
+     */
+    public static double NOMINAL_OUTPUT_LEFT = 0.1; //0.084;
+    
+    /**
+     * The nominal output (or the constant output percent such that static friction is more easily broken)
+     * for the right.
+     */
+    public static double NOMINAL_OUTPUT_RIGHT = 0.1; //0.084;
+    
+    /**
+     * The peak output (or the maximum possible output percent) for the left.
+     */
+    public static double PEAK_OUTPUT_LEFT = 1;
+    
+    /**
+     * The peak output (or the maximum possible output percent) for the right.
+     */
+    public static double PEAK_OUTPUT_RIGHT = 1;
+    
+    /**
+     * The sensor phase for the left Talon when driving straight.
+     */
+    public static boolean LEFT_TALON_PHASE = false;
+    
+    /**
+     * The sensor phase for the right Talon when driving straight.
+     */
+    public static boolean RIGHT_TALON_PHASE = false;
+    
+ // CONCRETE CONSTANTS
+    /*public static double VEL_KF_LEFT = .197; //0.178
+    // when modifying KP, double until disastrous
+    public static double VEL_KP_LEFT = 0; //0.3;
+    public static double VEL_KI_LEFT = 0;//0;
+    public static double VEL_KD_LEFT = 0; //10;
+    
+    public static double VEL_KF_RIGHT = .188; //0.18
+    public static double VEL_KP_RIGHT = 0;//0.3;
+    public static double VEL_KI_RIGHT = 0;//0;
+    public static double VEL_KD_RIGHT = 0;//10;*/
+    // CARPET CONSTANTS
+    
+    
+   
+    /**
+     * The practice bot F constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KF_LEFT_PRACTICE = 0.197;
+    
+    /**
+     * The practice bot P constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KP_LEFT_PRACTICE = 0.5;
+    
+    /**
+     * The practice bot I constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KI_LEFT_PRACTICE = 0;
+    
+    /**
+     * The practice bot D constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KD_LEFT_PRACTICE = 0; 
+    
+    /**
+     * The practice bot F constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KF_RIGHT_PRACTICE = 0.197; 
+    
+    /**
+     * The practice bot P constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KP_RIGHT_PRACTICE = 0.5;//0.3;
+    
+    /**
+     * The practice bot I constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KI_RIGHT_PRACTICE = 0;//0;
+    
+    /**
+     * The practice bot D constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KD_RIGHT_PRACTICE = 0;//10;
+    
+    /**
+     * The competition bot F constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KF_LEFT_COMP = 0.197;
+    
+    /**
+     * The competition bot P constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KP_LEFT_COMP = 0.5;
+    
+    /**
+     * The competition bot I constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KI_LEFT_COMP = 0;
+    
+    /**
+     * The competition bot D constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KD_LEFT_COMP = 0; 
+    
+    /**
+     * The competition bot F constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KF_RIGHT_COMP = 0.197; 
+    
+    /**
+     * The competition bot P constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KP_RIGHT_COMP = 0.5;//0.3;
+    
+    /**
+     * The competition bot I constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KI_RIGHT_COMP = 0;//0;
+    
+    /**
+     * The competition bot D constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KD_RIGHT_COMP = 0;//10;
+    
+    /**
+     * The F constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KF_LEFT = RobotMap.IS_COMP ? VEL_KF_LEFT_COMP : VEL_KF_LEFT_PRACTICE;
+    
+    /**
+     * The P constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KP_LEFT = RobotMap.IS_COMP ? VEL_KP_LEFT_COMP : VEL_KP_LEFT_PRACTICE;
+    
+    /**
+     * The I constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KI_LEFT = RobotMap.IS_COMP ? VEL_KI_LEFT_COMP : VEL_KI_LEFT_PRACTICE;
+    
+    /**
+     * The D constant for the velocity closed loop on the left.
+     */
+    public static double VEL_KD_LEFT = RobotMap.IS_COMP ? VEL_KD_LEFT_COMP : VEL_KD_LEFT_PRACTICE;
+    
+    /**
+     * The F constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KF_RIGHT = RobotMap.IS_COMP ? VEL_KF_RIGHT_COMP : VEL_KF_RIGHT_PRACTICE;
+    
+    /**
+     * The P constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KP_RIGHT = RobotMap.IS_COMP ? VEL_KP_RIGHT_COMP : VEL_KP_RIGHT_PRACTICE;
+    
+    /**
+     * The I constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KI_RIGHT = RobotMap.IS_COMP ? VEL_KI_RIGHT_COMP : VEL_KI_RIGHT_PRACTICE;
+    
+    /**
+     * The D constant for the velocity closed loop on the right.
+     */
+    public static double VEL_KD_RIGHT = RobotMap.IS_COMP ? VEL_KD_RIGHT_COMP : VEL_KD_RIGHT_PRACTICE;
+
+    // CONCRETE
+//    public static double POS_KF_LEFT = 0;
+//    public static double POS_KP_LEFT = 0.1; //0.2 
+//    public static double POS_KI_LEFT = 0.000004; //
+//    public static double POS_KD_LEFT = 25;
+//    
+//    public static double POS_KF_RIGHT = 0;
+//    public static double POS_KP_RIGHT = 0.1;
+//    public static double POS_KI_RIGHT = 0.000004; // 
+//    public static double POS_KD_RIGHT = 25;
+    // CARPET 
+    
+    /**
+     * The F constant for the position closed loop on the left.
+     */
+    public static double POS_KF_LEFT = 0;
+    
+    /**
+     * The P constant for the position closed loop on the left.
+     */
+    public static double POS_KP_LEFT = 0.19;//0.22; //0.2 
+    
+    /**
+     * The I constant for the position closed loop on the left.
+     */
+    public static double POS_KI_LEFT = 0.0001;//0.00001;//0.001;//.0008;//0.00001;//0.00001; 
+    
+    /**
+     * The D constant for the position closed loop on the left.
+     */
+    public static double POS_KD_LEFT = 30;//40;//40;
+    
+    /**
+     * The integral zone constant for the position closed loop on the left.
+     */
+    public static int POS_IZONE_LEFT = 250;
+    
+    /**
+     * The F constant for the position closed loop on the right.
+     */
+    public static double POS_KF_RIGHT = 0;
+    
+    /**
+     * The P constant for the position closed loop on the right.
+     */
+    public static double POS_KP_RIGHT = 0.19;
+    
+    /**
+     * The I constant for the position closed loop on the right.
+     */
+    public static double POS_KI_RIGHT = 0.0001;//0.00001;//0.001;//0.00001;//0.00001;
+    
+    /**
+     * The D constant for the position closed loop on the right.
+     */
+    public static double POS_KD_RIGHT = 15;//30;//40;
+    
+    /**
+     * The integral zone constant for the position closed loop on the right.
+     */
+    public static int POS_IZONE_RIGHT = 250;
+   
+    /**
+     * The allowable error for the position closed loop.
+     */
+    public static int POS_ALLOWABLE_ERROR = 500;
+
+    /**
+     * The wheel diameter on this drivetrain.
+     */
+    public static double WHEELDIAMETER = 4.0;
+    
+    /**
+     * The maximum allowed drive speed for the drivetrain.
+     */
+    public static double MAX_DRIVE_SPEED_FPS = 14.0;
+    
+    /**
+     * The maximum allowed turn speed for the drivetrain.
+     */
+    public static double MAX_TURN_SPEED_FPS = 14;
+    
+    /**
+     * The peak current limit for the drivetrain.
+     */
+    public static int PEAK_CURRENT_LIMIT = 60;
+    
+    /**
+     * The time for which the peak currrent limit is allowed (in ms).
+     */
+    public static int PEAK_TIME_MS = 200;
+    
+    /**
+     * The continuous current limit for the drivetrain.
+     */
+    public static int CONTINUOUS_CURRENT_LIMIT = 40;
+    
+    
+    // motion profiling constants
+    // CONCRETE
+//    public static double DT_MOTION_PROF_KF_LEFT = .182; //0.197
+//    public static double DT_MOTION_PROF_KP_LEFT = 0.1; //0.2 
+//    public static double DT_MOTION_PROF_KI_LEFT = 0.000004; //
+//    public static double DT_MOTION_PROF_KD_LEFT = 25;
+//    
+//    public static double DT_MOTION_PROF_KF_RIGHT = .178; //0.188
+//    public static double DT_MOTION_PROF_KP_RIGHT = 0.1;
+//    public static double DT_MOTION_PROF_KI_RIGHT = 0.000004; // 
+//    public static double DT_MOTION_PROF_KD_RIGHT = 25;
+    // CARPET
+    
+    /**
+     * The F constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KF_LEFT = 0;
+    
+    /**
+     * The P constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KP_LEFT = 0;
+    
+    /**
+     * The I constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KI_LEFT = 0;
+    
+    /**
+     * The D constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KD_LEFT = 0;
+    
+    /**
+     * The F constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KF_RIGHT = 0.25;//0.22;//0.235;
+    
+    /**
+     * The P constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KP_RIGHT = 1.2;//0.8;
+    
+    /**
+     * The I constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KI_RIGHT = 0;//0.0001;
+    
+    /**
+     * The D constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KD_RIGHT = 4;
+
+    /**
+     * The allowable error for a motion profile closed loop.
+     */
+    public static final int MOTION_PROFILE_ALLOWABLE_ERROR = 500;
+    
+    /**
+   	 * A wrapper class to house all of the Pigeon-related constants.
+   	 * @author Finn Frankis
+   	 * @version 7/5/18
+   	 */
+   	public static class Pigeon
+   	{
+   	    /**
+   	     * The F constant for pigeon motion profiling.
+   	     */
+   	    public static double MOT_PROF_KF = 0;
+   	    
+   	    /**
+   	     * The P constant for pigeon motion profiling.
+   	     */
+   	    public static double MOT_PROF_KP = 0.8;//1.2;//2.6;//1.3;//1.1;
+   	    
+   	    /**
+   	     * The I constant for pigeon motion profiling.
+   	     */
+   	    public static double MOT_PROF_KI = 0;
+   	    
+   	    /**
+   	     * The D constant for pigeon motion profiling.
+   	     */
+   	    public static double MOT_PROF_KD = 5;//6;//15;
+   	    
+   	    /**
+   	     * The F constant for pigeon turning in place.
+   	     */
+   	    public static double TURN_KF = 0.5;
+   	    
+   	    /**
+   	     * The P constant for pigeon turning in place.
+   	     */
+   	    public static double TURN_KP = 3.6; 
+   	    
+   	    /**
+   	     * The I constant for pigeon turning in place.
+   	     */
+   	    public static double TURN_KI = 0.003;
+   	    
+   	    /**
+   	     * The D constant for pigeon turning in place.
+   	     */
+   	    public static double TURN_KD = 1; 
+   	    
+   	    /**
+   	     * The integral zone constant for pigeon turning in place.
+   	     */
+   	    public static int TURN_IZONE = 150; //150;
+   	    
+   	    /**
+   	     * The velocity constant for pigeon turning in place (w/ motion magic).
+   	     */
+   	    public static int TURN_VEL = 500;
+   	    
+   	    /**
+   	     * The acceleration constant for pigeon turning in place (w/ motion magic).
+   	     */
+   	    public static int TURN_ACCEL = 600;
+   	    
+   	    /**
+   	     * The frame period (in ms) for pigeon status updates.
+   	     */
+   	    public static final int PERIOD_MS = 4;
+   	
+   	    /**
+   	     * The Talon slot to configure the Pigeon as a remote sensor.
+   	     */
+   	    public static final RemoteFeedbackDevice REMOTE_SENSOR_SLOT = RemoteFeedbackDevice.RemoteSensor0;
+   	    
+   	    /**
+   	     * The allowable error for an angle closed loop.
+   	     */
+   	    public static final int ANGLE_ALLOWABLE_ERROR = 35;
+   	    
+   	    /**
+   	     * The left sensor phase for a turn in place.
+   	     */
+   	    public static final boolean LEFT_SENSOR_PHASE = false;
+   	    
+   	    /**
+   	     * The right sensor phase for a turn in place.
+   	     */
+   	    public static final boolean RIGHT_SENSOR_PHASE = false;
+   	}
 
 }

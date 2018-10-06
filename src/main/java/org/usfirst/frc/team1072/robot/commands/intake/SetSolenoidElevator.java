@@ -1,16 +1,12 @@
 package org.usfirst.frc.team1072.robot.commands.intake;
 
 import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
+import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.InstantCommand;
-import org.usfirst.frc.team1072.robot.RobotMap;
 
 /**
  * Represents a command to set the solenoid to a given state.
@@ -29,11 +25,11 @@ public class SetSolenoidElevator extends CommandGroup {
 	public SetSolenoidElevator (String key, DoubleSolenoid.Value state) {
 		requires(Intake.pn);
 		
-		if (Intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).get() == IntakeConstants.DOWN && 
-				key.equals(IntakeConstants.COMPRESSDECOMPRESS_KEY)&&
-				state == IntakeConstants.COMPRESS) {
+		if (Intake.pn.getSolenoid(Intake.UPDOWN_KEY).get() == Intake.DOWN && 
+				key.equals(Intake.COMPRESSDECOMPRESS_KEY)&&
+				state == Intake.COMPRESS) {
 			requires(Robot.el);
-			addSequential (new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
+			addSequential (new MoveElevatorMotionMagic(Elevator.INTAKE_HEIGHT));
 		}
 		
 		addSequential (new SetSolenoid(key, state));

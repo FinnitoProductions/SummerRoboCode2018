@@ -3,7 +3,7 @@ package org.usfirst.frc.team1072.robot.commands.intake;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -44,9 +44,9 @@ public class IntakeOuttakeCube extends Command
         if (!intakeEnabled)
         {
             if (oi.getDriverGamepad().getRightTriggerPressed())
-                Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getRightTrigger());
+                Robot.intake.intakeOuttakeCube(Intake.INTAKE_DIR * oi.getDriverGamepad().getRightTrigger());
             else if (oi.getDriverGamepad().getLeftTriggerPressed())
-                Robot.intake.intakeOuttakeCube(-IntakeConstants.INTAKE_DIR * oi.getDriverGamepad().getLeftTrigger());
+                Robot.intake.intakeOuttakeCube(-Intake.INTAKE_DIR * oi.getDriverGamepad().getLeftTrigger());
             else
                 Robot.intake.intakeOuttakeCube(0);
         }

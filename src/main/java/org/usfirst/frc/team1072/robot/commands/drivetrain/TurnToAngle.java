@@ -1,15 +1,15 @@
 package org.usfirst.frc.team1072.robot.commands.drivetrain;
 
+import org.usfirst.frc.team1072.robot.Robot;
+import org.usfirst.frc.team1072.robot.RobotMap;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
+import org.usfirst.frc.team1072.util.Conversions;
+import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
-
-import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.PigeonConstants;
-import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -116,7 +116,7 @@ public class TurnToAngle extends Command
     {
         startTime = Robot.getCurrentTimeMs();
         ;
-        Robot.dt.selectProfileSlots(DrivetrainConstants.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.selectProfileSlots(Drivetrain.ANGLE_PID, RobotMap.PRIMARY_PID_INDEX);
         
         Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.configureAngleClosedLoop();
@@ -135,8 +135,8 @@ public class TurnToAngle extends Command
         
         //Robot.dt.setBothSensorPositions(0, RobotMap.PRIMARY_PID_INDEX);
         
-        Robot.dt.setTalonSensorPhase(PigeonConstants.LEFT_SENSOR_PHASE, 
-                PigeonConstants.RIGHT_SENSOR_PHASE);
+        Robot.dt.setTalonSensorPhase(Drivetrain.Pigeon.LEFT_SENSOR_PHASE, 
+                Drivetrain.Pigeon.RIGHT_SENSOR_PHASE);
 
         Robot.dt.setLeft(ControlMode.MotionMagic, -angle);
         Robot.dt.setRight(ControlMode.MotionMagic, angle);
@@ -175,7 +175,7 @@ public class TurnToAngle extends Command
         {
             for (double d : previousErrors)
             {
-                if (Math.abs(d) > PigeonConstants.ANGLE_ALLOWABLE_ERROR)
+                if (Math.abs(d) > Drivetrain.Pigeon.ANGLE_ALLOWABLE_ERROR)
                     return false;
             }
             return true;

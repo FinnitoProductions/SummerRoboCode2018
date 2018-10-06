@@ -3,11 +3,8 @@ package org.usfirst.frc.team1072.robot.commands.drivetrain;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
-import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -42,16 +39,16 @@ public class DriveWithVelocity extends Command
         Robot.el.getBottomRightTalon().configSelectedFeedbackSensor
         (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
 
-        Robot.dt.selectProfileSlots(DrivetrainConstants.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.selectProfileSlots(Drivetrain.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         
         
         Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     
-        Robot.dt.setTalonSensorPhase(DrivetrainConstants.LEFT_TALON_PHASE, 
-                DrivetrainConstants.RIGHT_TALON_PHASE);
+        Robot.dt.setTalonSensorPhase(Drivetrain.LEFT_TALON_PHASE, 
+                Drivetrain.RIGHT_TALON_PHASE);
         
-        Robot.dt.resetTalonCoefficients(DrivetrainConstants.VEL_PID);
+        Robot.dt.resetTalonCoefficients(Drivetrain.VEL_PID);
     }
     /**
      * Executes the command to drive with a given velocity.
@@ -80,12 +77,12 @@ public class DriveWithVelocity extends Command
             leftY /= 1-deadband;
         }
         double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition
-        (RobotMap.PRIMARY_PID_INDEX)) / ElevatorConstants.SCALE_HIGH_HEIGHT;
+        (RobotMap.PRIMARY_PID_INDEX)) / Elevator.SCALE_HIGH_HEIGHT;
         
         
         double elevatorScale = 1;
-        if (elevatorPercent > ElevatorConstants.THROTTLE_PERCENT) {
-            elevatorScale = 1-elevatorPercent*(1-ElevatorConstants.MIN_THROTTLE_SPEED);
+        if (elevatorPercent > Elevator.THROTTLE_PERCENT) {
+            elevatorScale = 1-elevatorPercent*(1-Elevator.MIN_THROTTLE_SPEED);
         }
 
         double x = 0.8 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);

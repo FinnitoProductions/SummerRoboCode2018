@@ -1,24 +1,22 @@
 package org.usfirst.frc.team1072.robot;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-
 import org.usfirst.frc.team1072.harkerrobolib.commands.CancelCommand;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
 import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
-import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeIndefinite;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidStealth;
 import org.usfirst.frc.team1072.robot.commands.intake.ToggleSolenoid;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
+import org.usfirst.frc.team1072.robot.subsystems.Intake;
+
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
@@ -76,10 +74,10 @@ public class OI
         DPadButtonWrapper downDPadDriver= new DPadButtonWrapper (driverGamepad, 180);
         DPadButtonWrapper rightDPadDriver = new DPadButtonWrapper (driverGamepad, 90);
         
-        upDPadDriver.whenPressed(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-        downDPadDriver.whenPressed( new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
-        leftDPadDriver.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
-        rightDPadDriver.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
+        upDPadDriver.whenPressed(new SetSolenoid(Intake.UPDOWN_KEY, Intake.UP));
+        downDPadDriver.whenPressed( new SetSolenoid(Intake.UPDOWN_KEY, Intake.DOWN));
+        leftDPadDriver.whenPressed(new SetSolenoid(Intake.COMPRESSDECOMPRESS_KEY, Intake.DECOMPRESS));
+        rightDPadDriver.whenPressed(new SetSolenoid(Intake.COMPRESSDECOMPRESS_KEY, Intake.COMPRESS));
         
         if (RobotMap.TWO_CONTROLLERS)
         {
@@ -88,11 +86,11 @@ public class OI
             DPadButtonWrapper downDPadOperator = new DPadButtonWrapper (operatorGamepad, 180);
             DPadButtonWrapper rightDPadOperator = new DPadButtonWrapper (operatorGamepad, 90);
 
-            operatorGamepad.getButtonBumperLeft().whenPressed(new ToggleSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY));
-            operatorGamepad.getButtonBumperRight().whenPressed(new ToggleSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY));
+            operatorGamepad.getButtonBumperLeft().whenPressed(new ToggleSolenoid(Intake.COMPRESSDECOMPRESS_KEY));
+            operatorGamepad.getButtonBumperRight().whenPressed(new ToggleSolenoid(Intake.COMPRESSDECOMPRESS_KEY));
             
             CommandGroup compressRaise = new CommandGroup();
-            	compressRaise.addSequential(new ConditionalCommand(new MoveElevatorMotionMagic(ElevatorConstants.RAISE_HEIGHT)) {
+            	compressRaise.addSequential(new ConditionalCommand(new MoveElevatorMotionMagic(Elevator.RAISE_HEIGHT)) {
 
 					@Override
 					protected boolean condition() {
@@ -101,14 +99,14 @@ public class OI
                         System.out.println(Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
                         
                         return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 
-								ElevatorConstants.RAISE_HEIGHT;
+								Elevator.RAISE_HEIGHT;
 					}
             		
             	});
-            	compressRaise.addSequential(new SetSolenoidStealth(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.COMPRESS));
-            upDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-            downDPadOperator.whenPressed( new SetSolenoid(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
-            leftDPadOperator.whenPressed(new SetSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
+            	compressRaise.addSequential(new SetSolenoidStealth(Intake.COMPRESSDECOMPRESS_KEY, Intake.COMPRESS));
+            upDPadOperator.whenPressed(new SetSolenoid(Intake.UPDOWN_KEY, Intake.UP));
+            downDPadOperator.whenPressed( new SetSolenoid(Intake.UPDOWN_KEY, Intake.DOWN));
+            leftDPadOperator.whenPressed(new SetSolenoid(Intake.COMPRESSDECOMPRESS_KEY, Intake.DECOMPRESS));
             rightDPadOperator.whenPressed(compressRaise);
 
             Command halfSpeed = new IntakeOuttakeIndefinite (0.4);
@@ -131,21 +129,21 @@ public class OI
         }
         
         CommandGroup lowerAndOpen = new CommandGroup();
-            lowerAndOpen.addSequential(new SetSolenoidStealth(IntakeConstants.COMPRESSDECOMPRESS_KEY, IntakeConstants.DECOMPRESS));
-            lowerAndOpen.addSequential(new MoveElevatorMotionMagic(ElevatorConstants.INTAKE_HEIGHT));
-            lowerAndOpen.addSequential(new SetSolenoidStealth(IntakeConstants.UPDOWN_KEY, IntakeConstants.DOWN));
+            lowerAndOpen.addSequential(new SetSolenoidStealth(Intake.COMPRESSDECOMPRESS_KEY, Intake.DECOMPRESS));
+            lowerAndOpen.addSequential(new MoveElevatorMotionMagic(Elevator.INTAKE_HEIGHT));
+            lowerAndOpen.addSequential(new SetSolenoidStealth(Intake.UPDOWN_KEY, Intake.DOWN));
         driverGamepad.getButtonA().whenPressed(lowerAndOpen);
         
         CommandGroup raiseElevatorIntake = new CommandGroup();
-        	raiseElevatorIntake.addParallel(new SetSolenoidStealth (IntakeConstants.UPDOWN_KEY, IntakeConstants.UP));
-            raiseElevatorIntake.addParallel(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_HIGH_HEIGHT));
+        	raiseElevatorIntake.addParallel(new SetSolenoidStealth (Intake.UPDOWN_KEY, Intake.UP));
+            raiseElevatorIntake.addParallel(new MoveElevatorMotionMagic(Elevator.SCALE_HIGH_HEIGHT));
             raiseElevatorIntake.addParallel(new InstantCommand() {
                 public void initialize() {
                     System.out.println("Y PRESSED");
                 }
             });
-        driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SWITCH_HEIGHT));
-        driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(ElevatorConstants.SCALE_LOW_HEIGHT));
+        driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT));
+        driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(Elevator.SCALE_LOW_HEIGHT));
         driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);     
     }
 

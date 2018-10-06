@@ -3,8 +3,8 @@ package org.usfirst.frc.team1072.robot.commands.elevator;
 import org.usfirst.frc.team1072.robot.OI;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
-import org.usfirst.frc.team1072.robot.RobotMap.DrivetrainConstants;
-import org.usfirst.frc.team1072.robot.RobotMap.ElevatorConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
+import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
@@ -39,11 +39,11 @@ public class MoveElevatorVelocity extends Command
         {
             boolean isDown = oi.getDriverGamepad().getRightY() < 0;
             boolean reverseBeyondLimit = Robot.el.getBottomRightTalon()
-                    .getSelectedSensorPosition(DrivetrainConstants.POS_PID) <= ElevatorConstants.REVERSE_SOFT;
+                    .getSelectedSensorPosition(Drivetrain.POS_PID) <= Elevator.REVERSE_SOFT;
             if (isDown && !reverseBeyondLimit)
             {
                 double speed = oi.getDriverGamepad().getRightY();
-                if (Robot.el.getBottomRightTalon().getSelectedSensorPosition(ElevatorConstants.POS_PID) <= ElevatorConstants.SLOW_DOWN_POS)
+                if (Robot.el.getBottomRightTalon().getSelectedSensorPosition(Elevator.POS_PID) <= Elevator.SLOW_DOWN_POS)
                 {
                     speed *= 0.01;
                 }

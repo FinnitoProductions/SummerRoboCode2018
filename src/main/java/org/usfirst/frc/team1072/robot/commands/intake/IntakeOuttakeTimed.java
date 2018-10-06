@@ -1,7 +1,7 @@
 package org.usfirst.frc.team1072.robot.commands.intake;
 
 import org.usfirst.frc.team1072.robot.Robot;
-import org.usfirst.frc.team1072.robot.RobotMap.IntakeConstants;
+import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.robot.subsystems.Intake.IntakeType;
 import org.usfirst.frc.team1072.util.Conversions;
 
@@ -43,10 +43,10 @@ public class IntakeOuttakeTimed extends Command
     {
         if (intake == IntakeType.OUTTAKE)
         {
-            Robot.intake.intakeOuttakeCube(IntakeConstants.INTAKE_DIR);
+            Robot.intake.intakeOuttakeCube(Intake.INTAKE_DIR);
         }
         else if (intake == IntakeType.INTAKE)
-            Robot.intake.intakeOuttakeCube(-IntakeConstants.INTAKE_DIR);
+            Robot.intake.intakeOuttakeCube(-Intake.INTAKE_DIR);
         else
             Robot.intake.intakeOuttakeCube(0);
     }
