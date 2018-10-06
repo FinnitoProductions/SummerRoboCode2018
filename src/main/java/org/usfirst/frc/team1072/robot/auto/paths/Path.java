@@ -1,22 +1,29 @@
 package org.usfirst.frc.team1072.robot.auto.paths;
 
-import java.util.Arrays;
 import java.util.Map;
 
+import jaci.pathfinder.Pathfinder;
+import jaci.pathfinder.Trajectory;
+import jaci.pathfinder.Trajectory.Config;
+import jaci.pathfinder.Trajectory.FitMethod;
 import jaci.pathfinder.Trajectory.Segment;
+import jaci.pathfinder.Waypoint;
 
 public abstract class Path {
-    private Segment[] path;
+    private Trajectory path;
+    
+    public static final FitMethod FIT_METHOD = FitMethod.HERMITE_QUINTIC;
+    public static final int SAMPLE_GENERATION = Config.SAMPLES_HIGH;
     
     public enum SegmentPart {
     	dt, x, y, position, velocity, acceleration, jerk, heading
     }
     
     public Path (Map<SegmentPart, Double>[] path) {
-    	this.path = new Segment[path.length];
+    	Segment[] segments = new Segment[path.length];
     	int i = 0;
     	for (Map<SegmentPart, Double> segment : path) {
-    		this.path[i] = new Segment(segment.get(SegmentPart.dt), 
+    		segments[i] = new Segment(segment.get(SegmentPart.dt), 
     				segment.get(SegmentPart.x), 
     				segment.get(SegmentPart.y), 
     				segment.get(SegmentPart.position), 
@@ -26,9 +33,16 @@ public abstract class Path {
     				segment.get(SegmentPart.heading));
     		i++;
     	}
+    	this.path = new Trajectory(segments);
     }
     
-    public Segment[] getPath() {
-    	return path.clone();
+    public Path (Waypoint[] waypoints, double dt, double velMax, double accelMax, double jerkMax) {
+    	this.path = Pathfinder.generate(waypoints, new Config(FIT_METHOD, SAMPLE_GENERATION, dt, velMax, accelMax, jerkMax));
     }
+    
+    public Trajectory getPath() {
+    	return path;
+    }
+    
+    
 }
