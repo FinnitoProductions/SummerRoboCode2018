@@ -319,7 +319,7 @@ public class AutonomousCommand extends CommandGroup
      * @param prevPath the path which comes before this one (in a series of multiple paths)
      * @return the new follow path command
      */
-    private FollowPath setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse, FollowPath prevPath)
+    public static FollowPath setupPathFollowerArc(String leftFileName, String rightFileName, boolean reverse, FollowPath prevPath)
     {
         double endAngleLeft;
         double endAngleRight;
