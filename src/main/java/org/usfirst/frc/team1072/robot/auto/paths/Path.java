@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1072.robot.auto.paths;
 
+import java.security.InvalidParameterException;
 import java.util.Map;
 
 import jaci.pathfinder.Pathfinder;
@@ -78,6 +79,23 @@ public abstract class Path {
     		i++;
     	}
     	return new Trajectory(segments);
+    }
+    
+    /**
+     * Generates an array of waypoints given the data in an array of double arrays.
+     * @param points the array of points represented as an array of double arrays, where each internal array is 
+     * of length 3, with order x, y, angle.
+     * @return the converted array
+     */
+    public static Waypoint[] generateWaypoints (Double[][] points) {
+    	Waypoint[] waypoints = new Waypoint[points.length];
+    	for (int i = 0; i < points.length; i++) {
+    		Double[] point = points[i];
+    		if (point.length != 3)
+    			throw new InvalidParameterException ("The array of points is not formatted correctly. See Javadoc for clarification.");
+    		waypoints[i] = new Waypoint(points[i][0], points[i][1], points[i][2]);
+    	}
+		return waypoints;
     }
    
 }
