@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands.auton;
 
+import org.usfirst.frc.team1072.robot.auto.paths.Path;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
 
@@ -30,11 +31,11 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 	private double angleErrorPrev;
 	private boolean hasRunOnce;
 	
-	public FollowPathRio (TalonSRX leftTalon, Segment[] leftPath, TalonSRX rightTalon, Segment[] rightPath) {
+	public FollowPathRio (Path path, TalonSRX leftTalon, TalonSRX rightTalon) {
 		this.leftTalon = leftTalon;
-		this.leftPath = leftPath;
+		this.leftPath = path.getLeftPath().segments;
 		this.rightTalon = rightTalon;
-		this.rightPath = rightPath;
+		this.rightPath = path.getRightPath().segments;
 		
 		angleErrorPrev = -1;
 		
