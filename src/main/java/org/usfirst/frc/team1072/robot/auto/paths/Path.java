@@ -20,9 +20,10 @@ public abstract class Path {
     private Trajectory leftPath;
     private Trajectory rightPath;
     
-    public static final FitMethod FIT_METHOD = FitMethod.HERMITE_QUINTIC;
+    
     public static final int SAMPLE_GENERATION = Config.SAMPLES_HIGH;
     
+    public static final FitMethod FITMETHOD_DEFAULT = FitMethod.HERMITE_QUINTIC;
     public static final double DT_DEFAULT = 0.01;
     public static final double V_DEFAULT = 7.5;
     public static final double ACCEL_DEFAULT = 15;
@@ -38,10 +39,17 @@ public abstract class Path {
     	this.rightPath = generateTrajectory (rightPath);
     }
     
-    public Path (Waypoint[] waypoints, double dt, double velMax, double accelMax, double jerkMax, double wheelBase) {
-    	Trajectory[] generatedPath = PathfinderJNI.modifyTrajectoryTank(Pathfinder.generate(waypoints, new Config(FIT_METHOD, SAMPLE_GENERATION, dt, velMax, accelMax, jerkMax)), wheelBase);
+    public Path (Waypoint[] waypoints, FitMethod fitMethod, double dt, double velMax, double accelMax, double jerkMax, double wheelBase) {
+    	Trajectory[] generatedPath = 
+    			PathfinderJNI.modifyTrajectoryTank(
+    					Pathfinder.generate(waypoints, 
+    							new Config(fitMethod, SAMPLE_GENERATION, dt, velMax, accelMax, jerkMax)), 
+    					wheelBase);
     	leftPath = generatedPath[0];
     	rightPath = generatedPath[1];
+    }
+    public Path (Waypoint[] waypoints, double dt, double velMax, double accelMax, double jerkMax, double wheelBase) {
+    	this (waypoints, FITMETHOD_DEFAULT, dt, velMax, accelMax, jerkMax, wheelBase);
     }
     
     public Path (Waypoint[] waypoints, double dt, double velMax, double accelMax, double jerkMax) {
