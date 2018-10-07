@@ -20,6 +20,13 @@ public abstract class Path {
     private Trajectory leftPath;
     private Trajectory rightPath;
     
+	private Waypoint[] waypoints;
+	private FitMethod fitMethod;
+	private double dt;
+	private double velMax;
+	private double accelMax;
+	private double jerkMax;
+	private double wheelBase;
     
     public static final int SAMPLE_GENERATION = Config.SAMPLES_HIGH;
     
@@ -29,6 +36,9 @@ public abstract class Path {
     public static final double ACCEL_DEFAULT = 15;
     public static final double JERK_DEFAULT = 100;
     public static final double WHEELBASE_DEFAULT = 3.0;
+    
+
+    
     
     public enum SegmentPart {
     	dt, x, y, position, velocity, acceleration, jerk, heading
@@ -40,7 +50,15 @@ public abstract class Path {
     }
     
     public Path (Waypoint[] waypoints, FitMethod fitMethod, double dt, double velMax, double accelMax, double jerkMax, double wheelBase) {
-    	Trajectory[] generatedPath = 
+    	this.waypoints = waypoints;
+		this.fitMethod = fitMethod;
+		this.dt = dt;
+		this.velMax = velMax;
+		this.accelMax = accelMax;
+		this.jerkMax = jerkMax;
+		this.wheelBase = wheelBase;
+		
+		Trajectory[] generatedPath = 
     			PathfinderJNI.modifyTrajectoryTank(
     					Pathfinder.generate(waypoints, 
     							new Config(fitMethod, SAMPLE_GENERATION, dt, velMax, accelMax, jerkMax)), 
@@ -105,5 +123,61 @@ public abstract class Path {
     	}
 		return waypoints;
     }
+
+	public Waypoint[] getWaypoints() {
+		return waypoints;
+	}
+
+	public void setWaypoints(Waypoint[] waypoints) {
+		this.waypoints = waypoints;
+	}
+
+	public FitMethod getFitMethod() {
+		return fitMethod;
+	}
+
+	public void setFitMethod(FitMethod fitMethod) {
+		this.fitMethod = fitMethod;
+	}
+
+	public double getDt() {
+		return dt;
+	}
+
+	public void setDt(double dt) {
+		this.dt = dt;
+	}
+
+	public double getVelMax() {
+		return velMax;
+	}
+
+	public void setVelMax(double velMax) {
+		this.velMax = velMax;
+	}
+
+	public double getAccelMax() {
+		return accelMax;
+	}
+
+	public void setAccelMax(double accelMax) {
+		this.accelMax = accelMax;
+	}
+
+	public double getJerkMax() {
+		return jerkMax;
+	}
+
+	public void setJerkMax(double jerkMax) {
+		this.jerkMax = jerkMax;
+	}
+
+	public double getWheelBase() {
+		return wheelBase;
+	}
+
+	public void setWheelBase(double wheelBase) {
+		this.wheelBase = wheelBase;
+	}
    
 }

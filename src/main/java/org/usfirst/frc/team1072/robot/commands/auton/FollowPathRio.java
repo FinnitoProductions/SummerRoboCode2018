@@ -18,8 +18,11 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 	
 	private static final int PID_PRIMARY = 0;
 	private static final int PID_AUXILIARY = 1;
+	
 	private TalonSRX leftTalon;
 	private TalonSRX rightTalon;
+	private Path path;
+	
 	private Segment[] leftPath;
 	private Segment[] rightPath;
 	
@@ -36,6 +39,7 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 		this.leftPath = path.getLeftPath().segments;
 		this.rightTalon = rightTalon;
 		this.rightPath = path.getRightPath().segments;
+		this.path = path;
 		
 		angleErrorPrev = -1;
 		
@@ -46,7 +50,7 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 		if (leftPath.length > 0 && rightPath.length > 0)
 		{
 			prevTime = Timer.getFPGATimestamp();
-			processPoints.startPeriodic(leftPath[0].dt);
+			processPoints.startPeriodic(path.getDt());
 		}
 		else
 			isFinished = true;
