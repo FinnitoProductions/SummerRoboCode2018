@@ -111,21 +111,11 @@ public class OI
 
             Command halfSpeed = new IntakeOuttakeIndefinite (0.4);
             operatorGamepad.getButtonA().whenPressed(halfSpeed);
-            operatorGamepad.getButtonA().whenReleased(new CancelCommand(halfSpeed));
+            operatorGamepad.getButtonA().cancelWhenReleased(halfSpeed);
 
             Command threeQuarterSpeed = new IntakeOuttakeIndefinite(0.75);
             operatorGamepad.getButtonY().whenPressed(threeQuarterSpeed);
-            operatorGamepad.getButtonY().whenReleased(new CancelCommand(threeQuarterSpeed));
-
-            operatorGamepad.getButtonX().whenPressed(threeQuarterSpeed);
-            operatorGamepad.getButtonX().whenReleased(new CancelCommand(threeQuarterSpeed));
-
-            operatorGamepad.getButtonB().whenPressed(new InstantCommand() {
-                public void initialize() {
-                    System.out.println("B PRESSED");
-                }
-            });
-
+            operatorGamepad.getButtonY().cancelWhenReleased(threeQuarterSpeed);
         }
         
         CommandGroup lowerAndOpen = new CommandGroup();
