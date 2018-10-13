@@ -189,11 +189,6 @@ public class Intake extends Subsystem
     }
 
     /**
-     * The CAN ID of the PCM.
-     */
-    public static final int FIRST_PCM_ID = 0;
-    
-    /**
      * The port of the solenoid to lower the intake.
      */
     public static final int INTAKE_DOWN_SOL = 1;
@@ -232,16 +227,6 @@ public class Intake extends Subsystem
      * The solenoid value for decompressing the intake.
      */
     public static final DoubleSolenoid.Value DECOMPRESS = DoubleSolenoid.Value.kForward;
-    
-    /**
-     * The key in the solenoid map of the up/down double solenoid.
-     */
-    public static final String UPDOWN_KEY = "UPDOWN";
-    
-    /**
-     * The key in the solenoid map of the compress/decompress double solenoid.
-     */
-    public static final String COMPRESSDECOMPRESS_KEY = "COMPRESSDE";
 
     /**
      * The direction of Talon input such that the intake will intake.

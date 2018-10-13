@@ -20,6 +20,11 @@ public class Pneumatics extends Subsystem
      * The compressor for use in the pneumatic subsystem.
      */
     private Compressor c;
+
+	/**
+	 * The CAN ID of the PCM.
+	 */
+	public static final int FIRST_PCM_ID = 0;
     
     /**
      * The current instance of this singleton subsystem.
