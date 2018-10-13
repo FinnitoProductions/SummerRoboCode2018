@@ -29,12 +29,12 @@ public class Pneumatics extends Subsystem
     /**
      * The solenoid to raise and lower the intake.
      */
-    private DoubleSolenoid intake_updown;
+    private static DoubleSolenoid intake_updown;
     
     /**
      * The solenoid to compress and decompress the intake.
      */
-    private DoubleSolenoid intake_compressdecompress;
+    private static DoubleSolenoid intake_compressdecompress;
 
 	/**
 	 * The CAN ID of the compressor.
@@ -43,11 +43,26 @@ public class Pneumatics extends Subsystem
     
     
     public enum SolenoidDirection {
-    	UP, DOWN, COMPRESS, DECOMPRESS
+    	UP(intake_updown, Intake.UP), 
+    	DOWN(intake_updown, Intake.DOWN), 
+    	COMPRESS(intake_compressdecompress, Intake.COMPRESS), 
+    	DECOMPRESS(intake_compressdecompress, Intake.DECOMPRESS);
+    	
+    	
+    	private final DoubleSolenoid solenoid;
+    	private final DoubleSolenoid.Value state;
+    	
+    	SolenoidDirection(DoubleSolenoid solenoid, DoubleSolenoid.Value state) {
+    		this.solenoid = solenoid;
+    		this.state = state;
+    	}
+    	
+    	public DoubleSolenoid getSolenoid() {return solenoid;}
+    	public DoubleSolenoid.Value getState() {return state;}
     }
     
     public enum SolenoidType {
-    	UPDOWN, COMPRESSDECOMPRESS
+    	UPDOWN, COMPRESSDECOMPRESS;
     }
     /**
      * Constructs a new Pneumatics.
@@ -80,28 +95,7 @@ public class Pneumatics extends Subsystem
 
     public void setSolenoid(SolenoidDirection direction)
     {
-    	DoubleSolenoid solenoid; 
-    	DoubleSolenoid.Value state;
-    	
-    	switch (direction) {
-    	case UP:
-    		state = Intake.UP;
-    		solenoid = intake_updown;
-    		break;
-    	case DOWN:
-    		state = Intake.DOWN;
-    		solenoid = intake_updown;
-    		break;
-    	case COMPRESS:
-    		state = Intake.COMPRESS;
-    		solenoid = intake_compressdecompress;
-    		break;
-    	default:
-    		state = Intake.DECOMPRESS;
-    		solenoid = intake_compressdecompress;
-    		break;
-    	}
-    	solenoid.set(state);
+    	direction.getSolenoid().set(direction.getState());
     }
     
     public void toggleSolenoid (SolenoidType type) {
