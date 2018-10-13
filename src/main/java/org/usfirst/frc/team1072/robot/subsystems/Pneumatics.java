@@ -27,11 +27,6 @@ public class Pneumatics extends Subsystem
     private static Pneumatics pn;
     
     /**
-     * The map of solenoids.
-     */
-    private Map<String, DoubleSolenoid> solMap;
-    
-    /**
      * The solenoid to raise and lower the intake.
      */
     private DoubleSolenoid intake_updown;
@@ -40,21 +35,30 @@ public class Pneumatics extends Subsystem
      * The solenoid to compress and decompress the intake.
      */
     private DoubleSolenoid intake_compressdecompress;
+
+	/**
+	 * The CAN ID of the compressor.
+	 */
+	public static final int COMPRESSOR_PORT = 0;
     
+    
+    public enum SolenoidDirection {
+    	UP, DOWN, COMPRESS, DECOMPRESS
+    }
+    
+    public enum SolenoidType {
+    	UPDOWN, COMPRESSDECOMPRESS
+    }
     /**
      * Constructs a new Pneumatics.
      */
     public Pneumatics ()
     {
-        c = new Compressor(Intake.COMPRESSOR_PORT);
-        // stores all the solenoids by a String key representing their purpose (in RobotMap)
-        solMap = new HashMap<String, DoubleSolenoid>();
+        c = new Compressor(Pneumatics.COMPRESSOR_PORT);
         intake_updown = new DoubleSolenoid(/*RobotMap.FIRST_PCM_ID, */
                 Intake.INTAKE_UP_SOL, Intake.INTAKE_DOWN_SOL);
         intake_compressdecompress = new DoubleSolenoid (/*RobotMap.FIRST_PCM_ID,*/
                 Intake.INTAKE_COMPRESS_SOL, Intake.INTAKE_DECOMPRESS_SOL); 
-        solMap.put(Intake.UPDOWN_KEY, intake_updown);
-        solMap.put(Intake.COMPRESSDECOMPRESS_KEY, intake_compressdecompress);
     }
     /**
      * Initializes the command, setting up all the objects and the map of solenoids.
@@ -69,9 +73,36 @@ public class Pneumatics extends Subsystem
      * @param key the key in the map
      * @return the solenoid stored by the given key
      */
-    public DoubleSolenoid getSolenoid(String key)
+    public DoubleSolenoid getSolenoid(SolenoidType type)
     {
-        return solMap.get(key);
+    	return (type == SolenoidType.UPDOWN) ? intake_updown : intake_compressdecompress; 
+    }
+
+    public void setSolenoid(SolenoidDirection direction)
+    {
+    	DoubleSolenoid solenoid; 
+    	DoubleSolenoid.Value state;
+    	
+    	switch (direction) {
+    	case UP:
+    		state = Intake.UP;
+    	case DOWN:
+    		state = Intake.DOWN;
+    		solenoid = intake_updown;
+    		break;
+    	case COMPRESS:
+    		state = Intake.COMPRESS;
+    	default:
+    		state = Intake.DECOMPRESS;
+    		solenoid = intake_compressdecompress;
+    		break;
+    	}
+    	solenoid.set(state);
+    }
+    
+    public void toggleSolenoid (SolenoidType type) {
+    	DoubleSolenoid solenoid = getSolenoid(type);
+    	solenoid.set(solenoid.get() == DoubleSolenoid.Value.kForward ? DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
     }
     
     /**

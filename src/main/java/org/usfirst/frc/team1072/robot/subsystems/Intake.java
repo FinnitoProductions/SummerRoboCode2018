@@ -189,11 +189,6 @@ public class Intake extends Subsystem
     }
 
     /**
-     * The CAN ID of the compressor.
-     */
-    public static final int COMPRESSOR_PORT = 0;
-    
-    /**
      * The CAN ID of the PCM.
      */
     public static final int FIRST_PCM_ID = 0;

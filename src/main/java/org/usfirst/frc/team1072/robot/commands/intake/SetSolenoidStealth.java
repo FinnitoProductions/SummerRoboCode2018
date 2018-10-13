@@ -5,6 +5,7 @@ import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
+import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidDirection;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.InstantCommand;
@@ -17,14 +18,9 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
  */
 public class SetSolenoidStealth extends InstantCommand {
 	/**
-	 * The key for the solenoid to be actuated in the solenoid map.
-	 */
-	private String solenoidKey;
-
-	/**
 	 * The intended state for the solenoid.
 	 */
-	private DoubleSolenoid.Value solenoidState;
+	private SolenoidDirection solenoidState;
 
 	/**
 	 * Sets up the solenoid command, requiring the intake.
@@ -33,8 +29,7 @@ public class SetSolenoidStealth extends InstantCommand {
 	 *              modified
 	 * @param state the state of the solenoid (forward, off, or reverse)
 	 */
-	public SetSolenoidStealth (String key, DoubleSolenoid.Value state) {
-		solenoidKey = key;
+	public SetSolenoidStealth (SolenoidDirection state) {
 		solenoidState = state;
 	}
 
@@ -42,9 +37,9 @@ public class SetSolenoidStealth extends InstantCommand {
 	 * Sets a given solenoid to a given state.
 	 */
 	public void initialize() {
-		if (solenoidKey.equals(Intake.UPDOWN_KEY) && solenoidState.equals(Intake.DOWN)
+		if (solenoidState == SolenoidDirection.DOWN
 				&& Robot.el.getBottomRightTalon().getSelectedSensorPosition(RobotMap.PRIMARY_PID_INDEX) <= Elevator.INTAKE_HEIGHT)
 				new MoveElevatorMotionMagic(Elevator.INTAKE_HEIGHT).start();
-			Intake.pn.getSolenoid(solenoidKey).set(solenoidState);
+			Intake.pn.setSolenoid(solenoidState);
 	}
 }

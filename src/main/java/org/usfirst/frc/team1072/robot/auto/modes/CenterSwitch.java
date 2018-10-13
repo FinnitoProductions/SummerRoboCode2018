@@ -14,6 +14,7 @@ import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.robot.subsystems.Intake.IntakeType;
+import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidDirection;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -61,8 +62,7 @@ public class CenterSwitch extends AutoMode {
 	        firstCube.addParallel(raiseElevatorFirstCube);
 	        CommandGroup outtakeFirstCube = new CommandGroup();
 	            outtakeFirstCube.addSequential(new PauseUntilPathBegins(fpc1, PauseType.END_OF_PATH, 0.15, fpc1.getTotalTime()));
-	            outtakeFirstCube.addSequential(new SetSolenoid(Intake.COMPRESSDECOMPRESS_KEY,
-	                    Intake.DECOMPRESS));
+	            outtakeFirstCube.addSequential(new SetSolenoid(SolenoidDirection.DECOMPRESS));
 	            outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.17, IntakeType.OUTTAKE));
 	        firstCube.addParallel(outtakeFirstCube);
 	    addSequential(firstCube);
@@ -75,7 +75,7 @@ public class CenterSwitch extends AutoMode {
 				pathGroupSecondCube.addSequential(fpc2);
 				CommandGroup startPath3LowerIntake = new CommandGroup();
 					startPath3LowerIntake.addParallel(fpc3);
-					startPath3LowerIntake.addParallel(new SetSolenoid(Intake.UPDOWN_KEY, Intake.DOWN));
+					startPath3LowerIntake.addParallel(new SetSolenoid(SolenoidDirection.DOWN));
 				pathGroupSecondCube.addSequential(startPath3LowerIntake);
 			getSecondCube.addParallel(pathGroupSecondCube);
 			CommandGroup lowerElevatorSecondCube = new CommandGroup();
@@ -99,18 +99,16 @@ public class CenterSwitch extends AutoMode {
             scoreSecondCube.addParallel(pathGroupOuttakeSecondCube);
             CommandGroup intakeSecondCubeDuringPath = new CommandGroup();
                 intakeSecondCubeDuringPath.addSequential(new IntakeOuttakeTimed(0.4, IntakeType.INTAKE));
-                intakeSecondCubeDuringPath.addSequential(new SetSolenoid(Intake.COMPRESSDECOMPRESS_KEY, Intake.COMPRESS));
+                intakeSecondCubeDuringPath.addSequential(new SetSolenoid(SolenoidDirection.COMPRESS));
             scoreSecondCube.addParallel(intakeSecondCubeDuringPath);
             CommandGroup outtakeSecondCube = new CommandGroup();
                 outtakeSecondCube.addSequential(new PauseUntilPathBegins(fpc5, PauseType.END_OF_PATH, 
                         2, fpc5.getTotalTime()));
-                outtakeSecondCube.addSequential(new SetSolenoid(Intake.COMPRESSDECOMPRESS_KEY, Intake.COMPRESS));
-                outtakeSecondCube.addSequential(new SetSolenoid(Intake.UPDOWN_KEY,
-                    Intake.UP));
+                outtakeSecondCube.addSequential(new SetSolenoid(SolenoidDirection.COMPRESS));
+                outtakeSecondCube.addSequential(new SetSolenoid(SolenoidDirection.UP));
                 outtakeSecondCube.addSequential(new MoveElevatorMotionMagic
                         (Elevator.SWITCH_HEIGHT_AUTON));
-                outtakeSecondCube.addSequential(new SetSolenoid(Intake.COMPRESSDECOMPRESS_KEY,
-                        Intake.DECOMPRESS));
+                outtakeSecondCube.addSequential(new SetSolenoid(SolenoidDirection.DECOMPRESS));
                 outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.34, IntakeType.OUTTAKE));
             scoreSecondCube.addParallel(outtakeSecondCube);
         addSequential(scoreSecondCube);

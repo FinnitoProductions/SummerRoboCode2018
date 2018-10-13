@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1072.robot.commands.intake;
 
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
+import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.InstantCommand;
@@ -15,7 +16,7 @@ public class ToggleSolenoid extends InstantCommand {
 	/**
 	 * The key for the solenoid to be actuated in the solenoid map.
 	 */
-	private String solenoidKey;
+	private SolenoidType type;
 
 	/**
 	 * Sets up the solenoid command, requiring the intake.
@@ -24,12 +25,11 @@ public class ToggleSolenoid extends InstantCommand {
 	 *              modified
 	 * @param state the state of the solenoid (forward, off, or reverse)
 	 */
-	public ToggleSolenoid(String key) {
-        solenoidKey = key;
+	public ToggleSolenoid(SolenoidType type) {
+        this.type = type;
     }
     
     public void initialize () {
-        Intake.pn.getSolenoid(solenoidKey).set(Intake.pn.getSolenoid(solenoidKey).get().equals(DoubleSolenoid.Value.kForward) ? 
-        DoubleSolenoid.Value.kReverse : DoubleSolenoid.Value.kForward);
+        Intake.pn.toggleSolenoid(type);
     }
 }
