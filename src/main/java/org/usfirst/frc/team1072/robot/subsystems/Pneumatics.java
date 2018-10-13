@@ -7,6 +7,7 @@ import org.usfirst.frc.team1072.robot.commands.intake.SetCompressor;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -20,11 +21,6 @@ public class Pneumatics extends Subsystem
      * The compressor for use in the pneumatic subsystem.
      */
     private Compressor c;
-
-	/**
-	 * The CAN ID of the PCM.
-	 */
-	public static final int FIRST_PCM_ID = 0;
     
     /**
      * The current instance of this singleton subsystem.
@@ -48,10 +44,10 @@ public class Pneumatics extends Subsystem
     
     
     public enum SolenoidDirection {
-    	UP(intake_updown, Intake.UP), 
-    	DOWN(intake_updown, Intake.DOWN), 
-    	COMPRESS(intake_compressdecompress, Intake.COMPRESS), 
-    	DECOMPRESS(intake_compressdecompress, Intake.DECOMPRESS);
+    	UP(intake_updown, Pneumatics.UP), 
+    	DOWN(intake_updown, Pneumatics.DOWN), 
+    	COMPRESS(intake_compressdecompress, Pneumatics.COMPRESS), 
+    	DECOMPRESS(intake_compressdecompress, Pneumatics.DECOMPRESS);
     	
     	
     	private final DoubleSolenoid solenoid;
@@ -76,9 +72,9 @@ public class Pneumatics extends Subsystem
     {
         c = new Compressor(Pneumatics.COMPRESSOR_PORT);
         intake_updown = new DoubleSolenoid(/*RobotMap.FIRST_PCM_ID, */
-                Intake.INTAKE_UP_SOL, Intake.INTAKE_DOWN_SOL);
+                Pneumatics.INTAKE_UP_SOL, Pneumatics.INTAKE_DOWN_SOL);
         intake_compressdecompress = new DoubleSolenoid (/*RobotMap.FIRST_PCM_ID,*/
-                Intake.INTAKE_COMPRESS_SOL, Intake.INTAKE_DECOMPRESS_SOL); 
+                Pneumatics.INTAKE_COMPRESS_SOL, Pneumatics.INTAKE_DECOMPRESS_SOL); 
     }
     /**
      * Initializes the command, setting up all the objects and the map of solenoids.
@@ -136,4 +132,49 @@ public class Pneumatics extends Subsystem
             pn = new Pneumatics();
         return pn;
     }
+    
+    /**
+	 * The solenoid value for decompressing the intake.
+	 */
+	public static final DoubleSolenoid.Value DECOMPRESS = DoubleSolenoid.Value.kForward;
+
+	/**
+	 * The port of the solenoid to decompress the intake.
+	 */
+	public static final int INTAKE_DECOMPRESS_SOL = 2;
+
+	/**
+	 * The solenoid value for compressing the intake.
+	 */
+	public static final DoubleSolenoid.Value COMPRESS = DoubleSolenoid.Value.kReverse;
+
+	/**
+	 * The port of the solenoid to compress the intake.
+	 */
+	public static final int INTAKE_COMPRESS_SOL = 0;
+
+	/**
+	 * The solenoid value for raising the intake.
+	 */
+	public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kForward;
+
+	/**
+	 * The port of the solenoid to raise the intake.
+	 */
+	public static final int INTAKE_UP_SOL = 3;
+
+	/**
+	 * The solenoid value for lowering the intake.
+	 */
+	public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kReverse;
+
+	/**
+	 * The port of the solenoid to lower the intake.
+	 */
+	public static final int INTAKE_DOWN_SOL = 1;
+
+	/**
+	 * The CAN ID of the PCM.
+	 */
+	public static final int FIRST_PCM_ID = 0;
 }

@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -187,46 +186,6 @@ public class Intake extends Subsystem
     {
         getRightTalon().set(ControlMode.PercentOutput, speed);
     }
-
-    /**
-     * The port of the solenoid to lower the intake.
-     */
-    public static final int INTAKE_DOWN_SOL = 1;
-    
-    /**
-     * The solenoid value for lowering the intake.
-     */
-    public static final DoubleSolenoid.Value DOWN = DoubleSolenoid.Value.kReverse;
-    
-    /**
-     * The port of the solenoid to raise the intake.
-     */
-    public static final int INTAKE_UP_SOL = 3;
-    
-    /**
-     * The solenoid value for raising the intake.
-     */
-    public static final DoubleSolenoid.Value UP = DoubleSolenoid.Value.kForward;
-    
-    /**
-     * The port of the solenoid to compress the intake.
-     */
-    public static final int INTAKE_COMPRESS_SOL = 0;
-    
-    /**
-     * The solenoid value for compressing the intake.
-     */
-    public static final DoubleSolenoid.Value COMPRESS = DoubleSolenoid.Value.kReverse;
-    
-    /**
-     * The port of the solenoid to decompress the intake.
-     */
-    public static final int INTAKE_DECOMPRESS_SOL = 2;
-    
-    /**
-     * The solenoid value for decompressing the intake.
-     */
-    public static final DoubleSolenoid.Value DECOMPRESS = DoubleSolenoid.Value.kForward;
 
     /**
      * The direction of Talon input such that the intake will intake.
