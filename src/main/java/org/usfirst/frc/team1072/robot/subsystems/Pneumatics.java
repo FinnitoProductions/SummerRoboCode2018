@@ -86,12 +86,16 @@ public class Pneumatics extends Subsystem
     	switch (direction) {
     	case UP:
     		state = Intake.UP;
+    		solenoid = intake_updown;
+    		break;
     	case DOWN:
     		state = Intake.DOWN;
     		solenoid = intake_updown;
     		break;
     	case COMPRESS:
     		state = Intake.COMPRESS;
+    		solenoid = intake_compressdecompress;
+    		break;
     	default:
     		state = Intake.DECOMPRESS;
     		solenoid = intake_compressdecompress;
