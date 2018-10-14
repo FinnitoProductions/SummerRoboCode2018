@@ -1,8 +1,5 @@
 package org.usfirst.frc.team1072.robot;
 
-import org.usfirst.frc.team1072.harkerrobolib.commands.CancelCommand;
-import org.usfirst.frc.team1072.harkerrobolib.wrappers.DPadButtonWrapper;
-import org.usfirst.frc.team1072.harkerrobolib.wrappers.GamepadWrapper;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeIndefinite;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
@@ -19,6 +16,9 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.InstantCommand;
+import harkerrobolib.util.Conversions;
+import harkerrobolib.wrappers.DPadButtonWrapper;
+import harkerrobolib.wrappers.GamepadWrapper;
 
 
 
@@ -45,7 +45,7 @@ public class OI
     public static final double BLACK_XBOX_DRIVE_DEADBAND = 0.09;
 
     public static final double BLACK_XBOX_ELEVATOR_DEADBAND = 0.15;
-    
+
     /**
      * The deadband (range for which no input is received) of the Logitech controller.
      */
