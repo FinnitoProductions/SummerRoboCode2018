@@ -66,7 +66,8 @@ public class Drivetrain extends DrivetrainSubsystem
     private Drivetrain()
     {
         // initialize talons
-        super(new TalonSRXWrapper (CAN_IDs.LEFT_CIM_TALON), new TalonSRXWrapper (CAN_IDs.LEFT_CIM_TALON), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR));
+        super(new TalonSRXWrapper (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), 
+        		new TalonSRXWrapper (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR));
         leftTalon = new TalonSRX (CAN_IDs.LEFT_CIM_TALON);
         rightTalon = new TalonSRX (CAN_IDs.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR);
