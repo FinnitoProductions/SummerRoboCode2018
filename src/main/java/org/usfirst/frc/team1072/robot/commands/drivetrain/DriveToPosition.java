@@ -83,7 +83,7 @@ public class DriveToPosition extends PositionCommand
     public void end()
     {
         System.out.println("Command finished");
-        Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
-        Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+        Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, 0);
+        Robot.dt.getRightMaster().set(ControlMode.PercentOutput, 0);
     }
 }

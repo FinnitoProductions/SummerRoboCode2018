@@ -326,11 +326,11 @@ public class AutonomousCommand extends CommandGroup
         else
         {
             endAngleLeft = prevPath.getControllerTrajectory
-                    (Robot.dt.getLeftTalon()).segments[prevPath.getControllerTrajectory
-                                                       (Robot.dt.getLeftTalon()).segments.length-1].heading;
+                    (Robot.dt.getLeftMaster()).segments[prevPath.getControllerTrajectory
+                                                       (Robot.dt.getLeftMaster()).segments.length-1].heading;
             endAngleRight = prevPath.getControllerTrajectory
-                    (Robot.dt.getRightTalon()).segments[prevPath.getControllerTrajectory
-                                                       (Robot.dt.getLeftTalon()).segments.length-1].heading;                                                      
+                    (Robot.dt.getRightMaster()).segments[prevPath.getControllerTrajectory
+                                                       (Robot.dt.getLeftMaster()).segments.length-1].heading;                                                      
         }
         
         FollowPathArc fpc = new FollowPathArc();
@@ -348,8 +348,8 @@ public class AutonomousCommand extends CommandGroup
             e.printStackTrace();
             ;
         }
-        fpc.addProfile(leftPath1, Robot.dt.getLeftTalon(), reverse, endAngleLeft);
-        fpc.addProfile(rightPath1, Robot.dt.getRightTalon(), reverse, endAngleRight);
+        fpc.addProfile(leftPath1, Robot.dt.getLeftMaster(), reverse, endAngleLeft);
+        fpc.addProfile(rightPath1, Robot.dt.getRightMaster(), reverse, endAngleRight);
 
         int numPoints = (leftPath1.segments.length + rightPath1.segments.length)/2;
         fpc.setTotalTime(numPoints * RobotMap.TIME_PER_TRAJECTORY_POINT_MS);

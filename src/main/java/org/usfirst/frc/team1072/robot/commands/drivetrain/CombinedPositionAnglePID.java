@@ -57,7 +57,7 @@ public class CombinedPositionAnglePID extends PositionCommand
         ;
         ;
         //Robot.dt.getRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
+        Robot.dt.getRightMaster().set(ControlMode.Position, position, DemandType.AuxPID, angle);
     }
     
     /**
@@ -65,33 +65,33 @@ public class CombinedPositionAnglePID extends PositionCommand
      */
     private void initPosition()
     {   
-        Robot.dt.getLeftTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
+        Robot.dt.getLeftMaster().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
+        Robot.dt.getRightMaster().getSensorCollection().setQuadraturePosition(0, RobotMap.TIMEOUT);
         
-        Robot.dt.getRightTalon().selectProfileSlot(Drivetrain.POS_PID, RobotMap.PRIMARY_PID_INDEX);
-        Robot.dt.getRightTalon().selectProfileSlot(Drivetrain.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
-        Robot.dt.getLeftTalon().follow(Robot.dt.getRightTalon(), FollowerType.AuxOutput1);
+        Robot.dt.getRightMaster().selectProfileSlot(Drivetrain.POS_PID, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getRightMaster().selectProfileSlot(Drivetrain.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
+        Robot.dt.getLeftMaster().follow(Robot.dt.getRightMaster(), FollowerType.AuxOutput1);
         
-        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+        Robot.dt.getRightMaster().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, RobotMap.REMOTE_SLOT_0, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getLeftTalon().getDeviceID(), 
+        Robot.dt.getRightMaster().configRemoteFeedbackFilter(Robot.dt.getLeftMaster().getDeviceID(), 
                 RemoteSensorSource.TalonSRX_SelectedSensor, RobotMap.REMOTE_SLOT_1, RobotMap.TIMEOUT);
 
         
-        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(
+        Robot.dt.getLeftMaster().configSelectedFeedbackSensor(
                 FeedbackDevice.CTRE_MagEncoder_Relative, 
                 RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
-        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSelectedFeedbackSensor(
+        Robot.dt.getRightMaster().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
+        Robot.dt.getRightMaster().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+        Robot.dt.getRightMaster().configSelectedFeedbackSensor(
                 FeedbackDevice.SensorSum, 
                 RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, 
+        Robot.dt.getRightMaster().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, 
                 RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
         
-        Robot.dt.getLeftTalon().configSelectedFeedbackCoefficient(1, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getLeftMaster().configSelectedFeedbackCoefficient(1, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightMaster().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         Robot.dt.setTalonSensorPhase(Drivetrain.LEFT_TALON_PHASE, Drivetrain.RIGHT_TALON_PHASE);
         
     }
@@ -106,7 +106,7 @@ public class CombinedPositionAnglePID extends PositionCommand
             incrementNumExecutes();
         }
 
-        Robot.dt.getRightTalon().set(ControlMode.Position, position, DemandType.AuxPID, angle);
+        Robot.dt.getRightMaster().set(ControlMode.Position, position, DemandType.AuxPID, angle);
     }
     /**
     * Determines whether this command has finished.
@@ -117,7 +117,7 @@ public class CombinedPositionAnglePID extends PositionCommand
     {
         if (passedMaxExecutes())
         {
-            return Math.abs(Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX))
+            return Math.abs(Robot.dt.getRightMaster().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX))
                     < Drivetrain.POS_ALLOWABLE_ERROR;
         }
         //;
@@ -126,8 +126,8 @@ public class CombinedPositionAnglePID extends PositionCommand
     
     public void end()
     {
-        Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, 0);
-        Robot.dt.getRightTalon().set(ControlMode.PercentOutput, 0);
+        Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, 0);
+        Robot.dt.getRightMaster().set(ControlMode.PercentOutput, 0);
         ;
         ;
         ;

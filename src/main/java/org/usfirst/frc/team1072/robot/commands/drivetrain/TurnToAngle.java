@@ -121,11 +121,11 @@ public class TurnToAngle extends Command
         Robot.dt.resetTalonCoefficients(RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.configureAngleClosedLoop();
         
-        Robot.dt.getLeftTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+        Robot.dt.getLeftMaster().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_SLOT_0, 
                 RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
+        Robot.dt.getRightMaster().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
                 RobotMap.REMOTE_SLOT_0, 
                 RobotMap.TIMEOUT);
@@ -169,7 +169,7 @@ public class TurnToAngle extends Command
             return true; //end early
         }
         
-        previousErrors[errorIndex] = Robot.dt.getRightTalon().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
+        previousErrors[errorIndex] = Robot.dt.getRightMaster().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX);
         errorIndex = (errorIndex + 1) % previousErrors.length;
         if (numExecutes == -1)
         {

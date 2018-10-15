@@ -40,10 +40,10 @@ public class PrebufferPathPoints extends Command
     {
         this.fpc = fpc;
         masterControllers = new HashMap<IMotorController, Trajectory>();
-        masterControllers.put(Robot.dt.getRightTalon(), fpc.getControllerTrajectory(Robot.dt.getRightTalon()));
+        masterControllers.put(Robot.dt.getRightMaster(), fpc.getControllerTrajectory(Robot.dt.getRightMaster()));
         if (!(fpc instanceof FollowPathArc))
         {
-            masterControllers.put(Robot.dt.getLeftTalon(), fpc.getControllerTrajectory(Robot.dt.getLeftTalon()));
+            masterControllers.put(Robot.dt.getLeftMaster(), fpc.getControllerTrajectory(Robot.dt.getLeftMaster()));
         }
     }
     

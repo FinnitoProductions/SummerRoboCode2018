@@ -42,8 +42,8 @@ public class DriveWithVelocity extends Command
         Robot.dt.selectProfileSlots(Drivetrain.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         
         
-        Robot.dt.getLeftTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getLeftMaster().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getRightMaster().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
     
         Robot.dt.setTalonSensorPhase(Drivetrain.LEFT_TALON_PHASE, 
                 Drivetrain.RIGHT_TALON_PHASE);
@@ -100,8 +100,8 @@ public class DriveWithVelocity extends Command
                 elevatorScale * right * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                 SpeedUnit.ENCODER_UNITS);*/
         
-        Robot.dt.getLeftTalon().set(ControlMode.PercentOutput, left);
-        Robot.dt.getRightTalon().set(ControlMode.PercentOutput, right);
+        Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, left);
+        Robot.dt.getRightMaster().set(ControlMode.PercentOutput, right);
     }
     
     /**

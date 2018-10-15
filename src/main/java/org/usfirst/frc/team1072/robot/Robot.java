@@ -102,17 +102,17 @@ public class Robot extends TimedRobot
     public void disabledInit() 
     { 
         NeutralMode nm;
-        if (Robot.dt.getLeftTalon().getMotorOutputPercent() > Drivetrain.NOMINAL_OUTPUT_LEFT * 1.5
-                && Robot.dt.getRightTalon().getMotorOutputPercent() > Drivetrain.NOMINAL_OUTPUT_RIGHT * 1.5)
+        if (Robot.dt.getLeftMaster().getMotorOutputPercent() > Drivetrain.NOMINAL_OUTPUT_LEFT * 1.5
+                && Robot.dt.getRightMaster().getMotorOutputPercent() > Drivetrain.NOMINAL_OUTPUT_RIGHT * 1.5)
         {
             nm = NeutralMode.Brake;
         }
         else
             nm = NeutralMode.Coast;
-        Robot.dt.getLeftTalon().setNeutralMode(nm);
-        Robot.dt.getRightTalon().setNeutralMode(nm);
-        Robot.dt.getLeftVictor().setNeutralMode(nm);
-        Robot.dt.getRightVictor().setNeutralMode(nm);
+        Robot.dt.getLeftMaster().setNeutralMode(nm);
+        Robot.dt.getRightMaster().setNeutralMode(nm);
+        Robot.dt.getLeftFollower().setNeutralMode(nm);
+        Robot.dt.getRightFollower().setNeutralMode(nm);
     }
 
     /**
@@ -145,8 +145,8 @@ public class Robot extends TimedRobot
         }*/
         Scheduler.getInstance().run();
         
-        SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightTalon().getClosedLoopError(0));
-        SmartDashboard.putNumber ("Auxiliary Error", Robot.dt.getRightTalon().getClosedLoopError(1));
+        SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightMaster().getClosedLoopError(0));
+        SmartDashboard.putNumber ("Auxiliary Error", Robot.dt.getRightMaster().getClosedLoopError(1));
     }
 
     /**
