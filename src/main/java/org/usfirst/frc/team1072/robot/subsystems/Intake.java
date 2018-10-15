@@ -135,17 +135,17 @@ public class Intake extends Subsystem
      */
     private void intakeSetCurrentLimit(int peakCurrentLimit, int peakTime, int continuousLimit)
     {
-        getLeftTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
-        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+        getLeftTalon().configPeakCurrentLimit(peakCurrentLimit);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit);
 
-        getLeftTalon().configPeakCurrentDuration(peakTime, RobotMap.TIMEOUT);
-        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+        getLeftTalon().configPeakCurrentDuration(peakTime);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit);
 
-        getLeftTalon().configContinuousCurrentLimit(continuousLimit, RobotMap.TIMEOUT);
-        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+        getLeftTalon().configContinuousCurrentLimit(continuousLimit);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit);
 
         getLeftTalon().enableCurrentLimit(true);
-        getRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+        getRightTalon().configPeakCurrentLimit(peakCurrentLimit);
     }
     
     /**

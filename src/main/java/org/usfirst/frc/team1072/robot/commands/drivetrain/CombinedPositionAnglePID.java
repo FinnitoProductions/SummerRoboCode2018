@@ -82,16 +82,16 @@ public class CombinedPositionAnglePID extends PositionCommand
                 FeedbackDevice.CTRE_MagEncoder_Relative, 
                 RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
         
-        Robot.dt.getRightMaster().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.TIMEOUT);
-        Robot.dt.getRightMaster().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor1, RobotMap.TIMEOUT);
+        Robot.dt.getRightMaster().configSensorTerm(SensorTerm.Sum0, FeedbackDevice.CTRE_MagEncoder_Relative);
+        Robot.dt.getRightMaster().configSensorTerm(SensorTerm.Sum1, FeedbackDevice.RemoteSensor1);
         Robot.dt.getRightMaster().configSelectedFeedbackSensor(
                 FeedbackDevice.SensorSum, 
-                RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.getRightMaster().configSelectedFeedbackSensor(RemoteFeedbackDevice.RemoteSensor0, 
-                RobotMap.AUXILIARY_PID_INDEX, RobotMap.TIMEOUT);
+                RobotMap.AUXILIARY_PID_INDEX);
         
-        Robot.dt.getLeftMaster().configSelectedFeedbackCoefficient(1, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        Robot.dt.getRightMaster().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.dt.getLeftMaster().configSelectedFeedbackCoefficient(1, RobotMap.PRIMARY_PID_INDEX);
+        Robot.dt.getRightMaster().configSelectedFeedbackCoefficient(0.5, RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.setTalonSensorPhase(Drivetrain.LEFT_TALON_PHASE, Drivetrain.RIGHT_TALON_PHASE);
         
     }

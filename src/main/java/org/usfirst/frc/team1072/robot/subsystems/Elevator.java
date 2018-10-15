@@ -132,7 +132,7 @@ public class Elevator extends Subsystem
      */
     private void elSetRampRate (double rampRate)
     {
-        getBottomRightTalon().configOpenloopRamp(rampRate, RobotMap.TIMEOUT);
+        getBottomRightTalon().configOpenloopRamp(rampRate);
     }
     /**
      * Slaves the three elevator Victors to the one Talon.
@@ -173,7 +173,7 @@ public class Elevator extends Subsystem
      */
     private void elScaleVoltage(double nomVoltage)
     {
-        getBottomRightTalon().configVoltageCompSaturation(nomVoltage, RobotMap.TIMEOUT);
+        getBottomRightTalon().configVoltageCompSaturation(nomVoltage);
     }
 
     /**
@@ -184,11 +184,11 @@ public class Elevator extends Subsystem
      */
     private void elSetSoftLimit(int forwardSoftLimit, int reverseSoftLimit)
     {
-        getBottomRightTalon().configForwardSoftLimitThreshold(forwardSoftLimit, RobotMap.TIMEOUT);
-        getBottomRightTalon().configForwardSoftLimitEnable(true, RobotMap.TIMEOUT);
+        getBottomRightTalon().configForwardSoftLimitThreshold(forwardSoftLimit);
+        getBottomRightTalon().configForwardSoftLimitEnable(true);
         
-        getBottomRightTalon().configReverseSoftLimitThreshold(reverseSoftLimit, RobotMap.TIMEOUT);
-        getBottomRightTalon().configReverseSoftLimitEnable(true, RobotMap.TIMEOUT);
+        getBottomRightTalon().configReverseSoftLimitThreshold(reverseSoftLimit);
+        getBottomRightTalon().configReverseSoftLimitEnable(true);
         
         getBottomRightTalon().overrideLimitSwitchesEnable(true);
     }
@@ -201,23 +201,23 @@ public class Elevator extends Subsystem
      */
     private void elConfigurePositionClosedLoop()
     {
-        getBottomRightTalon().configNominalOutputForward(Elevator.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configNominalOutputForward(Elevator.NOMINAL_OUTPUT);
         
-        getBottomRightTalon().configNominalOutputReverse(-1 * Elevator.NOMINAL_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configNominalOutputReverse(-1 * Elevator.NOMINAL_OUTPUT);
         
-        getBottomRightTalon().configPeakOutputForward(Elevator.PEAK_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configPeakOutputForward(Elevator.PEAK_OUTPUT);
         
-        getBottomRightTalon().configPeakOutputReverse(-1 * Elevator.PEAK_OUTPUT, RobotMap.TIMEOUT);
+        getBottomRightTalon().configPeakOutputReverse(-1 * Elevator.PEAK_OUTPUT);
         
-        getBottomRightTalon().config_kF(Elevator.POS_PID, Elevator.POS_KF, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kF(Elevator.POS_PID, Elevator.POS_KF);
         
-        getBottomRightTalon().config_kP(Elevator.POS_PID, Elevator.POS_KP, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kP(Elevator.POS_PID, Elevator.POS_KP);
         
-        getBottomRightTalon().config_kI(Elevator.POS_PID, Elevator.POS_KI, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kI(Elevator.POS_PID, Elevator.POS_KI);
         
-        getBottomRightTalon().config_kD(Elevator.POS_PID, Elevator.POS_KD, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kD(Elevator.POS_PID, Elevator.POS_KD);
         
-        getBottomRightTalon().configAllowableClosedloopError(Drivetrain.POS_PID, Elevator.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(Drivetrain.POS_PID, Elevator.POS_ALLOWABLE_ERROR);
     }
     
     /**
@@ -227,15 +227,15 @@ public class Elevator extends Subsystem
     {
         // set motion magic port to be the velocity PID port 
         getBottomRightTalon().selectProfileSlot(Elevator.MOTION_MAGIC_PID, RobotMap.PRIMARY_PID_INDEX);
-        getBottomRightTalon().config_kF(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KF, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kP(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KP, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kI(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KI, RobotMap.TIMEOUT);
-        getBottomRightTalon().config_kD(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KD, RobotMap.TIMEOUT);
+        getBottomRightTalon().config_kF(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KF);
+        getBottomRightTalon().config_kP(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KP);
+        getBottomRightTalon().config_kI(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KI);
+        getBottomRightTalon().config_kD(Elevator.MOTION_MAGIC_PID, Elevator.MOTION_MAGIC_KD);
         
-        getBottomRightTalon().configMotionCruiseVelocity(Elevator.MOTION_MAGIC_VEL, RobotMap.TIMEOUT);
-        getBottomRightTalon().configMotionAcceleration(Elevator.MOTION_MAGIC_ACCEL, RobotMap.TIMEOUT);
+        getBottomRightTalon().configMotionCruiseVelocity(Elevator.MOTION_MAGIC_VEL);
+        getBottomRightTalon().configMotionAcceleration(Elevator.MOTION_MAGIC_ACCEL);
         
-        getBottomRightTalon().configAllowableClosedloopError(Drivetrain.VEL_PID, Elevator.MOTION_MAGIC_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getBottomRightTalon().configAllowableClosedloopError(Drivetrain.VEL_PID, Elevator.MOTION_MAGIC_ALLOWABLE_ERROR);
         
     }
 
@@ -251,9 +251,9 @@ public class Elevator extends Subsystem
      */
     private void elSetCurrentLimit(int peakCurrentLimit, int peakTime, int continuousLimit)
     {
-        getBottomRightTalon().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
-        getBottomRightTalon().configPeakCurrentDuration(peakTime, RobotMap.TIMEOUT);
-        getBottomRightTalon().configContinuousCurrentLimit(continuousLimit, RobotMap.TIMEOUT);
+        getBottomRightTalon().configPeakCurrentLimit(peakCurrentLimit);
+        getBottomRightTalon().configPeakCurrentDuration(peakTime);
+        getBottomRightTalon().configContinuousCurrentLimit(continuousLimit);
         getBottomRightTalon().enableCurrentLimit(true);
     }
 
@@ -262,7 +262,7 @@ public class Elevator extends Subsystem
      */
     private void elZeroSensors()
     {
-        getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX);
     }
     /**
      * Gets the top right Victor on the elevator.

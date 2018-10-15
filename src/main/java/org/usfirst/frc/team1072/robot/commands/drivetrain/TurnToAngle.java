@@ -123,12 +123,10 @@ public class TurnToAngle extends Command
         
         Robot.dt.getLeftMaster().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_SLOT_0, 
-                RobotMap.TIMEOUT);
+                RobotMap.REMOTE_SLOT_0, errorIndex);
         Robot.dt.getRightMaster().configRemoteFeedbackFilter(Robot.dt.getPigeon().getDeviceID(), 
                 RemoteSensorSource.Pigeon_Yaw, 
-                RobotMap.REMOTE_SLOT_0, 
-                RobotMap.TIMEOUT);
+                RobotMap.REMOTE_SLOT_0, errorIndex);
         
         
         Robot.dt.configBothFeedbackSensors(FeedbackDevice.RemoteSensor0, RobotMap.PRIMARY_PID_INDEX);

@@ -97,7 +97,7 @@ public class OI
 					@Override
 					protected boolean condition() {
                         Elevator.getInstance().getBottomRightTalon().configSelectedFeedbackSensor
-                        (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                        (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
                         System.out.println(Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
                         
                         return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 

@@ -198,7 +198,7 @@ public class FollowPath extends Command
             if (resetSensors)
             {
                 Robot.dt.getLeftMaster().follow(Robot.dt.getRightMaster(), FollowerType.AuxOutput1);
-                Robot.dt.getLeftMaster().configAuxPIDPolarity(false, RobotMap.TIMEOUT);
+                Robot.dt.getLeftMaster().configAuxPIDPolarity(false);
                 
                 Robot.dt.getRightMaster().selectProfileSlot(Drivetrain.MOTION_PROFILE_PID, RobotMap.PRIMARY_PID_INDEX);
                 Robot.dt.getRightMaster().selectProfileSlot(Drivetrain.ANGLE_PID, RobotMap.AUXILIARY_PID_INDEX);
@@ -228,7 +228,7 @@ public class FollowPath extends Command
                 }
                 //;
                 Robot.dt.getRightMaster().configSelectedFeedbackCoefficient(0.5,
-                        RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT); // set to average
+                        RobotMap.PRIMARY_PID_INDEX); // set to average
                 
     
                 Robot.dt.getRightMaster().configAllowableClosedloopError(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.ANGLE_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
@@ -283,13 +283,13 @@ public class FollowPath extends Command
                     ;
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Disable.value);
                     
-                    Robot.dt.getLeftMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    Robot.dt.getLeftMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX);
                     
                     Robot.dt.getRightMaster().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-                    Robot.dt.getRightMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    Robot.dt.getRightMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX);
                     
                     Robot.dt.getRightMaster().configSelectedFeedbackSensor(FeedbackDevice.SensorSum, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-                    Robot.dt.getRightMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+                    Robot.dt.getRightMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX);
 
                     ;
                     controller.set(ControlMode.MotionProfileArc, SetValueMotionProfile.Enable.value);

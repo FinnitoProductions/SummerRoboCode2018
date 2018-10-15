@@ -27,7 +27,7 @@ public class MoveElevatorVelocity extends Command
      */
     public void initialize()
     {
-        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        Robot.el.getBottomRightTalon().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
     }
     /**
      * Executes the command using the speed from joystick input.

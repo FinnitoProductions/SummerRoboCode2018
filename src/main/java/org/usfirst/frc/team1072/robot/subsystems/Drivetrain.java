@@ -174,8 +174,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void setTalonDeadbands()
     {
-        getLeftMaster().configNeutralDeadband(Drivetrain.TALON_DEADBAND, RobotMap.TIMEOUT);
-        getRightMaster().configNeutralDeadband(Drivetrain.TALON_DEADBAND, RobotMap.TIMEOUT);
+        getLeftMaster().configNeutralDeadband(Drivetrain.TALON_DEADBAND);
+        getRightMaster().configNeutralDeadband(Drivetrain.TALON_DEADBAND);
     }
 
     /**
@@ -218,8 +218,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void setBothSensorPositions (int value, int pidLoop)
     {
-        getLeftMaster().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
-        getRightMaster().setSelectedSensorPosition(value, pidLoop, RobotMap.TIMEOUT);
+        getLeftMaster().setSelectedSensorPosition(value, pidLoop);
+        getRightMaster().setSelectedSensorPosition(value, pidLoop);
     }
     
     /**
@@ -268,9 +268,9 @@ public class Drivetrain extends DrivetrainSubsystem
     public void resetTalonCoefficients (int pid_slot)
     {
         getLeftMaster().configSelectedFeedbackCoefficient(1,
-                pid_slot, RobotMap.TIMEOUT); 
+                pid_slot); 
         getRightMaster().configSelectedFeedbackCoefficient(1,
-                pid_slot, RobotMap.TIMEOUT); 
+                pid_slot); 
     }
     
     /**
@@ -278,8 +278,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void zeroAllSensors()
     {
-        getLeftMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
-        getRightMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX, RobotMap.TIMEOUT);
+        getLeftMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX);
+        getRightMaster().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX);
     }
    
 
@@ -305,8 +305,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void setRampTime(double t)
     {
-        getLeftMaster().configOpenloopRamp(t, RobotMap.TIMEOUT);
-        getRightMaster().configOpenloopRamp(t, RobotMap.TIMEOUT);
+        getLeftMaster().configOpenloopRamp(t);
+        getRightMaster().configOpenloopRamp(t);
     }
 
     /**
@@ -319,8 +319,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void scaleVoltage(double nomVoltage)
     {
-        getLeftMaster().configVoltageCompSaturation(nomVoltage, RobotMap.TIMEOUT);
-        getRightMaster().configVoltageCompSaturation(nomVoltage, RobotMap.TIMEOUT);
+        getLeftMaster().configVoltageCompSaturation(nomVoltage);
+        getRightMaster().configVoltageCompSaturation(nomVoltage);
         getLeftMaster().enableVoltageCompensation(true);
         getRightMaster().enableVoltageCompensation(true);
     }
@@ -344,17 +344,17 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void configureVelocityClosedLoop()
     {
-        getLeftMaster().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_LEFT);
+        getRightMaster().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_RIGHT);
 
-        getLeftMaster().config_kP(Drivetrain.VEL_PID, Drivetrain.VEL_KP_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kP(Drivetrain.VEL_PID, Drivetrain.VEL_KP_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kP(Drivetrain.VEL_PID, Drivetrain.VEL_KP_LEFT);
+        getRightMaster().config_kP(Drivetrain.VEL_PID, Drivetrain.VEL_KP_RIGHT);
 
-        getLeftMaster().config_kI(Drivetrain.VEL_PID, Drivetrain.VEL_KI_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kI(Drivetrain.VEL_PID, Drivetrain.VEL_KI_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kI(Drivetrain.VEL_PID, Drivetrain.VEL_KI_LEFT);
+        getRightMaster().config_kI(Drivetrain.VEL_PID, Drivetrain.VEL_KI_RIGHT);
 
-        getLeftMaster().config_kD(Drivetrain.VEL_PID, Drivetrain.VEL_KD_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kD(Drivetrain.VEL_PID, Drivetrain.VEL_KD_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kD(Drivetrain.VEL_PID, Drivetrain.VEL_KD_LEFT);
+        getRightMaster().config_kD(Drivetrain.VEL_PID, Drivetrain.VEL_KD_RIGHT);
       
     }
 
@@ -364,17 +364,17 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void configureNominalPeakOutputs()
     {
-        getLeftMaster().configNominalOutputForward(Drivetrain.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().configNominalOutputForward(Drivetrain.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().configNominalOutputForward(Drivetrain.NOMINAL_OUTPUT_LEFT);
+        getRightMaster().configNominalOutputForward(Drivetrain.NOMINAL_OUTPUT_RIGHT);
 
-        getLeftMaster().configNominalOutputReverse(-1 * Drivetrain.NOMINAL_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().configNominalOutputReverse(-1 * Drivetrain.NOMINAL_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().configNominalOutputReverse(-1 * Drivetrain.NOMINAL_OUTPUT_LEFT);
+        getRightMaster().configNominalOutputReverse(-1 * Drivetrain.NOMINAL_OUTPUT_RIGHT);
 
-        getLeftMaster().configPeakOutputForward(Drivetrain.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().configPeakOutputForward(Drivetrain.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().configPeakOutputForward(Drivetrain.PEAK_OUTPUT_LEFT);
+        getRightMaster().configPeakOutputForward(Drivetrain.PEAK_OUTPUT_RIGHT);
 
-        getLeftMaster().configPeakOutputReverse(-1 * Drivetrain.PEAK_OUTPUT_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().configPeakOutputReverse(-1 * Drivetrain.PEAK_OUTPUT_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().configPeakOutputReverse(-1 * Drivetrain.PEAK_OUTPUT_LEFT);
+        getRightMaster().configPeakOutputReverse(-1 * Drivetrain.PEAK_OUTPUT_RIGHT);
     }
     /**
      * Configures the drivetrain position closed loop.
@@ -385,23 +385,23 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void configurePositionClosedLoop()
     {
-        getLeftMaster().configAllowableClosedloopError(Drivetrain.POS_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-        getRightMaster().configAllowableClosedloopError(Drivetrain.POS_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getLeftMaster().configAllowableClosedloopError(Drivetrain.POS_PID, Drivetrain.POS_ALLOWABLE_ERROR);
+        getRightMaster().configAllowableClosedloopError(Drivetrain.POS_PID, Drivetrain.POS_ALLOWABLE_ERROR);
 
-        getLeftMaster().config_kF(Drivetrain.POS_PID, Drivetrain.POS_KF_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kF(Drivetrain.POS_PID, Drivetrain.POS_KF_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kF(Drivetrain.POS_PID, Drivetrain.POS_KF_LEFT);
+        getRightMaster().config_kF(Drivetrain.POS_PID, Drivetrain.POS_KF_RIGHT);
 
-        getLeftMaster().config_kP(Drivetrain.POS_PID, Drivetrain.POS_KP_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kP(Drivetrain.POS_PID, Drivetrain.POS_KP_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kP(Drivetrain.POS_PID, Drivetrain.POS_KP_LEFT);
+        getRightMaster().config_kP(Drivetrain.POS_PID, Drivetrain.POS_KP_RIGHT);
 
-        getLeftMaster().config_kI(Drivetrain.POS_PID, Drivetrain.POS_KI_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kI(Drivetrain.POS_PID, Drivetrain.POS_KI_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kI(Drivetrain.POS_PID, Drivetrain.POS_KI_LEFT);
+        getRightMaster().config_kI(Drivetrain.POS_PID, Drivetrain.POS_KI_RIGHT);
 
-        getLeftMaster().config_kD(Drivetrain.POS_PID, Drivetrain.POS_KD_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kD(Drivetrain.POS_PID, Drivetrain.POS_KD_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kD(Drivetrain.POS_PID, Drivetrain.POS_KD_LEFT);
+        getRightMaster().config_kD(Drivetrain.POS_PID, Drivetrain.POS_KD_RIGHT);
         
-        getLeftMaster().config_IntegralZone(Drivetrain.POS_PID, Drivetrain.POS_IZONE_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_IntegralZone(Drivetrain.POS_PID, Drivetrain.POS_IZONE_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_IntegralZone(Drivetrain.POS_PID, Drivetrain.POS_IZONE_LEFT);
+        getRightMaster().config_IntegralZone(Drivetrain.POS_PID, Drivetrain.POS_IZONE_RIGHT);
     }
     
     /**
@@ -422,26 +422,26 @@ public class Drivetrain extends DrivetrainSubsystem
     {
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, Drivetrain.Pigeon.PERIOD_MS, RobotMap.TIMEOUT);
         
-        getRightMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KF, RobotMap.TIMEOUT);
-        getRightMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KP, RobotMap.TIMEOUT);
-        getRightMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KI, RobotMap.TIMEOUT);
-        getRightMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KD, RobotMap.TIMEOUT);
+        getRightMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KF);
+        getRightMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KP);
+        getRightMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KI);
+        getRightMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KD);
         
-        getRightMaster().configMotionCruiseVelocity(Drivetrain.Pigeon.TURN_VEL, RobotMap.TIMEOUT);
-        getRightMaster().configMotionAcceleration(Drivetrain.Pigeon.TURN_ACCEL, RobotMap.TIMEOUT);
+        getRightMaster().configMotionCruiseVelocity(Drivetrain.Pigeon.TURN_VEL);
+        getRightMaster().configMotionAcceleration(Drivetrain.Pigeon.TURN_ACCEL);
         
-        getRightMaster().config_IntegralZone(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_IZONE, RobotMap.TIMEOUT);
+        getRightMaster().config_IntegralZone(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_IZONE);
         
         
-        getLeftMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KF, RobotMap.TIMEOUT);
-        getLeftMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KP, RobotMap.TIMEOUT);
-        getLeftMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KI, RobotMap.TIMEOUT);
-        getLeftMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KD, RobotMap.TIMEOUT);
+        getLeftMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KF);
+        getLeftMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KP);
+        getLeftMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KI);
+        getLeftMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_KD);
         
-        getLeftMaster().configMotionCruiseVelocity(Drivetrain.Pigeon.TURN_VEL, RobotMap.TIMEOUT);
-        getLeftMaster().configMotionAcceleration(Drivetrain.Pigeon.TURN_ACCEL, RobotMap.TIMEOUT);
+        getLeftMaster().configMotionCruiseVelocity(Drivetrain.Pigeon.TURN_VEL);
+        getLeftMaster().configMotionAcceleration(Drivetrain.Pigeon.TURN_ACCEL);
         
-        getLeftMaster().config_IntegralZone(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_IZONE, RobotMap.TIMEOUT);
+        getLeftMaster().config_IntegralZone(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.TURN_IZONE);
     }
     
     /**
@@ -453,15 +453,15 @@ public class Drivetrain extends DrivetrainSubsystem
     {
         getPigeon().setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, Drivetrain.Pigeon.PERIOD_MS, RobotMap.TIMEOUT);
         
-        getRightMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KF, RobotMap.TIMEOUT);
-        getRightMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KP, RobotMap.TIMEOUT);
-        getRightMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KI, RobotMap.TIMEOUT);
-        getRightMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KD, RobotMap.TIMEOUT);
+        getRightMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KF);
+        getRightMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KP);
+        getRightMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KI);
+        getRightMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KD);
         
-        getLeftMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KF, RobotMap.TIMEOUT);
-        getLeftMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KP, RobotMap.TIMEOUT);
-        getLeftMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KI, RobotMap.TIMEOUT);
-        getLeftMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KD, RobotMap.TIMEOUT);
+        getLeftMaster().config_kF(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KF);
+        getLeftMaster().config_kP(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KP);
+        getLeftMaster().config_kI(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KI);
+        getLeftMaster().config_kD(Drivetrain.ANGLE_PID, Drivetrain.Pigeon.MOT_PROF_KD);
 
     }
 
@@ -472,20 +472,20 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void configureMotionProfileDriveClosedLoop()
     {
-        getLeftMaster().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
-        getRightMaster().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR, RobotMap.TIMEOUT);
+        getLeftMaster().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR);
+        getRightMaster().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR);
 
-        getLeftMaster().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_LEFT);
+        getRightMaster().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_RIGHT);
 
-        getLeftMaster().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_LEFT);
+        getRightMaster().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_RIGHT);
 
-        getLeftMaster().config_kI(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KI_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kI(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KI_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kI(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KI_LEFT);
+        getRightMaster().config_kI(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KI_RIGHT);
 
-        getLeftMaster().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_LEFT, RobotMap.TIMEOUT);
-        getRightMaster().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_RIGHT, RobotMap.TIMEOUT);
+        getLeftMaster().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_LEFT);
+        getRightMaster().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_RIGHT);
     }
     
     
@@ -494,21 +494,21 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void dtsetTalonFramePeriods()
     {
-        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, RobotMap.TIMEOUT);
-        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
-        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20, RobotMap.TIMEOUT);
-        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, RobotMap.TIMEOUT);
-        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, RobotMap.TIMEOUT);
+        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
+        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3);
+        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_3_Quadrature, RobotMap.MAX_TALON_FRAME_PERIOD_MS);
+        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, RobotMap.MAX_TALON_FRAME_PERIOD_MS);
+        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 20);
+        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20);
+        getLeftMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20);
         
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20, RobotMap.TIMEOUT);
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3, RobotMap.TIMEOUT);
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 20, RobotMap.TIMEOUT);
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.MAX_TALON_FRAME_PERIOD_MS, RobotMap.TIMEOUT);
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.TIME_PER_TRAJECTORY_POINT_MS, RobotMap.TIMEOUT);
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20, RobotMap.TIMEOUT);
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20, RobotMap.TIMEOUT);
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 20);
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 3);
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_9_MotProfBuffer, 20);
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.MAX_TALON_FRAME_PERIOD_MS);
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20);
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20);
 
         
     }
@@ -525,14 +525,14 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     private void dtSetCurrentLimit(int peakCurrentLimit, int peakTime, int continuousLimit)
     {
-        getLeftMaster().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
-        getRightMaster().configPeakCurrentLimit(peakCurrentLimit, RobotMap.TIMEOUT);
+        getLeftMaster().configPeakCurrentLimit(peakCurrentLimit);
+        getRightMaster().configPeakCurrentLimit(peakCurrentLimit);
 
-        getLeftMaster().configPeakCurrentDuration(peakTime, RobotMap.TIMEOUT);
-        getRightMaster().configPeakCurrentDuration(peakTime, RobotMap.TIMEOUT);
+        getLeftMaster().configPeakCurrentDuration(peakTime);
+        getRightMaster().configPeakCurrentDuration(peakTime);
 
-        getLeftMaster().configContinuousCurrentLimit(continuousLimit, RobotMap.TIMEOUT);
-        getRightMaster().configContinuousCurrentLimit(continuousLimit, RobotMap.TIMEOUT);
+        getLeftMaster().configContinuousCurrentLimit(continuousLimit);
+        getRightMaster().configContinuousCurrentLimit(continuousLimit);
 
         getLeftMaster().enableCurrentLimit(true);
         getRightMaster().enableCurrentLimit(true);
@@ -628,9 +628,9 @@ public class Drivetrain extends DrivetrainSubsystem
     public void configBothFeedbackSensors(FeedbackDevice fd, int pidLoop)
     {
         getLeftMaster().configSelectedFeedbackSensor(fd, 
-                    pidLoop, RobotMap.TIMEOUT);
+                    pidLoop);
         getRightMaster().configSelectedFeedbackSensor(fd, 
-                    pidLoop, RobotMap.TIMEOUT);
+                    pidLoop);
     }
     
     /**
