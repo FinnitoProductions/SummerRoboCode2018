@@ -33,7 +33,7 @@ dependencies {
     compile ctre()
     compile navx()
     compile files('lib/Pathfinder-Java-1.8.jar')
-    compile files ('lib/HarkerRoboLib.jar') 
+    compile files ('lib/HarkerRoboLib-v2.0.jar')  
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
