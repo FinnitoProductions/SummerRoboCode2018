@@ -19,6 +19,8 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 import harkerrobolib.util.Conversions;
 import harkerrobolib.wrappers.DPadButtonWrapper;
 import harkerrobolib.wrappers.GamepadWrapper;
+import harkerrobolib.wrappers.LogitechGamepad;
+import harkerrobolib.wrappers.XboxGamepad;
 
 
 
@@ -46,10 +48,11 @@ public class OI
 
     public static final double BLACK_XBOX_ELEVATOR_DEADBAND = 0.15;
 
+    public static final double DRIVER_TRIGGER_DEADBAND = 0.15;
     /**
      * The deadband (range for which no input is received) of the Logitech controller.
      */
-    public static final double LOGITECH_DEADBAND = 0.15;
+    public static final double LOGITECH_TRIGGER_DEADBAND = 0.15;
     
     /**
      * The current instance of the singleton OI.
@@ -59,12 +62,12 @@ public class OI
     /**
      * The gamepad for use by the driver.
      */
-    private GamepadWrapper driverGamepad = new GamepadWrapper(DRIVER_PORT);
+    private GamepadWrapper driverGamepad = new XboxGamepad(DRIVER_PORT);
     
     /**
      * The gamepad for use by the operator.
      */
-    private GamepadWrapper operatorGamepad = new GamepadWrapper(OPERATOR_PORT, GamepadWrapper.SETTING_LOGITECH);
+    private GamepadWrapper operatorGamepad = new LogitechGamepad(OPERATOR_PORT);
     
     /**
      * Constructs a new OI.

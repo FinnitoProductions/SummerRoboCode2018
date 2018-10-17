@@ -34,18 +34,18 @@ public class IntakeOuttakeCube extends Command
         {
             double leftInput = oi.getOperatorGamepad().getLeftY();
             double rightInput = oi.getOperatorGamepad().getRightY();
-            if (Math.abs(leftInput) > OI.LOGITECH_DEADBAND || Math.abs(rightInput) > OI.LOGITECH_DEADBAND)
+            if (Math.abs(leftInput) > OI.LOGITECH_TRIGGER_DEADBAND || Math.abs(rightInput) > OI.LOGITECH_TRIGGER_DEADBAND)
             {
-                Robot.intake.setLeft(Math.abs(leftInput) > OI.LOGITECH_DEADBAND ? -leftInput * Math.abs(leftInput) * 0.8 : 0);
-                Robot.intake.setRight(Math.abs(rightInput) > OI.LOGITECH_DEADBAND ? -rightInput * Math.abs(rightInput) * 0.8 : 0);
+                Robot.intake.setLeft(Math.abs(leftInput) > OI.LOGITECH_TRIGGER_DEADBAND ? -leftInput * Math.abs(leftInput) * 0.8 : 0);
+                Robot.intake.setRight(Math.abs(rightInput) > OI.LOGITECH_TRIGGER_DEADBAND ? -rightInput * Math.abs(rightInput) * 0.8 : 0);
                 intakeEnabled = true;
             }
         }
         if (!intakeEnabled)
         {
-            if (oi.getDriverGamepad().getRightTriggerPressed())
+            if (oi.getDriverGamepad().getRightTrigger() > OI.DRIVER_TRIGGER_DEADBAND)
                 Robot.intake.intakeOuttakeCube(Intake.INTAKE_DIR * oi.getDriverGamepad().getRightTrigger());
-            else if (oi.getDriverGamepad().getLeftTriggerPressed())
+            else if (oi.getDriverGamepad().getLeftTrigger() > OI.DRIVER_TRIGGER_DEADBAND)
                 Robot.intake.intakeOuttakeCube(-Intake.INTAKE_DIR * oi.getDriverGamepad().getLeftTrigger());
             else
                 Robot.intake.intakeOuttakeCube(0);
@@ -59,7 +59,7 @@ public class IntakeOuttakeCube extends Command
     @Override
     public void end()
     {
-        Robot.intake.intakeOuttakeCube(0);
+        Robot.intake.intakeOuttakeCube(0); 
     }
     
     /**
