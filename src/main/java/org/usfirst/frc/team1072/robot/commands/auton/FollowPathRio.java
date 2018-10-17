@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1072.robot.commands.auton;
 
-import org.usfirst.frc.team1072.robot.auto.paths.Path;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -11,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import harkerrobolib.auto.Path;
 import jaci.pathfinder.Trajectory.Segment;
 
 public class FollowPathRio extends Command implements java.lang.Runnable {

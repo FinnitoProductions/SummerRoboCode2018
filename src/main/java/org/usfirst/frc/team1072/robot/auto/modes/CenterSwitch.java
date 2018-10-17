@@ -17,6 +17,7 @@ import org.usfirst.frc.team1072.robot.subsystems.Intake.IntakeType;
 import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidDirection;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import harkerrobolib.auto.AutoMode;
 
 public class CenterSwitch extends AutoMode {
 	private boolean onLeft;
