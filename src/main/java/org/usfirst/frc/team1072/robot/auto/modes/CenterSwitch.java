@@ -16,36 +16,34 @@ import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.robot.subsystems.Intake.IntakeType;
 import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidDirection;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import harkerrobolib.auto.AutoMode;
+import harkerrobolib.auto.SequentialCommandGroup;
 
 public class CenterSwitch extends AutoMode {
-	private boolean onLeft;
 	private FollowPath fpc1, fpc2, fpc5, fpc6, fpc7, fpc8, fpc9;
     private CombinedPositionAnglePID fpc3, fpc4;
     
-	public CenterSwitch (boolean onLeft) {
-		this.onLeft = onLeft;
-		
-		fpc1 = AutonomousCommand.setupPathFollowerArc(onLeft ? AutonomousConstants.CLH_P1_LEFT : "", onLeft ? AutonomousConstants.CLH_P1_RIGHT : "", 
-                false, null).zeroPigeonAtStart(false).resetSensors(true);
+    public enum EndLocation {
+    	LEFT, RIGHT
+    }
+	public CenterSwitch (EndLocation loc) {
+		super (StartLocation.CENTER);
+    	boolean onLeft = loc == EndLocation.LEFT;
+		FollowPath fpc1 = AutonomousCommand.setupPathFollowerArc(onLeft ? AutonomousConstants.CLH_P1_LEFT : "", onLeft ? AutonomousConstants.CLH_P1_RIGHT : "", 
+                false, null).zeroPigeonAtStart(false).resetSensors(true),
         fpc2 = AutonomousCommand.setupPathFollowerArc(onLeft? AutonomousConstants.CLH_P2_LEFT_REV : "", onLeft ? AutonomousConstants.CLH_P2_RIGHT_REV : "", true, 
-                fpc1).zeroPigeonAtStart(false).resetSensors(false);
+                fpc1).zeroPigeonAtStart(false).resetSensors(false),
+        fpc5 = AutonomousCommand.setupPathFollowerArc
+            (onLeft ? AutonomousConstants.CLH_P5_LEFT : "", onLeft ? AutonomousConstants.CLH_P5_RIGHT : "", false, fpc2)
+            .zeroPigeonAtStart(false).resetSensors(true);
         fpc3 = new CombinedPositionAnglePID(2.95, 0);
         fpc4 = new CombinedPositionAnglePID(-3.25, 0);
-        fpc5 = AutonomousCommand.setupPathFollowerArc
-                (onLeft ? AutonomousConstants.CLH_P5_LEFT : "", onLeft ? AutonomousConstants.CLH_P5_RIGHT : "", false, fpc2)
-                .zeroPigeonAtStart(false).resetSensors(true);
+        
 	}
 
-	@Override
-	public void addCommands() {
-		addSequential (getFirstCube());
-		addSequential (getSecondCube());
-		addSequential (scoreSecondCube());
-	}
-	
-	public CommandGroup getFirstCube() {
+	public CommandGroup scoreFirstCube() {
 		CommandGroup firstCube = new CommandGroup();
 	        CommandGroup firstPath = new CommandGroup();
 	            firstPath.addSequential(new PrebufferPathPoints(fpc1));
@@ -114,6 +112,23 @@ public class CenterSwitch extends AutoMode {
             scoreSecondCube.addParallel(outtakeSecondCube);
         addSequential(scoreSecondCube);
         return scoreSecondCube;
+	}
+
+	@Override
+	public Command getCenterCommands() {
+		return new SequentialCommandGroup (scoreFirstCube(), scoreFirstCube(), getSecondCube(), scoreSecondCube());
+	}
+
+	@Override
+	public Command getLeftCommands() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Command getRightCommands() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
