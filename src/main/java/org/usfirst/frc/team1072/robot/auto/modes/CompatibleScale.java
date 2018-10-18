@@ -17,6 +17,7 @@ import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidDirection;
 import edu.wpi.first.wpilibj.command.Command;
 import harkerrobolib.auto.AutoMode;
 import harkerrobolib.auto.CommandGroupWrapper;
+import harkerrobolib.auto.SequentialCommandGroup;
 
 public class CompatibleScale extends AutoMode {
 
@@ -32,13 +33,13 @@ public class CompatibleScale extends AutoMode {
 
 	@Override
 	public Command getLeftCommands() {
-        return new CommandGroupWrapper().sequential (new FollowPathRio (new LeftToLeftScaleSide()))
-        .sequential (new MoveElevatorMotionMagic(Elevator.SCALE_HIGH_HEIGHT))
-        .sequential (new DriveToPosition(2.75))
-        .sequential(new SetSolenoid (SolenoidDirection.DECOMPRESS))
-        .sequential (new IntakeOuttakeTimed(AutonomousConstants.SCALE_OUTTAKE_TIME, IntakeType.OUTTAKE))
-        .sequential(new Delay(1))
-        .sequential (new DriveToPosition(-1.5));
+        return new SequentialCommandGroup (new FollowPathRio (new LeftToLeftScaleSide()),
+        new MoveElevatorMotionMagic(Elevator.SCALE_HIGH_HEIGHT),
+        new DriveToPosition(2.75),
+        new SetSolenoid (SolenoidDirection.DECOMPRESS),
+        new IntakeOuttakeTimed(AutonomousConstants.SCALE_OUTTAKE_TIME, IntakeType.OUTTAKE),
+        new Delay(1),
+        new DriveToPosition(-1.5));
 	}
 
 	@Override
