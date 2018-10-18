@@ -54,6 +54,8 @@ public class AutonomousCommand extends CommandGroup
             requires(s);
 
         initSubsystems();
+        FollowPathRio.setDefaultLeftTalon(Robot.dt.getLeftMaster());
+        FollowPathRio.setDefaultRightTalon(Robot.dt.getRightMaster());
         
         /*if (location == RobotLocation.LEFT) {
             if (fieldData.equals("LLL"))

@@ -13,6 +13,9 @@ import harkerrobolib.auto.Path;
 import jaci.pathfinder.Trajectory.Segment;
 
 public class FollowPathRio extends Command implements java.lang.Runnable {
+	private static TalonSRX defaultLeftTalon;
+	private static TalonSRX defaultRightTalon;
+	
 	private boolean isFinished;
 	
 	private static final int PID_PRIMARY = 0;
@@ -43,6 +46,10 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 		angleErrorPrev = -1;
 		
 		processPoints = new Notifier (this);
+	}
+	
+	public FollowPathRio (Path path) {
+		this(path, defaultLeftTalon, defaultRightTalon);
 	}
 	
 	public void initialize() {
@@ -88,5 +95,12 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 		currentPointIdx++;
 	}
 	
+	public static void setDefaultLeftTalon (TalonSRX defaultLeft) {
+		defaultLeftTalon = defaultLeft;
+	}
+	
+	public static void setDefaultRightTalon (TalonSRX defaultRight) {
+		defaultRightTalon = defaultRight;
+	}
 
 }
