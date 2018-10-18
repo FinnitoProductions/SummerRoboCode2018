@@ -121,14 +121,12 @@ public class CenterSwitch extends AutoMode {
 
 	@Override
 	public Command getLeftCommands() {
-		// TODO Auto-generated method stub
-		return null;
+		return leftAutonNotDefined;
 	}
 
 	@Override
 	public Command getRightCommands() {
-		// TODO Auto-generated method stub
-		return null;
+		return rightAutonNotDefined;
 	}
 	
 }

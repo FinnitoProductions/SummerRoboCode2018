@@ -14,7 +14,7 @@ public class Baseline extends AutoMode {
 
 	@Override
 	public Command getCenterCommands() {
-		return new CommandGroup();
+		return centerAutonNotDefined;
 	}
 
 	@Override

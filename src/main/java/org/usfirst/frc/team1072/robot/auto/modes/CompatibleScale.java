@@ -27,8 +27,7 @@ public class CompatibleScale extends AutoMode {
 
 	@Override
 	public Command getCenterCommands() {
-		// TODO Auto-generated method stub
-		return null;
+		return centerAutonNotDefined;
 	}
 
 	@Override
@@ -44,8 +43,7 @@ public class CompatibleScale extends AutoMode {
 
 	@Override
 	public Command getRightCommands() {
-		// TODO Auto-generated method stub
-		return null;
+		return rightAutonNotDefined;
 	}
 
 
