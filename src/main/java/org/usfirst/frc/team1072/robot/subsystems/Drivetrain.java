@@ -164,7 +164,7 @@ public class Drivetrain extends DrivetrainSubsystem
         configurePositionClosedLoop();
         configureMotionProfileDriveClosedLoop();
 
-        dtSetCurrentLimit(Drivetrain.PEAK_CURRENT_LIMIT, Drivetrain.PEAK_TIME_MS,
+        setCurrentLimit(Drivetrain.PEAK_CURRENT_LIMIT, Drivetrain.PEAK_TIME_MS,
                 Drivetrain.CONTINUOUS_CURRENT_LIMIT);
 
     }
@@ -508,37 +508,8 @@ public class Drivetrain extends DrivetrainSubsystem
         getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_11_UartGadgeteer, RobotMap.MAX_TALON_FRAME_PERIOD_MS);
         getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, RobotMap.TIME_PER_TRAJECTORY_POINT_MS);
         getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 20);
-        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20);
-
-        
+        getRightMaster().setStatusFramePeriod(StatusFrameEnhanced.Status_14_Turn_PIDF1, 20);   
     }
-
-    /**
-     * Sets a current limit for the left and right talons on the drivetrain.
-     * 
-     * @param peakCurrentLimit
-     *            the peak current limit (only temporary)
-     * @param peakTime
-     *            the time for which the peak current limit is allowed
-     * @param continuousLimit
-     *            the continuous limit (represents the limit after peakTime passes)
-     */
-    private void dtSetCurrentLimit(int peakCurrentLimit, int peakTime, int continuousLimit)
-    {
-        getLeftMaster().configPeakCurrentLimit(peakCurrentLimit);
-        getRightMaster().configPeakCurrentLimit(peakCurrentLimit);
-
-        getLeftMaster().configPeakCurrentDuration(peakTime);
-        getRightMaster().configPeakCurrentDuration(peakTime);
-
-        getLeftMaster().configContinuousCurrentLimit(continuousLimit);
-        getRightMaster().configContinuousCurrentLimit(continuousLimit);
-
-        getLeftMaster().enableCurrentLimit(true);
-        getRightMaster().enableCurrentLimit(true);
-    }
-    
-  
 
     /**
      * Gets the instance of this Drivetrain, creating a new one if necessary.
