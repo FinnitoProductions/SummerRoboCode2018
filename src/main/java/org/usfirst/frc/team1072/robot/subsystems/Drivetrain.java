@@ -197,7 +197,7 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void setLeft (ControlMode cm, double value)
     {
-        Robot.dt.getLeftMaster().set(cm, value);
+        getLeftMaster().set(cm, value);
     }
     
     /**
@@ -208,7 +208,7 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void setRight (ControlMode cm, double value)
     {
-        Robot.dt.getRightMaster().set(cm, value);
+        getRightMaster().set(cm, value);
     }
     
     /**
@@ -227,8 +227,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void clearTrajectoryPoints()
     {
-        Robot.dt.getLeftMaster().clearMotionProfileTrajectories();
-        Robot.dt.getRightMaster().clearMotionProfileTrajectories();
+        getLeftMaster().clearMotionProfileTrajectories();
+        getRightMaster().clearMotionProfileTrajectories();
     }
     
     /**
@@ -638,8 +638,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void printMotorOutputPercentage()
     {
-        SmartDashboard.putNumber("Left Talon Output Percentage", Robot.dt.getLeftMaster().getMotorOutputPercent());
-        SmartDashboard.putNumber("Right Talon Output Percentage", Robot.dt.getRightMaster().getMotorOutputPercent());
+        SmartDashboard.putNumber("Left Talon Output Percentage", getLeftMaster().getMotorOutputPercent());
+        SmartDashboard.putNumber("Right Talon Output Percentage", getRightMaster().getMotorOutputPercent());
     }
     
     /**
@@ -648,8 +648,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void printClosedLoopError (int pidLoop)
     {
-        SmartDashboard.putNumber("Left Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getLeftMaster().getClosedLoopError(pidLoop));
-        SmartDashboard.putNumber("Right Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getRightMaster().getClosedLoopError(pidLoop));
+        SmartDashboard.putNumber("Left Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), getLeftMaster().getClosedLoopError(pidLoop));
+        SmartDashboard.putNumber("Right Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), getRightMaster().getClosedLoopError(pidLoop));
     }
     
     /**
@@ -658,8 +658,8 @@ public class Drivetrain extends DrivetrainSubsystem
      */
     public void printSensorPositions (int pidLoop)
     {
-        SmartDashboard.putNumber("Left Talon Position " + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getLeftMaster().getSelectedSensorPosition(pidLoop));
-        SmartDashboard.putNumber("Right Talon Position" + (pidLoop == 0 ? "Primary" : "Auxiliary"), Robot.dt.getRightMaster().getSelectedSensorPosition(pidLoop));
+        SmartDashboard.putNumber("Left Talon Position " + (pidLoop == 0 ? "Primary" : "Auxiliary"), getLeftMaster().getSelectedSensorPosition(pidLoop));
+        SmartDashboard.putNumber("Right Talon Position" + (pidLoop == 0 ? "Primary" : "Auxiliary"), getRightMaster().getSelectedSensorPosition(pidLoop));
     }
     
     /**
