@@ -93,6 +93,7 @@ public class FollowPathRio extends Command implements java.lang.Runnable {
 		leftTalon.set(ControlMode.Position, leftPoint.position + gyroFactor, DemandType.ArbitraryFeedForward, leftFeedForward);
 		rightTalon.set(ControlMode.Position, rightPoint.position - gyroFactor, DemandType.ArbitraryFeedForward, rightFeedForward);
 		currentPointIdx++;
+		hasRunOnce = true;
 	}
 	
 	public static void setDefaultLeftTalon (TalonSRX defaultLeft) {
