@@ -7,7 +7,7 @@ cd #enter your required directory here
 ```
 Then, clone the project into this directory, which will create a folder for you containing the project contents.
 ```
-git clone https://github.com/FinnitoProductions/SummerRoboCode2018
+git clone https://github.com/HarkerRobo/SummerRoboCode2018
 ```
 Finally wrap up the setup with the following commands to ensure the repository was correctly cloned:
 ```
