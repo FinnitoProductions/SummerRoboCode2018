@@ -15,6 +15,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
 import harkerrobolib.subsystems.HSDrivetrain;
+import harkerrobolib.wrappers.HSPigeon;
 import harkerrobolib.wrappers.HSTalon;
 
 /**
@@ -41,16 +42,6 @@ public class Drivetrain extends HSDrivetrain
     private TalonSRX rightTalon;
     
     /**
-     * The left Victor on the drivetrain.
-     */
-    private VictorSPX leftVictor;
-    
-    /**
-     * The right Victor on the drivetrain.
-     */
-    private VictorSPX rightVictor;
-    
-    /**
      * The Pigeon IMU for use on the drivetrain.
      */
     private PigeonIMU pigeon;
@@ -63,11 +54,9 @@ public class Drivetrain extends HSDrivetrain
         // initialize talons
         super(new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), 
         		new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR)
-        		, null);
+        		, new HSPigeon(CAN_IDs.PIGEON));
         leftTalon = new TalonSRX (CAN_IDs.LEFT_CIM_TALON);
         rightTalon = new TalonSRX (CAN_IDs.RIGHT_CIM_TALON);
-        leftVictor = new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR);
-        rightVictor = new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR);
         pigeon = new PigeonIMU(CAN_IDs.PIGEON);
     }
   
