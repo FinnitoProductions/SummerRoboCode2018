@@ -163,7 +163,7 @@ public class Robot extends TimedRobot
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
-        dt.getPigeon().zeroPigeon();
+        dt.getPigeon().zero();
     }
 
     /**

@@ -110,7 +110,7 @@ public class Drivetrain extends HSDrivetrain
     public void talonInit()
     {
         zeroAllSensors();
-        getPigeon().zeroPigeon();
+        getPigeon().zero();
         setTalonDeadbands();
         initTalonOutput(0);
 
