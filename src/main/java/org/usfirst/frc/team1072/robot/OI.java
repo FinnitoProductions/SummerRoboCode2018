@@ -6,19 +6,16 @@ import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidStealth;
 import org.usfirst.frc.team1072.robot.commands.intake.ToggleSolenoid;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
-import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidDirection;
 import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidType;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.InstantCommand;
-import harkerrobolib.util.Conversions;
-import harkerrobolib.wrappers.DPadButtonWrapper;
-import harkerrobolib.wrappers.GamepadWrapper;
+import harkerrobolib.wrappers.HSDPadButton;
+import harkerrobolib.wrappers.HSGamepad;
 import harkerrobolib.wrappers.LogitechGamepad;
 import harkerrobolib.wrappers.XboxGamepad;
 
@@ -62,22 +59,22 @@ public class OI
     /**
      * The gamepad for use by the driver.
      */
-    private GamepadWrapper driverGamepad = new XboxGamepad(DRIVER_PORT);
+    private HSGamepad driverGamepad = new XboxGamepad(DRIVER_PORT);
     
     /**
      * The gamepad for use by the operator.
      */
-    private GamepadWrapper operatorGamepad = new LogitechGamepad(OPERATOR_PORT);
+    private HSGamepad operatorGamepad = new LogitechGamepad(OPERATOR_PORT);
     
     /**
      * Constructs a new OI.
      */
     public OI ()
     {
-        DPadButtonWrapper upDPadDriver = new DPadButtonWrapper(driverGamepad, 0);
-        DPadButtonWrapper leftDPadDriver = new DPadButtonWrapper (driverGamepad, 270);
-        DPadButtonWrapper downDPadDriver= new DPadButtonWrapper (driverGamepad, 180);
-        DPadButtonWrapper rightDPadDriver = new DPadButtonWrapper (driverGamepad, 90);
+        HSDPadButton upDPadDriver = new HSDPadButton(driverGamepad, 0);
+        HSDPadButton leftDPadDriver = new HSDPadButton (driverGamepad, 270);
+        HSDPadButton downDPadDriver= new HSDPadButton (driverGamepad, 180);
+        HSDPadButton rightDPadDriver = new HSDPadButton (driverGamepad, 90);
         
         upDPadDriver.whenPressed(new SetSolenoid(SolenoidDirection.UP));
         downDPadDriver.whenPressed( new SetSolenoid(SolenoidDirection.DOWN));
@@ -86,10 +83,10 @@ public class OI
         
         if (RobotMap.TWO_CONTROLLERS)
         {
-            DPadButtonWrapper upDPadOperator = new DPadButtonWrapper(operatorGamepad, 0);
-            DPadButtonWrapper leftDPadOperator = new DPadButtonWrapper (operatorGamepad, 270);
-            DPadButtonWrapper downDPadOperator = new DPadButtonWrapper (operatorGamepad, 180);
-            DPadButtonWrapper rightDPadOperator = new DPadButtonWrapper (operatorGamepad, 90);
+            HSDPadButton upDPadOperator = new HSDPadButton(operatorGamepad, 0);
+            HSDPadButton leftDPadOperator = new HSDPadButton (operatorGamepad, 270);
+            HSDPadButton downDPadOperator = new HSDPadButton (operatorGamepad, 180);
+            HSDPadButton rightDPadOperator = new HSDPadButton (operatorGamepad, 90);
 
             operatorGamepad.getButtonBumperLeft().whenPressed(new ToggleSolenoid(SolenoidType.COMPRESSDECOMPRESS));
             operatorGamepad.getButtonBumperRight().whenPressed(new ToggleSolenoid(SolenoidType.COMPRESSDECOMPRESS));
@@ -142,7 +139,7 @@ public class OI
      * Gets the current instance of the driver gamepad.
      * @return the driver gamepad instance
      */
-    public GamepadWrapper getDriverGamepad() 
+    public HSGamepad getDriverGamepad() 
     {
         return driverGamepad;
     }
@@ -151,7 +148,7 @@ public class OI
      * Gets the current instance of the operator gamepad.
      * @return the operator gamepad instance
      */
-    public GamepadWrapper getOperatorGamepad() 
+    public HSGamepad getOperatorGamepad() 
     {
         return operatorGamepad;
     }

@@ -6,10 +6,9 @@ import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeCube;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import harkerrobolib.wrappers.TalonSRXWrapper;
+import harkerrobolib.wrappers.HSTalon;
 
 /**
  * Represents an intake subsystem with pneumatic and motor control.
@@ -31,12 +30,12 @@ public class Intake extends Subsystem
     /**
      * The left Talon on the intake.
      */
-    private TalonSRXWrapper leftTalon;
+    private HSTalon leftTalon;
     
     /**
      * The right Talon on the intake.
      */
-    private TalonSRXWrapper rightTalon;
+    private HSTalon rightTalon;
     
     /**
      * Represents the possible directions for the intake.
@@ -65,8 +64,8 @@ public class Intake extends Subsystem
      */
     public Intake()
     {
-        leftTalon = new TalonSRXWrapper(CAN_IDs.INTAKE_TALON_LEFT, RobotMap.TIMEOUT);
-        rightTalon = new TalonSRXWrapper(CAN_IDs.INTAKE_TALON_RIGHT, RobotMap.TIMEOUT);
+        leftTalon = new HSTalon(CAN_IDs.INTAKE_TALON_LEFT, RobotMap.TIMEOUT);
+        rightTalon = new HSTalon(CAN_IDs.INTAKE_TALON_RIGHT, RobotMap.TIMEOUT);
     }
 
     protected void invertTalons () {
@@ -152,13 +151,13 @@ public class Intake extends Subsystem
      * Gets the left Talon on the 
      * @return the left Talon
      */
-    public TalonSRXWrapper getLeftTalon() { return leftTalon; }
+    public HSTalon getLeftTalon() { return leftTalon; }
 
     /**
      * Gets the right Talon on the 
      * @return the right Talon
      */
-    public TalonSRXWrapper getRightTalon() { return rightTalon; }
+    public HSTalon getRightTalon() { return rightTalon; }
 
     /**
      * Gets the instance of this singleton Intake, returning a new one if one has not yet been created.

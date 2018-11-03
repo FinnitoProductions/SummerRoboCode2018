@@ -1,14 +1,11 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
 import org.usfirst.frc.team1072.robot.OI;
-import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.CAN_IDs;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocity;
-import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
@@ -17,17 +14,15 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import harkerrobolib.subsystems.DrivetrainSubsystem;
-import harkerrobolib.wrappers.TalonSRXWrapper;
+import harkerrobolib.subsystems.HSDrivetrain;
+import harkerrobolib.wrappers.HSTalon;
 
 /**
  * Represents a drive train with two Talons and two Victors.
  * @author Finn Frankis
  * @version 6/11/18
  */
-public class Drivetrain extends DrivetrainSubsystem
+public class Drivetrain extends HSDrivetrain
 {
 
 	/**
@@ -66,8 +61,9 @@ public class Drivetrain extends DrivetrainSubsystem
     private Drivetrain()
     {
         // initialize talons
-        super(new TalonSRXWrapper (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), 
-        		new TalonSRXWrapper (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR));
+        super(new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), 
+        		new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR)
+        		, null);
         leftTalon = new TalonSRX (CAN_IDs.LEFT_CIM_TALON);
         rightTalon = new TalonSRX (CAN_IDs.RIGHT_CIM_TALON);
         leftVictor = new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR);
@@ -176,17 +172,6 @@ public class Drivetrain extends DrivetrainSubsystem
     {
         getLeftMaster().configNeutralDeadband(Drivetrain.TALON_DEADBAND);
         getRightMaster().configNeutralDeadband(Drivetrain.TALON_DEADBAND);
-    }
-
-    /**
-     * Sets both talons to a given value.
-     * @param cm the ControlMode to which both talons will be set (like PercentOutput, Velocity, Position, or Disabled)
-     * @param value the value to which both talons will be set
-     */
-    public void setBoth (ControlMode cm, double value)
-    {
-        setLeft(cm, value);
-        setRight(cm, value);
     }
     
     /**
@@ -520,14 +505,6 @@ public class Drivetrain extends DrivetrainSubsystem
         if (instance == null) instance = new Drivetrain();
         return instance;
     }
-    /**
-     * Gets the pigeon for this drivetrain.
-     * @return the pigeon
-     */
-    public PigeonIMU getPigeon()
-    {
-        return pigeon;
-    }
     
     /**
      * Gets the current yaw value of the pigeon.
@@ -591,60 +568,6 @@ public class Drivetrain extends DrivetrainSubsystem
         getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
     }
     
-    /**
-     * Configures both Talons to point to a given sensor.
-     * @param fd the type of sensor to which the Talon should use
-     * @param pidLoop the loop index where this sensor should be placed [0,1]
-     */
-    public void configBothFeedbackSensors(FeedbackDevice fd, int pidLoop)
-    {
-        getLeftMaster().configSelectedFeedbackSensor(fd, 
-                    pidLoop);
-        getRightMaster().configSelectedFeedbackSensor(fd, 
-                    pidLoop);
-    }
-    
-    /**
-     * Prints the current output percentage to the motors to SmartDashboard.
-     */
-    public void printMotorOutputPercentage()
-    {
-        SmartDashboard.putNumber("Left Talon Output Percentage", getLeftMaster().getMotorOutputPercent());
-        SmartDashboard.putNumber("Right Talon Output Percentage", getRightMaster().getMotorOutputPercent());
-    }
-    
-    /**
-     * Prints the closed loop error of the Talons in a given loop.
-     * @param pidLoop the loop index [0,1]
-     */
-    public void printClosedLoopError (int pidLoop)
-    {
-        SmartDashboard.putNumber("Left Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), getLeftMaster().getClosedLoopError(pidLoop));
-        SmartDashboard.putNumber("Right Talon Closed Loop Error " + (pidLoop == 0 ? "Primary" : "Auxiliary"), getRightMaster().getClosedLoopError(pidLoop));
-    }
-    
-    /**
-     * Prints the sensor positions of the Talons in a given loop.
-     * @param pidLoop the loop index [0,1]
-     */
-    public void printSensorPositions (int pidLoop)
-    {
-        SmartDashboard.putNumber("Left Talon Position " + (pidLoop == 0 ? "Primary" : "Auxiliary"), getLeftMaster().getSelectedSensorPosition(pidLoop));
-        SmartDashboard.putNumber("Right Talon Position" + (pidLoop == 0 ? "Primary" : "Auxiliary"), getRightMaster().getSelectedSensorPosition(pidLoop));
-    }
-    
-    /**
-     * Determines whether the closed loop error for both sides is within a given value.
-     * @param loopIndex the loop index, either primary or auxiliary [0,1]
-     * @param allowableError the error tolerance to be checked
-     * @return true if the absolute value of the error is within the value; false otherwise
-     */
-    public boolean isClosedLoopErrorWithin (int loopIndex, double allowableError)
-    {
-        return Math.abs(getLeftMaster().getClosedLoopError(loopIndex)) < allowableError
-                && Math.abs(getRightMaster().getClosedLoopError(loopIndex)) < allowableError;
-    }
-
     /**
      * The velocity amount to which all motion profile trajectories will be added to more easily
      * break static friction at the beginning of the profile.

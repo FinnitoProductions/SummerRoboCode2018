@@ -6,24 +6,12 @@ import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import harkerrobolib.auto.AutoMode;
+import harkerrobolib.commands.ThrowException;
 
 public class Baseline extends AutoMode {
 	public Baseline(StartLocation loc) {
-		super(loc);
-	}
-
-	@Override
-	public Command getCenterCommands() {
-		return centerAutonNotDefined;
-	}
-
-	@Override
-	public Command getLeftCommands() {
-		return new DriveToPosition (AutonomousConstants.BASELINE_DISTANCE);
-	}
-
-	@Override
-	public Command getRightCommands() {
-		return getLeftCommands();
+		super(loc, new DriveToPosition (AutonomousConstants.BASELINE_DISTANCE), 
+				new ThrowException("Center Auton Not Defined"), 
+				new DriveToPosition (AutonomousConstants.BASELINE_DISTANCE));
 	}
 }

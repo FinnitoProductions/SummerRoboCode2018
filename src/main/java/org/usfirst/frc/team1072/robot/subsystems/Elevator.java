@@ -7,11 +7,10 @@ import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorVelocity;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import harkerrobolib.wrappers.TalonSRXWrapper;
+import harkerrobolib.wrappers.HSTalon;
 
 /**
  * Represents an Elevator subsystem with control over the four motors.
@@ -43,7 +42,7 @@ public class Elevator extends Subsystem
     /**
      * The bottom right (and only) Talon on the elevator.
      */
-    private TalonSRXWrapper bottomRightTalon; 
+    private HSTalon bottomRightTalon; 
     
     /**
      * Initializes the command using the four ports in RobotMap.
@@ -53,7 +52,7 @@ public class Elevator extends Subsystem
         topRightVictor = new VictorSPX(CAN_IDs.ELEVATOR_VICTOR_TOPRIGHT);
         topLeftVictor = new VictorSPX (CAN_IDs.ELEVATOR_VICTOR_TOPLEFT);
         bottomLeftVictor = new VictorSPX(CAN_IDs.ELEVATOR_VICTOR_BOTTOMLEFT);
-        bottomRightTalon = new TalonSRXWrapper(CAN_IDs.ELEVATOR_TALON, RobotMap.TIMEOUT);
+        bottomRightTalon = new HSTalon(CAN_IDs.ELEVATOR_TALON, RobotMap.TIMEOUT);
     }
 
     protected void initDefaultCommand()
@@ -286,7 +285,7 @@ public class Elevator extends Subsystem
      * Gets the bottom right Talon on the elevator.
      * @return the bottom right Talon
      */
-    public TalonSRXWrapper getBottomRightTalon() { return bottomRightTalon; }
+    public HSTalon getBottomRightTalon() { return bottomRightTalon; }
 
     /**
      * Gets the instance of the singleton Elevator, creating a new one if necessary.

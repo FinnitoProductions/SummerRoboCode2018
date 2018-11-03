@@ -1,13 +1,9 @@
 package org.usfirst.frc.team1072.robot.subsystems;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.usfirst.frc.team1072.robot.commands.intake.SetCompressor;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**

@@ -22,14 +22,16 @@ import harkerrobolib.auto.AutoMode;
 import harkerrobolib.auto.SequentialCommandGroup;
 
 public class CenterSwitch extends AutoMode {
-	private FollowPath fpc1, fpc2, fpc5, fpc6, fpc7, fpc8, fpc9;
-    private CombinedPositionAnglePID fpc3, fpc4;
+	private static FollowPath fpc1, fpc2, fpc5, fpc6, fpc7, fpc8, fpc9;
+    private static CombinedPositionAnglePID fpc3, fpc4;
     
     public enum EndLocation {
     	LEFT, RIGHT
     }
 	public CenterSwitch (EndLocation loc) {
-		super (StartLocation.CENTER);
+		super (StartLocation.CENTER, AutoMode.Companion.getLeftCommandDefault()
+				, new SequentialCommandGroup (scoreFirstCube(), scoreFirstCube(), getSecondCube(), scoreSecondCube()), 
+				AutoMode.Companion.getRightCommandDefault());
     	boolean onLeft = loc == EndLocation.LEFT;
 		FollowPath fpc1 = AutonomousCommand.setupPathFollowerArc(onLeft ? AutonomousConstants.CLH_P1_LEFT : "", onLeft ? AutonomousConstants.CLH_P1_RIGHT : "", 
                 false, null).zeroPigeonAtStart(false).resetSensors(true),
@@ -43,7 +45,7 @@ public class CenterSwitch extends AutoMode {
         
 	}
 
-	public CommandGroup scoreFirstCube() {
+	public static CommandGroup scoreFirstCube() {
 		CommandGroup firstCube = new CommandGroup();
 	        CommandGroup firstPath = new CommandGroup();
 	            firstPath.addSequential(new PrebufferPathPoints(fpc1));
@@ -64,11 +66,10 @@ public class CenterSwitch extends AutoMode {
 	            outtakeFirstCube.addSequential(new SetSolenoid(SolenoidDirection.DECOMPRESS));
 	            outtakeFirstCube.addSequential(new IntakeOuttakeTimed(0.17, IntakeType.OUTTAKE));
 	        firstCube.addParallel(outtakeFirstCube);
-	    addSequential(firstCube);
 	    return firstCube;
 	}
 	
-	private CommandGroup getSecondCube() {
+	private static CommandGroup getSecondCube() {
 		CommandGroup getSecondCube = new CommandGroup();
 			CommandGroup pathGroupSecondCube = new CommandGroup();
 				pathGroupSecondCube.addSequential(fpc2);
@@ -86,11 +87,10 @@ public class CenterSwitch extends AutoMode {
 				intakeSecondCube.addSequential(new PauseUntilReachingPosition(fpc3, 0.45));
 				intakeSecondCube.addSequential(new IntakeOuttakeTimed(0.4, IntakeType.INTAKE));
 			getSecondCube.addParallel(intakeSecondCube);
-		addSequential(getSecondCube);
 		return getSecondCube;
 	}
 
-	private CommandGroup scoreSecondCube () {
+	private static CommandGroup scoreSecondCube () {
         CommandGroup scoreSecondCube = new CommandGroup();
             CommandGroup pathGroupOuttakeSecondCube = new CommandGroup();
                 pathGroupOuttakeSecondCube.addSequential(fpc4);
@@ -110,23 +110,6 @@ public class CenterSwitch extends AutoMode {
                 outtakeSecondCube.addSequential(new SetSolenoid(SolenoidDirection.DECOMPRESS));
                 outtakeSecondCube.addSequential(new IntakeOuttakeTimed(0.34, IntakeType.OUTTAKE));
             scoreSecondCube.addParallel(outtakeSecondCube);
-        addSequential(scoreSecondCube);
         return scoreSecondCube;
 	}
-
-	@Override
-	public Command getCenterCommands() {
-		return new SequentialCommandGroup (scoreFirstCube(), scoreFirstCube(), getSecondCube(), scoreSecondCube());
-	}
-
-	@Override
-	public Command getLeftCommands() {
-		return leftAutonNotDefined;
-	}
-
-	@Override
-	public Command getRightCommands() {
-		return rightAutonNotDefined;
-	}
-	
 }
