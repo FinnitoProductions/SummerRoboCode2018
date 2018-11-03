@@ -31,20 +31,6 @@ public class Drivetrain extends HSDrivetrain
      */
     private static Drivetrain instance = null;
     
-    /**
-     * The left Talon on the drivetrain.
-     */
-    private TalonSRX leftTalon;
-     
-    /**
-     * The right Talon on the drivetrain.
-     */
-    private TalonSRX rightTalon;
-    
-    /**
-     * The Pigeon IMU for use on the drivetrain.
-     */
-    private PigeonIMU pigeon;
     
     /**
      * Initializes this subsystem.
@@ -55,9 +41,6 @@ public class Drivetrain extends HSDrivetrain
         super(new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), 
         		new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR)
         		, new HSPigeon(CAN_IDs.PIGEON));
-        leftTalon = new TalonSRX (CAN_IDs.LEFT_CIM_TALON);
-        rightTalon = new TalonSRX (CAN_IDs.RIGHT_CIM_TALON);
-        pigeon = new PigeonIMU(CAN_IDs.PIGEON);
     }
   
     /**
@@ -77,9 +60,8 @@ public class Drivetrain extends HSDrivetrain
     public void arcadeDriveVelocity(double speed, double turn)
     {
         // victor follows talon
-        rightTalon.set(ControlMode.Velocity, speed + turn);  
-        leftTalon.set(ControlMode.Velocity, speed - turn);  
-
+        getRightMaster().set(ControlMode.Velocity, speed + turn);  
+        getLeftMaster().set(ControlMode.Velocity, speed - turn);  
     }
     
     /**
@@ -88,7 +70,7 @@ public class Drivetrain extends HSDrivetrain
      */
     public void arcadeDrivePosition (double target)
     {
-        rightTalon.set(ControlMode.Position, target);
+        getRightMaster().set(ControlMode.Position, target);
     }
     
     /**
@@ -98,8 +80,8 @@ public class Drivetrain extends HSDrivetrain
      */
     public void arcadeDrivePosition (double leftTarget, double rightTarget)
     {        
-        leftTalon.set(ControlMode.Position, leftTarget);
-        rightTalon.set(ControlMode.Position, rightTarget);
+        getLeftMaster().set(ControlMode.Position, leftTarget);
+        getRightMaster().set(ControlMode.Position, rightTarget);
     }
     
     /**
@@ -128,7 +110,7 @@ public class Drivetrain extends HSDrivetrain
     public void talonInit()
     {
         zeroAllSensors();
-        zeroPigeon();
+        getPigeon().zeroPigeon();
         setTalonDeadbands();
         initTalonOutput(0);
 
@@ -495,67 +477,7 @@ public class Drivetrain extends HSDrivetrain
         return instance;
     }
     
-    /**
-     * Gets the current yaw value of the pigeon.
-     * @return the yaw
-     */
-    public double getPigeonYaw()
-    {
-        double[] ypr = new double[3];
-        pigeon.getYawPitchRoll(ypr);
-        return ypr[0];
-    }
-    
-    /**
-     * Gets the current pitch value of the pigeon.
-     * @return the pitch
-     */
-    public double getPigeonPitch()
-    {
-        double[] ypr = new double[3];
-        pigeon.getYawPitchRoll(ypr);
-        return ypr[1];
-    }
-    
-    /**
-     * Gets the current roll value of the pigeon.
-     * @return the roll
-     */
-    public double getPigeonRoll()
-    {
-        double[] ypr = new double[3];
-        pigeon.getYawPitchRoll(ypr);
-        return ypr[2];
-    }
-    
-    /**
-     * Sets the pigeon yaw to a given value.
-     * @param angle the angle value to which the pigeon should be set, in pigeon units 
-     * where 1 rotation is 8192 units
-     */
-    public void setPigeonYaw(double angle)
-    {
-        getPigeon().setYaw(angle * 64, RobotMap.TIMEOUT);
-    }
-    
-    /**
-     * Adds a given value to the pigeon yaw.
-     * @param angle the angle value which should be added to the pigeon yaw value, in pigeon units 
-     * where 1 rotation is 8192 units
-     */
-    public void addPigeonYaw (double angle)
-    {
-        getPigeon().addYaw(angle * 64, RobotMap.TIMEOUT);
-    }
- 
-    /**
-     * Zeros the pigeon.
-     */
-    public void zeroPigeon()
-    {
-        getPigeon().setYaw(0, RobotMap.TIMEOUT);
-        getPigeon().setAccumZAngle(0, RobotMap.TIMEOUT);
-    }
+   
     
     /**
      * The velocity amount to which all motion profile trajectories will be added to more easily

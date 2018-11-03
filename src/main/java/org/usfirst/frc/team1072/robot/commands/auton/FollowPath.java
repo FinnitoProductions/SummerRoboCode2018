@@ -224,7 +224,7 @@ public class FollowPath extends Command
                 ;
                 if (zeroAux)
                 {
-                    Robot.dt.setPigeonYaw(0);
+                    Robot.dt.getPigeon().setYaw(0);
                 }
                 //;
                 Robot.dt.getRightMaster().configSelectedFeedbackCoefficient(0.5,
