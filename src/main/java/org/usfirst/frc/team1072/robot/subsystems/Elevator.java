@@ -419,7 +419,7 @@ public class Elevator extends Subsystem
     /**
      * The acceleration constant for the motion magic closed loop.
      */
-    public static int MOTION_MAGIC_ACCEL = 3000;
+    public static int MOTION_MAGIC_ACCEL = 2000;
     
     /**
      * The velocity constant for the motion magic closed loop.
