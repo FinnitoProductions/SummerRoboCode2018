@@ -60,13 +60,14 @@ public class DriveWithVelocity extends Command
         
         double leftX = oi.getDriverGamepad().getLeftX();
         double leftY = oi.getDriverGamepad().getLeftY();
-        if (Math.abs(leftX) < deadband)
+        
+        /*if (Math.abs(leftX) < deadband)
             leftX = 0;
         else
         {
             leftX = leftX -  Math.signum(leftX) * deadband;
             leftX /= 1- deadband;
-        }
+        }*/
             
         
         if (Math.abs(leftY) < deadband)
@@ -87,7 +88,7 @@ public class DriveWithVelocity extends Command
 
         double x = 0.8 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);
         double y = leftY;
-        double k = Math.max(1.0, Math.max(Math.abs(y + x * x), Math.abs(y - x * x)));
+        double k = Math.max(1.0, Math.max(Math.abs(y + x), Math.abs(y - x)));
         double left = elevatorScale * (y + x * Math.abs(x)) / k;
         double right = elevatorScale * (y - x * Math.abs(x)) / k;
 

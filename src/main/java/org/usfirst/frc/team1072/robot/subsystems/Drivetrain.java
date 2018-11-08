@@ -39,7 +39,7 @@ public class Drivetrain extends HSDrivetrain
     {
         // initialize talons
         super(new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), 
-        		new HSTalon (CAN_IDs.LEFT_CIM_TALON, RobotMap.TIMEOUT), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR)
+        		new HSTalon (CAN_IDs.RIGHT_CIM_TALON, RobotMap.TIMEOUT), new VictorSPX (CAN_IDs.LEFT_CIM_VICTOR), new VictorSPX (CAN_IDs.RIGHT_CIM_VICTOR)
         		, new HSPigeon(CAN_IDs.PIGEON));
     }
   
