@@ -26,6 +26,10 @@ import harkerrobolib.wrappers.HSTalon;
 public class Drivetrain extends HSDrivetrain
 {
 
+	public enum TurnDirection {
+		LEFT, RIGHT
+	}
+	
 	/**
      * The current instance of this singleton Drivetrain.
      */
