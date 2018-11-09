@@ -387,7 +387,11 @@ public class Elevator extends Subsystem
     /**
      * The soft limit in the reverse (downward) direction.
      */
-    public static int REVERSE_SOFT = 2000;
+    public static int REVERSE_SOFT = 20000;
+    
+    public static double SLOW_DOWN_SPEED = 0.75;
+    
+    public static double MAX_ELEVATOR_SPEED = 3500;
     
     /**
      * The time (in seconds) for which the elevator should ramp up to full speed in 

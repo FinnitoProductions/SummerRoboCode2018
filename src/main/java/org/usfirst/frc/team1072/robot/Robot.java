@@ -179,6 +179,7 @@ public class Robot extends TimedRobot
     {
           Scheduler.getInstance().run();
           SmartDashboard.putNumber("Elevator Height", Robot.el.getBottomRightTalon().getSelectedSensorPosition(0));
+          SmartDashboard.putNumber("Elevator Speed", Robot.el.getBottomRightTalon().getSelectedSensorVelocity(0));
           //SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
     }
 

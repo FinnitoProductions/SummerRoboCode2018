@@ -5,10 +5,13 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
+import org.usfirst.frc.team1072.util.Conversions;
+import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import edu.wpi.first.wpilibj.command.Command;
+import harkerrobolib.util.MathUtil;
 
 /**
  * Represents a command to continually move the elevator given a velocity.
@@ -37,22 +40,23 @@ public class MoveElevatorVelocity extends Command
         OI oi = OI.getInstance();
         if (Math.abs(oi.getDriverGamepad().getRightY()) > OI.BLACK_XBOX_ELEVATOR_DEADBAND)
         {
-            boolean isDown = oi.getDriverGamepad().getRightY() < 0;
+        	double rightY = oi.getDriverGamepad().getRightY();
+            boolean isDown = rightY < 0;
             boolean reverseBeyondLimit = Robot.el.getBottomRightTalon()
                     .getSelectedSensorPosition(Drivetrain.POS_PID) <= Elevator.REVERSE_SOFT;
-            if (isDown && !reverseBeyondLimit)
+            double currentSpeed = Robot.el.getBottomRightTalon().getSelectedSensorVelocity(RobotMap.PRIMARY_PID_INDEX);
+            double dist = Math.abs(Robot.el.getBottomRightTalon()
+                    .getSelectedSensorPosition(Drivetrain.POS_PID) - Elevator.REVERSE_SOFT);
+            double outputFactor = 1.0;
+            if (isDown && reverseBeyondLimit && Math.abs(currentSpeed) / Elevator.MAX_ELEVATOR_SPEED < Elevator.SLOW_DOWN_SPEED)
             {
-                double speed = oi.getDriverGamepad().getRightY();
-                if (Robot.el.getBottomRightTalon().getSelectedSensorPosition(Elevator.POS_PID) <= Elevator.SLOW_DOWN_POS)
-                {
-                    speed *= 0.01;
-                }
-                Robot.el.moveElevatorVelocity(speed);
+                outputFactor = MathUtil.INSTANCE.map(dist, 0, Elevator.REVERSE_SOFT, 1, 0);
             }
-            else if (isDown && reverseBeyondLimit)
-                Robot.el.moveElevatorVelocity(0);
-            else
-                Robot.el.moveElevatorVelocity(oi.getDriverGamepad().getRightY());
+            else if (Math.abs(currentSpeed) / Elevator.MAX_ELEVATOR_SPEED >= Elevator.SLOW_DOWN_SPEED) {
+            	outputFactor = MathUtil.INSTANCE.map(dist, 0, Elevator.REVERSE_SOFT, 1, -0.5);
+            }
+            rightY *= outputFactor;
+            Robot.el.moveElevatorVelocity(rightY);
         }
         else
             Robot.el.moveElevatorVelocity(0);
