@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ZeroElevator extends Command {
 	public static final double STALL_CURRENT = 7;
 	public static final double DOWN_SPEED = -0.3 - 0.1;
-	
+	public static final int END_HEIGHT = -616;
 	public ZeroElevator () {
 		requires (Robot.el);
 	}
@@ -37,7 +37,7 @@ public class ZeroElevator extends Command {
 	}
 	
 	protected void end () {
-		Robot.el.getBottomRightTalon().setSelectedSensorPosition(0, RobotMap.PRIMARY_PID_INDEX);
+		Robot.el.getBottomRightTalon().setSelectedSensorPosition(END_HEIGHT, RobotMap.PRIMARY_PID_INDEX);
 	}
 	
 	

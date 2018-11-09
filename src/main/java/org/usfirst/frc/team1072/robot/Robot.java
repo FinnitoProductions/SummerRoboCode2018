@@ -17,6 +17,7 @@ import org.usfirst.frc.team1072.util.Conversions;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -110,6 +111,7 @@ public class Robot extends TimedRobot
         }
         else
             nm = NeutralMode.Coast;
+        
         Robot.dt.getLeftMaster().setNeutralMode(nm);
         Robot.dt.getRightMaster().setNeutralMode(nm);
         Robot.dt.getLeftFollower().setNeutralMode(nm);
@@ -145,6 +147,7 @@ public class Robot extends TimedRobot
         		m_autonomousCommand.cancel();
         	(m_autonomousCommand = new AutonomousCommand (location, subsystems, newData)).start();
         }*/
+        
         Scheduler.getInstance().run();
         
         SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightMaster().getClosedLoopError(0));

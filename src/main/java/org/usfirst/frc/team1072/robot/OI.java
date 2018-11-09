@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1072.robot;
 
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
+import org.usfirst.frc.team1072.robot.commands.elevator.ZeroElevator;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeIndefinite;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoidStealth;
@@ -76,36 +77,38 @@ public class OI
         HSDPadButton downDPadDriver= new HSDPadButton (driverGamepad, 180);
         HSDPadButton rightDPadDriver = new HSDPadButton (driverGamepad, 90);
         
+        HSDPadButton upDPadOperator = new HSDPadButton(operatorGamepad, 0);
+        HSDPadButton leftDPadOperator = new HSDPadButton (operatorGamepad, 270);
+        HSDPadButton downDPadOperator = new HSDPadButton (operatorGamepad, 180);
+        HSDPadButton rightDPadOperator = new HSDPadButton (operatorGamepad, 90);
+        
+        CommandGroup compressRaise = new CommandGroup();
+    	compressRaise.addSequential(new ConditionalCommand(new MoveElevatorMotionMagic(Elevator.RAISE_HEIGHT)) {
+
+			@Override
+			protected boolean condition() {
+                Elevator.getInstance().getBottomRightTalon().configSelectedFeedbackSensor
+                (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
+                System.out.println(Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
+                
+                return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 
+						Elevator.RAISE_HEIGHT;
+			}
+    		
+    	});
+    	compressRaise.addSequential(new SetSolenoidStealth(SolenoidDirection.COMPRESS));
+        
         upDPadDriver.whenPressed(new SetSolenoid(SolenoidDirection.UP));
         downDPadDriver.whenPressed( new SetSolenoid(SolenoidDirection.DOWN));
         leftDPadDriver.whenPressed(new SetSolenoid(SolenoidDirection.DECOMPRESS));
-        rightDPadDriver.whenPressed(new SetSolenoid(SolenoidDirection.COMPRESS));
+        rightDPadDriver.whenPressed(compressRaise);
         
         if (RobotMap.TWO_CONTROLLERS)
         {
-            HSDPadButton upDPadOperator = new HSDPadButton(operatorGamepad, 0);
-            HSDPadButton leftDPadOperator = new HSDPadButton (operatorGamepad, 270);
-            HSDPadButton downDPadOperator = new HSDPadButton (operatorGamepad, 180);
-            HSDPadButton rightDPadOperator = new HSDPadButton (operatorGamepad, 90);
-
             operatorGamepad.getButtonBumperLeft().whenPressed(new ToggleSolenoid(SolenoidType.COMPRESSDECOMPRESS));
             operatorGamepad.getButtonBumperRight().whenPressed(new ToggleSolenoid(SolenoidType.COMPRESSDECOMPRESS));
             
-            CommandGroup compressRaise = new CommandGroup();
-            	compressRaise.addSequential(new ConditionalCommand(new MoveElevatorMotionMagic(Elevator.RAISE_HEIGHT)) {
-
-					@Override
-					protected boolean condition() {
-                        Elevator.getInstance().getBottomRightTalon().configSelectedFeedbackSensor
-                        (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
-                        System.out.println(Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
-                        
-                        return Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0) < 
-								Elevator.RAISE_HEIGHT;
-					}
-            		
-            	});
-            	compressRaise.addSequential(new SetSolenoidStealth(SolenoidDirection.COMPRESS));
+            
             upDPadOperator.whenPressed(new SetSolenoid(SolenoidDirection.UP));
             downDPadOperator.whenPressed( new SetSolenoid(SolenoidDirection.DOWN));
             leftDPadOperator.whenPressed(new SetSolenoid(SolenoidDirection.DECOMPRESS));
@@ -132,7 +135,8 @@ public class OI
             });
         driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT));
         driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(Elevator.SCALE_LOW_HEIGHT));
-        driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);     
+        driverGamepad.getButtonY().whenPressed(new ZeroElevator());
+        //driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);     
     }
 
     /**
