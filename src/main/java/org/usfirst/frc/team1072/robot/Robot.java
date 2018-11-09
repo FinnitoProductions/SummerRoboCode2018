@@ -128,6 +128,7 @@ public class Robot extends TimedRobot
     {
         startTime = Timer.getFPGATimestamp();
         (m_autonomousCommand = new AutonomousCommand (location, subsystems, "")).start();
+        new ZeroElevator().start();
         /*intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).set(IntakeConstants.UP);
         intake.pn.getSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY).set(IntakeConstants.COMPRESS);*/
     }
