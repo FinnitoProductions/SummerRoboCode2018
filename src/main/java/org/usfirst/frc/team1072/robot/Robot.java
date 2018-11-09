@@ -9,6 +9,7 @@ package org.usfirst.frc.team1072.robot;
 
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
+import org.usfirst.frc.team1072.robot.commands.elevator.ZeroElevator;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
@@ -162,6 +163,7 @@ public class Robot extends TimedRobot
         
         dt.talonInitTeleop();
         el.talonInit();
+        new ZeroElevator().start();
         intake.talonInit();
         dt.getPigeon().zero();
     }
@@ -171,7 +173,6 @@ public class Robot extends TimedRobot
      */
     public void teleopPeriodic() 
     {
-          
           Scheduler.getInstance().run();
           SmartDashboard.putNumber("Elevator Height", Robot.el.getBottomRightTalon().getSelectedSensorPosition(0));
           //SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
