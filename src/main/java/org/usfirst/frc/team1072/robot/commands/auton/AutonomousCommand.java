@@ -56,18 +56,18 @@ public class AutonomousCommand extends CommandGroup
             requires(s);
 
         initSubsystems();
-        addSequential(new ZeroElevator());
-        addSequential(new DriveWithVelocityTimed(1, 1.8));
+//        addSequential(new ZeroElevator());
+//        addSequential(new DriveWithVelocityTimed(0.8, 1.8));
 //        FollowPathRio.setDefaultLeftTalon(Robot.dt.getLeftMaster());
 //        FollowPathRio.setDefaultRightTalon(Robot.dt.getRightMaster());
 
-//        addSequential(new SequentialCommandGroup(new ZeroElevator(),
-//                new MoveElevatorVelocityTimed(2, 1), new SequentialCommandGroup(new DriveWithVelocityTimed(1, 1.2),
-//                                    new MoveElevatorVelocityTimed(0.75, 1), new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.LEFT),
-//                                                    new DriveWithVelocityTimed(1, 2.5),
-//                                                    new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
-//                                                    new IntakeOuttakeTimed(3.0, Intake.IntakeType.OUTTAKE, 0.5)
-//                                                    )));
+        addSequential(new SequentialCommandGroup(new ZeroElevator(),
+                new MoveElevatorVelocityTimed(0.6, 1), new SequentialCommandGroup(new DriveWithVelocityTimed(1, 1.8),
+                                    new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT_AUTON), new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.LEFT),
+                                                    new DriveWithVelocityTimed(1, 2.5),
+                                                    new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
+                                                    new IntakeOuttakeTimed(3.0, Intake.IntakeType.OUTTAKE, 0.5)
+                                                    )));
 
         /*if (location == RobotLocation.LEFT) {
             if (fieldData.equals("LLL"))
