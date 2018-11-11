@@ -1,5 +1,6 @@
 package org.usfirst.frc.team1072.robot;
 
+import harkerrobolib.auto.SequentialCommandGroup;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
 import org.usfirst.frc.team1072.robot.commands.elevator.ZeroElevator;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeIndefinite;
@@ -114,9 +115,10 @@ public class OI
             leftDPadOperator.whenPressed(new SetSolenoid(SolenoidDirection.DECOMPRESS));
             rightDPadOperator.whenPressed(compressRaise);
 
-            operatorGamepad.getButtonA().whilePressed(new IntakeOuttakeIndefinite (0.4));
-
-            operatorGamepad.getButtonY().whilePressed(new IntakeOuttakeIndefinite(0.75));
+            operatorGamepad.getButtonA().whilePressed(new SequentialCommandGroup(new SetSolenoid(SolenoidDirection.DECOMPRESS),
+                                                        new IntakeOuttakeIndefinite (0.4)));
+            operatorGamepad.getButtonY().whilePressed(new SequentialCommandGroup(new SetSolenoid(SolenoidDirection.DECOMPRESS),
+                                                        new IntakeOuttakeIndefinite(0.75)));
         }
         
         CommandGroup lowerAndOpen = new CommandGroup();
