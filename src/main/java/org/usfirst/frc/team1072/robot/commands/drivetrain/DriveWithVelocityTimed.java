@@ -28,4 +28,11 @@ public class DriveWithVelocityTimed extends TimedCommand {
         Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, speed);
         Robot.dt.getRightMaster().set(ControlMode.PercentOutput, speed);
     }
+
+    @Override
+    public void end()
+    {
+        Robot.dt.getLeftMaster().set(ControlMode.Disabled, 0);
+        Robot.dt.getRightMaster().set(ControlMode.Disabled, 0);
+    }
 }

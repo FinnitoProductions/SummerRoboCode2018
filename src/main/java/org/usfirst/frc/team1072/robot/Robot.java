@@ -41,7 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot
 {
-    public static final RobotLocation location = RobotLocation.CENTER;
+    public static final RobotLocation location = RobotLocation.LEFT;
 
     /**
      * The drivetrain on the robot.
@@ -102,6 +102,11 @@ public class Robot extends TimedRobot
         loc_chooser.addObject ("Right", RobotLocation.RIGHT);
 
         SmartDashboard.putData("Robot Location", loc_chooser);
+
+        dt.talonInitTeleop();
+        el.talonInit();
+        intake.talonInit();
+        dt.getPigeon().zero();
     }
     
 
@@ -138,7 +143,7 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
-        (m_autonomousCommand = new AutonomousCommand (location, subsystems, "")).start();
+        (m_autonomousCommand = new AutonomousCommand (location, subsystems, DriverStation.getInstance().getGameSpecificMessage())).start();
         //new DriveWithVelocityTimed(1, 0.85).start();
         //new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.RIGHT)
 
@@ -184,12 +189,8 @@ public class Robot extends TimedRobot
         {
             m_autonomousCommand.cancel();
         }
-        
-        dt.talonInitTeleop();
-        el.talonInit();
         new ZeroElevator().start();
-        intake.talonInit();
-        dt.getPigeon().zero();
+
     }
 
     /**

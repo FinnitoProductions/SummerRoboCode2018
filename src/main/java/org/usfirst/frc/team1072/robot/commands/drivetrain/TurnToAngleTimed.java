@@ -26,8 +26,15 @@ public class TurnToAngleTimed extends TimedCommand {
     @Override
     public void execute() 
     {
-        Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, ((direction == TurnDirection.RIGHT) ? -1 : 1));
+        Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, ((direction == TurnDirection.RIGHT) ? 1 : -1));
         Robot.dt.getRightMaster().set(ControlMode.PercentOutput, ((direction == TurnDirection.RIGHT) ? -1 : 1));
         System.out.println("turn angle");
+    }
+
+    @Override
+    public void end()
+    {
+        Robot.dt.getLeftMaster().set(ControlMode.Disabled, 0);
+        Robot.dt.getRightMaster().set(ControlMode.Disabled, 0);
     }
 }

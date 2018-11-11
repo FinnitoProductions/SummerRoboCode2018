@@ -55,19 +55,25 @@ public class AutonomousCommand extends CommandGroup
         for (Subsystem s : subsystems)
             requires(s);
 
-        initSubsystems();
+        //initSubsystems();
 //        addSequential(new ZeroElevator());
 //        addSequential(new DriveWithVelocityTimed(0.8, 1.8));
+
+//        addSequential(new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.LEFT));
 //        FollowPathRio.setDefaultLeftTalon(Robot.dt.getLeftMaster());
 //        FollowPathRio.setDefaultRightTalon(Robot.dt.getRightMaster());
-
         addSequential(new SequentialCommandGroup(new ZeroElevator(),
-                new MoveElevatorVelocityTimed(0.6, 1), new SequentialCommandGroup(new DriveWithVelocityTimed(1, 1.8),
-                                    new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT_AUTON), new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.LEFT),
-                                                    new DriveWithVelocityTimed(1, 2.5),
-                                                    new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
-                                                    new IntakeOuttakeTimed(3.0, Intake.IntakeType.OUTTAKE, 0.5)
-                                                    )));
+                new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT_AUTON),
+                    new DriveWithVelocityTimed(0.4, 5.75)
+                                              ));
+        if (location == RobotLocation.RIGHT && fieldData.substring(0, 1).equals("R")) {
+            addSequential(new SequentialCommandGroup(new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
+                    new IntakeOuttakeTimed(3.0, IntakeType.INTAKE, 0.5)));
+        }
+        else if (location == RobotLocation.LEFT && fieldData.substring(0, 1).equals("L")) {
+            addSequential(new SequentialCommandGroup(new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
+                    new IntakeOuttakeTimed(3.0, IntakeType.INTAKE, 0.5)));
+        }
 
         /*if (location == RobotLocation.LEFT) {
             if (fieldData.equals("LLL"))
