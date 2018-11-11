@@ -7,12 +7,23 @@
 
 package org.usfirst.frc.team1072.robot;
 
+import edu.wpi.first.wpilibj.command.*;
+import harkerrobolib.auto.ParallelCommandGroup;
+import harkerrobolib.auto.SequentialCommandGroup;
+import harkerrobolib.commands.Cancel;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocityTimed;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngleTimed;
+import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
+import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorVelocityTimed;
 import org.usfirst.frc.team1072.robot.commands.elevator.ZeroElevator;
+import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeTimed;
+import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
+import org.usfirst.frc.team1072.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team1072.util.Conversions;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -20,8 +31,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -130,7 +139,18 @@ public class Robot extends TimedRobot
     {
         startTime = Timer.getFPGATimestamp();
         (m_autonomousCommand = new AutonomousCommand (location, subsystems, "")).start();
-        new ZeroElevator().start();
+        //new DriveWithVelocityTimed(1, 0.85).start();
+        //new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.RIGHT)
+
+
+        //new SequentialCommandGroup( new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.LEFT)).start();
+
+//        CommandGroup leftCommand = new SequentialCommandGroup(new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT_AUTON),
+//                new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.RIGHT),
+//                new ParallelCommandGroup(new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
+//                        new IntakeOuttakeTimed(3.0, Intake.IntakeType.OUTTAKE, 0.5)));
+
+        //rightCommand.start();
         /*intake.pn.getSolenoid(IntakeConstants.UPDOWN_KEY).set(IntakeConstants.UP);
         intake.pn.getSolenoid(IntakeConstants.COMPRESSDECOMPRESS_KEY).set(IntakeConstants.COMPRESS);*/
     }
@@ -139,7 +159,7 @@ public class Robot extends TimedRobot
      * This function is called periodically during autonomous.
      */
     public void autonomousPeriodic()
-    { 
+    {
         /*String newData = DriverStation.getInstance().getGameSpecificMessage();
         if (newData.length() == 3 && (gameData.length() != 3 || !newData.equals(gameData))) {
         	gameData = newData;
@@ -147,9 +167,9 @@ public class Robot extends TimedRobot
         		m_autonomousCommand.cancel();
         	(m_autonomousCommand = new AutonomousCommand (location, subsystems, newData)).start();
         }*/
-        
+
         Scheduler.getInstance().run();
-        
+
         SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightMaster().getClosedLoopError(0));
         SmartDashboard.putNumber ("Auxiliary Error", Robot.dt.getRightMaster().getClosedLoopError(1));
     }

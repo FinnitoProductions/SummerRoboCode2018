@@ -300,7 +300,7 @@ public class Elevator extends Subsystem
     /**
      * The height to which the elevator should raise for a switch autonomous (in encoder units).
      */ 
-    public static final double SWITCH_HEIGHT_AUTON = 8000;
+    public static final double SWITCH_HEIGHT_AUTON = 16000;
     
     /**
      * The height to which the elevator should raise for the third cube in a
@@ -474,6 +474,6 @@ public class Elevator extends Subsystem
     
     public static double THROTTLE_PERCENT = 0.5;
 
-    public static double MIN_THROTTLE_SPEED = 0.25;
+    public static double MIN_THROTTLE_SPEED = 0.45;
     
 }

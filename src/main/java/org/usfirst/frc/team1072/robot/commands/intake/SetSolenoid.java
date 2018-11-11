@@ -30,7 +30,7 @@ public class SetSolenoid extends InstantCommand {
 	 * @param state the state of the solenoid (forward, off, or reverse)
 	 */
 	public SetSolenoid(SolenoidDirection state) {
-		requires(Intake.pn);
+		//requires(Intake.pn);
 		solenoidState = state;
 	}
 

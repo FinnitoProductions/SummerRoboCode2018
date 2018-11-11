@@ -3,23 +3,25 @@ package org.usfirst.frc.team1072.robot.commands.auton;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import edu.wpi.first.wpilibj.command.Command;
+import harkerrobolib.auto.SequentialCommandGroup;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.AutonomousConstants;
 import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBegins.PauseType;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.CombinedPositionAnglePID;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveToPosition;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.InitializeDrivetrain;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.PositionCommand;
-import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngle;
+import org.usfirst.frc.team1072.robot.commands.drivetrain.*;
 import org.usfirst.frc.team1072.robot.commands.elevator.InitializeElevator;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
+import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorVelocityTimed;
+import org.usfirst.frc.team1072.robot.commands.elevator.ZeroElevator;
 import org.usfirst.frc.team1072.robot.commands.intake.InitializeIntake;
 import org.usfirst.frc.team1072.robot.commands.intake.IntakeOuttakeTimed;
 import org.usfirst.frc.team1072.robot.commands.intake.SetSolenoid;
+import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.robot.subsystems.Intake.IntakeType;
+import org.usfirst.frc.team1072.robot.subsystems.Pneumatics;
 import org.usfirst.frc.team1072.robot.subsystems.Pneumatics.SolenoidDirection;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -54,9 +56,19 @@ public class AutonomousCommand extends CommandGroup
             requires(s);
 
         initSubsystems();
-        FollowPathRio.setDefaultLeftTalon(Robot.dt.getLeftMaster());
-        FollowPathRio.setDefaultRightTalon(Robot.dt.getRightMaster());
-        
+        addSequential(new ZeroElevator());
+        addSequential(new DriveWithVelocityTimed(1, 1.8));
+//        FollowPathRio.setDefaultLeftTalon(Robot.dt.getLeftMaster());
+//        FollowPathRio.setDefaultRightTalon(Robot.dt.getRightMaster());
+
+//        addSequential(new SequentialCommandGroup(new ZeroElevator(),
+//                new MoveElevatorVelocityTimed(2, 1), new SequentialCommandGroup(new DriveWithVelocityTimed(1, 1.2),
+//                                    new MoveElevatorVelocityTimed(0.75, 1), new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.LEFT),
+//                                                    new DriveWithVelocityTimed(1, 2.5),
+//                                                    new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
+//                                                    new IntakeOuttakeTimed(3.0, Intake.IntakeType.OUTTAKE, 0.5)
+//                                                    )));
+
         /*if (location == RobotLocation.LEFT) {
             if (fieldData.equals("LLL"))
                 sideScale(ON_LEFT);
@@ -89,7 +101,7 @@ public class AutonomousCommand extends CommandGroup
         }*/
         //sideScale(ON_LEFT);
         //baseline();
-        sideScaleSneaky(ON_LEFT);
+        //sideScaleSneaky(ON_LEFT);
         //switchAuton(ON_LEFT);
         //oneCubeSide(ON_LEFT);
     }

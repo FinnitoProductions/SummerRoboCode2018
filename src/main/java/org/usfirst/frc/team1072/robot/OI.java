@@ -135,8 +135,9 @@ public class OI
             });
         driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT));
         driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(Elevator.SCALE_LOW_HEIGHT));
-        driverGamepad.getButtonY().whenPressed(new ZeroElevator());
-        //driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);     
+        //driverGamepad.getButtonY().whenPressed(new ZeroElevator());
+        driverGamepad.getButtonStickRight().whenPressed(new ZeroElevator());
+        driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);
     }
 
     /**
