@@ -41,6 +41,7 @@ public abstract class PositionCommand extends Command
      */
     public PositionCommand (int maxExecutes, double desiredPos)
     {
+        requires(Robot.dt);
         numExecutes = 0;
         this.maxExecutes = maxExecutes;
         position = desiredPos;

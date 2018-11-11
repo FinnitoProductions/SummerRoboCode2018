@@ -28,6 +28,7 @@ public class DriveToPosition extends PositionCommand
     public DriveToPosition (double position)
     {
         super (10, Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS));
+        requires(Robot.dt);
         this.position = Conversions.convertPosition(PositionUnit.FEET, position, PositionUnit.ENCODER_UNITS);
     }
     

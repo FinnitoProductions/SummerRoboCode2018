@@ -3,6 +3,7 @@ package org.usfirst.frc.team1072.robot.commands.elevator;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import edu.wpi.first.wpilibj.command.TimedCommand;
+import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 
 public class MoveElevatorVelocityTimed extends TimedCommand {
@@ -15,6 +16,7 @@ public class MoveElevatorVelocityTimed extends TimedCommand {
      */
     public MoveElevatorVelocityTimed(double time, double output) {
         super(time);
+        requires (Robot.el);
         this.output = output;
     }
 

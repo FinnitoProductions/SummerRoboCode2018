@@ -67,6 +67,7 @@ public class TurnToAngle extends Command
      */
     public TurnToAngle (double angle)
     {
+        requires(Robot.dt);
         errorIndex = 0;
         errorSamples = 6;
         this.angle = Conversions.convertAngle(AngleUnit.DEGREES, angle, AngleUnit.PIGEON_UNITS);

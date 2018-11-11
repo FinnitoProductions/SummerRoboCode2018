@@ -15,6 +15,7 @@ public class DriveWithVelocityTimed extends TimedCommand {
     private double speed;
 	public DriveWithVelocityTimed(double speed, double time) {
 		super (time);
+		requires(Robot.dt);
 		this.speed = speed;
 	}
     

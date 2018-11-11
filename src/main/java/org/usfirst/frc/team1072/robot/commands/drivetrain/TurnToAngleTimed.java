@@ -16,6 +16,7 @@ public class TurnToAngleTimed extends TimedCommand {
 	private TurnDirection direction;
 	public TurnToAngleTimed (double time, TurnDirection direction) {
 		super (time);
+		requires(Robot.dt);
 		this.direction = direction;
 	}
     
