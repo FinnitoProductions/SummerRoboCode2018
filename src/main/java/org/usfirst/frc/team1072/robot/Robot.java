@@ -8,8 +8,11 @@
 package org.usfirst.frc.team1072.robot;
 
 import edu.wpi.first.wpilibj.command.*;
+import harkerrobolib.auto.AutoMode;
 import harkerrobolib.auto.ParallelCommandGroup;
 import harkerrobolib.auto.SequentialCommandGroup;
+
+import org.usfirst.frc.team1072.robot.auto.modes.CompatibleScale;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocityTimed;
@@ -76,6 +79,8 @@ public class Robot extends TimedRobot
      * The autonomous chooser.
      */
     private SendableChooser<RobotLocation> loc_chooser;
+
+    private SendableChooser<AutoMode> LLL;  
     
     private String gameData = "";
     
@@ -97,12 +102,14 @@ public class Robot extends TimedRobot
         subsystems = new Subsystem[] {dt, el, intake, Intake.pn};
     
         loc_chooser = new SendableChooser<RobotLocation>();
+        LLL = new SendableChooser<AutoMode>();
+
         loc_chooser.addDefault("Left", RobotLocation.LEFT);
         loc_chooser.addObject ("Center", RobotLocation.CENTER);
         loc_chooser.addObject ("Right", RobotLocation.RIGHT);
 
         SmartDashboard.putData("Robot Location", loc_chooser);
-
+        
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
@@ -207,7 +214,8 @@ public class Robot extends TimedRobot
 
     @Override
     public void robotPeriodic() {
-        
+        SmartDashboard.updateValues();
+        SmartDashboard.putData("Robot Location", loc_chooser);
     }
     
     /**
