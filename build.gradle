@@ -36,7 +36,7 @@ dependencies {
     compile wpilib()
     compile ctre()
     compile navx()
-    compile files('lib/Pathfinder-Java-1.8.jar')
+    compile pathfinder()
     compile files('lib/HarkerRoboLib-5.2.2.jar')  
 }
 
