@@ -41,7 +41,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot
 {
-    public static final RobotLocation location = RobotLocation.LEFT;
+    public static RobotLocation location = RobotLocation.LEFT;
 
     /**
      * The drivetrain on the robot.
@@ -76,7 +76,7 @@ public class Robot extends TimedRobot
     /**
      * The autonomous chooser.
      */
-    SendableChooser<RobotLocation> loc_chooser = new SendableChooser<RobotLocation>();
+    private SendableChooser<RobotLocation> loc_chooser;
     
     private String gameData = "";
     
@@ -94,10 +94,11 @@ public class Robot extends TimedRobot
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         oi = OI.getInstance();
-
+        
         subsystems = new Subsystem[] {dt, el, intake, Intake.pn};
     
-        loc_chooser.addObject ("Left", RobotLocation.LEFT);
+        loc_chooser = new SendableChooser<RobotLocation>();
+        loc_chooser.addDefault("Left", RobotLocation.LEFT);
         loc_chooser.addObject ("Center", RobotLocation.CENTER);
         loc_chooser.addObject ("Right", RobotLocation.RIGHT);
 
@@ -143,7 +144,9 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
-        (m_autonomousCommand = new AutonomousCommand (location, subsystems, DriverStation.getInstance().getGameSpecificMessage())).start();
+        //(m_autonomousCommand = new AutonomousCommand (location, subsystems, DriverStation.getInstance().getGameSpecificMessage())).start();
+        location = loc_chooser.getSelected();
+        System.out.println(location);
         //new DriveWithVelocityTimed(1, 0.85).start();
         //new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.RIGHT)
 
