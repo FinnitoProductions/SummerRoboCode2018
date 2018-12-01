@@ -10,7 +10,6 @@ package org.usfirst.frc.team1072.robot;
 import edu.wpi.first.wpilibj.command.*;
 import harkerrobolib.auto.ParallelCommandGroup;
 import harkerrobolib.auto.SequentialCommandGroup;
-import harkerrobolib.commands.Cancel;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocityTimed;
@@ -107,7 +106,6 @@ public class Robot extends TimedRobot
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
-        dt.getPigeon().zero();
     }
     
 

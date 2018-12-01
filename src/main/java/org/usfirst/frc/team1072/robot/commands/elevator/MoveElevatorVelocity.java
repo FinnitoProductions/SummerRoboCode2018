@@ -50,10 +50,10 @@ public class MoveElevatorVelocity extends Command
             double outputFactor = 1.0;
             if (isDown && reverseBeyondLimit && Math.abs(currentSpeed) / Elevator.MAX_ELEVATOR_SPEED < Elevator.SLOW_DOWN_SPEED)
             {
-                outputFactor = MathUtil.INSTANCE.map(dist, 0, Elevator.REVERSE_SOFT, 1, 0);
+                outputFactor = MathUtil.map(dist, 0, Elevator.REVERSE_SOFT, 1, 0);
             }
             else if (Math.abs(currentSpeed) / Elevator.MAX_ELEVATOR_SPEED >= Elevator.SLOW_DOWN_SPEED) {
-            	outputFactor = MathUtil.INSTANCE.map(dist, 0, Elevator.REVERSE_SOFT, 1, -0.5);
+            	outputFactor = MathUtil.map(dist, 0, Elevator.REVERSE_SOFT, 1, -0.5);
             }
             rightY *= outputFactor;
             Robot.el.moveElevatorVelocity(rightY);

@@ -18,13 +18,18 @@ import harkerrobolib.auto.SequentialCommandGroup;
 
 public class CompatibleScale extends AutoMode {
 
-	public CompatibleScale(StartLocation loc) {
-		super(loc, new SequentialCommandGroup (new FollowPathRio (new LeftToLeftScaleSide()),
+	public CompatibleScale(Location loc) {
+		super(loc, loc);
+	}
+
+	@Override
+	public Command getLeftCommands(Location endLoc) {
+		return new SequentialCommandGroup (new FollowPathRio (new LeftToLeftScaleSide()),
 		        new MoveElevatorMotionMagic(Elevator.SCALE_HIGH_HEIGHT),
 		        new DriveToPosition(2.75),
 		        new SetSolenoid (SolenoidDirection.DECOMPRESS),
 		        new IntakeOuttakeTimed(AutonomousConstants.SCALE_OUTTAKE_TIME, IntakeType.OUTTAKE),
 		        new Delay(1),
-		        new DriveToPosition(-1.5)), null, null);
+		        new DriveToPosition(-1.5));
 	}
 }
