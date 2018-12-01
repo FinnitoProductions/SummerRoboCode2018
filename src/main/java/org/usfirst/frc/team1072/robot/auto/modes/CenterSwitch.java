@@ -28,8 +28,8 @@ public class CenterSwitch extends AutoMode {
     public enum EndLocation {
     	LEFT, RIGHT
     }
-	public CenterSwitch (EndLocation loc) {
-		super (StartLocation.CENTER, AutoMode.Companion.getLeftCommandDefault()
+	public CenterSwitch (EndLocation loc) 
+		super (StartLocation.CENTER, AutoMode.getLeftCommandDefault()
 				, new SequentialCommandGroup (scoreFirstCube(), scoreFirstCube(), getSecondCube(), scoreSecondCube()), 
 				AutoMode.Companion.getRightCommandDefault());
     	boolean onLeft = loc == EndLocation.LEFT;
