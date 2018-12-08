@@ -302,7 +302,7 @@ public class Drivetrain extends HSDrivetrain
      * 
      * @postcondition nominal and peak output in both directions has been set
      */
-    private void configureVelocityClosedLoop()
+    public void configureVelocityClosedLoop()
     {
         getLeftMaster().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_LEFT);
         getRightMaster().config_kF(Drivetrain.VEL_PID, Drivetrain.VEL_KF_RIGHT);
@@ -435,9 +435,6 @@ public class Drivetrain extends HSDrivetrain
         getLeftMaster().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR);
         getRightMaster().configAllowableClosedloopError(Drivetrain.MOTION_PROFILE_PID, Drivetrain.POS_ALLOWABLE_ERROR);
 
-        getLeftMaster().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_LEFT);
-        getRightMaster().config_kF(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KF_RIGHT);
-
         getLeftMaster().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_LEFT);
         getRightMaster().config_kP(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KP_RIGHT);
 
@@ -446,6 +443,9 @@ public class Drivetrain extends HSDrivetrain
 
         getLeftMaster().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_LEFT);
         getRightMaster().config_kD(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_KD_RIGHT);
+
+        getLeftMaster().config_IntegralZone(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_IZONE_LEFT);
+        getRightMaster().config_IntegralZone(Drivetrain.MOTION_PROFILE_PID, Drivetrain.MOTION_PROF_IZONE_RIGHT);
     }
     
     
@@ -480,6 +480,55 @@ public class Drivetrain extends HSDrivetrain
         if (instance == null) instance = new Drivetrain();
         return instance;
     }
+    
+     /**
+     * The F constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KF_LEFT = 0.5;
+    
+    /**
+     * The P constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KP_LEFT = 0.18;
+    
+    /**
+     * The I constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KI_LEFT = 0;//0.001;
+
+    public static int MOTION_PROF_IZONE_LEFT = 1000;
+    
+    /**
+     * The D constant for the motion profile closed loop on the left.
+     */
+    public static double MOTION_PROF_KD_LEFT = 41;
+    
+    /**
+     * The F constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KF_RIGHT = 0.5;//0.25;//0.22;//0.235;
+    
+    /**
+     * The P constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KP_RIGHT = 0.18;//\0.1;//1.2;//0.8;
+    
+    /**
+     * The I constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KI_RIGHT = 0;//0.001;
+    
+    /**
+     * The D constant for the motion profile closed loop on the right.
+     */
+    public static double MOTION_PROF_KD_RIGHT = 41;//4;
+
+    public static int MOTION_PROF_IZONE_RIGHT = 1000;
+
+    /**
+     * The allowable error for a motion profile closed loop.
+     */
+    public static final int MOTION_PROFILE_ALLOWABLE_ERROR = 500;
     
    
     
@@ -812,51 +861,7 @@ public class Drivetrain extends HSDrivetrain
 //    public static double DT_MOTION_PROF_KD_RIGHT = 25;
     // CARPET
     
-    /**
-     * The F constant for the motion profile closed loop on the left.
-     */
-    public static double MOTION_PROF_KF_LEFT = 0;
-    
-    /**
-     * The P constant for the motion profile closed loop on the left.
-     */
-    public static double MOTION_PROF_KP_LEFT = 0;
-    
-    /**
-     * The I constant for the motion profile closed loop on the left.
-     */
-    public static double MOTION_PROF_KI_LEFT = 0;
-    
-    /**
-     * The D constant for the motion profile closed loop on the left.
-     */
-    public static double MOTION_PROF_KD_LEFT = 0;
-    
-    /**
-     * The F constant for the motion profile closed loop on the right.
-     */
-    public static double MOTION_PROF_KF_RIGHT = 0.25;//0.22;//0.235;
-    
-    /**
-     * The P constant for the motion profile closed loop on the right.
-     */
-    public static double MOTION_PROF_KP_RIGHT = 1.2;//0.8;
-    
-    /**
-     * The I constant for the motion profile closed loop on the right.
-     */
-    public static double MOTION_PROF_KI_RIGHT = 0;//0.0001;
-    
-    /**
-     * The D constant for the motion profile closed loop on the right.
-     */
-    public static double MOTION_PROF_KD_RIGHT = 4;
-
-    /**
-     * The allowable error for a motion profile closed loop.
-     */
-    public static final int MOTION_PROFILE_ALLOWABLE_ERROR = 500;
-    
+   
     /**
    	 * A wrapper class to house all of the Pigeon-related constants.
    	 * @author Finn Frankis
@@ -867,12 +872,12 @@ public class Drivetrain extends HSDrivetrain
    	    /**
    	     * The F constant for pigeon motion profiling.
    	     */
-   	    public static double MOT_PROF_KF = 0;
+   	    public static double MOT_PROF_KF = 0.22;
    	    
    	    /**
    	     * The P constant for pigeon motion profiling.
    	     */
-   	    public static double MOT_PROF_KP = 0.8;//1.2;//2.6;//1.3;//1.1;
+   	    public static double MOT_PROF_KP = 0;//0.8;//1.2;//2.6;//1.3;//1.1;
    	    
    	    /**
    	     * The I constant for pigeon motion profiling.
@@ -882,7 +887,7 @@ public class Drivetrain extends HSDrivetrain
    	    /**
    	     * The D constant for pigeon motion profiling.
    	     */
-   	    public static double MOT_PROF_KD = 5;//6;//15;
+   	    public static double MOT_PROF_KD = 0;//5;//6;//15;
    	    
    	    /**
    	     * The F constant for pigeon turning in place.
