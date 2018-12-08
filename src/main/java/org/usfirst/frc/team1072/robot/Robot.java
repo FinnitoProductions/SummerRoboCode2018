@@ -10,9 +10,11 @@ package org.usfirst.frc.team1072.robot;
 import edu.wpi.first.wpilibj.command.*;
 import harkerrobolib.auto.AutoMode;
 import harkerrobolib.auto.ParallelCommandGroup;
+import harkerrobolib.auto.Path;
 import harkerrobolib.auto.SequentialCommandGroup;
 
 import org.usfirst.frc.team1072.robot.auto.modes.CompatibleScale;
+import org.usfirst.frc.team1072.robot.auto.paths.LeftToLeftScaleSide;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocityTimed;
@@ -113,6 +115,7 @@ public class Robot extends TimedRobot
         dt.talonInitTeleop();
         el.talonInit();
         intake.talonInit();
+        //System.out.println(new LeftToLeftScaleSide().getLeftPath().segments);
     }
     
 
@@ -149,6 +152,7 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         startTime = Timer.getFPGATimestamp();
+        gameData = DriverStation.getInstance().getGameSpecificMessage();
         //(m_autonomousCommand = new AutonomousCommand (location, subsystems, DriverStation.getInstance().getGameSpecificMessage())).start();
         location = loc_chooser.getSelected();
         System.out.println(location);
