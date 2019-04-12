@@ -103,7 +103,6 @@ public class Elevator extends Subsystem
     public void talonInitTeleop()
     {
         talonInit();
-        elSetSoftLimit(Elevator.FORWARD_SOFT, Elevator.REVERSE_SOFT);
         elSetCurrentLimit(Elevator.PEAK_CURRENT_LIMIT, Elevator.PEAK_TIME_MS,
                 Elevator.CONTINOUS_CURRENT_LIMIT);
         elSetRampRate (Elevator.RAMP_RATE);
@@ -114,6 +113,7 @@ public class Elevator extends Subsystem
      */
     public void talonInit()
     {
+        getBottomRightTalon().configFactoryDefault();
         elSlaveVictors();
         elSetNeutralMode(NeutralMode.Brake);
 
@@ -123,6 +123,7 @@ public class Elevator extends Subsystem
         
         elConfigureMotionMagic();
         getBottomRightTalon().setSelectedSensorPosition(0);
+
 
     }
 

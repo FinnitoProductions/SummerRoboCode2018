@@ -42,7 +42,7 @@ public class MoveElevatorPosition extends Command
      * 
      */
     @Override
-    public void execute() { Robot.el.moveElevatorPosition(position); }
+    // public void execute() { Robot.el.moveElevatorPosition(position); }
 
     /**
      * Determines whether the command is complete.

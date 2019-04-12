@@ -36,12 +36,11 @@ public class MoveElevatorVelocity extends Command
     public void execute() 
     { 
         OI oi = OI.getInstance();
-        System.out.println("EXECUTE");
         if (Math.abs(oi.getDriverGamepad().getRightY()) > OI.BLACK_XBOX_ELEVATOR_DEADBAND)
         {
         	double rightY = oi.getDriverGamepad().getRightY();
             // rightY *= outputFactor;
-            Robot.el.moveElevatorVelocity(rightY);
+            Robot.el.moveElevatorVelocity(0.4 * rightY);
         }
         else
             Robot.el.moveElevatorVelocity(0);

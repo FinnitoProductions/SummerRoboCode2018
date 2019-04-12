@@ -39,7 +39,7 @@ public class MoveElevatorMotionMagicIndefinite extends Command
         Robot.el.getBottomRightTalon().configSelectedFeedbackSensor
                 (FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
 
-        Robot.el.moveElevatorMotionMagic(position);
+        // Robot.el.moveElevatorMotionMagic(position);
         ;
     }
     /**
@@ -47,7 +47,7 @@ public class MoveElevatorMotionMagicIndefinite extends Command
      */
     public void execute()
     {
-        Robot.el.moveElevatorMotionMagic(position);
+        // Robot.el.moveElevatorMotionMagic(position);
     }
 
     /**
@@ -56,7 +56,7 @@ public class MoveElevatorMotionMagicIndefinite extends Command
      * @return true if the command has finished; false otherwise
      */
     protected boolean isFinished() {
-        return false;
+        return true;
     }
 
 }

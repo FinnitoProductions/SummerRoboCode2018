@@ -34,6 +34,8 @@ public class Drivetrain extends HSDrivetrain
      * The current instance of this singleton Drivetrain.
      */
     private static Drivetrain instance = null;
+
+    private static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
     
     
     /**
@@ -113,6 +115,9 @@ public class Drivetrain extends HSDrivetrain
      */
     public void talonInit()
     {
+        getLeftMaster().configFactoryDefault();
+        getRightMaster().configFactoryDefault();
+
         zeroAllSensors();
         //getPigeon().zero();
         setTalonDeadbands();
@@ -123,7 +128,10 @@ public class Drivetrain extends HSDrivetrain
         victorInit();
         
         invertControllers();
-        setNeutralMode(NeutralMode.Brake);
+        getLeftMaster().setNeutralMode(NEUTRAL_MODE);
+        getLeftFollower().setNeutralMode(NEUTRAL_MODE);
+        getRightMaster().setNeutralMode(NEUTRAL_MODE);
+        getRightFollower().setNeutralMode(NEUTRAL_MODE);
         
         ;
         scaleVoltage(RobotMap.NOMINAL_BATTERY_VOLTAGE);
@@ -587,13 +595,13 @@ public class Drivetrain extends HSDrivetrain
      * The nominal output (or the constant output percemt such that static friction is more easily broken)
      * for the left.
      */
-    public static double NOMINAL_OUTPUT_LEFT = 0.1; //0.084;
+    public static double NOMINAL_OUTPUT_LEFT = 0;//0.1; //0.084;
     
     /**
      * The nominal output (or the constant output percent such that static friction is more easily broken)
      * for the right.
      */
-    public static double NOMINAL_OUTPUT_RIGHT = 0.1; //0.084;
+    public static double NOMINAL_OUTPUT_RIGHT = 0;//0.1; //0.084;
     
     /**
      * The peak output (or the maximum possible output percent) for the left.

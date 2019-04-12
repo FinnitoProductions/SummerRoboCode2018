@@ -5,6 +5,9 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
+import harkerrobolib.util.Conversions;
+import harkerrobolib.util.MathUtil;
+import harkerrobolib.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -59,39 +62,23 @@ public class DriveWithVelocity extends Command
     { 
         OI oi = OI.getInstance();
         
-        double leftX = oi.getDriverGamepad().getLeftX();
-        double leftY = oi.getDriverGamepad().getLeftY();
-        
-        /*if (Math.abs(leftX) < deadband)
-            leftX = 0;
-        else
-        {
-            leftX = leftX -  Math.signum(leftX) * deadband;
-            leftX /= 1- deadband;
-        }*/
-            
-        
-        if (Math.abs(leftY) < deadband)
-            leftY = 0;
-        else
-        {
-            leftY -= Math.signum(leftY) * deadband;
-            leftY /= 1-deadband;
-        }
-        double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition
-        (RobotMap.PRIMARY_PID_INDEX)) / Elevator.SCALE_HIGH_HEIGHT;
+        double leftX = MathUtil.mapJoystickOutput(oi.getDriverGamepad().getLeftX(), OI.BLACK_XBOX_DRIVE_DEADBAND);
+        double leftY = MathUtil.mapJoystickOutput(oi.getDriverGamepad().getLeftY(), OI.BLACK_XBOX_DRIVE_DEADBAND);
+
+        // double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition
+        // (RobotMap.PRIMARY_PID_INDEX)) / Elevator.SCALE_HIGH_HEIGHT;
         
         
         double elevatorScale = 1;
-        if (elevatorPercent > Elevator.THROTTLE_PERCENT) {
-            elevatorScale = 1-elevatorPercent*(1-Elevator.MIN_THROTTLE_SPEED);
-        }
+        // if (elevatorPercent > Elevator.THROTTLE_PERCENT) {
+        //     elevatorScale = 1-elevatorPercent*(1-Elevator.MIN_THROTTLE_SPEED);
+        // }
 
-        double x = 0.8 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);
+        double x = 0.4 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);
         double y = leftY;
-        double k = Math.max(1.0, Math.max(Math.abs(y + x), Math.abs(y - x)));
-        double left = elevatorScale * (y + x * Math.abs(x)) / k;
-        double right = elevatorScale * (y - x * Math.abs(x)) / k;
+        // double k = Math.max(1.0, Math.max(Math.abs(y + x), Math.abs(y - x)));
+        double left = elevatorScale * (y * Drivetrain.MAX_DRIVE_SPEED_FPS + x * Drivetrain.MAX_TURN_SPEED_FPS);
+        double right = elevatorScale * (y * Drivetrain.MAX_DRIVE_SPEED_FPS - x * Drivetrain.MAX_TURN_SPEED_FPS);
 
         /*double leftSpeed = Conversions.convertSpeed
                 (SpeedUnit.FEET_PER_SECOND, 
@@ -102,8 +89,17 @@ public class DriveWithVelocity extends Command
                 elevatorScale * right * DrivetrainConstants.MAX_DRIVE_SPEED_FPS, 
                 SpeedUnit.ENCODER_UNITS);*/
         
-        Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, left);
-        Robot.dt.getRightMaster().set(ControlMode.PercentOutput, right);
+        if (Math.abs(left) < 2e-6) {
+            Robot.dt.getLeftMaster().set(ControlMode.PercentOutput, 0);
+        } else {
+            Robot.dt.getLeftMaster().set(ControlMode.Velocity, Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, left, SpeedUnit.ENCODER_UNITS));
+        }
+
+        if (Math.abs(right) < 2e-6) {
+            Robot.dt.getRightMaster().set(ControlMode.PercentOutput, 0);
+        } else {
+            Robot.dt.getRightMaster().set(ControlMode.Velocity, Conversions.convertSpeed(SpeedUnit.FEET_PER_SECOND, right, SpeedUnit.ENCODER_UNITS));
+        }
     }
     
     /**
