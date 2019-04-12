@@ -3,8 +3,9 @@ package org.usfirst.frc.team1072.robot.commands.drivetrain;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
-import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Conversions.PositionUnit;
+
+import harkerrobolib.util.Conversions;
+import harkerrobolib.util.Conversions.PositionUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;

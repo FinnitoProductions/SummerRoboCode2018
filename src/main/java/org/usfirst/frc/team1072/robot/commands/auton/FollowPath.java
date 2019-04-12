@@ -10,12 +10,12 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
-import org.usfirst.frc.team1072.util.Conversions;
+import harkerrobolib.util.Conversions;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
-import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
+//import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
@@ -400,7 +400,7 @@ public class FollowPath extends Command
     
     
                     
-                    tp.timeDur = TrajectoryDuration.valueOf(0); // time to ADD to each point convert to correct units
+                    //tp.timeDur = TrajectoryDuration.valueOf(0); // time to ADD to each point convert to correct units
                     tp.profileSlotSelect0 = Drivetrain.MOTION_PROFILE_PID;
                     
                     if (outerPort >= 0) 
@@ -629,5 +629,4 @@ public class FollowPath extends Command
         // TODO Auto-generated method stub
         return pathState;
     }
-    
 }

@@ -5,8 +5,6 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
-import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Conversions.SpeedUnit;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 

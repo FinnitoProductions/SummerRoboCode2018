@@ -4,14 +4,14 @@ import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Drivetrain.Pigeon;
-import org.usfirst.frc.team1072.util.Conversions;
-import org.usfirst.frc.team1072.util.Conversions.AngleUnit;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 
 import edu.wpi.first.wpilibj.command.Command;
+import harkerrobolib.util.Conversions;
+import harkerrobolib.util.Conversions.AngleUnit;
 
 /**
  * Turns the robot to a given angle.

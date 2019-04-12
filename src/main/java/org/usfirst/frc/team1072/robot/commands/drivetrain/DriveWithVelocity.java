@@ -41,6 +41,7 @@ public class DriveWithVelocity extends Command
 
         Robot.dt.selectProfileSlots(Drivetrain.VEL_PID, RobotMap.PRIMARY_PID_INDEX);
         
+        Robot.dt.configureVelocityClosedLoop();
         
         Robot.dt.getLeftMaster().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);
         Robot.dt.getRightMaster().configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, RobotMap.PRIMARY_PID_INDEX);

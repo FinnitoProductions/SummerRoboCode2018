@@ -12,11 +12,14 @@ import harkerrobolib.auto.AutoMode;
 import harkerrobolib.auto.ParallelCommandGroup;
 import harkerrobolib.auto.Path;
 import harkerrobolib.auto.SequentialCommandGroup;
+import harkerrobolib.auto.AutoMode.Location;
+import harkerrobolib.util.Conversions;
+import jaci.pathfinder.Trajectory.Segment;
 
 import org.usfirst.frc.team1072.robot.auto.modes.CompatibleScale;
 import org.usfirst.frc.team1072.robot.auto.paths.LeftToLeftScaleSide;
 import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand;
-import org.usfirst.frc.team1072.robot.commands.auton.AutonomousCommand.RobotLocation;
+import org.usfirst.frc.team1072.robot.commands.auton.FollowPathRio;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.DriveWithVelocityTimed;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.TurnToAngleTimed;
 import org.usfirst.frc.team1072.robot.commands.elevator.MoveElevatorMotionMagic;
@@ -28,9 +31,8 @@ import org.usfirst.frc.team1072.robot.subsystems.Drivetrain;
 import org.usfirst.frc.team1072.robot.subsystems.Elevator;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.robot.subsystems.Pneumatics;
-import org.usfirst.frc.team1072.util.Conversions;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode; 
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -45,7 +47,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot
 {
-    public static RobotLocation location = RobotLocation.LEFT;
+    public static Location location = Location.LEFT;
 
     /**
      * The drivetrain on the robot.
@@ -80,13 +82,15 @@ public class Robot extends TimedRobot
     /**
      * The autonomous chooser.
      */
-    private SendableChooser<RobotLocation> loc_chooser;
+    private SendableChooser<Location> loc_chooser;
 
     private SendableChooser<AutoMode> LLL;  
     
     private String gameData = "";
     
     private Subsystem[] subsystems;
+
+    public static Path baseline;
     
 
     /**
@@ -96,19 +100,23 @@ public class Robot extends TimedRobot
     public void robotInit() 
     {
         Conversions.setWheelDiameter(Drivetrain.WHEELDIAMETER);
+
         intake = Intake.getInstance();
         dt = Drivetrain.getInstance();
         el = Elevator.getInstance();
         oi = OI.getInstance();
+
+        FollowPathRio.setDefaultLeftTalon(Robot.dt.getLeftMaster());
+        FollowPathRio.setDefaultRightTalon(Robot.dt.getRightMaster());
         
         subsystems = new Subsystem[] {dt, el, intake, Intake.pn};
     
-        loc_chooser = new SendableChooser<RobotLocation>();
+        loc_chooser = new SendableChooser<Location>();
         LLL = new SendableChooser<AutoMode>();
 
-        loc_chooser.addDefault("Left", RobotLocation.LEFT);
-        loc_chooser.addObject ("Center", RobotLocation.CENTER);
-        loc_chooser.addObject ("Right", RobotLocation.RIGHT);
+        loc_chooser.addDefault("Left", Location.LEFT);
+        loc_chooser.addObject ("Center", Location.CENTER);
+        loc_chooser.addObject ("Right", Location.RIGHT);
 
         SmartDashboard.putData("Robot Location", loc_chooser);
         
@@ -156,6 +164,7 @@ public class Robot extends TimedRobot
         //(m_autonomousCommand = new AutonomousCommand (location, subsystems, DriverStation.getInstance().getGameSpecificMessage())).start();
         location = loc_chooser.getSelected();
         System.out.println(location);
+
         //new DriveWithVelocityTimed(1, 0.85).start();
         //new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.RIGHT)
 
@@ -187,8 +196,13 @@ public class Robot extends TimedRobot
 
         Scheduler.getInstance().run();
 
-        SmartDashboard.putNumber ("Primary Error", Robot.dt.getRightMaster().getClosedLoopError(0));
-        SmartDashboard.putNumber ("Auxiliary Error", Robot.dt.getRightMaster().getClosedLoopError(1));
+        SmartDashboard.putNumber("Left Motor Output", Robot.dt.getLeftMaster().getMotorOutputPercent());
+        SmartDashboard.putNumber("Right Motor Output", Robot.dt.getRightMaster().getMotorOutputPercent());
+
+        SmartDashboard.putNumber("Left Error", Robot.dt.getLeftMaster().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+        SmartDashboard.putNumber("Right Error", Robot.dt.getRightMaster().getClosedLoopError(RobotMap.PRIMARY_PID_INDEX));
+
+        Robot.dt.printSensorPositions(RobotMap.PRIMARY_PID_INDEX);
     }
 
     /**
@@ -220,6 +234,7 @@ public class Robot extends TimedRobot
     public void robotPeriodic() {
         SmartDashboard.updateValues();
         SmartDashboard.putData("Robot Location", loc_chooser);
+        SmartDashboard.putNumber("el encoder", Robot.el.getBottomRightTalon().getSelectedSensorPosition());
     }
     
     /**

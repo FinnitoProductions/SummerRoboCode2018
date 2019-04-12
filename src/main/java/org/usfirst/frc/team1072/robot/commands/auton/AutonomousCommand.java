@@ -5,9 +5,13 @@ import java.io.FileNotFoundException;
 
 import edu.wpi.first.wpilibj.command.Command;
 import harkerrobolib.auto.SequentialCommandGroup;
+import harkerrobolib.auto.AutoMode.Location;
+
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.RobotMap;
 import org.usfirst.frc.team1072.robot.RobotMap.AutonomousConstants;
+import org.usfirst.frc.team1072.robot.auto.modes.BaselineMotionProfile;
+import org.usfirst.frc.team1072.robot.auto.paths.BaselinePath;
 import org.usfirst.frc.team1072.robot.commands.auton.PauseUntilPathBegins.PauseType;
 import org.usfirst.frc.team1072.robot.commands.drivetrain.*;
 import org.usfirst.frc.team1072.robot.commands.elevator.InitializeElevator;
@@ -36,25 +40,21 @@ import jaci.pathfinder.Trajectory;
  */
 public class AutonomousCommand extends CommandGroup
 {    
-    public static final boolean ON_LEFT = true;
-    public static final boolean ON_RIGHT = false;
     public enum AutonType {
         BASELINE, CENTER_SWITCH, ONE_CUBE_CENTER, ONE_CUBE_SIDE, LEFT_SWITCH, RIGHT_SWITCH;
     }
     
-    public enum RobotLocation {
-        LEFT, CENTER, RIGHT;
-    }
 
     /**
      * Constructs a new command
      * @param subsystems the list of subsystems
      */
-    public AutonomousCommand(RobotLocation location, Subsystem[] subsystems, String fieldData)
+    public AutonomousCommand(Location location, Subsystem[] subsystems, String fieldData)
     {
         for (Subsystem s : subsystems)
             requires(s);
-
+        System.out.println("ADDING BASELINE MOT PROF");
+        addSequential(new FollowPathRio(Robot.baseline));
         //initSubsystems();
 //        addSequential(new ZeroElevator());
 //        addSequential(new DriveWithVelocityTimed(0.8, 1.8));
@@ -62,7 +62,7 @@ public class AutonomousCommand extends CommandGroup
 //        addSequential(new TurnToAngleTimed(0.22, Drivetrain.TurnDirection.LEFT));
 //        FollowPathRio.setDefaultLeftTalon(Robot.dt.getLeftMaster());
 //        FollowPathRio.setDefaultRightTalon(Robot.dt.getRightMaster());
-        addSequential(new SequentialCommandGroup(new ZeroElevator(),
+        /*addSequential(new SequentialCommandGroup(new ZeroElevator(),
                 new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT_AUTON),
                     new DriveWithVelocityTimed(0.4, 5.75)
                                               ));
@@ -73,11 +73,11 @@ public class AutonomousCommand extends CommandGroup
         else if (location == RobotLocation.LEFT && fieldData.substring(0, 1).equals("L")) {
             addSequential(new SequentialCommandGroup(new SetSolenoid(Pneumatics.SolenoidDirection.DECOMPRESS),
                     new IntakeOuttakeTimed(3.0, IntakeType.INTAKE, 0.5)));
-        }
+        }*/
 
         /*if (location == RobotLocation.LEFT) {
             if (fieldData.equals("LLL"))
-                sideScale(ON_LEFT);
+                sideScale(  );
             else if (fieldData.equals("RLR")) 
                 sideScale(ON_LEFT);
             else if (fieldData.equals("RRR"))
@@ -112,7 +112,6 @@ public class AutonomousCommand extends CommandGroup
         //oneCubeSide(ON_LEFT);
     }
 
-    
     
     /**
      * Initializes subsystems in parallel.

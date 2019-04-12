@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.command.TimedCommand;
 import org.usfirst.frc.team1072.robot.Robot;
 import org.usfirst.frc.team1072.robot.subsystems.Intake;
 import org.usfirst.frc.team1072.robot.subsystems.Intake.IntakeType;
-import org.usfirst.frc.team1072.util.Conversions;
 
 import edu.wpi.first.wpilibj.command.Command;
 
