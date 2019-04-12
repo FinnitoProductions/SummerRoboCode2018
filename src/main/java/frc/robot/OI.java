@@ -45,7 +45,7 @@ public class OI
      */
     public static final double BLACK_XBOX_DRIVE_DEADBAND = 0.04;
 
-    public static final double BLACK_XBOX_ELEVATOR_DEADBAND = 0.15;
+    public static final double BLACK_XBOX_ELEVATOR_DEADBAND = 0.08;
 
     public static final double DRIVER_TRIGGER_DEADBAND = 0.15;
     /**

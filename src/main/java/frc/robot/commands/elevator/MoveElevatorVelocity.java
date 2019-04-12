@@ -36,24 +36,11 @@ public class MoveElevatorVelocity extends Command
     public void execute() 
     { 
         OI oi = OI.getInstance();
+        System.out.println("EXECUTE");
         if (Math.abs(oi.getDriverGamepad().getRightY()) > OI.BLACK_XBOX_ELEVATOR_DEADBAND)
         {
         	double rightY = oi.getDriverGamepad().getRightY();
-            boolean isDown = rightY < 0;
-            boolean reverseBeyondLimit = Robot.el.getBottomRightTalon()
-                    .getSelectedSensorPosition(Drivetrain.POS_PID) <= Elevator.REVERSE_SOFT;
-            double currentSpeed = Robot.el.getBottomRightTalon().getSelectedSensorVelocity(RobotMap.PRIMARY_PID_INDEX);
-            double dist = Math.abs(Robot.el.getBottomRightTalon()
-                    .getSelectedSensorPosition(Drivetrain.POS_PID) - Elevator.REVERSE_SOFT);
-            double outputFactor = 1.0;
-            if (isDown && reverseBeyondLimit && Math.abs(currentSpeed) / Elevator.MAX_ELEVATOR_SPEED < Elevator.SLOW_DOWN_SPEED)
-            {
-                outputFactor = MathUtil.map(dist, 0, Elevator.REVERSE_SOFT, 1, 0);
-            }
-            else if (Math.abs(currentSpeed) / Elevator.MAX_ELEVATOR_SPEED >= Elevator.SLOW_DOWN_SPEED) {
-            	outputFactor = MathUtil.map(dist, 0, Elevator.REVERSE_SOFT, 1, -0.5);
-            }
-            rightY *= outputFactor;
+            // rightY *= outputFactor;
             Robot.el.moveElevatorVelocity(rightY);
         }
         else

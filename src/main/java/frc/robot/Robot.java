@@ -215,7 +215,6 @@ public class Robot extends TimedRobot
         {
             m_autonomousCommand.cancel();
         }
-        new ZeroElevator().start();
 
     }
 
@@ -227,6 +226,7 @@ public class Robot extends TimedRobot
           Scheduler.getInstance().run();
           SmartDashboard.putNumber("Elevator Height", Robot.el.getBottomRightTalon().getSelectedSensorPosition(0));
           SmartDashboard.putNumber("Elevator Speed", Robot.el.getBottomRightTalon().getSelectedSensorVelocity(0));
+          System.out.println(Elevator.getInstance().getCurrentCommand());
           //SmartDashboard.putNumber("Elevator Height", Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition(0));
     }
 
@@ -234,7 +234,7 @@ public class Robot extends TimedRobot
     public void robotPeriodic() {
         SmartDashboard.updateValues();
         SmartDashboard.putData("Robot Location", loc_chooser);
-        SmartDashboard.putNumber("el encoder", Robot.el.getBottomRightTalon().getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putNumber("el encoder", Robot.el.getBottomRightTalon().getSelectedSensorPosition());
     }
     
     /**
