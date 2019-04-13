@@ -13,6 +13,7 @@ import frc.robot.subsystems.Pneumatics.SolenoidType;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.InstantCommand;
@@ -125,7 +126,7 @@ public class OI
             lowerAndOpen.addSequential(new SetSolenoidStealth(SolenoidDirection.DECOMPRESS));
             lowerAndOpen.addSequential(new MoveElevatorMotionMagic(Elevator.INTAKE_HEIGHT));
             lowerAndOpen.addSequential(new SetSolenoidStealth(SolenoidDirection.DOWN));
-        driverGamepad.getButtonA().whenPressed(lowerAndOpen);
+        // driverGamepad.getButtonA().whenPressed(lowerAndOpen);
         
         CommandGroup raiseElevatorIntake = new CommandGroup();
         	raiseElevatorIntake.addParallel(new SetSolenoidStealth (SolenoidDirection.UP));
@@ -135,11 +136,17 @@ public class OI
                     System.out.println("Y PRESSED");
                 }
             });
-        driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT));
-        driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(Elevator.SCALE_LOW_HEIGHT));
-        //driverGamepad.getButtonY().whenPressed(new ZeroElevator());
-        driverGamepad.getButtonStickRight().whenPressed(new ZeroElevator());
-        driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);
+
+        driverGamepad.getButtonStart().whenPressed(new InstantCommand() {
+            public void initialize() {
+                RobotMap.SAFETY_MODE = (RobotMap.SAFETY_MODE == RobotMap.SafetyMode.SAFE ? RobotMap.SafetyMode.NOT_SAFE : RobotMap.SafetyMode.SAFE);
+            }
+        });
+        // driverGamepad.getButtonX().whenPressed(new MoveElevatorMotionMagic(Elevator.SWITCH_HEIGHT));
+        // driverGamepad.getButtonB().whenPressed(new MoveElevatorMotionMagic(Elevator.SCALE_LOW_HEIGHT));
+        // //driverGamepad.getButtonY().whenPressed(new ZeroElevator());
+        // driverGamepad.getButtonStickRight().whenPressed(new ZeroElevator());
+        // driverGamepad.getButtonY().whenPressed(raiseElevatorIntake);
     }
 
     /**

@@ -3,6 +3,7 @@ package frc.robot.commands.drivetrain;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.RobotMap.SafetyMode;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Elevator;
 import harkerrobolib.util.Conversions;
@@ -22,6 +23,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class DriveWithVelocity extends Command
 {
+    private static final double DRIVETRAIN_OUTPUT_SAFETY_MULTIPLIER = 0.1;
+
     /**
      * The controller deadband.
      */
@@ -62,8 +65,8 @@ public class DriveWithVelocity extends Command
     { 
         OI oi = OI.getInstance();
         
-        double leftX = MathUtil.mapJoystickOutput(oi.getDriverGamepad().getLeftX(), OI.BLACK_XBOX_DRIVE_DEADBAND);
-        double leftY = MathUtil.mapJoystickOutput(oi.getDriverGamepad().getLeftY(), OI.BLACK_XBOX_DRIVE_DEADBAND);
+        double leftX = (RobotMap.SAFETY_MODE == SafetyMode.SAFE ? DRIVETRAIN_OUTPUT_SAFETY_MULTIPLIER : 1.0) * MathUtil.mapJoystickOutput(oi.getDriverGamepad().getLeftX(), OI.BLACK_XBOX_DRIVE_DEADBAND);
+        double leftY = (RobotMap.SAFETY_MODE == SafetyMode.SAFE ? DRIVETRAIN_OUTPUT_SAFETY_MULTIPLIER : 1.0) * MathUtil.mapJoystickOutput(oi.getDriverGamepad().getLeftY(), OI.BLACK_XBOX_DRIVE_DEADBAND);
 
         // double elevatorPercent = (1.0 * Elevator.getInstance().getBottomRightTalon().getSelectedSensorPosition
         // (RobotMap.PRIMARY_PID_INDEX)) / Elevator.SCALE_HIGH_HEIGHT;
@@ -74,7 +77,7 @@ public class DriveWithVelocity extends Command
         //     elevatorScale = 1-elevatorPercent*(1-Elevator.MIN_THROTTLE_SPEED);
         // }
 
-        double x = 0.4 * Math.pow(Math.abs(leftX), 2) * Math.signum(leftX);
+        double x = leftX;
         double y = leftY;
         // double k = Math.max(1.0, Math.max(Math.abs(y + x), Math.abs(y - x)));
         double left = elevatorScale * (y * Drivetrain.MAX_DRIVE_SPEED_FPS + x * Drivetrain.MAX_TURN_SPEED_FPS);

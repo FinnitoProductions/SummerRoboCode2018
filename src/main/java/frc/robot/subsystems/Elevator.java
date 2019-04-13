@@ -352,7 +352,7 @@ public class Elevator extends Subsystem
      * The feed forward to constantly add to the elevator to resist the effect
      * of gravity.
      */
-    public static double POS_FGRAV = 0.06;
+    public static double POS_FGRAV = 0.08;
     
     /**
      * The peak output for the elevator motor controllers.

@@ -17,6 +17,8 @@ import harkerrobolib.wrappers.HSTalon;
  */
 public class Intake extends Subsystem
 {
+    public static final double INTAKE_SPEED_SAFETY_MULTIPLIER = 0.7;
+
     /**
      * The current instance of this subsystem.
      */
@@ -96,6 +98,8 @@ public class Intake extends Subsystem
      */
     public void intakeOuttakeCube (double speed)
     {
+        if(RobotMap.SAFETY_MODE == RobotMap.SafetyMode.SAFE)
+            speed *= INTAKE_SPEED_SAFETY_MULTIPLIER;
         leftTalon.set(ControlMode.PercentOutput, speed);
         rightTalon.set(ControlMode.PercentOutput, speed);
     }

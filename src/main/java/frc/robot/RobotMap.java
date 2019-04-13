@@ -13,15 +13,21 @@ package frc.robot;
  * @version 6/11/18
  */
 public class RobotMap {
+    public enum SafetyMode {
+        SAFE, NOT_SAFE
+    }
+
+    public static SafetyMode SAFETY_MODE = SafetyMode.SAFE;
+
     /**
      * Whether or not the robot is in competition mode.
      */
-    public static boolean IS_COMP = false;
+    public static final boolean IS_COMP = false;
     
     /**
      * Whether or not two controllers are being used to control the robot.
      */
-    public static boolean TWO_CONTROLLERS = true;
+    public static final boolean TWO_CONTROLLERS = true;
     
     /**
      * The joystick port.

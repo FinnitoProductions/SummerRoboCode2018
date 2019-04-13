@@ -18,6 +18,8 @@ import harkerrobolib.util.MathUtil;
  */
 public class MoveElevatorVelocity extends Command
 {
+    private static final double ELEVATOR_OUTPUT_SAFETY_MULTIPLIER = 0.17;
+
     /**
      * Creates a new MoveElevatorVelocity.
      */
@@ -36,11 +38,11 @@ public class MoveElevatorVelocity extends Command
     public void execute() 
     { 
         OI oi = OI.getInstance();
-        if (Math.abs(oi.getDriverGamepad().getRightY()) > OI.BLACK_XBOX_ELEVATOR_DEADBAND)
+        double driverRightY = MathUtil.mapJoystickOutput(oi.getDriverGamepad().getRightY(), OI.BLACK_XBOX_DRIVE_DEADBAND);
+        if (Math.abs(driverRightY) > 0)
         {
-        	double rightY = oi.getDriverGamepad().getRightY();
             // rightY *= outputFactor;
-            Robot.el.moveElevatorVelocity(0.4 * rightY);
+            Robot.el.moveElevatorVelocity((RobotMap.SAFETY_MODE == RobotMap.SafetyMode.SAFE ? ELEVATOR_OUTPUT_SAFETY_MULTIPLIER : 1.0)  * driverRightY);
         }
         else
             Robot.el.moveElevatorVelocity(0);
